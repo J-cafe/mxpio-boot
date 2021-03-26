@@ -1,0 +1,27 @@
+server:
+  port: 9000
+  tomcat:
+    max-swallow-size: -1
+  servlet:
+    context-path: 
+
+spring:
+  servlet:
+     multipart:
+        max-file-size: 10MB
+        max-request-size: 10MB
+  jpa:
+    open-in-view: false
+    showSql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://localhost:3306/mboot?characterEncoding=utf-8&useSSL=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    sql-script-encoding: UTF-8
+    continue-on-error: true
+    initialization-mode: ALWAYS
+
+

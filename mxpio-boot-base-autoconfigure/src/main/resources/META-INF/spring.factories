@@ -1,0 +1,17 @@
+# Initializers
+
+# Application Listeners
+
+# Environment Processors
+org.springframework.boot.env.EnvironmentPostProcessor=\
+com.mxpio.mxpioboot.autoconfigure.MxpioEnvironmentPostProcessor
+
+# Run Listeners
+org.springframework.boot.SpringApplicationRunListener=\
+com.mxpio.mxpioboot.autoconfigure.MxpioPreloadSpringApplicationRunListener
+
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.mxpio.mxpioboot.autoconfigure.common.CommonAutoConfiguration,\
+com.mxpio.mxpioboot.autoconfigure.jpa.LinqAutoConfiguration,\
+com.mxpio.mxpioboot.autoconfigure.security.SecurityAutoConfiguration
