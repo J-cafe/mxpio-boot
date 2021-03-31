@@ -9,21 +9,20 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mxpio.mxpioboot.jpa.JpaUtil;
-import com.mxpio.mxpioboot.jpa.initiator.JpaUtilAble;
 import com.mxpio.mxpioboot.security.entity.User;
 import com.mxpio.mxpioboot.security.service.UserService;
 
 @Service
-public class UserServiceImpl implements UserService, JpaUtilAble {
+public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	protected PasswordEncoder passwordEncoder;
@@ -91,15 +90,23 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
-	public void afterPropertiesSet(ApplicationContext applicationContext) {
-		User user = new User();
-		user.setUsername("admin");
-		JpaUtil.save(user);
-		List<User> users = JpaUtil.linq(User.class).list();
-		for(User u : users) {
-			System.out.println(u.getUsername());
+	public boolean isAdministrator() {
+		return isAdministrator(null);
+	}
+
+	@Override
+	public boolean isAdministrator(String username) {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (principal instanceof User) {
+			if (((User) principal).getUsername().equals(username)) {
+				return ((User) principal).isAdministrator();
+			} 
+			if (username == null) {
+				return ((User) principal).isAdministrator();
+			}
 		}
+		User user = JpaUtil.linq(User.class).idEqual(username).findOne();
+		return user.isAdministrator();
 	}
 
 }

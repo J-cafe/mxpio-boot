@@ -1,39 +1,42 @@
 package com.mxpio.mxpioboot.security.service.impl;
 
-import javax.persistence.EntityNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.mxpio.mxpioboot.common.exception.MBootException;
+import com.mxpio.mxpioboot.jpa.JpaUtil;
 import com.mxpio.mxpioboot.security.entity.User;
-import com.mxpio.mxpioboot.security.service.UserService;
+import com.mxpio.mxpioboot.security.service.GrantedAuthorityService;
 
+/**
+
+ * Spring Security的{@link org.springframework.security.core.userdetails.UserDetailsService}接口的默认实现
+
+ * @author Kevin Yang (mailto:kevin.yang@bstek.com)
+
+ * @since 2016年2月27日
+
+ */
 @Service
+@Transactional(readOnly = true)
 public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	@Autowired
-	private UserService userService;
-
+	private GrantedAuthorityService grantedAuthorityService;
+	
 	@Override
-	public User loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user;
-        try {
-            user = userService.findByName(username);
-        } catch (EntityNotFoundException e) {
-            // SpringSecurity会自动转换UsernameNotFoundException为BadCredentialsException
-            throw new UsernameNotFoundException("", e);
-        }
-        if (user == null) {
-            throw new UsernameNotFoundException("");
-        } else {
-            if (!user.isEnabled()) {
-                throw new MBootException("账号未激活！");
-            }
-            //TODO 添加权限、部门信息
-        }
-		return user;
+	public UserDetails loadUserByUsername(String username)
+			throws UsernameNotFoundException {
+		try {
+			
+			User user = JpaUtil.getOne(User.class, username);
+			user.setAuthorities(grantedAuthorityService.getGrantedAuthorities(user));
+			return user;
+		} catch (Exception e) {
+			throw new UsernameNotFoundException("Not Found");
+		}
 	}
 }

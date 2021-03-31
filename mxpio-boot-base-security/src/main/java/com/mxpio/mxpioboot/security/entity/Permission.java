@@ -76,7 +76,7 @@ public class Permission extends BaseEntity implements ConfigAttribute{
 	
 	/**
 
-	 * 资源类型，菜单为URL，组件为COMPONENT
+	 * 资源类型，菜单为URL，组件为ELEMENT
 
 	 * @return resourceType
 

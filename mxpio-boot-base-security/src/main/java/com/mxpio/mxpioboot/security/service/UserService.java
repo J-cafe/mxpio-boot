@@ -90,4 +90,23 @@ public interface UserService {
      * @param resources /
      */
     void updateCenter(User resources);
+    
+    /**
+
+	 * 判断当前登录用户是否为管理员
+
+	 * @return 返回ture，则为管理员，否则不是
+
+	 */
+	boolean isAdministrator();
+
+	
+	/**
+
+	 * 判断是否为管理员
+
+	 * @return 返回ture，则为管理员，否则不是
+
+	 */
+	boolean isAdministrator(String username);
 }
