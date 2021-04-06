@@ -49,7 +49,7 @@ public class UrlFilterConfigAttributeProvider implements
 	}
 
 	protected boolean validate(Url url) {
-		if (StringUtils.isEmpty(url.getPath())) {
+		if (StringUtils.hasText(url.getPath())) {
 			return false;
 		}
 		return true;

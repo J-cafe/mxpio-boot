@@ -23,6 +23,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mxpio.mxpioboot.common.CommonConstant;
 import com.mxpio.mxpioboot.common.vo.Result;
+import com.mxpio.mxpioboot.security.Constants;
 import com.mxpio.mxpioboot.security.anthentication.JwtLoginToken;
 import com.mxpio.mxpioboot.security.entity.User;
 
@@ -62,8 +63,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 return;
             }
             
-            String salt = "mxpio";
-            Algorithm algorithm = Algorithm.HMAC256(salt);
+            Algorithm algorithm = Algorithm.HMAC256(Constants.JWT_TOKEN_SALT);
             JWTVerifier v = JWT.require(algorithm).build();
             DecodedJWT jwt = v.verify(token);
             

@@ -93,11 +93,6 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 				// 剩余请求全部验证
 				.anyRequest().authenticated()
 				.and()
-			/*.formLogin()
-				.successHandler(new CustomAuthenticationSuccessHandler())
-				.loginPage(URL_PREFIX + loginPath)
-				.permitAll()
-				.and()*/
 			.logout()
 				.logoutUrl(URL_PREFIX + logoutPath).permitAll()
 				.and()
@@ -139,26 +134,6 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		return anonymous;
 	}
 
-	/*class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
-
-		private RequestCache requestCache = new HttpSessionRequestCache();
-
-		public CustomAuthenticationSuccessHandler() {
-			this.setRequestCache(requestCache);
-		}
-
-		@Override
-		public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-				Authentication authentication) throws ServletException, IOException {
-			SavedRequest savedRequest = requestCache.getRequest(request, response);
-			if (savedRequest != null) {
-				this.getRedirectStrategy().sendRedirect(request, response, getDefaultTargetUrl());
-			} else {
-				super.onAuthenticationSuccess(request, response, authentication);
-			}
-		}
-	}*/
-	
 	//登录成功处理
 	class JwtLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
@@ -166,14 +141,13 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 	        response.setContentType("application/json;charset=UTF-8");
 	        
-	        String salt = "mxpio";
 	        User jwtUserDetails = (User) authentication.getPrincipal();
 	        String json = JSON.toJSONString(jwtUserDetails);
 	        long nowMillis = System.currentTimeMillis();
 	        Date now = new Date(nowMillis);
 	        long expMillis = nowMillis + Constants.DEFAULT_TOKEN_TIME_MS;
             Date exp = new Date(expMillis);
-            Algorithm algorithm = Algorithm.HMAC256(salt);
+            Algorithm algorithm = Algorithm.HMAC256(Constants.JWT_TOKEN_SALT);
 	        String token = JWT.create()
 	    		.withSubject(json)
 	            .withExpiresAt(exp)

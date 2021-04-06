@@ -4,6 +4,8 @@ public class Constants {
 
 	public static final long DEFAULT_TOKEN_TIME_MS = 30 * 60 * 1000;
 	
+	public static final String JWT_TOKEN_SALT = "MXPIO";
+	
 	// Swagger WHITELIST
     public static final String[] SWAGGER_WHITELIST = {
             "/swagger-ui.html",

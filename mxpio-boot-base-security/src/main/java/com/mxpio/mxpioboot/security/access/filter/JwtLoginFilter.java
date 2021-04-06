@@ -30,11 +30,5 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         // 即 跳转到 JwtAuthenticationProvider.authenticate 方法中认证
         Authentication authenticatedToken = this.getAuthenticationManager().authenticate(jwtLoginToken);
         return authenticatedToken;
-		
-		
-		/*UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
-		// Allow subclasses to set the "details" property
-		setDetails(request, authRequest);
-		return this.getAuthenticationManager().authenticate(authRequest);*/
 	}
 }
