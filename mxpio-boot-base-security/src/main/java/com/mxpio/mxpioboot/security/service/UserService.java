@@ -109,4 +109,5 @@ public interface UserService {
 
 	 */
 	boolean isAdministrator(String username);
+
 }

@@ -49,6 +49,9 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 
 	@Column(name = "ENABLED_")
 	private boolean enabled = true;
+	
+	@Column(name = "SALT_")
+	private String salt;
 
 	@Transient
 	private Object organization;
@@ -151,6 +154,14 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 	@Override
 	public <T> void setOrganization(T organization) {
 		this.organization = organization;
-
 	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+	
 }

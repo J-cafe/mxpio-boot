@@ -18,13 +18,14 @@ public class LoginController {
 	/**
 	 * 登录方法
 	 * 
-	 * @param loginBody
+	 * @param user
 	 *            登录信息
 	 * @return 结果
 	 */
 	@PostMapping("/login")
 	@ApiOperation(value = "登录")
 	public Result<?> login(@RequestBody LoginUserVo user) {
+		
 		return Result.OK();
 	}
 }

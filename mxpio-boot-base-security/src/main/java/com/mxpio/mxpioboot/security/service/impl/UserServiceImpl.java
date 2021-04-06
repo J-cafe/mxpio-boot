@@ -108,5 +108,5 @@ public class UserServiceImpl implements UserService {
 		User user = JpaUtil.linq(User.class).idEqual(username).findOne();
 		return user.isAdministrator();
 	}
-
+	
 }

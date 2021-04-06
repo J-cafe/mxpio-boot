@@ -1,0 +1,17 @@
+package com.mxpio.mxpioboot.security;
+
+public class Constants {
+
+	public static final long DEFAULT_TOKEN_TIME_MS = 30 * 60 * 1000;
+	
+	// Swagger WHITELIST
+    public static final String[] SWAGGER_WHITELIST = {
+            "/swagger-ui.html",
+            "/swagger-ui/*",
+            "/swagger-resources/**",
+            "/v2/api-docs",
+            "/v3/api-docs",
+            "/webjars/**"
+    };
+
+}
