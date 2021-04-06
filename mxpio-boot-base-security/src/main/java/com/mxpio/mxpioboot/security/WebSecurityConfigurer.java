@@ -36,7 +36,6 @@ import com.mxpio.mxpioboot.security.access.filter.LoginFilter;
 import com.mxpio.mxpioboot.security.access.intercept.FilterSecurityInterceptor;
 import com.mxpio.mxpioboot.security.anthentication.JwtAuthenticationProvider;
 import com.mxpio.mxpioboot.security.entity.User;
-import com.mxpio.mxpioboot.security.service.UserService;
 
 @Component
 @Order(120)
@@ -68,12 +67,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	@Autowired
-	private UserService userService;
-
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		System.out.println(passwordEncoder.encode("123456"));
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
 	}
 
