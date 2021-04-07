@@ -53,26 +53,16 @@ public interface SecurityDecisionManager {
 ### 属性配置及默认值
 ```java
 #应用名称
-panda.appName=Bstek Development Framework
+mxpio.appName=Bstek Development Framework
 #登陆页面背景图片
-panda.loginImageBg=dorado/res/static/images/login-bg.jpg
+mxpio.loginImageBg=dorado/res/static/images/login-bg.jpg
 #首次启动时，用户表为空的情况下是否自动创建一个默认的用户：admin/123456
-panda.autoCreateIfUserIsEmpty=true
-#登陆页面地址
-panda.loginPath=panda.security.ui.view.Login.d
+mxpio.autoCreateIfUserIsEmpty=true
 #登出地址
-panda.logoutPath=logout
+mxpio.logoutPath=logout
 #系统需要匿名访问URL
-panda.systemAnonymous=/static/**,/**/*.dpkg,/dorado/client/**,/dorado/res/**,/**/*.js, /**/*.css
+mxpio.systemAnonymous=/static/**,/**/*.js, /**/*.css
 #用户自定义需要匿名访问的URL
-panda.customAnonymous=
-#欢迎页面的标题
-panda.welcomeTitle=\u6B22\u8FCE
-#欢迎页面的图片
-panda.welcomeIcon=fa fa-university blue-text
-#欢迎页面的地址
-panda.welcomePath=
-#个人中心页面的地址
-panda.personCenter=panda.security.ui.view.PersonalCenter.d
+mxpio.customAnonymous=
 ```
 
