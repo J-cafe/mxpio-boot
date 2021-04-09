@@ -7,14 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import com.mxpio.mxpioboot.jpa.initiator.JpaUtilAble;
 import com.mxpio.mxpioboot.jpa.initiator.JpaUtilInitiator;
-import com.mxpio.mxpioboot.jpa.policy.CriteriaPolicy;
-import com.mxpio.mxpioboot.jpa.policy.impl.QBCCriteriaPolicy;
 
 /**
  * 模块配置类

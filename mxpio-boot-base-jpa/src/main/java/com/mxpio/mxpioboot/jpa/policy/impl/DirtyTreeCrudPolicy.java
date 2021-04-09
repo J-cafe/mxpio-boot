@@ -75,6 +75,7 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 		context.setParent(parent);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	protected List<Field> getPersistentFields(CrudContext context) {
 		Object entity = context.getEntity();
 		List<Field> result = new ArrayList<Field>();
