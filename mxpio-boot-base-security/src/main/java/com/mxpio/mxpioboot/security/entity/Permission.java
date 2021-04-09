@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.security.access.ConfigAttribute;
 
@@ -40,6 +41,28 @@ public class Permission extends BaseEntity implements ConfigAttribute{
 	@Column(name = "ATTRIBUTE_", length = 255)
 	private String attribute;
 	
+	@Transient
+	private Role role;
+	
+	@Transient
+	private Element element;
+	
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public Element getElement() {
+		return element;
+	}
+
+	public void setElement(Element element) {
+		this.element = element;
+	}
+
 	public String getId() {
 		return id;
 	}

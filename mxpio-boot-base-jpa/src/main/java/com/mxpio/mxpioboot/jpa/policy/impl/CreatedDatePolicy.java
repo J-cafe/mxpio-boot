@@ -1,6 +1,5 @@
 package com.mxpio.mxpioboot.jpa.policy.impl;
 
-import java.lang.reflect.Field;
 import java.util.Date;
 
 public class CreatedDatePolicy extends AbstractGeneratorPolicy {
@@ -11,7 +10,7 @@ public class CreatedDatePolicy extends AbstractGeneratorPolicy {
 	}
 
 	@Override
-	protected Object getValue(Object entity, Field field) {
+	protected Object getValue(Object entity, String name) {
 		return new Date();
 	}
 

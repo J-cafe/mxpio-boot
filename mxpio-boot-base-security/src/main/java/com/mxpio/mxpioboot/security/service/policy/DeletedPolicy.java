@@ -1,7 +1,5 @@
 package com.mxpio.mxpioboot.security.service.policy;
 
-import java.lang.reflect.Field;
-
 import com.mxpio.mxpioboot.jpa.policy.impl.AbstractGeneratorPolicy;
 import com.mxpio.mxpioboot.jpa.policy.impl.CrudType;
 
@@ -13,7 +11,7 @@ public class DeletedPolicy extends AbstractGeneratorPolicy {
 	}
 
 	@Override
-	protected Object getValue(Object entity, Field field) {
+	protected Object getValue(Object entity, String name) {
 		return false;
 	}
 

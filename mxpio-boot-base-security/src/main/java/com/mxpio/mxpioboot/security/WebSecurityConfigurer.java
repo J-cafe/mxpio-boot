@@ -30,7 +30,6 @@ import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.mxpio.mxpioboot.common.vo.Result;
-import com.mxpio.mxpioboot.security.access.filter.JwtLoginFilter;
 import com.mxpio.mxpioboot.security.access.filter.JwtTokenFilter;
 import com.mxpio.mxpioboot.security.access.filter.LoginFilter;
 import com.mxpio.mxpioboot.security.access.intercept.FilterSecurityInterceptor;
@@ -102,7 +101,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	    	.formLogin().disable() //禁用form登录
 	    	.csrf().disable()
 	    	.addFilterAt(jwtLoginFilter, UsernamePasswordAuthenticationFilter.class) // 添加拦截器
-            .addFilterAfter(jwtTokenFilter, JwtLoginFilter.class);;
+            .addFilterAfter(jwtTokenFilter, LoginFilter.class);;
 		http.headers().frameOptions().disable();
 		http.headers().xssProtection().disable();
 		http.headers().disable();

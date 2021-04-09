@@ -8,6 +8,11 @@ import javax.persistence.criteria.Expression;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.mxpio.mxpioboot.jpa.filter.Filter;
+import com.mxpio.mxpioboot.jpa.parser.CriterionParser;
+import com.mxpio.mxpioboot.jpa.policy.LinqContext;
+import com.mxpio.mxpioboot.jpa.query.Criteria;
+
 /**
  * 语言集成查询
  * @author Kevin Yang (mailto:muxiangqiu@gmail.com)
@@ -137,6 +142,150 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 */
 	<T> List<T> list(int page, int size);
 
+	
+	/**
+	 * 获取语言集成查询上下文
+	 * @return 本身
+	 */
+	LinqContext getLinqContext();
+
+	/**
+	 * 收集属性对应的值
+	 * @param properties 收集属性
+	 * @return 本身
+	 */
+	Linq collect(String... properties);
+	
+	/**
+	 * 根据主键收集entityClass对应的数据，
+	 * @param entityClass 实体类
+	 * @return 本身
+	 */
+	Linq collect(Class<?> entityClass);
+
+	/**
+	 * 根据主键收集entityClass对应的数据
+	 * @param otherProperty entityClass的某个属性，与properties属性存在关联
+	 * @param entityClass 实体类
+	 * @return 本身
+	 */
+	Linq collect(String otherProperty, Class<?> entityClass);
+
+	/**
+	 * 根据属性收集entityClass对应的数据
+	 * @param entityClass 实体类
+	 * @param properties 属性
+	 * @return 本身
+	 */
+	Linq collect(Class<?> entityClass, String... properties);
+	
+	/**
+	 * 根据属性收集entityClass对应的数据
+	 * @param otherProperty entityClass的某个属性，与properties属性存在关联
+	 * @param entityClass 实体类
+	 * @param properties 属性
+	 * @return 本身
+	 */
+	Linq collect(String otherProperty, Class<?> entityClass, String... properties);
+	
+	/**
+	 * 根据主键收集entityClass对应的数据
+	 * @param entityClass 实体类
+	 * @param relationClass 多对多关系中的中间表对应的实体类
+	 * @return 本身
+	 */
+	Linq collect(Class<?> relationClass, Class<?> entityClass);
+	
+	/**
+	 * 根据主键收集entityClass对应的数据
+	 * @param entityClass 实体类
+	 * @param relationClass 多对多关系中的中间表对应的实体类
+	 * @param relationProperty 查询主实体类在中间表对应的实体类中的关联属性
+	 * @param relationOtherProperty 收集实体类在中间表对应的实体类中的关联属性
+	 * @return 本身
+	 */
+	Linq collect(Class<?> relationClass, String relationProperty, String relationOtherProperty, Class<?> entityClass);
+	
+	/**
+	 * 根据主键收集entityClass对应的数据
+	 * @param entityClass 实体类
+	 * @param relationClass 多对多关系中的中间表对应的实体类
+	 * @param relationProperty 查询主实体类在中间表对应的实体类中的关联属性
+	 * @param relationOtherProperty 收集实体类在中间表对应的实体类中的关联属性
+	 * @param otherProperty entityClass的某个属性，与properties属性存在关联
+	 * @return 本身
+	 */
+	Linq collect(Class<?> relationClass, String relationProperty, String relationOtherProperty, String otherProperty,
+			Class<?> entityClass);
+	
+	/**
+	 * 根据属性收集entityClass对应的数据
+	 * @param entityClass 实体类
+	 * @param relationClass 多对多关系中的中间表对应的实体类
+	 * @param relationProperty 查询主实体类在中间表对应的实体类中的关联属性
+	 * @param relationOtherProperty 收集实体类在中间表对应的实体类中的关联属性
+	 * @param otherProperty entityClass的某个属性，与properties属性存在关联
+	 * @param properties 属性
+	 * @return 本身
+	 */
+	Linq collect(Class<?> relationClass, String relationProperty, String relationOtherProperty, String otherProperty,
+			Class<?> entityClass, String... properties);
+
+	/**
+	 * 设置收集entityClass对应的数据的投影
+	 * @param entityClass 实体类
+	 * @param projections 投影
+	 * @return 本身
+	 */
+	Linq collectSelect(Class<?> entityClass, String... projections);
+	
+	/**
+	 *	禁用收集数据回填
+	 * @return 本身
+	 */
+	Linq setDisableBackFillFilter();
+	
+	/**
+	 * 设置结果过滤器
+	 * @param filter 结果过滤器
+	 * @return 本身
+	 */
+	Linq filter(Filter filter);
+	
+	/**
+	 * 添加条件解析器
+	 * @param criterionParser 条件解析器
+	 * @return 本身
+	 */
+	Linq addParser(CriterionParser criterionParser);
+	
+	/**
+	 * 添加子查询解析器
+	 * @param entityClass 实体类
+	 * @param foreignKeys 实体类外键
+	 * @return 本身
+	 */
+	Linq addSubQueryParser(Class<?> entityClass, String... foreignKeys);
+
+	/**
+	 * 添加子查询解析器
+	 * @param entityClasses 实体类
+	 * @return 本身
+	 */
+	Linq addSubQueryParser(Class<?>... entityClasses);
+
+	/**
+	 * 设置条件
+	 * @param criteria 条件
+	 * @return 本身
+	 */
+	Linq where(Criteria criteria);
+	
+	/**
+	 * 禁用智能自查询条件生成
+	 * @return 本身
+	 */
+	Linq setDisableSmartSubQueryCriterion();
 
 	
 }

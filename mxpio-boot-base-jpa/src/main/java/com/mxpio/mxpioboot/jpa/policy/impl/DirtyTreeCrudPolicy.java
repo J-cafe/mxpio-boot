@@ -7,23 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ReflectionUtils;
-
+import com.mxpio.mxpioboot.jpa.BeanReflectionUtils;
 import com.mxpio.mxpioboot.jpa.JpaUtil;
 import com.mxpio.mxpioboot.jpa.annotation.Generator;
 import com.mxpio.mxpioboot.jpa.policy.CrudContext;
 import com.mxpio.mxpioboot.jpa.policy.CrudPolicy;
 import com.mxpio.mxpioboot.jpa.policy.GeneratorPolicy;
 
-/**
-
- *@author Kevin.yang
-
- *@since 2015年5月17日
-
- */
 public class DirtyTreeCrudPolicy implements CrudPolicy {
 	private CrudPolicy crudPolicy;
 	
@@ -67,7 +58,7 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 		for (Map<String, Object> map : generatorPolicies) {
 			Field field = (Field) map.get("field");
 			GeneratorPolicy policy = (GeneratorPolicy) map.get("policy");
-			policy.apply(context.getEntity(), field);
+			policy.apply(context.getEntity(), field.getName());
 		}
 		
 	}
@@ -77,7 +68,7 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 		Object parent = context.getParent();
 		context.setParent(entity);
 		for (Field field : fields) {
-			Object value = ReflectionUtils.getField(field, entity);
+			Object value = BeanReflectionUtils.getProperty(entity, field.getName());
 			context.setEntity(value);
 			apply(context);
 		}
@@ -87,13 +78,13 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 	protected List<Field> getPersistentFields(CrudContext context) {
 		Object entity = context.getEntity();
 		List<Field> result = new ArrayList<Field>();
-		List<Field> fields = FieldUtils.getAllFieldsList(entity.getClass());
+		List<Field> fields = BeanReflectionUtils.loadClassFields(entity);
 		if(fields != null) {
 			for (Field field : fields) {
 				Class<?> propertyClass = field.getType();
 				if(Collection.class.isAssignableFrom(propertyClass)) {
 					field.setAccessible(true);
-					Collection c = (Collection) ReflectionUtils.getField(field, entity);
+					Collection c = (Collection) BeanReflectionUtils.getProperty(entity, field.getName());
 					if(!CollectionUtils.isEmpty(c)) {
 						propertyClass = c.iterator().next().getClass();
 					}
@@ -108,7 +99,8 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 	
 	protected List<Map<String, Object>> getNeedGeneratorFields(Object entity, CrudType crudType) throws InstantiationException, IllegalAccessException {
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-		List<Field> fields = FieldUtils.getAllFieldsList(entity.getClass());
+		List<Field> fields = BeanReflectionUtils.loadClassFields(entity);
+		
 		if(fields != null) {
 			for (Field field : fields) {
 				Generator generator = field.getAnnotation(Generator.class);

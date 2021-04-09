@@ -27,6 +27,7 @@ import javax.persistence.metamodel.SingularAttribute;
 
 import com.mxpio.mxpioboot.jpa.lin.Linu;
 import com.mxpio.mxpioboot.jpa.lin.impl.LinuImpl;
+import com.mxpio.mxpioboot.jpa.policy.CriteriaPolicy;
 import com.mxpio.mxpioboot.jpa.policy.CrudContext;
 import com.mxpio.mxpioboot.jpa.policy.CrudPolicy;
 import com.mxpio.mxpioboot.jpa.policy.impl.CrudType;
@@ -51,13 +52,20 @@ import com.mxpio.mxpioboot.jpa.lin.impl.LinqImpl;
 
 /**
  * JPA通用工具类
- * @author Kevin Yang (mailto:muxiangqiu@gmail.com)
- * @since 2017年11月16日
  */
 public abstract class JpaUtil {
 	
 	protected static GetEntityManagerFactoryStrategy getEntityManagerFactoryStrategy;
 	protected static ApplicationContext applicationContext;
+	private static CriteriaPolicy defaultQBCCriteriaPolicy;
+	
+	public static CriteriaPolicy getDefaultQBCCriteriaPolicy() {
+		return defaultQBCCriteriaPolicy;
+	}
+	
+	public static void setDefaultQBCCriteriaPolicy(CriteriaPolicy criteriaPolicy) {
+		defaultQBCCriteriaPolicy = criteriaPolicy;
+	}
 	
 	/**
 	 * 创建Linq

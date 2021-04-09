@@ -1,9 +1,9 @@
 package com.mxpio.mxpioboot.jpa.policy;
 
-import javax.persistence.criteria.CriteriaQuery;
+import com.mxpio.mxpioboot.jpa.query.Criteria;
 
-public interface CriteriaContext<T> {
-	CriteriaQuery<T> getCriteria();
-	void setCurrent(T e);
-	T getCurrent();
+public interface CriteriaContext {
+	Criteria getCriteria();
+	<E> void setCurrent(E e);
+	<E> E getCurrent();
 }

@@ -17,19 +17,15 @@ import javax.persistence.criteria.Selection;
 import javax.persistence.criteria.Subquery;
 
 import com.mxpio.mxpioboot.jpa.JpaUtil;
-import com.mxpio.mxpioboot.jpa.Or;
 import com.mxpio.mxpioboot.jpa.lin.Lin;
+import com.mxpio.mxpioboot.jpa.query.Junction;
+import com.mxpio.mxpioboot.jpa.query.JunctionType;
+
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import com.mxpio.mxpioboot.jpa.And;
-import com.mxpio.mxpioboot.jpa.Junction;
-
-/**
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
- * @since 2016年1月31日
- */
 @SuppressWarnings("unchecked")
 public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> implements Lin<T, Q> {
 	
@@ -58,7 +54,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 			em = JpaUtil.getEntityManager(domainClass);
 		}
 		cb = em.getCriteriaBuilder();
-		junction = new And();
+		junction = new Junction(JunctionType.AND);
 		junctions.add(junction);
 	}
 	
@@ -70,7 +66,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		criteria = parent.criteria();
 		sq = criteria().subquery(domainClass);
 		root = sq.from(domainClass);
-		junction = new And();
+		junction = new Junction(JunctionType.AND);
 		junctions.add(junction);
 	}
 	
@@ -83,8 +79,10 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 			result = (Boolean) target;
 		} else if (target instanceof Collection) {
 			result = !CollectionUtils.isEmpty((Collection<?>) target);
+		} else if(target instanceof String) {
+			result = !StringUtils.hasText((String)target);
 		} else {
-			result = !StringUtils.isEmpty(target);
+			result = !ObjectUtils.isEmpty(target);
 		}
 		ifResult.push(result);
 		return (T) this;
@@ -97,8 +95,10 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 			result = !(Boolean) target;
 		} else if (target instanceof Collection) {
 			result = CollectionUtils.isEmpty((Collection<?>) target);
+		} else if(target instanceof String) {
+			result = StringUtils.hasText((String)target);
 		} else {
-			result = StringUtils.isEmpty(target);
+			result = ObjectUtils.isEmpty(target);
 		}
 		ifResult.push(result);
 		return (T) this;
@@ -197,7 +197,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		if (!beforeMethodInvoke()) {
 			return (T) this;
 		}
-		And and = new And();
+		Junction and = new Junction(JunctionType.AND);
 		add(and);
 		junctions.push(and);
 		return (T) this;
@@ -208,7 +208,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		if (!beforeMethodInvoke()) {
 			return (T) this;
 		}
-		Or or = new Or();
+		Junction or = new Junction(JunctionType.OR);
 		add(or);
 		junctions.push(or);
 		return (T) this;
@@ -1208,7 +1208,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		if (!beforeMethodInvoke()) {
 			return (T) this;
 		}
-		having = new And();
+		having = new Junction(JunctionType.AND);
 		junctions.push(having);
 		return (T) this;
 	}
@@ -1218,18 +1218,18 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 			return (Predicate) predicate;
 		} else if (predicate instanceof Junction) {
 			Junction junction = (Junction) predicate;
-			if (!CollectionUtils.isEmpty(junction.getPredicates())) {
+			if (!CollectionUtils.isEmpty(junction.getCriterions())) {
 				List<Predicate> predicates = new ArrayList<Predicate>();
-				for (Object p : junction.getPredicates()) {
+				for (Object p : junction.getCriterions()) {
 					Predicate result = parsePredicate(p);
 					if (result != null) {
 						predicates.add(result);
 					}
 				}
 				if (!CollectionUtils.isEmpty(predicates)) {
-					if (junction instanceof And) {
+					if (JunctionType.AND.equals(junction.getType())) {
 						return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-					} else if (junction instanceof Or) {
+					} else if (JunctionType.OR.equals(junction.getType())) {
 						return cb.or(predicates.toArray(new Predicate[predicates.size()]));
 					}
 				}

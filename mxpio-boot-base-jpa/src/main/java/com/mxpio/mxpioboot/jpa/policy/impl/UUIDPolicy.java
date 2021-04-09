@@ -1,15 +1,14 @@
 package com.mxpio.mxpioboot.jpa.policy.impl;
 
-import java.lang.reflect.Field;
 import java.util.UUID;
 
-import org.springframework.util.ReflectionUtils;
+import com.mxpio.mxpioboot.jpa.BeanReflectionUtils;
 
 public class UUIDPolicy extends AbstractGeneratorPolicy {
 
 	@Override
-	protected Object getValue(Object entity, Field field) {
-		Object value = ReflectionUtils.getField(field, entity);
+	protected Object getValue(Object entity, String name) {
+		Object value = BeanReflectionUtils.getPropertyValue(entity, name);
 		if (value == null) {
 			return UUID.randomUUID().toString();
 		}
