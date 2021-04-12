@@ -35,13 +35,15 @@ mxpio-boot-base-jpa是基于JPA实现的。为了更好与spring-data-jpa集成�
 
 #### 方法链式调用
 为结构化查询体功能条件。代码更连贯，增强可读性。
-如下(分页+过滤栏+部分字段查询+固定条件+排序)：
+如下(分页+过滤栏+部分字段查询+动态条件+固定条件+排序)：
 ```java
+	@DataProvider
 	@Transactional(readOnly = true)
-	public Page<User> load(Pageable pageable, String deptId) {
+	public void load(Page<User> page, Criteria criteria, String deptId) {
 		JpaUtil
 		  .linq(User.class)
 		  .select("id", "name", "age")
+		  .where(criteria)
                   .addIf(deptId)
 		    .equal("deptId", deptId)
 	          .endIf()
@@ -54,7 +56,7 @@ mxpio-boot-base-jpa是基于JPA实现的。为了更好与spring-data-jpa集成�
 		    .end()
 		  .end()
 		  .desc("createAt", "name")
-		  .paging(pageable);
+		  .paging(page);
 		/**********************************************************************************************************************************************
 		 * 当deptId为空时，近似于：select id, name, age from user where arg > 18 and (married=1 or salary >= 5000 and salay <= 2000 order by createat desc, name desc)   
 		 * 当deptId不为空时，近似于：select id, name, age from user where deptid = xxx arg > 18 and (married=1 or salary >= 5000 and salay <= 2000 order by createat desc, name desc)
@@ -79,6 +81,76 @@ mxpio-boot-base-jpa是基于JPA实现的。为了更好与spring-data-jpa集成�
     ...
     ...
 ```
+
+#### 智能增删改
+
+* 支持单个和批量实体对象的保存
+* 智能选择合适的EntityManagerFactory（或者说数据源），对于开发人员透明
+* 支持@Generator注解，通过在实体类字段上添加@Generator注解来实现对智能保存方法的优雅干预，推荐是全局通用级别的干预
+* 支持CrudPolicy策略，根据增删改类型加载不同的前置、后置处理
+
+##### 接口CrudPolicy
+
+```java
+public interface CrudPolicy {
+	void apply(CrudContext context);
+}
+```
+
+#### SmartCrudPolicyAdapter
+
+```java
+public class SmartCrudPolicyAdapter implements CrudPolicy {
+
+	@Override
+	public void apply(CrudContext context) {
+		Object entity = context.getEntity();
+		EntityManager entityManager = context.getEntityManager();
+		if (CrudType.SAVE.equals(context.getCrudType())) {
+			if (beforeInsert(context)) {
+				entityManager.persist(entity);
+				afterInsert(context);
+			}
+		} else if(CrudType.UPDATE.equals(context.getCrudType())) {
+			if (beforeUpdate(context)) {
+				entityManager.merge(entity);
+				afterUpdate(context);
+			}
+		} else if(CrudType.DELETE.equals(context.getCrudType())) {
+			if (beforeDelete(context)) {
+				entityManager.merge(entity);
+				afterDelete(context);
+			}
+		}
+	}
+	
+	public boolean beforeDelete(CrudContext context) {
+		return true;
+	}
+	
+	public void afterDelete(CrudContext context) {
+		
+	}
+	
+	public boolean beforeInsert(CrudContext context) {
+		return true;
+	}
+	
+	public void afterInsert(CrudContext context) {
+		
+	}
+	
+	public boolean beforeUpdate(CrudContext context) {
+		return true;
+	}
+	
+	public void afterUpdate(CrudContext context) {
+		
+	}
+}
+```
+
+
 ## 示例
 1. 查询所有数据
 ```java
@@ -150,6 +222,8 @@ mxpio-boot-base-jpa是基于JPA实现的。为了更好与spring-data-jpa集成�
 	boolean isExists = JpaUtil.linq(User.class).exists();
 ```
 
+
+
 10. 标准持久化数据
 ```java
 	JpaUtil.persist(user);
@@ -165,22 +239,22 @@ mxpio-boot-base-jpa是基于JPA实现的。为了更好与spring-data-jpa集成�
 	JpaUtil.merge(user);
 ```
 
-14. 标准批量更新数据
+13. 标准批量更新数据
 ```java
 	JpaUtil.merge(users);
 ```
 
-15. 标准删除数据
+14. 标准删除数据
 ```java
 	JpaUtil.remove(user);
 ```
 
-16. 标准批量删除数据
+15. 标准批量删除数据
 ```java
 	JpaUtil.remove(users);
 ```
 
-17. 条件批量更新数据
+16. 条件批量更新数据
 ```java
 	JpaUtil
     	  .linu(User.class)
@@ -189,12 +263,22 @@ mxpio-boot-base-jpa是基于JPA实现的。为了更好与spring-data-jpa集成�
           .update();
 ```
 
-18. 条件批量删除数据
+17. 条件批量删除数据
 ```java
 	JpaUtil
     	  .lind(User.class)
     	  .le("age", 18)
           .delete();
+```
+
+18. 带策略的增删改
+```java
+	JpaUtil.save(users);
+	JpaUtil.save(users,crudPolicy);
+	JpaUtil.update(users);
+	JpaUtil.update(users,crudPolicy);
+	JpaUtil.delete(users);
+	JpaUtil.delete(users,crudPolicy);
 ```
 
 

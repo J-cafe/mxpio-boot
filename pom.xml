@@ -25,6 +25,7 @@
 		<module>mxpio-boot-base-jpa</module>
 		<module>mxpio-boot-base-common</module>
 		<module>mxpio-boot-base-security</module>
+		<module>mxpio-boot-module-erp</module>
 	</modules>
 	<dependencies>
 		<dependency>
