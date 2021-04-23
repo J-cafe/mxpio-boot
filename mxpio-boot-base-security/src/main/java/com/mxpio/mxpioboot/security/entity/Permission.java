@@ -9,6 +9,7 @@ import javax.persistence.Transient;
 import org.springframework.security.access.ConfigAttribute;
 
 import com.mxpio.mxpioboot.jpa.BaseEntity;
+import com.mxpio.mxpioboot.jpa.annotation.Generator;
 
 /**
 
@@ -26,6 +27,7 @@ public class Permission extends BaseEntity implements ConfigAttribute{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
+	@Generator
 	@Column(name = "ID_", length = 64)
 	private String id;
 	
@@ -47,6 +49,17 @@ public class Permission extends BaseEntity implements ConfigAttribute{
 	@Transient
 	private Element element;
 	
+	@Transient
+	private Url url;
+	
+	public Url getUrl() {
+		return url;
+	}
+
+	public void setUrl(Url url) {
+		this.url = url;
+	}
+
 	public Role getRole() {
 		return role;
 	}

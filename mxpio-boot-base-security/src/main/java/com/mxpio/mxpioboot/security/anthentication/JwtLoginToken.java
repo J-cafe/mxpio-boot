@@ -42,6 +42,7 @@ public class JwtLoginToken extends AbstractAuthenticationToken {
 		this.principal = principal;
 		this.credentials = credentials;
 		super.setAuthenticated(true);
+		super.setDetails(principal);
 	}
 
 	@Override

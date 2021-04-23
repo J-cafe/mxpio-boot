@@ -11,6 +11,7 @@ import javax.persistence.Transient;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.mxpio.mxpioboot.jpa.BaseEntity;
+import com.mxpio.mxpioboot.jpa.annotation.Generator;
 
 @Entity
 @Table(name = "MB_ROLE")
@@ -20,6 +21,7 @@ public class Role extends BaseEntity {
 	
 	@Id
 	@Column(name = "ID_", length = 64)
+	@Generator
 	private String id;
 	
 	@Column(name = "NAME_", length = 64)

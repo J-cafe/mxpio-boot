@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.mxpio.mxpioboot.jpa.BaseEntity;
+import com.mxpio.mxpioboot.jpa.annotation.Generator;
 
 @Entity
 @Table(name = "MB_ROLE_GRANTED_AUTHORITY")
@@ -18,6 +19,7 @@ public class RoleGrantedAuthority extends BaseEntity implements GrantedAuthority
 	
 	@Id
 	@Column(name = "ID_", length = 64)
+	@Generator
 	private String id;
 	
 	@Column(name = "ACTOR_ID_", length = 64)

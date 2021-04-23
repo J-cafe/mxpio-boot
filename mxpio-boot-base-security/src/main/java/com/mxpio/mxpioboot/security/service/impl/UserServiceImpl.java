@@ -9,7 +9,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,11 +20,22 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mxpio.mxpioboot.jpa.JpaUtil;
+import com.mxpio.mxpioboot.jpa.initiator.JpaUtilAble;
+import com.mxpio.mxpioboot.jpa.query.Criteria;
+import com.mxpio.mxpioboot.jpa.query.CriteriaUtils;
+import com.mxpio.mxpioboot.jpa.query.Junction;
+import com.mxpio.mxpioboot.jpa.query.JunctionType;
+import com.mxpio.mxpioboot.jpa.query.Operator;
+import com.mxpio.mxpioboot.jpa.query.SimpleCriterion;
+import com.mxpio.mxpioboot.security.entity.Element;
+import com.mxpio.mxpioboot.security.entity.Permission;
+import com.mxpio.mxpioboot.security.entity.Role;
+import com.mxpio.mxpioboot.security.entity.RoleGrantedAuthority;
 import com.mxpio.mxpioboot.security.entity.User;
 import com.mxpio.mxpioboot.security.service.UserService;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, JpaUtilAble {
 	
 	@Autowired
 	protected PasswordEncoder passwordEncoder;
@@ -108,5 +121,38 @@ public class UserServiceImpl implements UserService {
 		User user = JpaUtil.linq(User.class).idEqual(username).findOne();
 		return user.isAdministrator();
 	}
-	
+
+	@Override
+	@Transactional(readOnly = false)
+	public void afterPropertiesSet(ApplicationContext applicationContext) {
+		
+		SimpleCriterion sc = new SimpleCriterion("resourceType", Element.RESOURCE_TYPE, Operator.EQ);
+		SimpleCriterion sc1 = new SimpleCriterion("roleId", "111", Operator.EQ);
+		SimpleCriterion sc2 = new SimpleCriterion("id", "p111", Operator.EQ);
+		
+		Criteria c = new Criteria();
+		c.add(sc);
+		Junction or = new Junction(JunctionType.OR);
+		or.add(sc1);
+		or.add(sc2);
+		c.add(or);
+		
+		
+		
+		String json = "{\"criterions\":[{\"fieldName\":\"resourceType\",\"operator\":\"EQ\",\"value\":\"ELEMENT\"},{\"criterions\":[{\"fieldName\":\"roleId\",\"operator\":\"EQ\",\"value\":\"111\"},{\"fieldName\":\"id\",\"operator\":\"EQ\",\"value\":\"p111\"}],\"type\":\"OR\"}],\"orders\":[]}";
+		
+		Criteria c2 = CriteriaUtils.json2Criteria(json);
+		Pageable page = PageRequest.of(0, 10);
+		
+		JpaUtil.linq(Permission.class)
+			.where(c2)
+			.collect(Role.class, "roleId")
+			.collect(Element.class, "resourceId")
+			.exists(RoleGrantedAuthority.class)
+				.equalProperty("roleId", "roleId")
+				.equal("actorId", "admin")
+			.end()
+			.paging(page);		
+	}
+
 }

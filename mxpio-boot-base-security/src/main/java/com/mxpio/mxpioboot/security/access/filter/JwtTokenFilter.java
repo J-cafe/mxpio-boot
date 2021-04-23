@@ -78,7 +78,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 return;
             }
 
-            User user = JSON.parseObject(jwt.getClaim("userDetails").asString(), User.class);
+            User user = JSON.parseObject(jwt.getSubject(), User.class);
             JwtLoginToken jwtLoginToken = new JwtLoginToken(user, "", user.getAuthorities());
             jwtLoginToken.setDetails(new WebAuthenticationDetails(httpServletRequest));
             SecurityContextHolder.getContext().setAuthentication(jwtLoginToken);

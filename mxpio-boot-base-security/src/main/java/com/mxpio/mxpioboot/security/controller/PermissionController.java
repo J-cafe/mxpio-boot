@@ -4,28 +4,31 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.mxpio.mxpioboot.common.vo.Result;
 import com.mxpio.mxpioboot.security.entity.Element;
 import com.mxpio.mxpioboot.security.entity.Permission;
 import com.mxpio.mxpioboot.security.service.PermissionService;
+import com.mxpio.mxpioboot.security.service.RoleUrlService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-/**
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
- * @since 2016年3月6日
- */
 @Api(value = "PermissionController", tags = {"权限管理"})
-@Controller("/permiss")
+@RestController
+@RequestMapping("/permiss")
 public class PermissionController {
 	
 	@Autowired
 	private PermissionService permissionService;
+	
+	@Autowired
+	private RoleUrlService roleUrlService;
 	
 	@GetMapping("/loadElements")
 	@ApiOperation(value = "加载页面组件")
@@ -34,9 +37,10 @@ public class PermissionController {
 	}
 	
 	@GetMapping("/loadPermissions")
+	@ResponseBody
 	@ApiOperation(value = "加载权限")
-	public Result<List<Permission>> loadPermissions(String roleId, String urlId) {
-		return Result.OK(permissionService.loadPermissions(roleId, urlId));
+	public Result<List<Permission>> loadPermissions() {
+		return Result.OK(roleUrlService.load());
 	}
 	
 	@PostMapping("/save")

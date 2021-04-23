@@ -18,35 +18,41 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.mxpio.mxpioboot.security.anthentication.JwtLoginToken;
 
-public class LoginFilter extends AbstractAuthenticationProcessingFilter {
-    
-    public LoginFilter() {
-         //拦截url为 "/login" 的POST请求
-        super(new AntPathRequestMatcher("/login", "POST"));
-    }
+import lombok.extern.slf4j.Slf4j;
 
-    @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-            throws AuthenticationException, IOException, ServletException {
-        //从json中获取username和password
-        String body = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
-        String username = null, password = null;
-        if(StringUtils.hasText(body)) {
-            JSONObject jsonObj = JSON.parseObject(body);
-            username = jsonObj.getString("username");
-            password = jsonObj.getString("password");
-        }   
-        
-        if (username == null) 
-            username = "";
-        if (password == null)
-            password = "";
-        username = username.trim();
-       //封装到token中提交
-        JwtLoginToken authRequest = new JwtLoginToken(
-                username, password);
-        
-        return this.getAuthenticationManager().authenticate(authRequest);
-    }
+@Slf4j
+public class LoginFilter extends AbstractAuthenticationProcessingFilter {
+
+	public LoginFilter() {
+		// 拦截url为 "/login" 的POST请求
+		super(new AntPathRequestMatcher("/login", "POST"));
+	}
+
+	@Override
+	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+			throws AuthenticationException, IOException, ServletException {
+		// 从json中获取username和password
+		String body = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
+		String username = null, password = null;
+		if (StringUtils.hasText(body)) {
+			try {
+				JSONObject jsonObj = JSON.parseObject(body);
+				username = jsonObj.getString("username");
+				password = jsonObj.getString("password");
+			} catch (Exception e) {
+				log.error(e.getMessage());
+			}
+		}
+
+		if (username == null)
+			username = "";
+		if (password == null)
+			password = "";
+		username = username.trim();
+		// 封装到token中提交
+		JwtLoginToken authRequest = new JwtLoginToken(username, password);
+
+		return this.getAuthenticationManager().authenticate(authRequest);
+	}
 
 }

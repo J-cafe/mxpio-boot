@@ -44,7 +44,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 		// 构造已认证的authentication
 		JwtLoginToken authenticatedToken = new JwtLoginToken(userDetails, jwtLoginToken.getCredentials(),
 				userDetails.getAuthorities());
-		authenticatedToken.setDetails(jwtLoginToken.getDetails());
+		// authenticatedToken.setDetails(jwtLoginToken.getDetails());
 		return authenticatedToken;
 	}
 
