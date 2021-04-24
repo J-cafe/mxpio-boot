@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,6 +34,7 @@ import com.mxpio.mxpioboot.security.access.filter.LoginFilter;
 import com.mxpio.mxpioboot.security.access.intercept.FilterSecurityInterceptor;
 import com.mxpio.mxpioboot.security.anthentication.JwtAuthenticationProvider;
 import com.mxpio.mxpioboot.security.entity.User;
+import com.mxpio.mxpioboot.security.vo.TokenVo;
 
 @Component
 @Order(120)
@@ -153,7 +153,10 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	            .withIssuedAt(now)
 	            .sign(algorithm);
 	        //签发token
-	        response.getWriter().write(JSON.toJSONString(Result.OK(token)));
+	        TokenVo tokenVo = new TokenVo();
+	        tokenVo.setUser(jwtUserDetails);
+	        tokenVo.setToken(token);
+	        response.getWriter().write(JSON.toJSONString(Result.OK(tokenVo)));
 	    }
 	}
 
@@ -162,7 +165,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		@Override
 		public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 				AuthenticationException exception) throws IOException, ServletException {
-			response.setStatus(HttpStatus.UNAUTHORIZED.value());
+			response.setContentType("application/json;charset=UTF-8");
+			response.getWriter().write(JSON.toJSONString(Result.noauth("账号或密码错误")));
+			// response.setStatus(HttpStatus.UNAUTHORIZED.value());
 		}
 	}
 }

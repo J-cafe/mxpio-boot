@@ -11,4 +11,6 @@ public class LoginUserVo {
 	
 	private String phone;
 	
+	private String token;
+	
 }

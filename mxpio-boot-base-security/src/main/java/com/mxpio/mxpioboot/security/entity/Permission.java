@@ -11,15 +11,6 @@ import org.springframework.security.access.ConfigAttribute;
 import com.mxpio.mxpioboot.jpa.BaseEntity;
 import com.mxpio.mxpioboot.jpa.annotation.Generator;
 
-/**
-
- * 权限信息
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年1月20日
-
- */
 @Entity
 @Table(name = "MB_PERMISSION")
 public class Permission extends BaseEntity implements ConfigAttribute{

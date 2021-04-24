@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.persistence.criteria.CriteriaQuery;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,41 +72,49 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public Map<String, String> updateAvatar(MultipartFile file) {
 		return null;
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public void updateEmail(String username, String email) {
 		
 	}
 
 	@Override
-	public Page<User> queryAll(CriteriaQuery<User> criteria, Pageable pageable) {
-		return null;
+	@Transactional(readOnly = true)
+	public Page<User> queryAll(Criteria criteria, Pageable pageable) {
+		return JpaUtil.linq(User.class).where(criteria).paging(pageable);
 	}
 
 	@Override
-	public List<User> queryAll(CriteriaQuery<User> criteria) {
-		return null;
+	@Transactional(readOnly = true)
+	public List<User> queryAll(Criteria criteria) {
+		return JpaUtil.linq(User.class).where(criteria).list();
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public void download(List<User> queryAll, HttpServletResponse response) throws IOException {
 
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public void updateCenter(User resources) {
 
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public boolean isAdministrator() {
 		return isAdministrator(null);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public boolean isAdministrator(String username) {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (principal instanceof User) {

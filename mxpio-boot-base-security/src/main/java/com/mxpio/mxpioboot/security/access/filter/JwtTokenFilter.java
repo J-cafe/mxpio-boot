@@ -77,7 +77,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 httpServletResponse.getWriter().write(JSON.toJSONString(result));
                 return;
             }
-
             User user = JSON.parseObject(jwt.getSubject(), User.class);
             JwtLoginToken jwtLoginToken = new JwtLoginToken(user, "", user.getAuthorities());
             jwtLoginToken.setDetails(new WebAuthenticationDetails(httpServletRequest));

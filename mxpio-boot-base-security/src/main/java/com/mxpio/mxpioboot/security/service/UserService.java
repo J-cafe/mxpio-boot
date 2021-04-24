@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.persistence.criteria.CriteriaQuery;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mxpio.mxpioboot.jpa.query.Criteria;
 import com.mxpio.mxpioboot.security.entity.User;
 
 public interface UserService {
@@ -68,14 +68,14 @@ public interface UserService {
      * @param pageable 分页参数
      * @return /
      */
-    Page<User> queryAll(CriteriaQuery<User> criteria, Pageable pageable);
+    Page<User> queryAll(Criteria criteria, Pageable pageable);
 
     /**
      * 查询全部不分页
      * @param criteria 条件
      * @return /
      */
-    List<User> queryAll(CriteriaQuery<User> criteria);
+    List<User> queryAll(Criteria criteria);
 
     /**
      * 导出数据
