@@ -27,10 +27,13 @@ import com.mxpio.mxpioboot.security.Constants;
 import com.mxpio.mxpioboot.security.anthentication.JwtLoginToken;
 import com.mxpio.mxpioboot.security.entity.User;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @Data: 2019/10/30
  * @Des: Token有效性验证拦截器
  */
+@Slf4j
 public class JwtTokenFilter extends OncePerRequestFilter {
 	
 	private RequestMatcher requiresAuthenticationRequestMatcher;
@@ -83,6 +86,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(jwtLoginToken);
             filterChain.doFilter(httpServletRequest, httpServletResponse);
         } catch (Exception e) {
+        	log.info(httpServletRequest.getPathInfo());
             throw new BadCredentialsException("登陆凭证失效，请重新登陆");
         }
     }

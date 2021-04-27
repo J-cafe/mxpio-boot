@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mxpio.mxpioboot.common.vo.Result;
 import com.mxpio.mxpioboot.security.entity.Element;
 import com.mxpio.mxpioboot.security.entity.Permission;
+import com.mxpio.mxpioboot.security.entity.Url;
 import com.mxpio.mxpioboot.security.service.PermissionService;
 import com.mxpio.mxpioboot.security.service.RoleUrlService;
+import com.mxpio.mxpioboot.security.service.UrlService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +32,9 @@ public class PermissionController {
 	@Autowired
 	private RoleUrlService roleUrlService;
 	
+	@Autowired
+	private UrlService urlService;
+	
 	@GetMapping("/loadElements")
 	@ApiOperation(value = "加载页面组件")
 	public Result<Collection<Element>> loadElements(String pageId) throws Exception {
@@ -41,6 +46,13 @@ public class PermissionController {
 	@ApiOperation(value = "加载权限")
 	public Result<List<Permission>> loadPermissions() {
 		return Result.OK(roleUrlService.load());
+	}
+	
+	@GetMapping("/loadUrl")
+	@ResponseBody
+	@ApiOperation(value = "加载权限")
+	public Result<List<Url>> loadUrl() {
+		return Result.OK(urlService.findTreeByUsername(null));
 	}
 	
 	@PostMapping("/save")

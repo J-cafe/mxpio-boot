@@ -21,13 +21,6 @@ import com.mxpio.mxpioboot.security.decision.manager.SecurityDecisionManager;
 import com.mxpio.mxpioboot.security.entity.Resource;
 import com.mxpio.mxpioboot.security.entity.User;
 
-/**
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年7月7日
-
- */
 @Service
 public class SecurityDecisionManagerImpl implements SecurityDecisionManager {
 
