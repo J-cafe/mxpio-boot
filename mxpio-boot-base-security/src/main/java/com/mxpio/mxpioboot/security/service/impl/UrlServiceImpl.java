@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.mxpio.mxpioboot.jpa.JpaUtil;
+import com.mxpio.mxpioboot.security.cache.SecurityCacheEvict;
 import com.mxpio.mxpioboot.security.decision.manager.SecurityDecisionManager;
 import com.mxpio.mxpioboot.security.entity.Permission;
 import com.mxpio.mxpioboot.security.entity.Url;
@@ -21,16 +22,9 @@ import com.mxpio.mxpioboot.security.service.UrlService;
 import com.mxpio.mxpioboot.security.service.UrlServiceCache;
 import com.mxpio.mxpioboot.security.service.UserService;
 
-/**
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年1月30日
-
- */
 @Service
 @Transactional(readOnly = true)
-public class UrlServiceImpl implements UrlService {
+public class UrlServiceImpl extends BaseServiceImpl<Url> implements UrlService {
 	@Autowired
 	private UrlServiceCache urlServiceCache;
 	
@@ -130,5 +124,26 @@ public class UrlServiceImpl implements UrlService {
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	@SecurityCacheEvict
+	@Transactional(readOnly = false)
+	public void save(List<Url> url) {
+		JpaUtil.save(url);
+	}
+	
+	@Override
+	@SecurityCacheEvict
+	@Transactional(readOnly = false)
+	public void update(List<Url> url) {
+		JpaUtil.update(url);
+	}
+	
+	@Override
+	@SecurityCacheEvict
+	@Transactional(readOnly = false)
+	public void delete(List<Url> url) {
+		JpaUtil.delete(url);
 	}
 }
