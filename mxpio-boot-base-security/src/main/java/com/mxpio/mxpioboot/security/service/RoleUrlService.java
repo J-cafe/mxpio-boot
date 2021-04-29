@@ -10,4 +10,8 @@ public interface RoleUrlService {
 
 	void save(List<Permission> permissions);
 
+	void delete(List<Permission> permissions);
+
+	void update(List<Permission> permissions);
+
 }

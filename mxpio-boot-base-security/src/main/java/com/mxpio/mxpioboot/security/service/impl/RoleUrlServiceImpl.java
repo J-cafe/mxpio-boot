@@ -22,7 +22,7 @@ import com.mxpio.mxpioboot.security.service.RoleUrlService;
 public class RoleUrlServiceImpl implements RoleUrlService {
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<Permission> load() {
 		List<Permission> result = new ArrayList<>();
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -48,7 +48,22 @@ public class RoleUrlServiceImpl implements RoleUrlService {
 	
 	@Override
 	@SecurityCacheEvict
-	@Transactional
+	@Transactional(readOnly = false)
 	public void save(List<Permission> permissions) {
+		JpaUtil.save(permissions);
+	}
+	
+	@Override
+	@SecurityCacheEvict
+	@Transactional(readOnly = false)
+	public void update(List<Permission> permissions) {
+		JpaUtil.update(permissions);
+	}
+	
+	@Override
+	@SecurityCacheEvict
+	@Transactional(readOnly = false)
+	public void delete(List<Permission> permissions) {
+		JpaUtil.delete(permissions);
 	}
 }

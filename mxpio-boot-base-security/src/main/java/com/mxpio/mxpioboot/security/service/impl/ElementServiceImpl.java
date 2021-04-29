@@ -15,7 +15,7 @@ import com.mxpio.mxpioboot.security.service.ElementService;
 
 @Service
 @Transactional(readOnly = true)
-public class ElementServiceImpl implements ElementService {
+public class ElementServiceImpl extends BaseServiceImpl<Element> implements ElementService {
 
 	@Override
 	public List<Element> findAll() {

@@ -5,15 +5,9 @@ import java.util.List;
 import com.mxpio.mxpioboot.security.entity.Url;
 
 /**
-
  * 菜单服务接口
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年1月30日
-
  */
-public interface UrlService {
+public interface UrlService extends BaseService<Url> {
 	
 	/**
 
@@ -45,5 +39,4 @@ public interface UrlService {
 
 	 */
 	List<Url> getAccessibleUrlsByUsername(String username);
-
 }

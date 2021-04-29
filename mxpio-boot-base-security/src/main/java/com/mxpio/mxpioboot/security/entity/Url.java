@@ -39,17 +39,25 @@ public class Url extends BaseEntity implements Resource {
 	@ApiModelProperty(value = "ID")
 	private String id;
 	
-	@Column(name = "NAME_", length = 64)
-	@ApiModelProperty(value = "名称")
-	private String name;
+	@Column(name = "TITLE_", length = 64)
+	@ApiModelProperty(value = "标题")
+	private String title;
 	
 	@Column(name = "ICON_", length = 255)
 	@ApiModelProperty(value = "图标")
 	private String icon;
 	
+	@Column(name = "NAME_", length = 64)
+	@ApiModelProperty(value = "名称")
+	private String name;
+	
 	@Column(name = "PATH_", length = 512)
 	@ApiModelProperty(value = "路径")
 	private String path;
+	
+	@Column(name = "COMPONENT_", length = 512)
+	@ApiModelProperty(value = "组件")
+	private String component;
 	
 	@Column(name = "PARENT_ID_", length = 64)
 	@ApiModelProperty(value = "父ID")
@@ -68,7 +76,7 @@ public class Url extends BaseEntity implements Resource {
 	private boolean keepAlive;
 	
 	@Column(name = "DESCRIPTION_", length = 255)
-	@ApiModelProperty(value = "是否缓存")
+	@ApiModelProperty(value = "描述")
 	private String description;
 	
 	@Transient

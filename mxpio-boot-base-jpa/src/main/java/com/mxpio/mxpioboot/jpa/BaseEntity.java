@@ -1,13 +1,10 @@
 package com.mxpio.mxpioboot.jpa;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import com.mxpio.mxpioboot.jpa.annotation.Generator;
 import com.mxpio.mxpioboot.jpa.policy.impl.CreatedDatePolicy;
@@ -40,18 +37,4 @@ public class BaseEntity implements Serializable {
     @ApiModelProperty(value = "更新时间", hidden = true)
     private Date updateTime;
     
-    @Override
-    public String toString() {
-        ToStringBuilder builder = new ToStringBuilder(this);
-        Field[] fields = this.getClass().getDeclaredFields();
-        try {
-            for (Field f : fields) {
-                f.setAccessible(true);
-                builder.append(f.getName(), f.get(this)).append("\n");
-            }
-        } catch (Exception e) {
-            builder.append("toString builder encounter an error");
-        }
-        return builder.toString();
-    }
 }

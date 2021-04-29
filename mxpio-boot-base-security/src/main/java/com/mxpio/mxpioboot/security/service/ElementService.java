@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.mxpio.mxpioboot.security.entity.Element;
 
-public interface ElementService {
+public interface ElementService extends BaseService<Element> {
 
 	/**
 
