@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.mxpio.mxpioboot.jpa.JpaUtil;
 import com.mxpio.mxpioboot.security.common.Constants;
@@ -38,7 +39,7 @@ public class UrlServiceCacheImpl implements UrlServiceCache {
 				childrenMap.put(url.getId(), url.getChildren());
 			}
 
-			if (url.getParentId() == null) {
+			if (!StringUtils.hasText(url.getParentId())) {
 				result.add(url);
 			} else {
 				List<Url> children;

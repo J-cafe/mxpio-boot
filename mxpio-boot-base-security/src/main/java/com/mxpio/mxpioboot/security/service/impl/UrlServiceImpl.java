@@ -84,6 +84,10 @@ public class UrlServiceImpl extends BaseServiceImpl<Url> implements UrlService {
 		u.setOrder(url.getOrder());
 		u.setParentId(url.getParentId());
 		u.setPath(url.getPath());
+		u.setComponent(url.getComponent());
+		u.setKeepAlive(url.isKeepAlive());
+		u.setAttributes(url.getAttributes());
+		u.setTitle(url.getTitle());
 		return u;
 	}
 	
