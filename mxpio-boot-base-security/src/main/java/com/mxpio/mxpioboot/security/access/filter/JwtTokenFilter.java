@@ -22,10 +22,13 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mxpio.mxpioboot.common.CommonConstant;
+import com.mxpio.mxpioboot.common.redis.RedisUtils;
+import com.mxpio.mxpioboot.common.util.SpringUtil;
 import com.mxpio.mxpioboot.common.vo.Result;
 import com.mxpio.mxpioboot.security.Constants;
 import com.mxpio.mxpioboot.security.anthentication.JwtLoginToken;
 import com.mxpio.mxpioboot.security.entity.User;
+import com.mxpio.mxpioboot.security.service.OnlineUserService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -65,26 +68,46 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 httpServletResponse.getWriter().write(JSON.toJSONString(result));
                 return;
             }
-            
-            Algorithm algorithm = Algorithm.HMAC256(Constants.JWT_TOKEN_SALT);
-            JWTVerifier v = JWT.require(algorithm).build();
-            DecodedJWT jwt = v.verify(token);
-            
-            Date date = jwt.getExpiresAt();
-            if(date.before(new Date())) {
-            	httpServletResponse.setContentType("application/json;charset=UTF-8");
-                Result<String> result = new Result<>();
-                result.setSuccess(false);
-                result.setCode(CommonConstant.HTTP_NO_AUTHZ);
-                result.setMessage("登陆失效，请重新登陆");
-                httpServletResponse.getWriter().write(JSON.toJSONString(result));
-                return;
+            //TODO 后续使用provider重写
+            RedisUtils redisUtil = SpringUtil.getBean(RedisUtils.class);
+            OnlineUserService onlineUserService = SpringUtil.getBean(OnlineUserService.class);
+            if(redisUtil != null) {
+            	User user = onlineUserService.getOne(token, redisUtil);
+            	if(user == null) {
+            		httpServletResponse.setContentType("application/json;charset=UTF-8");
+                    Result<String> result = new Result<>();
+                    result.setSuccess(false);
+                    result.setCode(CommonConstant.HTTP_NO_AUTHZ);
+                    result.setMessage("登陆失效，请重新登陆");
+                    httpServletResponse.getWriter().write(JSON.toJSONString(result));
+                    return;
+            	}else {
+            		JwtLoginToken jwtLoginToken = new JwtLoginToken(user, "", user.getAuthorities());
+                    jwtLoginToken.setDetails(new WebAuthenticationDetails(httpServletRequest));
+                    SecurityContextHolder.getContext().setAuthentication(jwtLoginToken);
+                    filterChain.doFilter(httpServletRequest, httpServletResponse);
+            	}
+            }else {
+            	Algorithm algorithm = Algorithm.HMAC256(Constants.JWT_TOKEN_SALT);
+                JWTVerifier v = JWT.require(algorithm).build();
+                DecodedJWT jwt = v.verify(token);
+                
+                Date date = jwt.getExpiresAt();
+                if(date.before(new Date())) {
+                	httpServletResponse.setContentType("application/json;charset=UTF-8");
+                    Result<String> result = new Result<>();
+                    result.setSuccess(false);
+                    result.setCode(CommonConstant.HTTP_NO_AUTHZ);
+                    result.setMessage("登陆失效，请重新登陆");
+                    httpServletResponse.getWriter().write(JSON.toJSONString(result));
+                    return;
+                }
+                User user = JSON.parseObject(jwt.getSubject(), User.class);
+                JwtLoginToken jwtLoginToken = new JwtLoginToken(user, "", user.getAuthorities());
+                jwtLoginToken.setDetails(new WebAuthenticationDetails(httpServletRequest));
+                SecurityContextHolder.getContext().setAuthentication(jwtLoginToken);
+                filterChain.doFilter(httpServletRequest, httpServletResponse);
             }
-            User user = JSON.parseObject(jwt.getSubject(), User.class);
-            JwtLoginToken jwtLoginToken = new JwtLoginToken(user, "", user.getAuthorities());
-            jwtLoginToken.setDetails(new WebAuthenticationDetails(httpServletRequest));
-            SecurityContextHolder.getContext().setAuthentication(jwtLoginToken);
-            filterChain.doFilter(httpServletRequest, httpServletResponse);
         } catch (Exception e) {
         	log.info(httpServletRequest.getRequestURI());
             throw new BadCredentialsException("登陆凭证失效，请重新登陆");

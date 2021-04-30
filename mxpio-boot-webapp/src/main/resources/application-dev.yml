@@ -23,5 +23,15 @@ spring:
     sql-script-encoding: UTF-8
     continue-on-error: true
     initialization-mode: ALWAYS
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout:
+    pool:
+      maxActive: 8
+      maxWait: -1
+      maxIdle: 8
+      minIdle: 0
 
 

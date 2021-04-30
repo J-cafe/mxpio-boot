@@ -5,13 +5,7 @@ import java.util.List;
 import com.mxpio.mxpioboot.security.entity.Url;
 
 /**
-
  * 主要内部使用，在接口代理模式下，实现缓存代理的中间类
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年1月30日
-
  */
 public interface UrlServiceCache {
 	/**

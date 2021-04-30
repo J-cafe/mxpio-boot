@@ -6,6 +6,8 @@ public class Constants {
 	
 	public static final String JWT_TOKEN_SALT = "MXPIO";
 	
+	public static final String JWT_TOKEN_REDIS_KEY = "-jwt-token-";
+	
 	// Swagger WHITELIST
     public static final String[] SWAGGER_WHITELIST = {
             "/swagger-ui.html",

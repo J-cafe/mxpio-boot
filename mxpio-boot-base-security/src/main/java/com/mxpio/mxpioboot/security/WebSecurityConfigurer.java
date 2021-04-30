@@ -28,12 +28,15 @@ import org.springframework.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.mxpio.mxpioboot.common.redis.RedisUtils;
+import com.mxpio.mxpioboot.common.util.SpringUtil;
 import com.mxpio.mxpioboot.common.vo.Result;
 import com.mxpio.mxpioboot.security.access.filter.JwtTokenFilter;
 import com.mxpio.mxpioboot.security.access.filter.LoginFilter;
 import com.mxpio.mxpioboot.security.access.intercept.FilterSecurityInterceptor;
 import com.mxpio.mxpioboot.security.anthentication.JwtAuthenticationProvider;
 import com.mxpio.mxpioboot.security.entity.User;
+import com.mxpio.mxpioboot.security.service.OnlineUserService;
 import com.mxpio.mxpioboot.security.vo.TokenVo;
 
 @Component
@@ -153,6 +156,11 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	            .withIssuedAt(now)
 	            .sign(algorithm);
 	        //签发token
+	        RedisUtils redisUtil = SpringUtil.getBean(RedisUtils.class);
+            if(redisUtil != null) {
+            	OnlineUserService onlineUserService = SpringUtil.getBean(OnlineUserService.class);
+            	onlineUserService.save(jwtUserDetails, token, redisUtil);
+            }
 	        TokenVo tokenVo = new TokenVo();
 	        tokenVo.setUser(jwtUserDetails);
 	        tokenVo.setToken(token);
