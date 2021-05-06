@@ -6,13 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
-
  * 授权信息提供者
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年1月24日
-
  */
 public interface GrantedAuthorityProvider {
 

@@ -6,10 +6,6 @@ import javax.persistence.criteria.Predicate;
 
 import com.mxpio.mxpioboot.jpa.lin.Lind;
 
-/**
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
- * @since 2016年2月20日
- */
 public class LindImpl extends LinImpl<Lind, CriteriaDelete<?>> implements Lind {
 
 	public LindImpl(Class<?> domainClass) {

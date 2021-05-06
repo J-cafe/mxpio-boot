@@ -12,13 +12,7 @@ import com.mxpio.mxpioboot.security.entity.User;
 import com.mxpio.mxpioboot.security.service.GrantedAuthorityService;
 
 /**
-
  * Spring Security的{@link org.springframework.security.core.userdetails.UserDetailsService}接口的默认实现
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年2月27日
-
  */
 @Service
 @Transactional(readOnly = true)

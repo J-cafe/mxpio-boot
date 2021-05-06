@@ -6,13 +6,7 @@ import java.util.Map;
 import org.springframework.security.access.ConfigAttribute;
 
 /**
-
  * 菜单权限信息提供者
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年1月22日
-
  */
 public interface FilterConfigAttributeProvider {
 	/**

@@ -7,8 +7,6 @@ import com.mxpio.mxpioboot.jpa.transform.ResultTransformer;
 
 /**
  * 别名转Bean结果转换器
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
- * @since 2016年2月21日
  */
 public class AliasToBeanResultTransformer implements ResultTransformer {
 

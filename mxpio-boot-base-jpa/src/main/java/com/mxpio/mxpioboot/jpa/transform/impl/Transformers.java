@@ -4,8 +4,6 @@ import com.mxpio.mxpioboot.jpa.transform.ResultTransformer;
 
 /**
  * 查询结果转换器工厂
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
- * @since 2016年2月21日
  */
 final public class Transformers {
 

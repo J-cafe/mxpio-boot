@@ -16,13 +16,7 @@ import org.springframework.stereotype.Component;
 import com.mxpio.mxpioboot.security.service.UserService;
 
 /**
-
  * 默认访问决策管理器
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年7月7日
-
  */
 @Component
 public class AccessDecisionManagerImpl extends AbstractAccessDecisionManager {

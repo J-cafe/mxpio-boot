@@ -15,8 +15,6 @@ import com.mxpio.mxpioboot.jpa.query.Criteria;
 
 /**
  * 语言集成查询
- * @author Kevin Yang (mailto:muxiangqiu@gmail.com)
- * @since 2017年11月16日
  */
 public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 

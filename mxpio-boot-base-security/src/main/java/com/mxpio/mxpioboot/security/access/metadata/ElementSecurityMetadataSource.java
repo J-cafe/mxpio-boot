@@ -18,9 +18,9 @@ import com.mxpio.mxpioboot.security.entity.Element;
 public class ElementSecurityMetadataSource implements SecurityMetadataSource {
 	@Autowired
 	private List<ElementConfigAttributeProvider> providers;
+
 	@Override
-	public Collection<ConfigAttribute> getAttributes(Object object)
-			throws IllegalArgumentException {
+	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
 		return getElementMap().get(object.toString());
 	}
 
@@ -28,14 +28,13 @@ public class ElementSecurityMetadataSource implements SecurityMetadataSource {
 	public Collection<ConfigAttribute> getAllConfigAttributes() {
 		Set<ConfigAttribute> allAttributes = new HashSet<ConfigAttribute>();
 
-		for (Map.Entry<String, Collection<ConfigAttribute>> entry : getElementMap()
-				.entrySet()) {
+		for (Map.Entry<String, Collection<ConfigAttribute>> entry : getElementMap().entrySet()) {
 			allAttributes.addAll(entry.getValue());
 		}
 
 		return allAttributes;
 	}
-	
+
 	public Map<String, Collection<ConfigAttribute>> getElementMap() {
 		AnnotationAwareOrderComparator.sort(providers);
 		Map<String, Collection<ConfigAttribute>> componentMap = new LinkedHashMap<String, Collection<ConfigAttribute>>();

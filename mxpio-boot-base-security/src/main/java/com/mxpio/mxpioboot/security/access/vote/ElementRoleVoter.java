@@ -13,13 +13,7 @@ import org.springframework.util.CollectionUtils;
 import com.mxpio.mxpioboot.security.entity.Element;
 
 /**
-
  * 组件角色投票器
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年7月7日
-
  */
 @Component
 public class ElementRoleVoter implements AccessDecisionVoter<Object> {

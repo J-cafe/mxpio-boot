@@ -18,13 +18,7 @@ import com.mxpio.mxpioboot.security.entity.Url;
 import com.mxpio.mxpioboot.security.service.UrlService;
 
 /**
-
  * 默认菜单权限信息提供者
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年1月24日
-
  */
 @Component
 @Order(100)

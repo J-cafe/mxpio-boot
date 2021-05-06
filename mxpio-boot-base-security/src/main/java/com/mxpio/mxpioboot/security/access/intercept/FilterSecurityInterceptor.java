@@ -18,13 +18,7 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 
 /**
-
  * 菜单安全拦截器
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年1月23日
-
  */
 public class FilterSecurityInterceptor extends AbstractSecurityInterceptor implements
 		Filter {

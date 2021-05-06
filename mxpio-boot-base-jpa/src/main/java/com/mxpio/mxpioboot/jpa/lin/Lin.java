@@ -14,8 +14,6 @@ import javax.persistence.criteria.Subquery;
 /**
  * 语言集成抽象接口<br>
  * 抽象了语言集成查询、语言集成删除和语言集成更新的共有方法
- * @author Kevin Yang (mailto:muxiangqiu@gmail.com)
- * @since 2017年11月16日
  *
  * @param <T> 具体语言集成操作类型，如语言集成查询（{@link Linq}）
  * @param <Q> JPA的{@link javax.persistence.criteria.CommonAbstractCriteria}的类型

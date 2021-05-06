@@ -9,10 +9,6 @@ import javax.persistence.metamodel.SingularAttribute;
 
 import com.mxpio.mxpioboot.jpa.lin.Linu;
 
-/**
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
- * @since 2016年2月20日
- */
 public class LinuImpl extends LinImpl<Linu, CriteriaUpdate<?>> implements Linu {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

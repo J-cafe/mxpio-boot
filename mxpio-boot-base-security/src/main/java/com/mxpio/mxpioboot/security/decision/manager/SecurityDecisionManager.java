@@ -7,17 +7,9 @@ import org.springframework.security.access.ConfigAttribute;
 import com.mxpio.mxpioboot.security.entity.Resource;
 
 /**
-
  * 权限决策管理器。<br>
-
  * 实现{@link org.springframework.security.access.SecurityMetadataSource}来<br>
-
  * 提供自己定义资源的权限信息，就可以实现权限决策判断
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年7月7日
-
  */
 public interface SecurityDecisionManager {
 

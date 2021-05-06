@@ -8,10 +8,6 @@ import com.mxpio.mxpioboot.jpa.strategy.GetEntityManagerFactoryStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * @author Kevin Yang (mailto:muxiangqiu@gmail.com)
- * @since 2017年11月16日
- */
 @Component
 public class GetEntityManagerFactoryStrategyImpl implements
         GetEntityManagerFactoryStrategy {

@@ -22,13 +22,7 @@ import org.springframework.stereotype.Component;
 import com.mxpio.mxpioboot.security.access.provider.FilterConfigAttributeProvider;
 
 /**
-
  * 菜单安全元数据源
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年1月22日
-
  */
 @Component
 public class UrlSecurityMetadataSource  implements FilterInvocationSecurityMetadataSource {

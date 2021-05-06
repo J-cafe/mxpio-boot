@@ -13,13 +13,7 @@ import org.springframework.stereotype.Component;
 import com.mxpio.mxpioboot.security.entity.Url;
 
 /**
-
  * 菜单角色投票器
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年7月7日
-
  */
 @Component
 public class UrlRoleVoter implements AccessDecisionVoter<Object> {

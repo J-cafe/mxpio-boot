@@ -18,13 +18,7 @@ import com.mxpio.mxpioboot.security.entity.Element;
 import com.mxpio.mxpioboot.security.service.ElementService;
 
 /**
- * 
  * 默认组件权限信息提供者
- * 
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
- * 
- * @since 2016年1月24日
- * 
  */
 @Component
 @Order(100)

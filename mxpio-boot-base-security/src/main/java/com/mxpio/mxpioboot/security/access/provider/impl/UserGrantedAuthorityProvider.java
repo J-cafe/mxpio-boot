@@ -13,13 +13,7 @@ import com.mxpio.mxpioboot.security.access.provider.GrantedAuthorityProvider;
 import com.mxpio.mxpioboot.security.entity.RoleGrantedAuthority;
 
 /**
-
  * 默认用户授权信息提供者
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年2月27日
-
  */
 @Component
 @Order(1)

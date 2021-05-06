@@ -11,13 +11,6 @@ import org.springframework.cache.annotation.Caching;
 
 import com.mxpio.mxpioboot.security.common.Constants;
 
-/**
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年8月14日
-
- */
 @Target({ElementType.METHOD, ElementType.TYPE})  
 @Retention(RetentionPolicy.RUNTIME)  
 @Inherited 
