@@ -16,13 +16,6 @@ import org.springframework.util.Assert;
 import com.mxpio.mxpioboot.security.access.provider.GrantedAuthorityProvider;
 import com.mxpio.mxpioboot.security.service.GrantedAuthorityService;
 
-/**
-
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
-
- * @since 2016年12月6日
-
- */
 @Service
 @Transactional(readOnly = true)
 public class GrantedAuthorityServiceImpl implements GrantedAuthorityService, InitializingBean {

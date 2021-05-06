@@ -110,6 +110,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
         	log.info(httpServletRequest.getRequestURI());
+        	e.printStackTrace();
             throw new BadCredentialsException("登陆凭证失效，请重新登陆");
         }
     }

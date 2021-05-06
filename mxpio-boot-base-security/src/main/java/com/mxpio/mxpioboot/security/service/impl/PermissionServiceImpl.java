@@ -13,10 +13,6 @@ import com.mxpio.mxpioboot.security.entity.Element;
 import com.mxpio.mxpioboot.security.entity.Permission;
 import com.mxpio.mxpioboot.security.service.PermissionService;
 
-/**
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
- * @since 2016年7月12日
- */
 @Service
 @Transactional(readOnly = true)
 public class PermissionServiceImpl implements PermissionService {
