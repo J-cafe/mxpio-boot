@@ -14,4 +14,5 @@ com.mxpio.mxpioboot.autoconfigure.MxpioPreloadSpringApplicationRunListener
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.mxpio.mxpioboot.autoconfigure.common.CommonAutoConfiguration,\
 com.mxpio.mxpioboot.autoconfigure.jpa.LinqAutoConfiguration,\
-com.mxpio.mxpioboot.autoconfigure.security.SecurityAutoConfiguration
+com.mxpio.mxpioboot.autoconfigure.security.SecurityAutoConfiguration,\
+com.mxpio.mxpioboot.autoconfigure.ddm.DdmAutoConfiguration

@@ -26,6 +26,7 @@
 		<module>mxpio-boot-base-common</module>
 		<module>mxpio-boot-base-security</module>
 		<module>mxpio-boot-module-erp</module>
+		<module>mxpio-boot-base-ddm</module>
 	</modules>
 	<dependencies>
 		<dependency>
@@ -99,6 +100,11 @@
 			<dependency>
 				<groupId>com.mxpio</groupId>
 				<artifactId>mxpio-boot-base-security</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-base-ddm</artifactId>
 				<version>${mxpio.version}</version>
 			</dependency>
 			<dependency>
