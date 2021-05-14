@@ -34,6 +34,9 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 
 	@Column(name = "PASSWORD_", length = 125)
 	private String password;
+	
+	@Column(name = "EMAIL_", length = 125)
+	private String email;
 
 	@Column(name = "ADMINISTRATOR_")
 	private boolean administrator = false;

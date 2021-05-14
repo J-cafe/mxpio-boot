@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
@@ -22,8 +23,8 @@ import org.springframework.security.web.access.intercept.FilterInvocationSecurit
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.JWT;
@@ -96,7 +97,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 				.anyRequest().authenticated()
 				.and()
 			.logout()
-				.logoutUrl(URL_PREFIX + logoutPath).permitAll()
+				.logoutUrl(URL_PREFIX + logoutPath)
+				.logoutSuccessHandler(new JwtLogoutSuccessHandler())
+				.permitAll()
 				.and()
 			.rememberMe();
 
@@ -126,11 +129,11 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 	private String[] mergeAnonymous() {
 		String[] anonymous = null;
-		if (StringUtils.hasText(systemAnonymous) && StringUtils.hasText(customAnonymous)) {
+		if (StringUtils.isNotBlank(systemAnonymous) && StringUtils.isNotBlank(customAnonymous)) {
 			anonymous = (systemAnonymous + "," + customAnonymous).split(",");
-		} else if (StringUtils.hasText(systemAnonymous)) {
+		} else if (StringUtils.isNotBlank(systemAnonymous)) {
 			anonymous = (systemAnonymous).split(",");
-		} else if (StringUtils.hasText(customAnonymous)) {
+		} else if (StringUtils.isNotBlank(customAnonymous)) {
 			anonymous = (customAnonymous).split(",");
 		}
 		return anonymous;
@@ -166,6 +169,22 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	        tokenVo.setToken(token);
 	        response.getWriter().write(JSON.toJSONString(Result.OK(tokenVo)));
 	    }
+	}
+	
+	class JwtLogoutSuccessHandler implements LogoutSuccessHandler{
+
+		@Override
+		public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
+				Authentication authentication) throws IOException, ServletException {
+			
+			String authInfo = request.getHeader("Authorization");
+			String token = StringUtils.removeStart(authInfo, "Bearer ");
+			RedisUtils redisUtil = SpringUtil.getBean(RedisUtils.class);
+            if(redisUtil != null) {
+            	OnlineUserService onlineUserService = SpringUtil.getBean(OnlineUserService.class);
+            	onlineUserService.logout(token, redisUtil);
+            }
+		}
 	}
 
 	//登录失败处理
