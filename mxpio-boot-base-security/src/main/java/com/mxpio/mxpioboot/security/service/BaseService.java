@@ -15,4 +15,6 @@ public interface BaseService<T> {
 	void update(T entity);
 
 	void delete(T entity);
+	
+	int delete(Object key, Class<T> clazz);
 }

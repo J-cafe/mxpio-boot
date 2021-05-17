@@ -45,4 +45,10 @@ public class BaseServiceImpl<T> implements BaseService<T> {
 		JpaUtil.delete(entity);
 	}
 
+	@Override
+	@Transactional(readOnly = false)
+	public int delete(Object key, Class<T> clazz) {
+		return JpaUtil.lind(clazz).idEqual(key).delete();
+	}
+
 }

@@ -21,7 +21,7 @@ import com.mxpio.mxpioboot.jpa.BaseEntity;
  */
 @Entity
 @Table(name = "MB_USER")
-public class User extends BaseEntity implements UserDetails, OrganizationSupport {
+public class User extends BaseEntity implements UserDetails, OrganizationSupport, Actor {
 
 	private static final long serialVersionUID = 1L;
 
@@ -165,6 +165,11 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 
 	public void setSalt(String salt) {
 		this.salt = salt;
+	}
+
+	@Override
+	public String getActorId() {
+		return username;
 	}
 	
 }

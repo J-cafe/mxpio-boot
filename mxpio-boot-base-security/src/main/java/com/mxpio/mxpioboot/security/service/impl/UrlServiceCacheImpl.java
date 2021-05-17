@@ -22,7 +22,7 @@ import com.mxpio.mxpioboot.security.service.UrlServiceCache;
 public class UrlServiceCacheImpl implements UrlServiceCache {
 
 	@Override
-	// @Cacheable(cacheNames = Constants.URL_TREE_CACHE_KEY, keyGenerator = Constants.KEY_GENERATOR_BEAN_NAME)
+	@Cacheable(cacheNames = Constants.URL_TREE_CACHE_KEY, keyGenerator = Constants.KEY_GENERATOR_BEAN_NAME)
 	public List<Url> findTree() {
 		List<Url> result = new ArrayList<Url>();
 		List<Url> urls = JpaUtil.linq(Url.class).asc("order").list();
@@ -54,6 +54,9 @@ public class UrlServiceCacheImpl implements UrlServiceCache {
 		}
 		for (Permission permission : permissions) {
 			Url url = urlMap.get(permission.getResourceId());
+			if(url == null) {
+				continue;
+			}
 			List<ConfigAttribute> configAttributes = url.getAttributes();
 			if (configAttributes == null) {
 				configAttributes = new ArrayList<ConfigAttribute>();

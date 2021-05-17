@@ -12,4 +12,9 @@ public class RouterMetaVo {
 	private boolean keepAlive;
 	
 	private String icon;
+	
+	private Integer order;
+	
+	private String desc;
+	
 }

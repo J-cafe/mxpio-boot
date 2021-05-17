@@ -17,6 +17,12 @@ public interface UrlService extends BaseService<Url> {
 
 	 */
 	List<Url> findAll();
+	
+	/**
+	 * 获取所有菜单
+	 * @return 所有菜单
+	 */
+	public List<Url> findAllTree();
 
 	/**
 

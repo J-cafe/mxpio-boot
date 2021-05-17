@@ -53,7 +53,7 @@ public final class Constants {
 	
 	public final static String[] URL_ELEMENT_SECURITY = new String[] {REQUEST_MAP_CACHE_KEY, URL_ATTRIBUTE_BY_TARGET_CACHE_KEY, URL_TREE_CACHE_KEY, ELEMENT_ATTRIBUTE_MAP_CACHE_KEY};
 
-	public static final String KEY_GENERATOR_BEAN_NAME = "keyGenerator";
+	public static final String KEY_GENERATOR_BEAN_NAME = "securityKeyGenerator";
 	
 	public static final int SECURITY_CONFIGURER_ORDER = Ordered.LOWEST_PRECEDENCE - 1000;
 	

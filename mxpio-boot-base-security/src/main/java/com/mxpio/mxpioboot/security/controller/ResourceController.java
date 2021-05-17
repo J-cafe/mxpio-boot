@@ -7,14 +7,19 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mxpio.mxpioboot.common.vo.Result;
+import com.mxpio.mxpioboot.security.cache.SecurityCacheEvict;
 import com.mxpio.mxpioboot.security.entity.Element;
 import com.mxpio.mxpioboot.security.entity.Url;
 import com.mxpio.mxpioboot.security.service.ElementService;
 import com.mxpio.mxpioboot.security.service.UrlService;
+import com.mxpio.mxpioboot.security.util.RouterUtil;
+import com.mxpio.mxpioboot.security.vo.RouterVo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,12 +37,14 @@ public class ResourceController {
 	
 	@GetMapping("/loadAllUrl")
 	@ApiOperation(value = "获取全部菜单")
-	public Result<List<Url>> loadAllUrl() {
-		return Result.OK(urlService.findAll());
+	public Result<List<RouterVo>> loadAllUrl() {
+		List<Url> urls = urlService.findAllTree();
+		return Result.OK(RouterUtil.buildRouter(urls));
 	}
 	
 	@PostMapping("/saveUrl")
 	@ApiOperation(value = "保存菜单")
+	@SecurityCacheEvict
 	public Result<Object> saveUrl(Url url) {
 		urlService.save(url);
 		return Result.OK();
@@ -45,36 +52,41 @@ public class ResourceController {
 	
 	@PutMapping("/updateUrl")
 	@ApiOperation(value = "更新菜单")
-	public Result<Object> updateUrl(Url url) {
-		urlService.update(url);
+	@SecurityCacheEvict
+	public Result<Object> updateUrl(@RequestBody RouterVo router) {
+		urlService.update(RouterUtil.router2Url(router));
 		return Result.OK();
 	}
 	
 	@DeleteMapping("/deleteUrl")
 	@ApiOperation(value = "删除菜单")
-	public Result<Object> deleteUrl(Url url) {
-		urlService.delete(url);
+	@SecurityCacheEvict
+	public Result<Object> deleteUrl(@RequestParam("id") String id) {
+		urlService.delete(id, Url.class);
 		return Result.OK();
 	}
 	
 	@PostMapping("/saveElement")
-	@ApiOperation(value = "保存菜单")
+	@ApiOperation(value = "保存组件")
+	@SecurityCacheEvict
 	public Result<Object> saveElement(Element element) {
 		elementService.save(element);
 		return Result.OK();
 	}
 	
 	@PutMapping("/updateElement")
-	@ApiOperation(value = "更新菜单")
+	@ApiOperation(value = "更新组件")
+	@SecurityCacheEvict
 	public Result<Object> updateElement(Element element) {
 		elementService.update(element);
 		return Result.OK();
 	}
 	
 	@DeleteMapping("/deleteElement")
-	@ApiOperation(value = "删除菜单")
-	public Result<Object> deleteElement(Element element) {
-		elementService.delete(element);
+	@ApiOperation(value = "删除组件")
+	@SecurityCacheEvict
+	public Result<Object> deleteElement(String id) {
+		elementService.delete(id, Element.class);
 		return Result.OK();
 	}
 

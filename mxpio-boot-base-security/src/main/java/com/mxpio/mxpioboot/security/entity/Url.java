@@ -80,7 +80,6 @@ public class Url extends BaseEntity implements Resource {
 	private String description;
 	
 	@Transient
-	// @ElementCollection
 	private List<Url> children;
 	
 	@Transient
