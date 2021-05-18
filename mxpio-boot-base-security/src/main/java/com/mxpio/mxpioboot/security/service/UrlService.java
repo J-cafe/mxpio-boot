@@ -45,4 +45,7 @@ public interface UrlService extends BaseService<Url> {
 
 	 */
 	List<Url> getAccessibleUrlsByUsername(String username);
+
+	boolean deleteBundleById(String id);
+
 }

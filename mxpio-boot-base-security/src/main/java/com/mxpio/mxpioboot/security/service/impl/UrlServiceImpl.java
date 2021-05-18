@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import com.mxpio.mxpioboot.jpa.JpaUtil;
 import com.mxpio.mxpioboot.security.cache.SecurityCacheEvict;
 import com.mxpio.mxpioboot.security.decision.manager.SecurityDecisionManager;
+import com.mxpio.mxpioboot.security.entity.Element;
 import com.mxpio.mxpioboot.security.entity.Permission;
 import com.mxpio.mxpioboot.security.entity.Url;
 import com.mxpio.mxpioboot.security.entity.User;
@@ -184,4 +185,20 @@ public class UrlServiceImpl extends BaseServiceImpl<Url> implements UrlService {
 	public void delete(List<Url> url) {
 		JpaUtil.delete(url);
 	}
+
+	@Override
+	@SecurityCacheEvict
+	@Transactional(readOnly = false)
+	public boolean deleteBundleById(String id) {
+		Long elementCount = JpaUtil.linq(Element.class).equal("urlId",id).count();
+		if(elementCount > 0) {
+			return false;
+		}else {
+			JpaUtil.lind(Permission.class).equal("resourceId", id).delete();
+			delete(id, Url.class);
+			return true;
+		}
+		
+	}
+
 }

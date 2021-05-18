@@ -45,7 +45,9 @@ public class ResourceController {
 	@PostMapping("/saveUrl")
 	@ApiOperation(value = "保存菜单")
 	@SecurityCacheEvict
-	public Result<Object> saveUrl(Url url) {
+	public Result<Object> saveUrl(@RequestBody RouterVo router) {
+		Url url = RouterUtil.router2Url(router);
+		url.setId(null);
 		urlService.save(url);
 		return Result.OK();
 	}
@@ -62,8 +64,13 @@ public class ResourceController {
 	@ApiOperation(value = "删除菜单")
 	@SecurityCacheEvict
 	public Result<Object> deleteUrl(@RequestParam("id") String id) {
-		urlService.delete(id, Url.class);
-		return Result.OK();
+		boolean b = urlService.deleteBundleById(id);
+		if(b) {
+			return Result.OK();
+		}else {
+			return Result.error("请先删除菜单下的组件");
+		}
+		
 	}
 	
 	@PostMapping("/saveElement")

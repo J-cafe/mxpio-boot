@@ -49,4 +49,5 @@ public class PermissionServiceImpl implements PermissionService {
 			JpaUtil.save(permission);
 		}
 	}
+
 }
