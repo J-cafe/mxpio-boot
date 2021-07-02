@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.mxpio.mxpioboot.common.cache.CacheProvider;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,10 +28,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Component
-public class RedisUtils {
+public class RedisCacheProvider implements CacheProvider {
 	private RedisTemplate<Object, Object> redisTemplate;
 
-	public RedisUtils(RedisTemplate<Object, Object> redisTemplate) {
+	public RedisCacheProvider(RedisTemplate<Object, Object> redisTemplate) {
 		this.redisTemplate = redisTemplate;
 	}
 

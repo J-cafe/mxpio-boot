@@ -2,7 +2,7 @@ package com.mxpio.mxpioboot.security.service;
 
 import org.springframework.scheduling.annotation.Async;
 
-import com.mxpio.mxpioboot.common.redis.RedisUtils;
+import com.mxpio.mxpioboot.common.cache.CacheProvider;
 import com.mxpio.mxpioboot.security.entity.User;
 
 public interface OnlineUserService {
@@ -13,38 +13,38 @@ public interface OnlineUserService {
      * @param token /
      * @param request /
      */
-	public void save(User user, String token, RedisUtils redisUtil);
+	public void save(User user, String token, CacheProvider cacheProvider);
 	
 	/**
      * 踢出用户
      * @param key /
      */
-	public void kickOut(String key, RedisUtils redisUtil);
+	public void kickOut(String key, CacheProvider cacheProvider);
 	
 	/**
      * 退出登录
      * @param token /
      */
-    public void logout(String token, RedisUtils redisUtil);
+    public void logout(String token, CacheProvider cacheProvider);
     
     /**
      * 查询用户
      * @param key /
      * @return /
      */
-    public User getOne(String key, RedisUtils redisUtil);
+    public User getOne(String key, CacheProvider cacheProvider);
     
     /**
      * 根据用户名强退用户
      * @param username /
      */
     @Async
-    public void kickOutForUsername(String username, RedisUtils redisUtil) throws Exception;
+    public void kickOutForUsername(String username, CacheProvider cacheProvider) throws Exception;
     
     /**
      * 检测用户是否在之前已经登录，已经登录踢下线
      * @param userName 用户名
      */
-    public void checkLoginOnUser(String userName, String igoreToken, RedisUtils redisUtil);
+    public void checkLoginOnUser(String userName, String igoreToken, CacheProvider cacheProvider);
 
 }

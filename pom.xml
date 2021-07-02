@@ -17,8 +17,8 @@
 		<java.version>1.8</java.version>
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
 		<swagger.version>2.9.2</swagger.version>
-		<fastjson.version>1.2.70</fastjson.version>
-		<druid.version>1.1.24</druid.version>
+		<fastjson.version>1.2.76</fastjson.version>
+		<druid.version>1.2.6</druid.version>
 	</properties>
 	<modules>
 		<module>mxpio-boot-base-autoconfigure</module>

@@ -3,6 +3,8 @@ package com.mxpio.mxpioboot.jpa.transform.impl;
 
 import net.sf.cglib.beans.BeanMap;
 
+import java.lang.reflect.InvocationTargetException;
+
 import com.mxpio.mxpioboot.jpa.transform.ResultTransformer;
 
 /**
@@ -20,7 +22,7 @@ public class AliasToBeanResultTransformer implements ResultTransformer {
 		Object result;
 		
 		try {
-			result = resultClass.newInstance();
+			result = resultClass.getDeclaredConstructor().newInstance();;
 			
 			BeanMap beanMap = BeanMap.create(result);
 
@@ -30,9 +32,7 @@ public class AliasToBeanResultTransformer implements ResultTransformer {
 					beanMap.put(alias, tuple[i]);
 				}
 			}
-		} catch ( InstantiationException e ) {
-			throw new RuntimeException( "Could not instantiate resultclass: " + resultClass.getName() );
-		} catch ( IllegalAccessException e ) {
+		} catch ( InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e ) {
 			throw new RuntimeException( "Could not instantiate resultclass: " + resultClass.getName() );
 		}
 		return result;

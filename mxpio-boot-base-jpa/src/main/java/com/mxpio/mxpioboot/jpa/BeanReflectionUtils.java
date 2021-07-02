@@ -41,10 +41,9 @@ public final class BeanReflectionUtils {
 	public static Object newInstance(Class<?> cls) {
 		Object obj = null;
 		try {
-			obj = cls.newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+			obj = cls.getDeclaredConstructor().newInstance();
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
 		}
 		return obj;

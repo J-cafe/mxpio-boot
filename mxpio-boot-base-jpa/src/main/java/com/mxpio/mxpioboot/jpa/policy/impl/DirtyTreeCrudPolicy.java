@@ -1,6 +1,7 @@
 package com.mxpio.mxpioboot.jpa.policy.impl;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -42,7 +43,7 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 				if (generatorPolicies == null) {
 					try {
 						generatorPolicies = getNeedGeneratorFields(entity, context.getCrudType());
-					} catch (InstantiationException | IllegalAccessException e) {
+					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 						e.printStackTrace();
 					}
 				}
@@ -98,7 +99,7 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 		return result;
 	}
 	
-	protected List<Map<String, Object>> getNeedGeneratorFields(Object entity, CrudType crudType) throws InstantiationException, IllegalAccessException {
+	protected List<Map<String, Object>> getNeedGeneratorFields(Object entity, CrudType crudType) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		List<Field> fields = BeanReflectionUtils.loadClassFields(entity);
 		
@@ -107,7 +108,7 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 				Generator generator = field.getAnnotation(Generator.class);
 				Map<String, Object> map =new HashMap<String, Object>();
 				if(generator != null) {
-					GeneratorPolicy policy = generator.policy().newInstance();
+					GeneratorPolicy policy = generator.policy().getDeclaredConstructor().newInstance();;
 					if(crudType.equals(policy.getType()) || (CrudType.SAVE_OR_UPDATE.equals(policy.getType()) && !crudType.equals(CrudType.DELETE))) {
 						map.put("field", field);
 						map.put("policy", policy);

@@ -22,7 +22,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mxpio.mxpioboot.common.CommonConstant;
-import com.mxpio.mxpioboot.common.redis.RedisUtils;
+import com.mxpio.mxpioboot.common.cache.CacheProvider;
 import com.mxpio.mxpioboot.common.util.SpringUtil;
 import com.mxpio.mxpioboot.common.vo.Result;
 import com.mxpio.mxpioboot.security.Constants;
@@ -69,10 +69,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 return;
             }
             //TODO 后续使用provider重写
-            RedisUtils redisUtil = SpringUtil.getBean(RedisUtils.class);
+            CacheProvider cacheProvider = SpringUtil.getBean(CacheProvider.class);
             OnlineUserService onlineUserService = SpringUtil.getBean(OnlineUserService.class);
-            if(redisUtil != null) {
-            	User user = onlineUserService.getOne(token, redisUtil);
+            if(cacheProvider != null) {
+            	User user = onlineUserService.getOne(token, cacheProvider);
             	if(user == null) {
             		httpServletResponse.setContentType("application/json;charset=UTF-8");
                     Result<String> result = new Result<>();

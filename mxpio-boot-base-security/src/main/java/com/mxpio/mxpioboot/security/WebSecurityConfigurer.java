@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.mxpio.mxpioboot.common.redis.RedisUtils;
+import com.mxpio.mxpioboot.common.cache.CacheProvider;
 import com.mxpio.mxpioboot.common.util.SpringUtil;
 import com.mxpio.mxpioboot.common.vo.Result;
 import com.mxpio.mxpioboot.security.access.filter.JwtTokenFilter;
@@ -69,6 +69,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private CacheProvider cacheProvider;
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -159,10 +162,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	            .withIssuedAt(now)
 	            .sign(algorithm);
 	        //签发token
-	        RedisUtils redisUtil = SpringUtil.getBean(RedisUtils.class);
-            if(redisUtil != null) {
+            if(cacheProvider != null) {
             	OnlineUserService onlineUserService = SpringUtil.getBean(OnlineUserService.class);
-            	onlineUserService.save(jwtUserDetails, token, redisUtil);
+            	onlineUserService.save(jwtUserDetails, token, cacheProvider);
             }
 	        TokenVo tokenVo = new TokenVo();
 	        tokenVo.setUser(jwtUserDetails);
@@ -179,10 +181,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 			
 			String authInfo = request.getHeader("Authorization");
 			String token = StringUtils.removeStart(authInfo, "Bearer ");
-			RedisUtils redisUtil = SpringUtil.getBean(RedisUtils.class);
-            if(redisUtil != null) {
+            if(cacheProvider != null) {
             	OnlineUserService onlineUserService = SpringUtil.getBean(OnlineUserService.class);
-            	onlineUserService.logout(token, redisUtil);
+            	onlineUserService.logout(token, cacheProvider);
             }
 		}
 	}
