@@ -30,8 +30,8 @@ public class FreemarkerHelper {
     }
 
     public static void main(String[] args) {
-        String var1 = process("org/jeecg/modules/online/config/engine/tableTemplate.ftl", null);
-        System.out.println(var1);
+        String tableTemplate = process("org/jeecg/modules/online/config/engine/tableTemplate.ftl", null);
+        System.out.println(tableTemplate);
     }
 
     static {

@@ -50,42 +50,15 @@ public class Result<T> implements Serializable {
 	
 	public Result<T> success(String message) {
 		this.message = message;
-		this.code = CommonConstant.HTTP_OK_200;
+		this.code = CommonConstant.HTTP_OK;
 		this.success = true;
 		return this;
 	}
-
-	@Deprecated
-	public static Result<Object> ok() {
-		Result<Object> r = new Result<Object>();
-		r.setSuccess(true);
-		r.setCode(CommonConstant.HTTP_OK_200);
-		r.setMessage("成功");
-		return r;
-	}
-
-	@Deprecated
-	public static Result<Object> ok(String msg) {
-		Result<Object> r = new Result<Object>();
-		r.setSuccess(true);
-		r.setCode(CommonConstant.HTTP_OK_200);
-		r.setMessage(msg);
-		return r;
-	}
-
-	@Deprecated
-	public static Result<Object> ok(Object data) {
-		Result<Object> r = new Result<Object>();
-		r.setSuccess(true);
-		r.setCode(CommonConstant.HTTP_OK_200);
-		r.setResult(data);
-		return r;
-	}
-
+	
 	public static<T> Result<T> OK() {
 		Result<T> r = new Result<T>();
 		r.setSuccess(true);
-		r.setCode(CommonConstant.HTTP_OK_200);
+		r.setCode(CommonConstant.HTTP_OK);
 		r.setMessage("成功");
 		return r;
 	}
@@ -93,7 +66,7 @@ public class Result<T> implements Serializable {
 	public static<T> Result<T> OK(T data) {
 		Result<T> r = new Result<T>();
 		r.setSuccess(true);
-		r.setCode(CommonConstant.HTTP_OK_200);
+		r.setCode(CommonConstant.HTTP_OK);
 		r.setResult(data);
 		return r;
 	}
@@ -101,14 +74,14 @@ public class Result<T> implements Serializable {
 	public static<T> Result<T> OK(String msg, T data) {
 		Result<T> r = new Result<T>();
 		r.setSuccess(true);
-		r.setCode(CommonConstant.HTTP_OK_200);
+		r.setCode(CommonConstant.HTTP_OK);
 		r.setMessage(msg);
 		r.setResult(data);
 		return r;
 	}
 	
 	public static Result<Object> error(String msg) {
-		return error(CommonConstant.HTTP_INTERNAL_SERVER_ERROR_500, msg);
+		return error(CommonConstant.HTTP_SERVER_ERROR, msg);
 	}
 	
 	public static Result<Object> error(int code, String msg) {
@@ -121,7 +94,7 @@ public class Result<T> implements Serializable {
 
 	public Result<T> error500(String message) {
 		this.message = message;
-		this.code = CommonConstant.HTTP_INTERNAL_SERVER_ERROR_500;
+		this.code = CommonConstant.HTTP_SERVER_ERROR;
 		this.success = false;
 		return this;
 	}
