@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.mxpio</groupId>
+		<groupId>com.mxpioframework.boot</groupId>
 		<artifactId>mxpio-boot-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -14,27 +14,27 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>com.mxpio</groupId>
+			<groupId>com.mxpioframework.boot</groupId>
 			<artifactId>mxpio-boot-base-common</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.mxpio</groupId>
+			<groupId>com.mxpioframework.boot</groupId>
 			<artifactId>mxpio-boot-base-jpa</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.mxpio</groupId>
+			<groupId>com.mxpioframework.boot</groupId>
 			<artifactId>mxpio-boot-base-security</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.mxpio</groupId>
+			<groupId>com.mxpioframework.boot</groupId>
 			<artifactId>mxpio-boot-base-cache</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.mxpio</groupId>
+			<groupId>com.mxpioframework.boot</groupId>
 			<artifactId>mxpio-boot-module-cache-redis</artifactId>
 			<optional>true</optional>
 		</dependency>

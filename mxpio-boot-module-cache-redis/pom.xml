@@ -1,10 +1,29 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.mxpio</groupId>
-    <artifactId>mxpio-boot-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>mxpio-boot-module-cache-redis</artifactId>
-  <name>缓存模块redis实现</name>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.mxpioframework.boot</groupId>
+		<artifactId>mxpio-boot-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>mxpio-boot-module-cache-redis</artifactId>
+	<name>缓存模块redis实现</name>
+	<dependencies>
+		<!--Mxpio Boot Cache -->
+		<dependency>
+			<groupId>com.mxpioframework.boot</groupId>
+			<artifactId>mxpio-boot-base-cache</artifactId>
+		</dependency>
+		<!--Spring boot Redis -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<!--spring boot 集成redis所需common-pool2 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
+		</dependency>
+	</dependencies>
 </project>

@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.mxpio</groupId>
+		<groupId>com.mxpioframework.boot</groupId>
 		<artifactId>mxpio-boot-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -11,5 +11,10 @@
 	<name>缓存模块</name>
 	<description>缓存模块</description>
 	<dependencies>
+		<!--Mxpio Boot Common -->
+		<dependency>
+			<groupId>com.mxpioframework.boot</groupId>
+			<artifactId>mxpio-boot-base-common</artifactId>
+		</dependency>
 	</dependencies>
 </project>

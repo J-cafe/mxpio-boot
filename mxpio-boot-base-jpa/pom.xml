@@ -3,14 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.mxpio</groupId>
+		<groupId>com.mxpioframework.boot</groupId>
 		<artifactId>mxpio-boot-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>mxpio-boot-base-jpa</artifactId>
 	<dependencies>
 		<dependency>
-			<groupId>com.mxpio</groupId>
+			<groupId>com.mxpioframework.boot</groupId>
 			<artifactId>mxpio-boot-base-common</artifactId>
 		</dependency>
 		<!-- mysql -->
@@ -25,6 +25,5 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid-spring-boot-starter</artifactId>
 		</dependency>
-
 	</dependencies>
 </project>
