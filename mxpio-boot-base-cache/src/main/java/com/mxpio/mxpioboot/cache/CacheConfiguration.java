@@ -1,4 +1,4 @@
-package com.mxpio.mxpioboot.common.cache;
+package com.mxpio.mxpioboot.cache;
 
 import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.context.annotation.ComponentScan;
