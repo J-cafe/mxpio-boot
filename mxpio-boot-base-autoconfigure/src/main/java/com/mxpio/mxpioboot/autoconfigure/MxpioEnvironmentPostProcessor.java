@@ -16,7 +16,6 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 
 public class MxpioEnvironmentPostProcessor implements EnvironmentPostProcessor {
 
-	// Properties对象
 	private final Properties properties = new Properties();
 
 	@Override
