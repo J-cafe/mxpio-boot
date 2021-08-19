@@ -28,5 +28,10 @@
 			<artifactId>mxpio-boot-base-security</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-boot-base-cache</artifactId>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 </project>

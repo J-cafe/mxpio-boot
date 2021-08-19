@@ -25,6 +25,7 @@
 		<module>mxpio-boot-base-jpa</module>
 		<module>mxpio-boot-base-common</module>
 		<module>mxpio-boot-base-security</module>
+		<module>mxpio-boot-base-cache</module>
 	</modules>
 	<dependencies>
 		<dependency>
@@ -98,6 +99,11 @@
 			<dependency>
 				<groupId>com.mxpio</groupId>
 				<artifactId>mxpio-boot-base-security</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-base-cache</artifactId>
 				<version>${mxpio.version}</version>
 			</dependency>
 			<dependency>
