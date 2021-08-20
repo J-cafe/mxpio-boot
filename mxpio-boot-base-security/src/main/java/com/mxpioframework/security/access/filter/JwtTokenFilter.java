@@ -68,7 +68,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 httpServletResponse.getWriter().write(JSON.toJSONString(result));
                 return;
             }
-            //TODO 后续使用provider重写
             CacheProvider cacheProvider = SpringUtil.getBean(CacheProvider.class);
             OnlineUserService onlineUserService = SpringUtil.getBean(OnlineUserService.class);
             if(cacheProvider != null) {

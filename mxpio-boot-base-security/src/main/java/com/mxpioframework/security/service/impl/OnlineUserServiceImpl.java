@@ -42,4 +42,10 @@ public class OnlineUserServiceImpl implements OnlineUserService {
 
 	}
 
+	@Override
+	public void refreshToken(String token, CacheProvider cacheProvider) {
+		User user = getOne(token, cacheProvider);
+		cacheProvider.set(Constants.JWT_TOKEN_REDIS_KEY + token, user, Constants.DEFAULT_TOKEN_TIME_MS / 1000);
+	}
+
 }

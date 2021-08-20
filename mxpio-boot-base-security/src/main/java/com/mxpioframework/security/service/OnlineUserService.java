@@ -46,5 +46,11 @@ public interface OnlineUserService {
      * @param userName 用户名
      */
     public void checkLoginOnUser(String userName, String igoreToken, CacheProvider cacheProvider);
+    
+    /**
+     * 刷新token
+     * @param token
+     */
+    public void refreshToken(String token, CacheProvider cacheProvider);
 
 }

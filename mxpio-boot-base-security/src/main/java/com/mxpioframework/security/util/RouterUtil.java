@@ -10,7 +10,7 @@ import com.mxpioframework.security.vo.RouterMetaVo;
 import com.mxpioframework.security.vo.RouterVo;
 
 public class RouterUtil {
-	public static List<RouterVo> buildRouter(List<Url> urls){
+	public static List<RouterVo> buildRouter(List<Url> urls) {
 		List<RouterVo> routers = new ArrayList<>();
 		for (Url url : urls) {
 			RouterMetaVo meta = new RouterMetaVo();
@@ -20,8 +20,8 @@ public class RouterUtil {
 			meta.setTitle(url.getTitle());
 			meta.setOrder(url.getOrder());
 			meta.setDesc(url.getDescription());
-			RouterVo router = RouterVo.builder().key(url.getId()).parentId(url.getParentId()).name(url.getName()).meta(meta).component(url.getComponent())
-					.path(url.getPath()).build();
+			RouterVo router = RouterVo.builder().key(url.getId()).parentId(url.getParentId()).name(url.getName())
+					.meta(meta).component(url.getComponent()).path(url.getPath()).build();
 			if (CollectionUtils.isNotEmpty(url.getChildren())) {
 				router.setChildren(buildRouter(url.getChildren()));
 			}
@@ -29,8 +29,8 @@ public class RouterUtil {
 		}
 		return routers;
 	}
-	
-	public static Url router2Url(RouterVo router){
+
+	public static Url router2Url(RouterVo router) {
 		Url url = new Url();
 		url.setId(router.getKey());
 		url.setComponent(router.getComponent());
@@ -43,7 +43,7 @@ public class RouterUtil {
 		url.setPath(router.getPath());
 		url.setKeepAlive(router.getMeta().isKeepAlive());
 		url.setParentId(router.getParentId());
-		
+
 		return url;
 	}
 }
