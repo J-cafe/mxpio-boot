@@ -54,5 +54,4 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
 		return this.getAuthenticationManager().authenticate(authRequest);
 	}
-
 }
