@@ -8,6 +8,8 @@ public class Constants {
 	
 	public static final String JWT_TOKEN_REDIS_KEY = "-jwt-token-";
 	
+	public static final String KAPTCHA_REDIS_KEY = "-kaptcha-";
+	
 	// Swagger WHITELIST
     public static final String[] SWAGGER_WHITELIST = {
             "/swagger-ui.html",

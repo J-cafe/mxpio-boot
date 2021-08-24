@@ -13,6 +13,8 @@ import org.springframework.security.core.GrantedAuthority;
 import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
 @Table(name = "MB_ROLE")
 public class Role extends BaseEntity {
@@ -22,12 +24,15 @@ public class Role extends BaseEntity {
 	@Id
 	@Column(name = "ID_", length = 64)
 	@Generator
+	@ApiModelProperty(value = "ID")
 	private String id;
 	
 	@Column(name = "NAME_", length = 64)
+	@ApiModelProperty(value = "角色名称")
 	private String name;
 	
 	@Column(name = "DESCRIPTION_", length = 255)
+	@ApiModelProperty(value = "角色描述")
 	private String description;
 	
 	@Transient

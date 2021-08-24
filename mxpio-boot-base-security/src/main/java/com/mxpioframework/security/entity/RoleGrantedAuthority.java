@@ -11,6 +11,8 @@ import org.springframework.security.core.GrantedAuthority;
 import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
 @Table(name = "MB_ROLE_GRANTED_AUTHORITY")
 public class RoleGrantedAuthority extends BaseEntity implements GrantedAuthority {
@@ -20,12 +22,15 @@ public class RoleGrantedAuthority extends BaseEntity implements GrantedAuthority
 	@Id
 	@Column(name = "ID_", length = 64)
 	@Generator
+	@ApiModelProperty(value = "ID")
 	private String id;
 	
 	@Column(name = "ACTOR_ID_", length = 64)
+	@ApiModelProperty(value = "演员ID")
 	private String actorId;
 	
 	@Column(name = "ROLE_ID_", length = 64)
+	@ApiModelProperty(value = "角色ID")
 	private String roleId;
 
 	public String getId() {

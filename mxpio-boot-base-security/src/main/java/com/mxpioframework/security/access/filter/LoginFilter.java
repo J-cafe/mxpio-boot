@@ -16,11 +16,12 @@ import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.mxpioframework.cache.provider.CacheProvider;
+import com.mxpioframework.common.util.SpringUtil;
+import com.mxpioframework.security.Constants;
 import com.mxpioframework.security.anthentication.JwtLoginToken;
+import com.mxpioframework.security.kaptcha.KaptchaAuthenticationException;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
 	public LoginFilter() {
@@ -32,16 +33,22 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
 		// 从json中获取username和password
+		String username = null, password = null,code = null,uuid = null;
 		String body = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
-		String username = null, password = null;
 		if (StringUtils.hasText(body)) {
-			try {
-				JSONObject jsonObj = JSON.parseObject(body);
-				username = jsonObj.getString("username");
-				password = jsonObj.getString("password");
-			} catch (Exception e) {
-				log.error(e.getMessage());
-			}
+			JSONObject jsonObj = JSON.parseObject(body);
+			username = jsonObj.getString("username");
+			password = jsonObj.getString("password");
+			code = jsonObj.getString("code");
+			uuid = jsonObj.getString("uuid");
+		}
+		System.out.println(code);
+		if(uuid == null || code == null) {
+			throw new KaptchaAuthenticationException("验证码错误");
+		}
+		CacheProvider cacheProvider = SpringUtil.getBean(CacheProvider.class);
+		if(!code.equals(cacheProvider.get(Constants.KAPTCHA_REDIS_KEY+uuid)+"")) {
+			throw new KaptchaAuthenticationException("验证码错误");
 		}
 
 		if (username == null)

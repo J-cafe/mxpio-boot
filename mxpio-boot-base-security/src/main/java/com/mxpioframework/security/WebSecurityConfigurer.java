@@ -12,18 +12,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.authentication.AccountStatusException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.www.NonceExpiredException;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
@@ -37,6 +42,7 @@ import com.mxpioframework.security.access.filter.LoginFilter;
 import com.mxpioframework.security.access.intercept.FilterSecurityInterceptor;
 import com.mxpioframework.security.anthentication.JwtAuthenticationProvider;
 import com.mxpioframework.security.entity.User;
+import com.mxpioframework.security.kaptcha.KaptchaAuthenticationException;
 import com.mxpioframework.security.service.OnlineUserService;
 import com.mxpioframework.security.vo.TokenVo;
 
@@ -194,7 +200,23 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 				AuthenticationException exception) throws IOException, ServletException {
 			response.setContentType("application/json;charset=UTF-8");
-			response.getWriter().write(JSON.toJSONString(Result.noauth("账号或密码错误")));
+			if(exception instanceof KaptchaAuthenticationException) {
+				response.getWriter().write(JSON.toJSONString(Result.noauth(exception.getMessage())));
+			}else if(exception instanceof BadCredentialsException){
+				response.getWriter().write(JSON.toJSONString(Result.noauth("账号或密码错误")));
+			}else if(exception instanceof AccountStatusException){
+				response.getWriter().write(JSON.toJSONString(Result.noauth("账号已锁定")));
+			}else if(exception instanceof InsufficientAuthenticationException){
+				response.getWriter().write(JSON.toJSONString(Result.noauth("未认证的客户端")));
+			}else if(exception instanceof NonceExpiredException){
+				response.getWriter().write(JSON.toJSONString(Result.noauth("Nonce已过期")));
+			}else if(exception instanceof NonceExpiredException){
+				response.getWriter().write(JSON.toJSONString(Result.noauth("Nonce已过期")));
+			}else if(exception instanceof UsernameNotFoundException){
+				response.getWriter().write(JSON.toJSONString(Result.noauth("用户未找到")));
+			}else {
+				response.getWriter().write(JSON.toJSONString(Result.noauth("登录异常")));
+			}
 			// response.setStatus(HttpStatus.UNAUTHORIZED.value());
 		}
 	}
