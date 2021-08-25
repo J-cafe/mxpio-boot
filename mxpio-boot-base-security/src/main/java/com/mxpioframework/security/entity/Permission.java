@@ -11,8 +11,11 @@ import org.springframework.security.access.ConfigAttribute;
 import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
+import lombok.ToString;
+
 @Entity
 @Table(name = "MB_PERMISSION")
+@ToString
 public class Permission extends BaseEntity implements ConfigAttribute{
 	
 	private static final long serialVersionUID = 1L;

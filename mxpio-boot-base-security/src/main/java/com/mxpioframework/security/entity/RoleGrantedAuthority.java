@@ -12,9 +12,11 @@ import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.ToString;
 
 @Entity
 @Table(name = "MB_ROLE_GRANTED_AUTHORITY")
+@ToString
 public class RoleGrantedAuthority extends BaseEntity implements GrantedAuthority {
 
 	private static final long serialVersionUID = 1L;

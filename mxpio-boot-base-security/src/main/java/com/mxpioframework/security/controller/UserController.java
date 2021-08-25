@@ -23,7 +23,9 @@ import com.mxpioframework.security.service.UserService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Api(value = "UserController", tags = {"用户管理"})
 @RestController
 @RequestMapping("/user")
@@ -55,6 +57,8 @@ public class UserController {
 	@ApiOperation(value = "用户信息")
 	public Result<User> info(@PathParam("token") String token) throws Exception {
 		User user = onlineUserService.getOne(token, cacheProvider);
+		log.info("user==>" + user);
+		log.info("Authorities==>" + user.getAuthorities());
 		return Result.OK(user);
 	}
 	

@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.mxpioframework.jpa.BaseEntity;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.ToString;
 
 /**
  * 用戶模型
@@ -23,6 +24,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @Entity
 @Table(name = "MB_USER")
+@ToString
 public class User extends BaseEntity implements UserDetails, OrganizationSupport, Actor {
 
 	private static final long serialVersionUID = 1L;

@@ -17,11 +17,13 @@ import com.mxpioframework.jpa.annotation.Generator;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(name = "MB_URL")
+@ToString
 public class Url extends BaseEntity implements Resource {
 
 	private static final long serialVersionUID = 1L;
