@@ -13,6 +13,11 @@ import com.mxpioframework.security.SecurityConfiguration;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 自动装载 权限模块 mxpio-boot-base-security
+ * @author MxpIO <i@mxpio.com>
+ *
+ */
 @Configuration
 @ConditionalOnClass(SecurityConfiguration.class)
 @AutoConfigureAfter(LinqConfiguration.class)

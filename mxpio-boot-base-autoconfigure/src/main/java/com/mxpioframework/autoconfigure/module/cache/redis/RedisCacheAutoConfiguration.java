@@ -12,6 +12,11 @@ import com.mxpioframework.module.cache.redis.RedisCacheConfiguration;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 自动装载 缓存模块Redis实现 mxpio-boot-module-cache-redis
+ * @author MxpIO <i@mxpio.com>
+ *
+ */
 @Configuration
 @ConditionalOnClass(RedisCacheConfiguration.class)
 @AutoConfigureAfter(CacheConfiguration.class)

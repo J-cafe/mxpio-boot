@@ -14,6 +14,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
+/**
+ * 加载模块配置文件
+ * @author MxpIO <i@mxpio.com>
+ *
+ */
 public class MxpioEnvironmentPostProcessor implements EnvironmentPostProcessor {
 
 	private final Properties properties = new Properties();
