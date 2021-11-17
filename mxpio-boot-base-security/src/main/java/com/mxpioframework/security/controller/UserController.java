@@ -5,6 +5,8 @@ import java.util.Collection;
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,8 +57,8 @@ public class UserController {
 	
 	@GetMapping("/info")
 	@ApiOperation(value = "用户信息")
-	public Result<User> info(@PathParam("token") String token) throws Exception {
-		User user = onlineUserService.getOne(token, cacheProvider);
+	public Result<UserDetails> info(@PathParam("token") String token) throws Exception {
+		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		log.info("user==>" + user);
 		log.info("Authorities==>" + user.getAuthorities());
 		return Result.OK(user);
@@ -66,6 +68,7 @@ public class UserController {
 	@ApiOperation(value = "根据用户名强退用户")
 	public Result<User> logout(@PathParam("username") String username) throws Exception {
 		onlineUserService.kickOutForUsername(username, cacheProvider);
+		log.info("logout sucessful");
 		return Result.OK();
 	}
 	

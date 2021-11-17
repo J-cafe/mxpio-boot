@@ -21,6 +21,7 @@ import com.mxpioframework.common.util.SpringUtil;
 import com.mxpioframework.security.Constants;
 import com.mxpioframework.security.anthentication.JwtLoginToken;
 import com.mxpioframework.security.kaptcha.KaptchaAuthenticationException;
+import com.mxpioframework.security.kaptcha.KaptchaProperties;
 
 public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -33,22 +34,24 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
 		// 从json中获取username和password
-		String username = null, password = null,code = null,uuid = null;
+		String username = null, password = null,kaptcha = null,uuid = null;
 		String body = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
 		if (StringUtils.hasText(body)) {
 			JSONObject jsonObj = JSON.parseObject(body);
 			username = jsonObj.getString("username");
 			password = jsonObj.getString("password");
-			code = jsonObj.getString("code");
+			kaptcha = jsonObj.getString("kaptcha");
 			uuid = jsonObj.getString("uuid");
 		}
-		System.out.println(code);
-		if(uuid == null || code == null) {
-			throw new KaptchaAuthenticationException("验证码错误");
-		}
-		CacheProvider cacheProvider = SpringUtil.getBean(CacheProvider.class);
-		if(!code.equals(cacheProvider.get(Constants.KAPTCHA_REDIS_KEY+uuid)+"")) {
-			throw new KaptchaAuthenticationException("验证码错误");
+		KaptchaProperties kaptchaProperties = SpringUtil.getBean(KaptchaProperties.class);
+		if(kaptchaProperties.getOpen()) {
+			if(uuid == null || kaptcha == null) {
+				throw new KaptchaAuthenticationException("验证码错误");
+			}
+			CacheProvider cacheProvider = SpringUtil.getBean(CacheProvider.class);
+			if(!kaptcha.equals(cacheProvider.get(Constants.KAPTCHA_REDIS_KEY+uuid)+"")) {
+				throw new KaptchaAuthenticationException("验证码错误");
+			}
 		}
 
 		if (username == null)

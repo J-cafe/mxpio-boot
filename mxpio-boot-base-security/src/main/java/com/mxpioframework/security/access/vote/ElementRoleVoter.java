@@ -40,14 +40,16 @@ public class ElementRoleVoter implements AccessDecisionVoter<Object> {
 	}
 
 	public boolean supports(Class<?> clazz) {
-		return Component.class.isAssignableFrom(clazz);
+		return Element.class.isAssignableFrom(clazz);
 	}
 
 	public int vote(Authentication authentication, Object object,
 			Collection<ConfigAttribute> attributes) {
+		//用户权限为空，拒绝访问
 		if(authentication == null) {
 			return ACCESS_DENIED;
 		}
+		//资源所需权限为空，放行
 		if (CollectionUtils.isEmpty(attributes)) {
 			return ACCESS_GRANTED;
 		}
