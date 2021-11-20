@@ -35,8 +35,12 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 			throws AuthenticationException, IOException, ServletException {
 		// 从json中获取username和password
 		String username = null, password = null,kaptcha = null,uuid = null;
+		username = request.getParameter("username");
+		password = request.getParameter("password");
+		kaptcha = request.getParameter("kaptcha");
+		uuid = request.getParameter("uuid");
 		String body = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
-		if (StringUtils.hasText(body)) {
+		if (StringUtils.hasText(body) && username == null) {
 			JSONObject jsonObj = JSON.parseObject(body);
 			username = jsonObj.getString("username");
 			password = jsonObj.getString("password");
