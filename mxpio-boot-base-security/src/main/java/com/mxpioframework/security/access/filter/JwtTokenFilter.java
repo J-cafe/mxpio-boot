@@ -39,12 +39,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 	private RequestMatcher requiresAuthenticationRequestMatcher;
 	
 	public JwtTokenFilter() {
-		this.requiresAuthenticationRequestMatcher = new RequestHeaderRequestMatcher("Authorization");
+		this.requiresAuthenticationRequestMatcher = new RequestHeaderRequestMatcher("Access-Token");
 	}
 	
 	protected String getJwtToken(HttpServletRequest request) {
-		String authInfo = request.getHeader("Authorization");
-		return StringUtils.removeStart(authInfo, "Bearer ");
+		String authInfo = request.getHeader("Access-Token");
+		return authInfo;
 	}
 
     @Override
