@@ -1,7 +1,6 @@
 package com.mxpioframework.security;
 
 import java.io.IOException;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,8 +31,6 @@ import org.springframework.security.web.authentication.www.NonceExpiredException
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.mxpioframework.cache.provider.CacheProvider;
 import com.mxpioframework.common.util.SpringUtil;
 import com.mxpioframework.common.vo.Result;
@@ -44,6 +41,7 @@ import com.mxpioframework.security.anthentication.JwtAuthenticationProvider;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.kaptcha.KaptchaAuthenticationException;
 import com.mxpioframework.security.service.OnlineUserService;
+import com.mxpioframework.security.util.TokenUtil;
 import com.mxpioframework.security.vo.TokenVo;
 
 @Component
@@ -156,25 +154,17 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	        response.setContentType("application/json;charset=UTF-8");
 	        
 	        User jwtUserDetails = (User) authentication.getPrincipal();
-	        String json = JSON.toJSONString(jwtUserDetails);
-	        long nowMillis = System.currentTimeMillis();
-	        Date now = new Date(nowMillis);
-	        long expMillis = nowMillis + Constants.DEFAULT_TOKEN_TIME_MS;
-            Date exp = new Date(expMillis);
-            Algorithm algorithm = Algorithm.HMAC256(Constants.JWT_TOKEN_SALT);
-	        String token = JWT.create()
-	    		.withSubject(json)
-	            .withExpiresAt(exp)
-	            .withIssuedAt(now)
-	            .sign(algorithm);
+	        String accessToken = TokenUtil.createAccessToken(jwtUserDetails);
+	        String refreshToken = TokenUtil.createRefreshToken(accessToken);
 	        //签发token
             if(cacheProvider != null) {
             	OnlineUserService onlineUserService = SpringUtil.getBean(OnlineUserService.class);
-            	onlineUserService.save(jwtUserDetails, token, cacheProvider);
+            	onlineUserService.save(jwtUserDetails, accessToken, refreshToken, cacheProvider);
             }
 	        TokenVo tokenVo = new TokenVo();
 	        tokenVo.setUser(jwtUserDetails);
-	        tokenVo.setToken(token);
+	        tokenVo.setToken(accessToken);
+	        tokenVo.setRefreshToken(refreshToken);
 	        response.getWriter().write(JSON.toJSONString(Result.OK(tokenVo)));
 	    }
 	}

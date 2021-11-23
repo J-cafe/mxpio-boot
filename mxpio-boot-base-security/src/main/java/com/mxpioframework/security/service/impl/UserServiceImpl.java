@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
+	@Transactional(readOnly = false)
 	public void updatePass(String username, String newPassword) {
 		User u = JpaUtil.getOne(User.class, username);
 		u.setPassword(passwordEncoder.encode(newPassword));

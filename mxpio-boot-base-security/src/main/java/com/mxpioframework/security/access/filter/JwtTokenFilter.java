@@ -17,18 +17,15 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.alibaba.fastjson.JSON;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mxpioframework.cache.provider.CacheProvider;
 import com.mxpioframework.common.CommonConstant;
 import com.mxpioframework.common.util.SpringUtil;
 import com.mxpioframework.common.vo.Result;
-import com.mxpioframework.security.Constants;
 import com.mxpioframework.security.anthentication.JwtLoginToken;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.OnlineUserService;
+import com.mxpioframework.security.util.TokenUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -80,18 +77,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     result.setMessage("登陆失效，请重新登陆");
                     httpServletResponse.getWriter().write(JSON.toJSONString(result));
                     return;
-            	}else {
+            	} else {
             		JwtLoginToken jwtLoginToken = new JwtLoginToken(user, "", user.getAuthorities());
                     jwtLoginToken.setDetails(new WebAuthenticationDetails(httpServletRequest));
                     SecurityContextHolder.getContext().setAuthentication(jwtLoginToken);
                     filterChain.doFilter(httpServletRequest, httpServletResponse);
             	}
             }else {
-            	Algorithm algorithm = Algorithm.HMAC256(Constants.JWT_TOKEN_SALT);
-                JWTVerifier v = JWT.require(algorithm).build();
-                DecodedJWT jwt = v.verify(token);
-                
+            	DecodedJWT jwt = TokenUtil.verifyToken(token);
                 Date date = jwt.getExpiresAt();
+                
                 if(date.before(new Date())) {
                 	httpServletResponse.setContentType("application/json;charset=UTF-8");
                     Result<String> result = new Result<>();

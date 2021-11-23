@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +20,9 @@ import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.Constants;
 import com.mxpioframework.security.entity.Url;
 import com.mxpioframework.security.kaptcha.KaptchaDTO;
+import com.mxpioframework.security.service.OnlineUserService;
 import com.mxpioframework.security.service.UrlService;
+import com.mxpioframework.security.vo.TokenVo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,7 +41,10 @@ public class LoginController {
 	
 	@Autowired
 	private DefaultKaptcha defaultKaptcha;
-
+	
+	@Autowired
+	private OnlineUserService onlineUserService;
+	
 	@GetMapping("/loadUrl")
 	@ApiOperation(value = "加载菜单")
 	public Result<List<Url>> loadUrl() {
@@ -63,5 +69,17 @@ public class LoginController {
         captcha.setCode(uuid);
         captcha.setImage(encoder.encode(out.toByteArray()));
 		return Result.OK(captcha);
+	}
+	
+	@PostMapping("/refreshToken")
+	@ApiOperation(value = "刷新token")
+	public Result<Object> refreshToken(String refreshToken) throws IOException {
+		TokenVo tokenVo;
+		tokenVo = onlineUserService.refreshToken(refreshToken, cacheProvider);
+		if(tokenVo != null) {
+			return Result.OK(tokenVo);
+		}else {
+			return Result.noauth("refreshToken已失效");
+		}
 	}
 }

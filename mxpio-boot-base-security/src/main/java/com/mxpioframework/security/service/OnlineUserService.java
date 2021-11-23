@@ -4,6 +4,7 @@ import org.springframework.scheduling.annotation.Async;
 
 import com.mxpioframework.cache.provider.CacheProvider;
 import com.mxpioframework.security.entity.User;
+import com.mxpioframework.security.vo.TokenVo;
 
 public interface OnlineUserService {
 	
@@ -13,7 +14,7 @@ public interface OnlineUserService {
      * @param token /
      * @param request /
      */
-	public void save(User user, String token, CacheProvider cacheProvider);
+	public void save(User user, String token, String refreshToken, CacheProvider cacheProvider);
 	
 	/**
      * 踢出用户
@@ -51,6 +52,6 @@ public interface OnlineUserService {
      * 刷新token
      * @param token
      */
-    public void refreshToken(String token, CacheProvider cacheProvider);
+    public TokenVo refreshToken(String refreshToken, CacheProvider cacheProvider);
 
 }
