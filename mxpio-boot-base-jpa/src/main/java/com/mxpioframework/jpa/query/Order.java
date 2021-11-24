@@ -1,5 +1,8 @@
 package com.mxpioframework.jpa.query;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class Order {
 	
 	private String fieldName; // 属性名

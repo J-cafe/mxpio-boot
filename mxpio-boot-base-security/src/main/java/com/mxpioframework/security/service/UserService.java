@@ -20,7 +20,7 @@ public interface UserService {
      * 新增用户
      * @param resources /
      */
-    void create(User user);
+	User create(User user);
 
     /**
      * 编辑用户

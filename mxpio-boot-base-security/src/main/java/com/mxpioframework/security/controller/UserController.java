@@ -1,14 +1,17 @@
 package com.mxpioframework.security.controller;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,7 +48,8 @@ public class UserController {
 	@GetMapping("/list")
 	@ApiOperation(value = "用户列表")
 	public Result<Collection<User>> list(@PathParam("filter") String filter) throws Exception {
-		Criteria criteria = new Criteria();
+		 Criteria criteria = new Criteria();
+		
 		if(filter != null) {
 			Junction junction = new Junction(JunctionType.OR);
 			junction.add(new SimpleCriterion("username", filter, Operator.LIKE));
@@ -57,11 +61,38 @@ public class UserController {
 	
 	@GetMapping("/info")
 	@ApiOperation(value = "用户信息")
-	public Result<UserDetails> info(@PathParam("token") String token) throws Exception {
+	public Result<UserDetails> info() throws Exception {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		log.info("user==>" + user);
 		log.info("Authorities==>" + user.getAuthorities());
 		return Result.OK(user);
+	}
+	
+	@PostMapping("/add")
+	@ApiOperation(value = "添加用户")
+	public Result<UserDetails> add(User user) throws Exception {
+		userService.create(user);
+		return Result.OK("添加成功",user);
+	}
+	
+	@PutMapping("/edit")
+	@ApiOperation(value = "编辑用户")
+	public Result<User> edit(User user) throws Exception {
+		userService.update(user);
+		return Result.OK("编辑成功",null);
+	}
+	
+	@DeleteMapping("/delete")
+	@ApiOperation(value = "删除用户")
+	public Result<UserDetails> delete(String username) throws Exception {
+		userService.delete(new HashSet<String>() {
+			private static final long serialVersionUID = 1L;
+
+			{
+				add(username);
+			}
+		});
+		return Result.OK("删除成功",null);
 	}
 	
 	@PostMapping("/logout")

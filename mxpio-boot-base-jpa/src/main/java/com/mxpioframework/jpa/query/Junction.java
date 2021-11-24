@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * 联合条件
  */
-public class Junction implements Criterion{
+public class Junction implements Criterion {
 	private JunctionType type;
 	private List<Object> criterions = new ArrayList<Object>();
 	public Junction(JunctionType type) {

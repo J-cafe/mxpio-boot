@@ -41,14 +41,17 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	
 	@Override
 	@Transactional(readOnly = false)
-	public void create(User user) {
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+	public User create(User user) {
+		user.setPassword(passwordEncoder.encode("123456"));
 		JpaUtil.save(user);
+		return user;
 	}
 
 	@Override
 	@Transactional(readOnly = false)
 	public void update(User user) throws Exception {
+		User temp = JpaUtil.getOne(User.class, user.getUsername());
+		user.setPassword(temp.getPassword());
 		JpaUtil.update(user);
 	}
 
