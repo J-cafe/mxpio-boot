@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,7 +60,7 @@ public class PermissionController {
 	
 	@PostMapping("/save")
 	@ApiOperation(value = "保存权限")
-	public Result<Object> save(Permission permission) {
+	public Result<Object> save(@RequestBody Permission permission) {
 		permissionService.save(permission);
 		return Result.OK();
 	}

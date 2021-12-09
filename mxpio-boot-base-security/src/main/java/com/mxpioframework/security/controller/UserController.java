@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -70,14 +71,14 @@ public class UserController {
 	
 	@PostMapping("/add")
 	@ApiOperation(value = "添加用户")
-	public Result<UserDetails> add(User user) throws Exception {
+	public Result<UserDetails> add(@RequestBody User user) throws Exception {
 		userService.create(user);
 		return Result.OK("添加成功",user);
 	}
 	
 	@PutMapping("/edit")
 	@ApiOperation(value = "编辑用户")
-	public Result<User> edit(User user) throws Exception {
+	public Result<User> edit(@RequestBody User user) throws Exception {
 		userService.update(user);
 		return Result.OK("编辑成功",null);
 	}
