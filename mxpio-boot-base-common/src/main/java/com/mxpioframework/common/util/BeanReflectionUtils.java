@@ -1,4 +1,4 @@
-package com.mxpioframework.jpa;
+package com.mxpioframework.common.util;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
@@ -13,14 +13,14 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.BeanMap;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.aop.SpringProxy;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
-import javassist.util.proxy.ProxyObject;
-
 public final class BeanReflectionUtils {
+	
+	final static String[] PROXY_CLASS_NAMES = new String[] { "javassist.util.proxy.ProxyObject",
+	"org.springframework.aop.SpringProxy" };
 
 	@SuppressWarnings("unchecked")
 	public static <T> T getPropertyValue(Object bean, String name) {
@@ -64,30 +64,34 @@ public final class BeanReflectionUtils {
 		}
 		return fields;
 	}
-	
-	/**
-	 * 加载Clazz及其父类的Fields
-	 *
-	 * @param clazz
-	 * @return
-	 */
-	public static List<Field> loadClassFields(Object instance) {
-		Class<?> clazz = getClass(instance);
-		return loadClassFields(clazz);
-	}
 
 	public static Class<?> getClass(Object instance) {
 		Class<?> clazz = instance.getClass();
-		if (instance instanceof ProxyObject) {
-			clazz = clazz.getSuperclass();
-		} else if (Proxy.isProxyClass(clazz)) {
-			return clazz.getSuperclass();
-		} else if (hasClass("org.springframework.aop.SpringProxy") && instance instanceof SpringProxy) {
-			return clazz.getSuperclass();
+		return isProxy(clazz) ? clazz.getSuperclass() : clazz;
+	}
+
+	private static boolean isProxy(Class<?> clazz) {
+		Boolean isProxiedClass = null;
+		if (Proxy.isProxyClass(clazz)) {
+			return true;
 		} else if (isCglibProxyClass(clazz)) {
-			return clazz.getSuperclass();
+			return true;
 		}
-		return clazz;
+		for (int i = 0; i < PROXY_CLASS_NAMES.length && isProxiedClass == null; i++) {
+			isProxiedClass = isSubClassOf(clazz, PROXY_CLASS_NAMES[i]);
+		}
+
+		return isProxiedClass != null ? isProxiedClass : true;
+	}
+
+	public static Boolean isSubClassOf(Class<?> clazz, String className) {
+		Class<?> proxyClass = null;
+		try {
+			proxyClass = Class.forName(className);
+			return proxyClass.isAssignableFrom(clazz);
+		} catch (ClassNotFoundException e) {
+			return null;
+		}
 	}
 
 	public static Object getProperty(Object bean, String propertyName) {

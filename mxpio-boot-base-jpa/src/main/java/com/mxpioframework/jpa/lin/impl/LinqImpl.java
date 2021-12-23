@@ -21,7 +21,7 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.metamodel.SingularAttribute;
 
-import com.mxpioframework.jpa.BeanReflectionUtils;
+import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.jpa.CollectInfo;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.filter.Filter;

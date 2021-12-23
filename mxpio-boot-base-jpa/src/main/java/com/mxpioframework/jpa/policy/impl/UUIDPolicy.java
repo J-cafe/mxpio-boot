@@ -2,7 +2,7 @@ package com.mxpioframework.jpa.policy.impl;
 
 import java.util.UUID;
 
-import com.mxpioframework.jpa.BeanReflectionUtils;
+import com.mxpioframework.common.util.BeanReflectionUtils;
 
 public class UUIDPolicy extends AbstractGeneratorPolicy {
 

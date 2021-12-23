@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.util.CollectionUtils;
 
-import com.mxpioframework.jpa.BeanReflectionUtils;
+import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.jpa.CollectInfo;
 import com.mxpioframework.jpa.filter.Filter;
 import com.mxpioframework.jpa.policy.LinqContext;

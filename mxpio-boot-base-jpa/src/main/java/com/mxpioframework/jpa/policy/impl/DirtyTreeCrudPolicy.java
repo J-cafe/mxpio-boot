@@ -10,7 +10,7 @@ import java.util.Map;
 
 import org.springframework.util.CollectionUtils;
 
-import com.mxpioframework.jpa.BeanReflectionUtils;
+import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.annotation.Generator;
 import com.mxpioframework.jpa.policy.CrudContext;
@@ -81,7 +81,7 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 	protected List<Field> getPersistentFields(CrudContext context) {
 		Object entity = context.getEntity();
 		List<Field> result = new ArrayList<Field>();
-		List<Field> fields = BeanReflectionUtils.loadClassFields(entity);
+		List<Field> fields = BeanReflectionUtils.loadClassFields(BeanReflectionUtils.getClass(entity));
 		if(fields != null) {
 			for (Field field : fields) {
 				Class<?> propertyClass = field.getType();
@@ -102,7 +102,7 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 	
 	protected List<Map<String, Object>> getNeedGeneratorFields(Object entity, CrudType crudType) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-		List<Field> fields = BeanReflectionUtils.loadClassFields(entity);
+		List<Field> fields = BeanReflectionUtils.loadClassFields(BeanReflectionUtils.getClass(entity));
 		
 		if(fields != null) {
 			for (Field field : fields) {

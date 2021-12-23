@@ -1,6 +1,6 @@
 package com.mxpioframework.jpa.policy.impl;
 
-import com.mxpioframework.jpa.BeanReflectionUtils;
+import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.jpa.policy.GeneratorPolicy;
 
 public abstract class AbstractGeneratorPolicy implements GeneratorPolicy {
