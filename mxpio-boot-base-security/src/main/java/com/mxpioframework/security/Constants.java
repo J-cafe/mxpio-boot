@@ -2,9 +2,9 @@ package com.mxpioframework.security;
 
 public class Constants {
 
-	public static final long DEFAULT_ACCESS_TOKEN_TIME_MS = 30 * 60 * 1000;
+	public static final long DEFAULT_ACCESS_TOKEN_TIME_MS = 30 * 60 * 1000L;
 	
-	public static final long DEFAULT_REFRESH_TOKEN_TIME_MS = 2 * 30 * 60 * 1000;
+	public static final long DEFAULT_REFRESH_TOKEN_TIME_MS = 2 * 30 * 60 * 1000L;
 	
 	public static final String JWT_TOKEN_SALT = "MXPIO";
 	

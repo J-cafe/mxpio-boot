@@ -49,6 +49,7 @@ public final class Constants {
 
 	 */
 	public final static String ELEMENT_ATTRIBUTE_BY_TARGET_CACHE_KEY = "ElementAttributeByTargetCacheKey";
+	
 	public final static String[] ELEMENT_SECURITY = new String[] {ELEMENT_ATTRIBUTE_MAP_CACHE_KEY};
 	
 	public final static String[] URL_ELEMENT_SECURITY = new String[] {REQUEST_MAP_CACHE_KEY, URL_ATTRIBUTE_BY_TARGET_CACHE_KEY, URL_TREE_CACHE_KEY, ELEMENT_ATTRIBUTE_MAP_CACHE_KEY};
