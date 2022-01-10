@@ -190,7 +190,7 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 
 	@Override
 	public String getActorId() {
-		return username;
+		return getUsername();
 	}
 	
 }
