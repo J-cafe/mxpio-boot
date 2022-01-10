@@ -16,40 +16,40 @@ public class SmartCrudPolicyAdapter implements CrudPolicy {
 				entityManager.persist(entity);
 				afterInsert(context);
 			}
-		} else if(CrudType.UPDATE.equals(context.getCrudType())) {
+		} else if (CrudType.UPDATE.equals(context.getCrudType())) {
 			if (beforeUpdate(context)) {
 				entityManager.merge(entity);
 				afterUpdate(context);
 			}
-		} else if(CrudType.DELETE.equals(context.getCrudType())) {
+		} else if (CrudType.DELETE.equals(context.getCrudType())) {
 			if (beforeDelete(context)) {
 				entityManager.merge(entity);
 				afterDelete(context);
 			}
 		}
 	}
-	
+
 	public boolean beforeDelete(CrudContext context) {
 		return true;
 	}
-	
+
 	public void afterDelete(CrudContext context) {
-		
+
 	}
-	
+
 	public boolean beforeInsert(CrudContext context) {
 		return true;
 	}
-	
+
 	public void afterInsert(CrudContext context) {
-		
+
 	}
-	
+
 	public boolean beforeUpdate(CrudContext context) {
 		return true;
 	}
-	
+
 	public void afterUpdate(CrudContext context) {
-		
+
 	}
 }

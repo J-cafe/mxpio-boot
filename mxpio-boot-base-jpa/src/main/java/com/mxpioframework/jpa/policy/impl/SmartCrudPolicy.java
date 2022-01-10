@@ -13,9 +13,9 @@ public class SmartCrudPolicy implements CrudPolicy {
 		EntityManager entityManager = context.getEntityManager();
 		if (CrudType.SAVE.equals(context.getCrudType())) {
 			entityManager.persist(entity);
-		} else if(CrudType.UPDATE.equals(context.getCrudType())){
+		} else if (CrudType.UPDATE.equals(context.getCrudType())) {
 			entityManager.merge(entity);
-		} else if(CrudType.DELETE.equals(context.getCrudType())) {
+		} else if (CrudType.DELETE.equals(context.getCrudType())) {
 			entityManager.remove(entityManager.merge(entity));
 		}
 	}

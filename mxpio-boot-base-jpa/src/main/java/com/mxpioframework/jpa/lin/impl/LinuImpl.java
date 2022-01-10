@@ -17,11 +17,11 @@ public class LinuImpl extends LinImpl<Linu, CriteriaUpdate<?>> implements Linu {
 		criteria = cb.createCriteriaUpdate(domainClass);
 		root = criteria.from((Class) domainClass);
 	}
-	
+
 	public LinuImpl(Class<?> domainClass) {
 		this(domainClass, null);
 	}
-	
+
 	public LinuImpl(Linu parent, Class<?> domainClass) {
 		super(parent, domainClass);
 	}
@@ -30,7 +30,7 @@ public class LinuImpl extends LinImpl<Linu, CriteriaUpdate<?>> implements Linu {
 	public Linu createChild(Class<?> domainClass) {
 		return new LinuImpl(this, domainClass);
 	}
-	
+
 	@Override
 	public Linu set(String attributeName, Object value) {
 		if (!beforeMethodInvoke()) {
@@ -39,7 +39,7 @@ public class LinuImpl extends LinImpl<Linu, CriteriaUpdate<?>> implements Linu {
 		criteria.set(attributeName, value);
 		return this;
 	}
-	
+
 	@Override
 	public <Y> Linu set(Path<Y> attribute, Expression<? extends Y> value) {
 		if (!beforeMethodInvoke()) {
@@ -63,7 +63,8 @@ public class LinuImpl extends LinImpl<Linu, CriteriaUpdate<?>> implements Linu {
 		if (!beforeMethodInvoke()) {
 			return this;
 		}
-		criteria.set(attribute, value);;
+		criteria.set(attribute, value);
+		;
 		return this;
 	}
 
@@ -75,7 +76,7 @@ public class LinuImpl extends LinImpl<Linu, CriteriaUpdate<?>> implements Linu {
 		criteria.set(attribute, value);
 		return this;
 	}
-	
+
 	@Override
 	public int update() {
 		if (parent != null) {
@@ -85,7 +86,7 @@ public class LinuImpl extends LinImpl<Linu, CriteriaUpdate<?>> implements Linu {
 		applyPredicateToCriteria();
 		return em.createQuery(criteria).executeUpdate();
 	}
-	
+
 	protected void applyPredicateToCriteria() {
 		Predicate predicate = parsePredicate(junction);
 		if (predicate != null) {
@@ -96,10 +97,5 @@ public class LinuImpl extends LinImpl<Linu, CriteriaUpdate<?>> implements Linu {
 			}
 		}
 	}
-	
-	
-	
-
-	
 
 }

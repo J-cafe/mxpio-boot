@@ -23,10 +23,10 @@ public class LinqConfiguration implements ApplicationContextAware {
 
 	@Autowired
 	List<JpaUtilInitiator> jpaUtilInitiators;
-	
+
 	@Autowired(required = false)
 	List<JpaUtilAble> jpaUtilAbles;
-	
+
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		for (JpaUtilInitiator jpaUtilInitiator : jpaUtilInitiators) {

@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class Order {
-	
+
 	private String fieldName; // 属性名
-	
+
 	private boolean desc;
 
 	public String getFieldName() {
@@ -24,5 +24,5 @@ public class Order {
 	public void setDesc(boolean desc) {
 		this.desc = desc;
 	}
-	
+
 }
