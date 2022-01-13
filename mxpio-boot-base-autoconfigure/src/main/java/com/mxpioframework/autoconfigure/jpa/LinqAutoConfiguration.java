@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 自动装载 ORM模块 mxpio-boot-base-linq
- * @author MxpIO <i@mxpio.com>
+ * @author MxpIO
  *
  */
 @Configuration

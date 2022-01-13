@@ -16,7 +16,7 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 
 /**
  * 加载模块配置文件
- * @author MxpIO <i@mxpio.com>
+ * @author MxpIO
  *
  */
 public class MxpioEnvironmentPostProcessor implements EnvironmentPostProcessor {
