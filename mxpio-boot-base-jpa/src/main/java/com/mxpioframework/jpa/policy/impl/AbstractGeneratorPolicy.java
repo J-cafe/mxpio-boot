@@ -9,7 +9,7 @@ public abstract class AbstractGeneratorPolicy implements GeneratorPolicy {
 	public void apply(Object entity, String name) {
 		BeanReflectionUtils.setPropertyValue(entity, name, getValue(entity, name));
 	}
-	
+
 	protected abstract Object getValue(Object entity, String field);
 
 }

@@ -20,7 +20,7 @@ public class QBCCriteriaPolicy extends AbstractCriteriaPolicy {
 	@Override
 	public void apply(CriteriaContext context) {
 		QBCCriteriaContext c = (QBCCriteriaContext) context;
-		if(c.getCriteria() != null) {
+		if (c.getCriteria() != null) {
 			c.setCurrent(c.getCriteria().getCriterions());
 			parseCriterions(c);
 			parseOrders(c);
@@ -56,7 +56,7 @@ public class QBCCriteriaPolicy extends AbstractCriteriaPolicy {
 		c.getLinq().or();
 		c.setCurrent(or.getCriterions());
 		parseCriterions(c);
-		c.getLinq().end();	
+		c.getLinq().end();
 	}
 
 	@Override
@@ -74,17 +74,15 @@ public class QBCCriteriaPolicy extends AbstractCriteriaPolicy {
 				break;
 			}
 		}
-		
-		
+
 		if (!result) {
 			if (cls != null) {
 				Field field = FieldUtils.getField(cls, property, true);
-				if (Enum.class.isAssignableFrom(field.getType()) 
-						&& value instanceof String) {
+				if (Enum.class.isAssignableFrom(field.getType()) && value instanceof String) {
 					Class<?> type = field.getType();
 					Enum<?>[] items = (Enum<?>[]) type.getEnumConstants();
-					if(items!=null){
-						for(Enum<?> item:items){
+					if (items != null) {
+						for (Enum<?> item : items) {
 							if (item.name().equals(value)) {
 								criterion.setValue(item);
 								break;
@@ -95,9 +93,9 @@ public class QBCCriteriaPolicy extends AbstractCriteriaPolicy {
 
 			}
 			Linq linq = criteriaContext.getLinq();
-			
+
 			CriteriaUtils.parse(linq, criterion);
-		}		
+		}
 	}
 
 }

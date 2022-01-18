@@ -14,7 +14,7 @@ import com.mxpioframework.jpa.query.SimpleCriterion;
 public class SmartSubQueryParser implements CriterionParser {
 
 	private List<CriterionParser> parsers = new ArrayList<CriterionParser>(3);
-	
+
 	public SmartSubQueryParser(Linq linq, Class<?> entityClass, List<CollectInfo> collectInfos) {
 		PropertyDescriptor[] pds = PropertyUtils.getPropertyDescriptors(entityClass);
 		for (PropertyDescriptor pd : pds) {
@@ -34,7 +34,7 @@ public class SmartSubQueryParser implements CriterionParser {
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean parse(SimpleCriterion criterion) {
 		boolean result = false;

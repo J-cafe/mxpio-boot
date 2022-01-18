@@ -11,14 +11,14 @@ public class LindImpl extends LinImpl<Lind, CriteriaDelete<?>> implements Lind {
 	public LindImpl(Class<?> domainClass) {
 		this(domainClass, null);
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public LindImpl(Class<?> domainClass, EntityManager entityManager) {
 		super(domainClass, entityManager);
 		criteria = cb.createCriteriaDelete(domainClass);
 		root = criteria.from((Class) domainClass);
 	}
-	
+
 	public LindImpl(Lind parent, Class<?> domainClass) {
 		super(parent, domainClass);
 	}
@@ -27,7 +27,7 @@ public class LindImpl extends LinImpl<Lind, CriteriaDelete<?>> implements Lind {
 	public Lind createChild(Class<?> domainClass) {
 		return new LindImpl(this, domainClass);
 	}
-	
+
 	@Override
 	public int delete() {
 		if (parent != null) {
@@ -37,7 +37,7 @@ public class LindImpl extends LinImpl<Lind, CriteriaDelete<?>> implements Lind {
 		applyPredicateToCriteria();
 		return em.createQuery(criteria).executeUpdate();
 	}
-	
+
 	protected void applyPredicateToCriteria() {
 		Predicate predicate = parsePredicate(junction);
 		if (predicate != null) {
@@ -48,10 +48,5 @@ public class LindImpl extends LinImpl<Lind, CriteriaDelete<?>> implements Lind {
 			}
 		}
 	}
-	
-	
-	
-
-	
 
 }

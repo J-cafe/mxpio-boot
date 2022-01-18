@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 自动装载 缓存模块 mxpio-boot-base-cache
- * @author MxpIO <i@mxpio.com>
+ * @author MxpIO
  *
  */
 @Configuration

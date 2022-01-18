@@ -284,6 +284,5 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 * @return 本身
 	 */
 	Linq setDisableSmartSubQueryCriterion();
-
 	
 }

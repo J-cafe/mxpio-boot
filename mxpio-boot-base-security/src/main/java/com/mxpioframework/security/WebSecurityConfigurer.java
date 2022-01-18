@@ -200,8 +200,6 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 				response.getWriter().write(JSON.toJSONString(Result.noauth("未认证的客户端")));
 			}else if(exception instanceof NonceExpiredException){
 				response.getWriter().write(JSON.toJSONString(Result.noauth("Nonce已过期")));
-			}else if(exception instanceof NonceExpiredException){
-				response.getWriter().write(JSON.toJSONString(Result.noauth("Nonce已过期")));
 			}else if(exception instanceof UsernameNotFoundException){
 				response.getWriter().write(JSON.toJSONString(Result.noauth("用户未找到")));
 			}else {

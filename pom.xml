@@ -180,6 +180,37 @@
 			    <version>1.15</version>
 			</dependency>
 		</dependencies>
-
 	</dependencyManagement>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>https://gitee.com/i_mxpio/mxpio-boot/blob/master/LICENSE</url>
+			<distribution>repo,manual</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>MxpIO</name>
+			<email>i@mxpio.com</email>
+			<organization>mxpio</organization>
+			<url>https://gitee.com/i_mxpio</url>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:https://gitee.com/i_mxpio/mxpio-boot.git</connection>
+		<developerConnection>scm:git:https://gitee.com/i_mxpio/mxpio-boot.git</developerConnection>
+		<url>https://gitee.com/i_mxpio/mxpio-boot.git</url>
+		<tag>v0.0.1-beta1</tag>
+	</scm>
 </project>

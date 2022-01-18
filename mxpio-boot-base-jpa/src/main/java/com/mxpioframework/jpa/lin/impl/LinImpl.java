@@ -28,7 +28,7 @@ import org.springframework.util.StringUtils;
 
 @SuppressWarnings("unchecked")
 public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> implements Lin<T, Q> {
-	
+
 	protected Class<?> domainClass;
 	protected EntityManager em;
 	protected CriteriaBuilder cb;
@@ -42,11 +42,10 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 	protected List<String> aliases = new ArrayList<String>();
 	private Stack<Boolean> ifResult = new Stack<Boolean>();
 
-	
 	public LinImpl(Class<?> domainClass) {
 		this(domainClass, null);
 	}
-	
+
 	public LinImpl(Class<?> domainClass, EntityManager entityManager) {
 		this.domainClass = domainClass;
 		em = entityManager;
@@ -57,7 +56,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		junction = new Junction(JunctionType.AND);
 		junctions.add(junction);
 	}
-	
+
 	public LinImpl(T parent, Class<?> domainClass) {
 		this.domainClass = domainClass;
 		this.parent = parent;
@@ -69,9 +68,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		junction = new Junction(JunctionType.AND);
 		junctions.add(junction);
 	}
-	
-	
-	
+
 	@Override
 	public T addIf(Object target) {
 		boolean result;
@@ -79,8 +76,8 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 			result = (Boolean) target;
 		} else if (target instanceof Collection) {
 			result = !CollectionUtils.isEmpty((Collection<?>) target);
-		} else if(target instanceof String) {
-			result = !StringUtils.hasText((String)target);
+		} else if (target instanceof String) {
+			result = !StringUtils.hasText((String) target);
 		} else {
 			result = !ObjectUtils.isEmpty(target);
 		}
@@ -95,8 +92,8 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 			result = !(Boolean) target;
 		} else if (target instanceof Collection) {
 			result = CollectionUtils.isEmpty((Collection<?>) target);
-		} else if(target instanceof String) {
-			result = StringUtils.hasText((String)target);
+		} else if (target instanceof String) {
+			result = StringUtils.hasText((String) target);
 		} else {
 			result = ObjectUtils.isEmpty(target);
 		}
@@ -109,7 +106,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		ifResult.pop();
 		return (T) this;
 	}
-	
+
 	protected boolean beforeMethodInvoke() {
 		for (Boolean r : ifResult) {
 			if (!r) {
@@ -118,7 +115,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		}
 		return true;
 	}
-	
+
 	@Override
 	public T selectId() {
 		return select(JpaUtil.getIdName(domainClass));
@@ -136,7 +133,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		select(list.toArray(new Selection<?>[list.size()]));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T select(Object... selections) {
 		if (!beforeMethodInvoke()) {
@@ -170,7 +167,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 			result.add(root.get(ps[0]).alias(alias));
 		}
 	}
-	
+
 	@Override
 	@SuppressWarnings("rawtypes")
 	public T select(Selection<?>... selections) {
@@ -178,7 +175,9 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 			return (T) this;
 		}
 		Assert.isTrue(sq == null || selections.length == 1, "selections can only have one in subquery! ");
-		Assert.isTrue(sq == null || selections[0] instanceof Expression, "Elements in the selections must implement the " + Expression.class.getName() + " interface in subquery! ");
+		Assert.isTrue(sq == null || selections[0] instanceof Expression,
+				"Elements in the selections must implement the " + Expression.class.getName()
+						+ " interface in subquery! ");
 		Assert.isTrue(sq != null || criteria instanceof CriteriaQuery, "Not supported!");
 		if (sq == null) {
 			((CriteriaQuery) criteria).multiselect(selections);
@@ -188,10 +187,10 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		for (Selection<?> selection : selections) {
 			aliases.add(selection.getAlias());
 		}
-		
+
 		return (T) this;
 	}
-				
+
 	@Override
 	public T and() {
 		if (!beforeMethodInvoke()) {
@@ -202,7 +201,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		junctions.push(and);
 		return (T) this;
 	}
-	
+
 	@Override
 	public T or() {
 		if (!beforeMethodInvoke()) {
@@ -213,7 +212,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		junctions.push(or);
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Comparable<? super Y>> T between(Expression<Y> v, String x, String y) {
 		if (!beforeMethodInvoke()) {
@@ -224,7 +223,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.between(v, xe, ye));
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Comparable<? super Y>> T between(String v, Y x, Y y) {
 		if (!beforeMethodInvoke()) {
@@ -234,16 +233,17 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.between(ve, x, y));
 		return (T) this;
 	}
-	
+
 	@Override
-	public <Y extends Comparable<? super Y>> T between(Expression<? extends Y> v, Expression<? extends Y> x, Expression<? extends Y> y) {
+	public <Y extends Comparable<? super Y>> T between(Expression<? extends Y> v, Expression<? extends Y> x,
+			Expression<? extends Y> y) {
 		if (!beforeMethodInvoke()) {
 			return (T) this;
 		}
 		add(cb.between(v, x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Comparable<? super Y>> T between(Expression<? extends Y> v, Y x, Y y) {
 		if (!beforeMethodInvoke()) {
@@ -252,12 +252,12 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.between(v, x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T idEqual(Object id) {
 		return equal(JpaUtil.getIdName(domainClass), id);
 	}
-	
+
 	@Override
 	public T equal(String x, Object y) {
 		if (!beforeMethodInvoke()) {
@@ -266,7 +266,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.equal(root.get(x), y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T equal(Expression<?> x, Object y) {
 		if (!beforeMethodInvoke()) {
@@ -275,7 +275,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.equal(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T equal(Expression<?> x, Expression<?> y) {
 		if (!beforeMethodInvoke()) {
@@ -284,7 +284,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.equal(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T equalProperty(String property, String otherProperty) {
 		if (!beforeMethodInvoke()) {
@@ -297,7 +297,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		}
 		return (T) this;
 	}
-	
+
 	@Override
 	public T exists(Class<?> domainClass) {
 		if (!beforeMethodInvoke()) {
@@ -308,7 +308,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.exists(lin.getSubquery()));
 		return lin;
 	}
-	
+
 	@Override
 	public T notExists(Class<?> domainClass) {
 		if (!beforeMethodInvoke()) {
@@ -319,7 +319,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.not(cb.exists(lin.getSubquery())));
 		return lin;
 	}
-	
+
 	@Override
 	public T ge(String x, Number y) {
 		if (!beforeMethodInvoke()) {
@@ -328,7 +328,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.ge(root.get(x), y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T ge(Expression<? extends Number> x, Number y) {
 		if (!beforeMethodInvoke()) {
@@ -337,7 +337,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.ge(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T ge(Expression<? extends Number> x, Expression<? extends Number> y) {
 		if (!beforeMethodInvoke()) {
@@ -346,7 +346,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.ge(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T ge(String property, String otherProperty) {
 		if (!beforeMethodInvoke()) {
@@ -363,7 +363,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		}
 		return (T) this;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public T greaterThanProperty(String property, String otherProperty) {
@@ -381,7 +381,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		}
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Comparable<? super Y>> T greaterThan(String x, Y y) {
 		if (!beforeMethodInvoke()) {
@@ -391,7 +391,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.greaterThan(xe, y));
 		return (T) this;
 	}
-		
+
 	@Override
 	public <Y extends Comparable<? super Y>> T greaterThan(Expression<? extends Y> x, Y y) {
 		if (!beforeMethodInvoke()) {
@@ -400,7 +400,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.greaterThan(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Comparable<? super Y>> T greaterThan(Expression<? extends Y> x, Expression<? extends Y> y) {
 		if (!beforeMethodInvoke()) {
@@ -409,7 +409,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.greaterThan(x, y));
 		return (T) this;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public T greaterThanOrEqualToProperty(String property, String otherProperty) {
@@ -427,7 +427,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		}
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Comparable<? super Y>> T greaterThanOrEqualTo(String x, Y y) {
 		if (!beforeMethodInvoke()) {
@@ -437,7 +437,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.greaterThanOrEqualTo(xe, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Comparable<? super Y>> T greaterThanOrEqualTo(Expression<? extends Y> x, Y y) {
 		if (!beforeMethodInvoke()) {
@@ -446,16 +446,17 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.greaterThanOrEqualTo(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
-	public <Y extends Comparable<? super Y>> T greaterThanOrEqualTo(Expression<? extends Y> x, Expression<? extends Y> y) {
+	public <Y extends Comparable<? super Y>> T greaterThanOrEqualTo(Expression<? extends Y> x,
+			Expression<? extends Y> y) {
 		if (!beforeMethodInvoke()) {
 			return (T) this;
 		}
 		add(cb.greaterThanOrEqualTo(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Number> T gt(String x, Y y) {
 		if (!beforeMethodInvoke()) {
@@ -465,7 +466,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.gt(xe, y));
 		return (T) this;
 	}
-		
+
 	@Override
 	public <Y extends Number> T gt(Expression<? extends Y> x, Y y) {
 		if (!beforeMethodInvoke()) {
@@ -474,7 +475,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.gt(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Number> T gt(Expression<? extends Y> x, Expression<? extends Y> y) {
 		if (!beforeMethodInvoke()) {
@@ -483,7 +484,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.gt(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T gt(String property, String otherProperty) {
 		if (!beforeMethodInvoke()) {
@@ -500,7 +501,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		}
 		return (T) this;
 	}
-	
+
 	@Override
 	public T in(String property, Class<?> domainClass) {
 		if (!beforeMethodInvoke()) {
@@ -511,7 +512,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.in(e).value(lin.getSubquery()));
 		return lin;
 	}
-	
+
 	@Override
 	public T in(Class<?> domainClass) {
 		if (!beforeMethodInvoke()) {
@@ -522,12 +523,12 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.in(e).value(lin.getSubquery()));
 		return lin;
 	}
-	
+
 	@Override
 	public T in(String property, Set<?> values) {
 		return in(property, values.toArray());
 	}
-	
+
 	@Override
 	public T in(String property, Object... values) {
 		if (!beforeMethodInvoke()) {
@@ -537,7 +538,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(e.in(values));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T in(Expression<?> expression, Object... values) {
 		if (!beforeMethodInvoke()) {
@@ -546,7 +547,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(expression.in(values));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T in(String property, Expression<Collection<?>> values) {
 		if (!beforeMethodInvoke()) {
@@ -556,7 +557,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(e.in(values));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T in(Expression<?> expression, Expression<Collection<?>> values) {
 		if (!beforeMethodInvoke()) {
@@ -565,9 +566,9 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(expression.in(values));
 		return (T) this;
 	}
-	
+
 	@Override
-	public T in(String property, Expression<?> ...values) {
+	public T in(String property, Expression<?>... values) {
 		if (!beforeMethodInvoke()) {
 			return (T) this;
 		}
@@ -575,21 +576,21 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(e.in(values));
 		return (T) this;
 	}
-	
+
 	@Override
-	public <E> T in(Expression<E> expression, Expression<?> ...values) {
+	public <E> T in(Expression<E> expression, Expression<?>... values) {
 		if (!beforeMethodInvoke()) {
 			return (T) this;
 		}
 		add(expression.in(values));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T notIn(String property, Set<?> values) {
 		return notIn(property, values.toArray());
 	}
-	
+
 	@Override
 	public T notIn(String property, Object... values) {
 		if (!beforeMethodInvoke()) {
@@ -599,7 +600,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.not(e.in(values)));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T notIn(String property, Expression<Collection<?>> values) {
 		if (!beforeMethodInvoke()) {
@@ -609,7 +610,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.not(e.in(values)));
 		return (T) this;
 	}
-	
+
 	@Override
 	public <E> T notIn(Expression<E> expression, Expression<Collection<?>> values) {
 		if (!beforeMethodInvoke()) {
@@ -618,7 +619,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.not(expression.in(values)));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T notIn(Expression<?> expression, Object... values) {
 		if (!beforeMethodInvoke()) {
@@ -627,9 +628,9 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.not(expression.in(values)));
 		return (T) this;
 	}
-	
+
 	@Override
-	public T notIn(String property, Expression<?> ...values) {
+	public T notIn(String property, Expression<?>... values) {
 		if (!beforeMethodInvoke()) {
 			return (T) this;
 		}
@@ -637,16 +638,16 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.not(e.in(values)));
 		return (T) this;
 	}
-	
+
 	@Override
-	public <E> T notIn(Expression<E> expression, Expression<?> ...values) {
+	public <E> T notIn(Expression<E> expression, Expression<?>... values) {
 		if (!beforeMethodInvoke()) {
 			return (T) this;
 		}
 		add(cb.not(expression.in(values)));
 		return (T) this;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public T isEmpty(String property) {
@@ -657,7 +658,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.isEmpty(e));
 		return (T) this;
 	}
-	
+
 	@Override
 	public <C extends Collection<?>> T isEmpty(Expression<C> collection) {
 		if (!beforeMethodInvoke()) {
@@ -666,7 +667,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.isEmpty(collection));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T isFalse(String property) {
 		if (!beforeMethodInvoke()) {
@@ -676,7 +677,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.isFalse(e));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T isFalse(Expression<Boolean> expression) {
 		if (!beforeMethodInvoke()) {
@@ -685,7 +686,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.isFalse(expression));
 		return (T) this;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public T isMember(String elem, String collection) {
@@ -697,7 +698,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		isMember(elemE, collectionE);
 		return (T) this;
 	}
-	
+
 	@Override
 	public <E, C extends Collection<E>> T isMember(Expression<E> elem, Expression<C> collection) {
 		if (!beforeMethodInvoke()) {
@@ -706,7 +707,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.isMember(elem, collection));
 		return (T) this;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public T isNotEmpty(String collection) {
@@ -717,7 +718,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.isNotEmpty(collectionE));
 		return (T) this;
 	}
-	
+
 	@Override
 	public <C extends Collection<?>> T isNotEmpty(Expression<C> collection) {
 		if (!beforeMethodInvoke()) {
@@ -726,7 +727,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.isNotEmpty(collection));
 		return (T) this;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public T isNotMember(String elem, String collection) {
@@ -738,7 +739,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		isNotMember(elemE, collectionE);
 		return (T) this;
 	}
-	
+
 	@Override
 	public <E, C extends Collection<E>> T isNotMember(Expression<E> elem, Expression<C> collection) {
 		if (!beforeMethodInvoke()) {
@@ -747,7 +748,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.isNotMember(elem, collection));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T isNull(String property) {
 		if (!beforeMethodInvoke()) {
@@ -756,7 +757,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.isNull(root.get(property)));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T isNull(Expression<?> expression) {
 		if (!beforeMethodInvoke()) {
@@ -765,7 +766,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.isNull(expression));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T isNotNull(String property) {
 		if (!beforeMethodInvoke()) {
@@ -774,7 +775,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.isNotNull(root.get(property)));
 		return (T) this;
 	}
-		
+
 	@Override
 	public T isNotNull(Expression<?> expression) {
 		if (!beforeMethodInvoke()) {
@@ -783,7 +784,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.isNotNull(expression));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T isTrue(String property) {
 		if (!beforeMethodInvoke()) {
@@ -793,7 +794,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.isTrue(e));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T isTrue(Expression<Boolean> expression) {
 		if (!beforeMethodInvoke()) {
@@ -812,7 +813,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.le(xe, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T le(String property, String otherProperty) {
 		if (!beforeMethodInvoke()) {
@@ -829,7 +830,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		}
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Number> T le(Expression<? extends Y> x, Y y) {
 		if (!beforeMethodInvoke()) {
@@ -838,7 +839,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.le(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Number> T le(Expression<? extends Y> x, Expression<? extends Y> y) {
 		if (!beforeMethodInvoke()) {
@@ -846,8 +847,8 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		}
 		add(cb.le(x, y));
 		return (T) this;
-	}	
-	
+	}
+
 	@Override
 	public <Y extends Number> T lt(String x, Y y) {
 		if (!beforeMethodInvoke()) {
@@ -857,7 +858,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.lt(xe, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T lt(String property, String otherProperty) {
 		if (!beforeMethodInvoke()) {
@@ -874,7 +875,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		}
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Number> T lt(Expression<? extends Y> x, Y y) {
 		if (!beforeMethodInvoke()) {
@@ -883,7 +884,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.lt(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Number> T lt(Expression<? extends Y> x, Expression<? extends Y> y) {
 		if (!beforeMethodInvoke()) {
@@ -892,7 +893,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.lt(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Comparable<? super Y>> T lessThan(String x, Y y) {
 		if (!beforeMethodInvoke()) {
@@ -902,7 +903,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.lessThan(xe, y));
 		return (T) this;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public T lessThanProperty(String property, String otherProperty) {
@@ -920,7 +921,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		}
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Comparable<? super Y>> T lessThan(Expression<? extends Y> x, Y y) {
 		if (!beforeMethodInvoke()) {
@@ -929,7 +930,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.lessThan(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Comparable<? super Y>> T lessThan(Expression<? extends Y> x, Expression<? extends Y> y) {
 		if (!beforeMethodInvoke()) {
@@ -938,7 +939,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.lessThan(x, y));
 		return (T) this;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public T lessThanOrEqualToProperty(String property, String otherProperty) {
@@ -956,7 +957,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		}
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Comparable<? super Y>> T lessThanOrEqualTo(String x, Y y) {
 		if (!beforeMethodInvoke()) {
@@ -966,7 +967,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.lessThanOrEqualTo(xe, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Comparable<? super Y>> T lessThanOrEqualTo(Expression<? extends Y> x, Y y) {
 		if (!beforeMethodInvoke()) {
@@ -975,7 +976,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.lessThanOrEqualTo(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public <Y extends Comparable<? super Y>> T lessThanOrEqualTo(Expression<? extends Y> x, Expression<? extends Y> y) {
 		if (!beforeMethodInvoke()) {
@@ -984,7 +985,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.lessThanOrEqualTo(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T like(Expression<String> x, String pattern) {
 		if (!beforeMethodInvoke()) {
@@ -993,7 +994,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.like(x, pattern));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T like(Expression<String> x, Expression<String> pattern) {
 		if (!beforeMethodInvoke()) {
@@ -1002,9 +1003,9 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.like(x, pattern));
 		return (T) this;
 	}
-	
+
 	@Override
-	public T like(String x,String pattern) {
+	public T like(String x, String pattern) {
 		if (!beforeMethodInvoke()) {
 			return (T) this;
 		}
@@ -1012,7 +1013,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.like(xe, pattern));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T like(Expression<String> x, Expression<String> pattern, char escapeChar) {
 		if (!beforeMethodInvoke()) {
@@ -1021,7 +1022,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.like(x, pattern, escapeChar));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T like(Expression<String> x, Expression<String> pattern, Expression<Character> escapeChar) {
 		if (!beforeMethodInvoke()) {
@@ -1030,7 +1031,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.like(x, pattern, escapeChar));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T like(Expression<String> x, String pattern, char escapeChar) {
 		if (!beforeMethodInvoke()) {
@@ -1039,7 +1040,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.like(x, pattern, escapeChar));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T like(Expression<String> x, String pattern, Expression<Character> escapeChar) {
 		if (!beforeMethodInvoke()) {
@@ -1048,7 +1049,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.like(x, pattern, escapeChar));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T notLike(Expression<String> x, String pattern) {
 		if (!beforeMethodInvoke()) {
@@ -1057,7 +1058,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.notLike(x, pattern));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T notLike(Expression<String> x, Expression<String> pattern) {
 		if (!beforeMethodInvoke()) {
@@ -1066,7 +1067,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.notLike(x, pattern));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T notLike(String x, String pattern) {
 		if (!beforeMethodInvoke()) {
@@ -1076,7 +1077,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.notLike(xe, pattern));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T notLike(Expression<String> x, Expression<String> pattern, char escapeChar) {
 		if (!beforeMethodInvoke()) {
@@ -1085,7 +1086,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.notLike(x, pattern, escapeChar));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T notLike(Expression<String> x, Expression<String> pattern, Expression<Character> escapeChar) {
 		if (!beforeMethodInvoke()) {
@@ -1094,7 +1095,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.notLike(x, pattern, escapeChar));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T notLike(Expression<String> x, String pattern, char escapeChar) {
 		if (!beforeMethodInvoke()) {
@@ -1103,7 +1104,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.notLike(x, pattern, escapeChar));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T notLike(Expression<String> x, String pattern, Expression<Character> escapeChar) {
 		if (!beforeMethodInvoke()) {
@@ -1112,7 +1113,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.notLike(x, pattern, escapeChar));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T not(Expression<Boolean> restriction) {
 		if (!beforeMethodInvoke()) {
@@ -1121,7 +1122,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.not(restriction));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T notEqual(String x, Object y) {
 		if (!beforeMethodInvoke()) {
@@ -1130,7 +1131,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.notEqual(root.get(x), y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T notEqual(Expression<?> x, Object y) {
 		if (!beforeMethodInvoke()) {
@@ -1139,7 +1140,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.notEqual(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T notEqualProperty(String property, String otherProperty) {
 		if (!beforeMethodInvoke()) {
@@ -1156,7 +1157,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		}
 		return (T) this;
 	}
-	
+
 	@Override
 	public T notEqual(Expression<?> x, Expression<?> y) {
 		if (!beforeMethodInvoke()) {
@@ -1165,7 +1166,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.notEqual(x, y));
 		return (T) this;
 	}
-	
+
 	@Override
 	public T end() {
 		if (!beforeMethodInvoke()) {
@@ -1179,13 +1180,13 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 				}
 				return parent;
 			}
-		} 
+		}
 		if (!junctions.isEmpty()) {
 			junctions.pop();
 		}
 		return (T) this;
 	}
-	
+
 	@Override
 	public T groupBy(String... grouping) {
 		if (!beforeMethodInvoke()) {
@@ -1202,7 +1203,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		}
 		return (T) this;
 	}
-	
+
 	@Override
 	public T having() {
 		if (!beforeMethodInvoke()) {
@@ -1212,7 +1213,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		junctions.push(having);
 		return (T) this;
 	}
-		
+
 	protected Predicate parsePredicate(Object predicate) {
 		if (predicate instanceof Predicate) {
 			return (Predicate) predicate;
@@ -1246,26 +1247,26 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		this.getCurrent().add(predicate);
 		return (T) this;
 	}
-	
+
 	protected Junction getCurrent() {
 		return this.junctions.peek();
 	}
-	
+
 	@Override
 	public Q criteria() {
 		return criteria;
 	}
-	
+
 	@Override
 	public CriteriaBuilder criteriaBuilder() {
 		return cb;
 	}
-	
+
 	@Override
 	public EntityManager entityManager() {
 		return em;
 	}
-	
+
 	@Override
 	public <E> Subquery<E> getSubquery() {
 		return (Subquery<E>) sq;
@@ -1275,11 +1276,10 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 	public Class<?> domainClass() {
 		return domainClass;
 	}
-	
+
 	@Override
 	public <E> Root<E> root() {
 		return (Root<E>) root;
 	}
-
 
 }
