@@ -1,7 +1,9 @@
 package com.mxpioframework.security.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.websocket.server.PathParam;
 
@@ -19,8 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mxpioframework.cache.provider.CacheProvider;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.query.Criteria;
-import com.mxpioframework.jpa.query.Junction;
-import com.mxpioframework.jpa.query.JunctionType;
 import com.mxpioframework.jpa.query.Operator;
 import com.mxpioframework.jpa.query.SimpleCriterion;
 import com.mxpioframework.security.entity.User;
@@ -49,15 +49,18 @@ public class UserController {
 	@GetMapping("/list")
 	@ApiOperation(value = "用户列表")
 	public Result<Collection<User>> list(@PathParam("filter") String filter) throws Exception {
-		 Criteria criteria = new Criteria();
+		List<User> list = new ArrayList<>();
 		
 		if(filter != null) {
-			Junction junction = new Junction(JunctionType.OR);
-			junction.add(new SimpleCriterion("username", filter, Operator.LIKE));
-			junction.add(new SimpleCriterion("nickname", filter, Operator.LIKE));
-			criteria.add(junction);
+			
+			Criteria c = Criteria.create()
+					.or()
+						.addCriterion(new SimpleCriterion("username", Operator.LIKE, filter))
+						.addCriterion(new SimpleCriterion("nickname", Operator.LIKE, filter))
+					.end();
+			list = userService.queryAll(c);
 		}
-		return Result.OK(userService.queryAll(criteria));
+		return Result.OK(list);
 	}
 	
 	@GetMapping("/info")

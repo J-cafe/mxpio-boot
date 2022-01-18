@@ -26,8 +26,8 @@ public class CriteriaUtils {
 		}
 		if (map != null) {
 			for (Entry<String, ?> entry : map.entrySet()) {
-				SimpleCriterion criterion = new SimpleCriterion(entry.getKey(), entry.getValue(), Operator.EQ);
-				criteria.add(criterion);
+				SimpleCriterion criterion = new SimpleCriterion(entry.getKey(), Operator.EQ, entry.getValue());
+				criteria.addCriterion(criterion);
 			}
 		}
 		return criteria;
@@ -43,7 +43,7 @@ public class CriteriaUtils {
 	public static Junction add(Junction junction, Map<String, ?> map) {
 		if (map != null) {
 			for (Entry<String, ?> entry : map.entrySet()) {
-				SimpleCriterion criterion = new SimpleCriterion(entry.getKey(), entry.getValue(), Operator.EQ);
+				SimpleCriterion criterion = new SimpleCriterion(entry.getKey(), Operator.EQ, entry.getValue());
 				junction.add(criterion);
 			}
 		}
@@ -63,8 +63,8 @@ public class CriteriaUtils {
 		if (criteria == null) {
 			criteria = new Criteria();
 		}
-		SimpleCriterion criterion = new SimpleCriterion(propertyName, value, filterOperator);
-		criteria.add(criterion);
+		SimpleCriterion criterion = new SimpleCriterion(propertyName, filterOperator, value);
+		criteria.addCriterion(criterion);
 		return criteria;
 	}
 
@@ -78,7 +78,7 @@ public class CriteriaUtils {
 	 * @return 条件载体
 	 */
 	public static Junction add(Junction junction, String propertyName, Operator filterOperator, Object value) {
-		SimpleCriterion criterion = new SimpleCriterion(propertyName, value, filterOperator);
+		SimpleCriterion criterion = new SimpleCriterion(propertyName, filterOperator, value);
 		junction.add(criterion);
 		return junction;
 	}
@@ -170,24 +170,6 @@ public class CriteriaUtils {
 		return c;
 	}
 
-	/**
-	 * 返回级联条件and
-	 * 
-	 * @return And
-	 */
-	public static Junction and() {
-		return new Junction(JunctionType.AND);
-	}
-
-	/**
-	 * 返回级联条件or
-	 * 
-	 * @return Or
-	 */
-	public static Junction or() {
-		return new Junction(JunctionType.OR);
-	}
-
 	public static Criteria json2Criteria(String json) {
 		JSONObject object = JSON.parseObject(json);
 		Criteria c = new Criteria();
@@ -217,8 +199,26 @@ public class CriteriaUtils {
 	}
 
 	public static void main(String[] args) {
-		String json = "{\"criterions\":[{\"fieldName\":\"resourceType\",\"operator\":\"EQ\",\"value\":\"ELEMENT\"},{\"criterions\":[{\"fieldName\":\"roleId\",\"operator\":\"EQ\",\"value\":\"111\"},{\"fieldName\":\"id\",\"operator\":\"EQ\",\"value\":\"p111\"}],\"type\":\"OR\"}],\"orders\":[]}";
-		json2Criteria(json);
+		String json = "{\"criterions\":[{\"fieldName\":\"resourceType\",\"operator\":\"EQ\",\"value\":\"ELEMENT\"},{\"criterions\":[{\"fieldName\":\"roleId\",\"operator\":\"EQ\",\"value\":\"111\"},{\"fieldName\":\"id\",\"operator\":\"EQ\",\"value\":\"p111\"}],\"type\":\"OR\"}],\"orders\":[{\"desc\":false,\"fieldName\":\"username\"},{\"desc\":false,\"fieldName\":\"createTime\"}]}";
+		Criteria c = json2Criteria(json);
+		
+		Criteria c2 = Criteria.create()
+				.addCriterion("resourceType", Operator.EQ, "ELEMENT")
+				.or()
+					.addCriterion("username", Operator.EQ, "admin")
+					.and()
+						.addCriterion("username", Operator.EQ, "admin")
+						.addCriterion("username", Operator.EQ, "admin")
+					.end()
+					.addCriterion("username", Operator.EQ, "admin1")
+				.end()
+				.addOrder(new Order("createTime", true))
+				.addOrder(new Order("updateTime", true));
+		
+		
+		System.out.println(json);
+		System.out.println(JSON.toJSONString(c));
+		System.out.println(JSON.toJSONString(c2));
 	}
 
 }

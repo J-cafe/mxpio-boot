@@ -10,7 +10,7 @@ public class SimpleCriterion implements Criterion {
 
 	}
 
-	public SimpleCriterion(String fieldName, Object value, Operator operator) {
+	public SimpleCriterion(String fieldName, Operator operator, Object value) {
 		this.fieldName = fieldName;
 		this.value = value;
 		this.operator = operator;

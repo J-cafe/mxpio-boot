@@ -4,7 +4,6 @@ server:
     max-swallow-size: -1
   servlet:
     context-path: 
-
 spring:
   servlet:
      multipart:
