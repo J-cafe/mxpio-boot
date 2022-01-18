@@ -5,4 +5,16 @@
 
 >MxpIO-Boot基于spring-boot研发的开发框架。参考spring boot项目结构构建，目前处于孵化中。
 
+## 后端技术栈
 
+* Spring Boot 2.4.3
+* Spring Data Jpa
+* Spring Data Redis
+* Spring Security
+* Spring Cache
+* Alibaba Fastjson
+* Alibaba Druid
+* Springfox Swagger2
+* Jwt
+* Lombok
+* Easy-Captcha
