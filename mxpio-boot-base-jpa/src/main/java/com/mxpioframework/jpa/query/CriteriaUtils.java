@@ -215,7 +215,6 @@ public class CriteriaUtils {
 				.addOrder(new Order("createTime", true))
 				.addOrder(new Order("updateTime", true));
 		
-		
 		System.out.println(json);
 		System.out.println(JSON.toJSONString(c));
 		System.out.println(JSON.toJSONString(c2));

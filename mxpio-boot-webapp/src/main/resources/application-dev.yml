@@ -32,5 +32,8 @@ spring:
       maxWait: -1
       maxIdle: 8
       minIdle: 0
-
-
+management: 
+  endpoints: 
+    web: 
+      exposure: 
+        include: "*"

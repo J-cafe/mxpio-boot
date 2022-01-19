@@ -35,6 +35,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.mxpioframework.boot</groupId>
+			<artifactId>mxpio-boot-base-system</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpioframework.boot</groupId>
 			<artifactId>mxpio-boot-module-cache-redis</artifactId>
 			<optional>true</optional>
 		</dependency>
