@@ -3,6 +3,7 @@ package com.mxpioframework.security.controller;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,7 +27,6 @@ import com.mxpioframework.security.vo.TokenVo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import sun.misc.BASE64Encoder;
 
 @Api(value = "LoginController", tags = { "系统接口" })
 @RestController
@@ -64,10 +64,11 @@ public class LoginController {
         BufferedImage bi = defaultKaptcha.createImage(createText);
         ImageIO.write(bi, "jpg", out);
 
-        BASE64Encoder encoder = new BASE64Encoder();
+        //BASE64Encoder encoder = new BASE64Encoder();
+        Base64.Encoder encoder = Base64.getEncoder();
         
         captcha.setCode(uuid);
-        captcha.setImage(encoder.encode(out.toByteArray()));
+        captcha.setImage(encoder.encodeToString(out.toByteArray()));
 		return Result.OK(captcha);
 	}
 	

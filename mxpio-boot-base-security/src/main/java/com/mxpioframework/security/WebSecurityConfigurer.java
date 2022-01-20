@@ -30,7 +30,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import org.springframework.security.web.authentication.www.NonceExpiredException;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mxpioframework.cache.provider.CacheProvider;
 import com.mxpioframework.common.util.SpringUtil;
 import com.mxpioframework.common.vo.Result;
@@ -76,6 +76,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private CacheProvider cacheProvider;
+	
+	@Autowired
+	private ObjectMapper objectMapper;
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -165,7 +168,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	        tokenVo.setUser(jwtUserDetails);
 	        tokenVo.setToken(accessToken);
 	        tokenVo.setRefreshToken(refreshToken);
-	        response.getWriter().write(JSON.toJSONString(Result.OK(tokenVo)));
+	        response.getWriter().write(objectMapper.writeValueAsString(Result.OK(tokenVo)));
 	    }
 	}
 	
@@ -191,19 +194,19 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 				AuthenticationException exception) throws IOException, ServletException {
 			response.setContentType("application/json;charset=UTF-8");
 			if(exception instanceof KaptchaAuthenticationException) {
-				response.getWriter().write(JSON.toJSONString(Result.noauth(exception.getMessage())));
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth(exception.getMessage())));
 			}else if(exception instanceof BadCredentialsException){
-				response.getWriter().write(JSON.toJSONString(Result.noauth("账号或密码错误")));
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("账号或密码错误")));
 			}else if(exception instanceof AccountStatusException){
-				response.getWriter().write(JSON.toJSONString(Result.noauth("账号已锁定")));
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("账号已锁定")));
 			}else if(exception instanceof InsufficientAuthenticationException){
-				response.getWriter().write(JSON.toJSONString(Result.noauth("未认证的客户端")));
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("未认证的客户端")));
 			}else if(exception instanceof NonceExpiredException){
-				response.getWriter().write(JSON.toJSONString(Result.noauth("Nonce已过期")));
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("Nonce已过期")));
 			}else if(exception instanceof UsernameNotFoundException){
-				response.getWriter().write(JSON.toJSONString(Result.noauth("用户未找到")));
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("用户未找到")));
 			}else {
-				response.getWriter().write(JSON.toJSONString(Result.noauth("登录异常")));
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("登录异常")));
 			}
 			// response.setStatus(HttpStatus.UNAUTHORIZED.value());
 		}
