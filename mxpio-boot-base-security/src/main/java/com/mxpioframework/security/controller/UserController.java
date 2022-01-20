@@ -47,7 +47,7 @@ public class UserController {
 	private UserService userService;
 	
 	@GetMapping("/list")
-	@ApiOperation(value = "用户列表")
+	@ApiOperation(value = "用户列表", notes = "根据过滤字段filter获取用户列表，过滤用户名和昵称", httpMethod = "GET")
 	public Result<Collection<User>> list(@PathParam("filter") String filter) throws Exception {
 		List<User> list = new ArrayList<>();
 		
@@ -64,7 +64,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/info")
-	@ApiOperation(value = "用户信息")
+	@ApiOperation(value = "用户信息", notes = "获取当前登录用户信息", httpMethod = "GET")
 	public Result<UserDetails> info() throws Exception {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		log.info("user==>" + user);
@@ -73,21 +73,21 @@ public class UserController {
 	}
 	
 	@PostMapping("/add")
-	@ApiOperation(value = "添加用户")
+	@ApiOperation(value = "添加用户", notes = "添加用户信息", httpMethod = "POST")
 	public Result<UserDetails> add(@RequestBody User user) throws Exception {
 		userService.create(user);
 		return Result.OK("添加成功",user);
 	}
 	
 	@PutMapping("/edit")
-	@ApiOperation(value = "编辑用户")
+	@ApiOperation(value = "更新用户", notes = "更新用户信息", httpMethod = "PUT")
 	public Result<User> edit(@RequestBody User user) throws Exception {
 		userService.update(user);
 		return Result.OK("编辑成功",null);
 	}
 	
 	@DeleteMapping("/delete")
-	@ApiOperation(value = "删除用户")
+	@ApiOperation(value = "删除用户", notes = "根据用户名username删除用户信息", httpMethod = "DELETE")
 	public Result<UserDetails> delete(String username) throws Exception {
 		userService.delete(new HashSet<String>() {
 			private static final long serialVersionUID = 1L;
@@ -100,7 +100,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/logout")
-	@ApiOperation(value = "根据用户名强退用户")
+	@ApiOperation(value = "强退用户", notes = "根据用户名username强退用户", httpMethod = "POST")
 	public Result<User> logout(@PathParam("username") String username) throws Exception {
 		onlineUserService.kickOutForUsername(username, cacheProvider);
 		log.info("logout sucessful");

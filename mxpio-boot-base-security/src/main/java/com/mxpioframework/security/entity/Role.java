@@ -13,11 +13,13 @@ import org.springframework.security.core.GrantedAuthority;
 import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.ToString;
 
 @Entity
 @Table(name = "MB_ROLE")
+@ApiModel(value="角色对象")
 @ToString
 public class Role extends BaseEntity {
 
@@ -38,9 +40,11 @@ public class Role extends BaseEntity {
 	private String description;
 	
 	@Transient
+	@ApiModelProperty(value = "权限列表")
 	private List<Permission> permissions;
 	
 	@Transient
+	@ApiModelProperty(value = "授权信息")
 	private List<GrantedAuthority> authorities;
 	
 	public String getId() {

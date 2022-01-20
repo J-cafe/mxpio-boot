@@ -36,14 +36,14 @@ public class ResourceController {
 	private ElementService elementService;
 	
 	@GetMapping("/loadAllUrl")
-	@ApiOperation(value = "获取全部菜单")
+	@ApiOperation(value = "获取全部菜单", notes = "获取全部菜单", httpMethod = "GET")
 	public Result<List<RouterVo>> loadAllUrl() {
 		List<Url> urls = urlService.findAllTree();
 		return Result.OK(RouterUtil.buildRouter(urls));
 	}
 	
-	@PostMapping("/saveUrl")
-	@ApiOperation(value = "保存菜单")
+	@PostMapping("/saveRouter")
+	@ApiOperation(value = "新增路由", notes = "新增路由信息", httpMethod = "POST")
 	@SecurityCacheEvict
 	public Result<Object> saveUrl(@RequestBody RouterVo router) {
 		Url url = RouterUtil.router2Url(router);
@@ -52,8 +52,8 @@ public class ResourceController {
 		return Result.OK();
 	}
 	
-	@PutMapping("/updateUrl")
-	@ApiOperation(value = "更新菜单")
+	@PutMapping("/updateRouter")
+	@ApiOperation(value = "更新路由", notes = "更新路由信息", httpMethod = "PUT")
 	@SecurityCacheEvict
 	public Result<Object> updateUrl(@RequestBody RouterVo router) {
 		urlService.update(RouterUtil.router2Url(router));

@@ -11,11 +11,13 @@ import org.springframework.security.core.GrantedAuthority;
 import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.ToString;
 
 @Entity
 @Table(name = "MB_ROLE_GRANTED_AUTHORITY")
+@ApiModel(value="角色授权对象")
 @ToString
 public class RoleGrantedAuthority extends BaseEntity implements GrantedAuthority {
 

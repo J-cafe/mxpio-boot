@@ -14,6 +14,7 @@ import org.springframework.security.access.ConfigAttribute;
 import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,6 +24,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(name = "MB_URL")
+@ApiModel(value="菜单对象")
 @ToString
 public class Url extends BaseEntity implements Resource {
 

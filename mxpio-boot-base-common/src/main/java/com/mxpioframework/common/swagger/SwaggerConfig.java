@@ -36,11 +36,11 @@ public class SwaggerConfig implements WebMvcConfigurer {
 			.apis(RequestHandlerSelectors.basePackage("com.mxpio")).paths(PathSelectors.any()).build()
 			.apiInfo(
 				new ApiInfoBuilder()
-					.title("M-Boot")
-					.description("M-Boot")
-					.version("0.0.1")
-					.contact(new Contact("M-Boot", "www.mxpio.com", "i@mxpio.com"))
-					.license("The Apache License")
+					.title("MxpIO-Boot")
+					.description("MxpIO-Boot API")
+					.version("0.0.1-SNAPSHOT")
+					.contact(new Contact("MxpIO", "www.mxpio.com", "i@mxpio.com"))
+					.license("MIT License")
 					.licenseUrl("www.mxpio.com")
 					.build()
 			);
