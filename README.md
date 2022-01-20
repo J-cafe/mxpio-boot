@@ -55,19 +55,11 @@ mxpio-boot-parent
 * Axios
 * Viser
 
-## 5.开发计划
-
-- 在线文档：筹备中...
-
-- Linq JPA说明： [mxpio-boot-base-jpa](https://gitee.com/i_mxpio/mxpio-boot/tree/master/mxpio-boot-base-jpa/README.md)
-
-- 权限说明： [mxpio-boot-base-security](https://gitee.com/i_mxpio/mxpio-boot/blob/master/mxpio-boot-base-security/README.md)
-
-## 6.演示环境
+## 5.演示环境
 
 筹备中.
 
-## 7.快速开始
+## 6.快速开始
 
 检出代码
 
@@ -83,6 +75,15 @@ mvn clean package spring-boot:repackage
 java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-0.0.1-SNAPSHOT.jar
 ```
 
-## 8.开发文档
+## 7.开发文档
+
+- 在线文档：筹备中...
+
+- Linq JPA说明： [mxpio-boot-base-jpa](https://gitee.com/i_mxpio/mxpio-boot/tree/master/mxpio-boot-base-jpa/README.md)
+
+- 权限说明： [mxpio-boot-base-security](https://gitee.com/i_mxpio/mxpio-boot/blob/master/mxpio-boot-base-security/README.md)
+
+## 8.开发计划
 
 筹备中.
+
