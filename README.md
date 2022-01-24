@@ -72,7 +72,7 @@ git clone https://gitee.com/i_mxpio/mxpio-boot.git
 ```
 cd mxpio-boot
 mvn clean package spring-boot:repackage
-java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-0.0.1-SNAPSHOT.jar
+java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.0.jar
 ```
 
 ## 7.开发文档

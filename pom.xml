@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mxpioframework.boot</groupId>
 	<artifactId>mxpio-boot-parent</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 	<name>mxpio-boot</name>
 	<parent>
@@ -13,7 +13,7 @@
 		<version>2.4.3</version>
 	</parent>
 	<properties>
-		<mxpio.version>0.0.1-SNAPSHOT</mxpio.version>
+		<mxpio.version>1.0.0</mxpio.version>
 		<java.version>1.8</java.version>
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
 		<swagger.version>2.9.2</swagger.version>
@@ -306,6 +306,6 @@
 		<connection>scm:git:https://gitee.com/i_mxpio/mxpio-boot.git</connection>
 		<developerConnection>scm:git:https://gitee.com/i_mxpio/mxpio-boot.git</developerConnection>
 		<url>https://gitee.com/i_mxpio/mxpio-boot.git</url>
-		<tag>0.0.1-SNAPSHOT</tag>
+		<tag>1.0.0</tag>
 	</scm>
 </project>

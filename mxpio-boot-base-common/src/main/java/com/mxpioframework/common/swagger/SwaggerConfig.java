@@ -38,7 +38,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
 				new ApiInfoBuilder()
 					.title("MxpIO-Boot")
 					.description("MxpIO-Boot API")
-					.version("0.0.1-SNAPSHOT")
+					.version("1.0.0")
 					.contact(new Contact("MxpIO", "www.mxpio.com", "i@mxpio.com"))
 					.license("MIT License")
 					.licenseUrl("www.mxpio.com")
