@@ -1,4 +1,5 @@
 package com.mxpioframework.jpa.transform;
+
 /**
  * 查询结果转换器
  */

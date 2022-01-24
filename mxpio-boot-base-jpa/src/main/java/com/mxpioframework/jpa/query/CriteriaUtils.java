@@ -17,82 +17,82 @@ public class CriteriaUtils {
 	 * 以and形式添加多个条件
 	 * 
 	 * @param criteria 条件载体
-	 * @param map map的key为属性名称（深层次属性用点.分隔），map的value为条件值
+	 * @param map      map的key为属性名称（深层次属性用点.分隔），map的value为条件值
 	 * @return 条件载体
 	 */
-	public static Criteria add(Criteria criteria, Map<String ,?> map) {
+	public static Criteria add(Criteria criteria, Map<String, ?> map) {
 		if (criteria == null) {
 			criteria = new Criteria();
 		}
 		if (map != null) {
 			for (Entry<String, ?> entry : map.entrySet()) {
-				SimpleCriterion criterion = new SimpleCriterion(entry.getKey(), entry.getValue(), Operator.EQ);
-				criteria.add(criterion);
+				SimpleCriterion criterion = new SimpleCriterion(entry.getKey(), Operator.EQ, entry.getValue());
+				criteria.addCriterion(criterion);
 			}
 		}
 		return criteria;
 	}
-	
+
 	/**
 	 * 以and形式添加多个条件
 	 * 
 	 * @param junction 条件载体
-	 * @param map map的key为属性名称（深层次属性用点.分隔），map的value为条件值
+	 * @param map      map的key为属性名称（深层次属性用点.分隔），map的value为条件值
 	 * @return 条件载体
 	 */
-	public static Junction add(Junction junction, Map<String ,?> map) {
+	public static Junction add(Junction junction, Map<String, ?> map) {
 		if (map != null) {
 			for (Entry<String, ?> entry : map.entrySet()) {
-				SimpleCriterion criterion = new SimpleCriterion(entry.getKey(), entry.getValue(), Operator.EQ);
+				SimpleCriterion criterion = new SimpleCriterion(entry.getKey(), Operator.EQ, entry.getValue());
 				junction.add(criterion);
 			}
 		}
 		return junction;
 	}
-	
+
 	/**
 	 * 添加条件
 	 * 
-	 * @param criteria 条件载体
-	 * @param propertyName 属性名
+	 * @param criteria       条件载体
+	 * @param propertyName   属性名
 	 * @param filterOperator 条件操作类型
-	 * @param value 条件值
+	 * @param value          条件值
 	 * @return 条件载体
 	 */
 	public static Criteria add(Criteria criteria, String propertyName, Operator filterOperator, Object value) {
 		if (criteria == null) {
 			criteria = new Criteria();
 		}
-		SimpleCriterion criterion = new SimpleCriterion(propertyName, value, filterOperator);
-		criteria.add(criterion);
+		SimpleCriterion criterion = new SimpleCriterion(propertyName, filterOperator, value);
+		criteria.addCriterion(criterion);
 		return criteria;
 	}
-	
+
 	/**
 	 * 添加条件
 	 * 
-	 * @param junction 条件载体
-	 * @param propertyName 属性名
+	 * @param junction       条件载体
+	 * @param propertyName   属性名
 	 * @param filterOperator 条件操作类型
-	 * @param value 条件值
+	 * @param value          条件值
 	 * @return 条件载体
 	 */
 	public static Junction add(Junction junction, String propertyName, Operator filterOperator, Object value) {
-		SimpleCriterion criterion = new SimpleCriterion(propertyName, value, filterOperator);
+		SimpleCriterion criterion = new SimpleCriterion(propertyName, filterOperator, value);
 		junction.add(criterion);
 		return junction;
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void parse(Linq linq, SimpleCriterion criterion) {
 		String property = criterion.getFieldName();
 		if (property.contains(".")) {
 			property = StringUtils.substringAfterLast(property, ".");
 		}
-				
+
 		Object value = criterion.getValue();
 		Operator operator = criterion.getOperator();
-		
+
 		if (Operator.LIKE_END.equals(operator)) {
 			linq.like(property, "%" + (String) value);
 		} else if (Operator.LIKE_START.equals(operator)) {
@@ -103,7 +103,7 @@ public class CriteriaUtils {
 			} else if (value instanceof Comparable) {
 				linq.greaterThan(property, (Comparable) value);
 			}
-		}  else if (Operator.LT.equals(operator)) {
+		} else if (Operator.LT.equals(operator)) {
 			if (value instanceof Number) {
 				linq.lt(property, (Number) value);
 			} else if (value instanceof Comparable) {
@@ -128,10 +128,9 @@ public class CriteriaUtils {
 		} else if (Operator.LIKE.equals(operator)) {
 			linq.like(property, "%" + (String) value + "%");
 		}
-		
+
 	}
-	
-	
+
 	public static StringBuilder parseQL(SimpleCriterion criterion) {
 		StringBuilder c = new StringBuilder();
 		String p = criterion.getFieldName();
@@ -148,7 +147,7 @@ public class CriteriaUtils {
 		} else if (Operator.GT.equals(operator)) {
 			c.append(" > ");
 			criterion.setValue(value);
-		}  else if (Operator.LT.equals(operator)) {
+		} else if (Operator.LT.equals(operator)) {
 			c.append(" < ");
 			criterion.setValue(value);
 		} else if (Operator.GE.equals(operator)) {
@@ -171,41 +170,25 @@ public class CriteriaUtils {
 		return c;
 	}
 
-	/**
-	 * 返回级联条件and
-	 * @return And
-	 */
-	public static Junction and() {
-		return new Junction(JunctionType.AND);
-	}
-	
-	/**
-	 * 返回级联条件or
-	 * @return Or
-	 */
-	public static Junction or() {
-		return new Junction(JunctionType.OR);
-	}
-	
-	public static Criteria json2Criteria(String json){
+	public static Criteria json2Criteria(String json) {
 		JSONObject object = JSON.parseObject(json);
 		Criteria c = new Criteria();
-		if(object.get("criterions") != null) {
+		if (object.get("criterions") != null) {
 			JSONArray jSONArray = (JSONArray) object.get("criterions");
 			List<Object> criterions = new ArrayList<>();
-			jSONArray.stream().forEach(obj->paserCriterions((JSONObject) obj, criterions));
+			jSONArray.stream().forEach(obj -> paserCriterions((JSONObject) obj, criterions));
 			c.setCriterions(criterions);
 			c.setOrders(object.getJSONArray("orders").toJavaList(Order.class));
 		}
-		
+
 		return c;
 	}
-	
+
 	public static void paserCriterions(JSONObject item, List<Object> criterions) {
-		if(item.containsKey("criterions")) {
+		if (item.containsKey("criterions")) {
 			List<Object> subCriterions = new ArrayList<>();
 			JSONArray subArray = item.getJSONArray("criterions");
-			subArray.stream().forEach(obj->paserCriterions((JSONObject) obj, subCriterions));
+			subArray.stream().forEach(obj -> paserCriterions((JSONObject) obj, subCriterions));
 			Junction j = new Junction(Enum.valueOf(JunctionType.class, item.getString("type")));
 			j.setCriterions(subCriterions);
 			criterions.add(j);
@@ -214,10 +197,27 @@ public class CriteriaUtils {
 			criterions.add(sc);
 		}
 	}
-	
+
 	public static void main(String[] args) {
-		String json = "{\"criterions\":[{\"fieldName\":\"resourceType\",\"operator\":\"EQ\",\"value\":\"ELEMENT\"},{\"criterions\":[{\"fieldName\":\"roleId\",\"operator\":\"EQ\",\"value\":\"111\"},{\"fieldName\":\"id\",\"operator\":\"EQ\",\"value\":\"p111\"}],\"type\":\"OR\"}],\"orders\":[]}";
-		json2Criteria(json);
+		String json = "{\"criterions\":[{\"fieldName\":\"resourceType\",\"operator\":\"EQ\",\"value\":\"ELEMENT\"},{\"criterions\":[{\"fieldName\":\"roleId\",\"operator\":\"EQ\",\"value\":\"111\"},{\"fieldName\":\"id\",\"operator\":\"EQ\",\"value\":\"p111\"}],\"type\":\"OR\"}],\"orders\":[{\"desc\":false,\"fieldName\":\"username\"},{\"desc\":false,\"fieldName\":\"createTime\"}]}";
+		Criteria c = json2Criteria(json);
+		
+		Criteria c2 = Criteria.create()
+				.addCriterion("resourceType", Operator.EQ, "ELEMENT")
+				.or()
+					.addCriterion("username", Operator.EQ, "admin")
+					.and()
+						.addCriterion("username", Operator.EQ, "admin")
+						.addCriterion("username", Operator.EQ, "admin")
+					.end()
+					.addCriterion("username", Operator.EQ, "admin1")
+				.end()
+				.addOrder(new Order("createTime", true))
+				.addOrder(new Order("updateTime", true));
+		
+		System.out.println(json);
+		System.out.println(JSON.toJSONString(c));
+		System.out.println(JSON.toJSONString(c2));
 	}
-	
+
 }

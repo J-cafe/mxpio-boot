@@ -150,6 +150,41 @@ public class SmartCrudPolicyAdapter implements CrudPolicy {
 }
 ```
 
+#### 查询构造器的使用
+
+```java
+Criteria criteria = Criteria.create()
+		.addCriterion("aa", Operator.EQ, "xxx")
+		.or()
+			.addCriterion("username", Operator.EQ, "admin")
+			.addCriterion("username", Operator.EQ, "admin1")
+			.and()
+				.addCriterion("age", Operator.GT, 18)
+				.addCriterion("score", Operator.LT, 60)
+			.end()
+		.end()
+		.addOrder(new Order("createTime", true))
+		.addOrder(new Order("updateTime", true));
+		
+JpaUtil.linq(User.class).where(criteria).list();
+
+```
+
+以上代码执行效果：
+
+```sql
+SELECT
+	* 
+FROM
+	m_user 
+WHERE
+	aa = 'xxx' 
+	AND ( username = 'admin' OR username = 'admin1' OR ( age >= 18 AND score <= 60 ) ) 
+ORDER BY
+	createTime,
+	updateTime DESC
+
+```
 
 ## 示例
 1. 查询所有数据

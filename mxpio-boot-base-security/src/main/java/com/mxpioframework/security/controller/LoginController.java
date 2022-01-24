@@ -3,6 +3,7 @@ package com.mxpioframework.security.controller;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,7 +27,6 @@ import com.mxpioframework.security.vo.TokenVo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import sun.misc.BASE64Encoder;
 
 @Api(value = "LoginController", tags = { "系统接口" })
 @RestController
@@ -46,13 +46,13 @@ public class LoginController {
 	private OnlineUserService onlineUserService;
 	
 	@GetMapping("/loadUrl")
-	@ApiOperation(value = "加载菜单")
+	@ApiOperation(value = "加载菜单", notes = "获取已授权的URL清单", httpMethod = "GET")
 	public Result<List<Url>> loadUrl() {
 		return Result.OK(urlService.findTreeByUsername(null));
 	}
 	
 	@GetMapping("/kaptcha")
-	@ApiOperation(value = "加载验证码")
+	@ApiOperation(value = "加载验证码", notes = "获取登录验证码", httpMethod = "GET")
 	public Result<KaptchaDTO> kaptcha() throws IOException {
 		KaptchaDTO captcha = new KaptchaDTO();;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -64,15 +64,15 @@ public class LoginController {
         BufferedImage bi = defaultKaptcha.createImage(createText);
         ImageIO.write(bi, "jpg", out);
 
-        BASE64Encoder encoder = new BASE64Encoder();
+        Base64.Encoder encoder = Base64.getEncoder();
         
         captcha.setCode(uuid);
-        captcha.setImage(encoder.encode(out.toByteArray()));
+        captcha.setImage(encoder.encodeToString(out.toByteArray()));
 		return Result.OK(captcha);
 	}
 	
 	@PostMapping("/refreshToken")
-	@ApiOperation(value = "刷新token")
+	@ApiOperation(value = "刷新token", notes = "双token机制下通过refreshToken刷新权限token", httpMethod = "POST")
 	public Result<Object> refreshToken(String refreshToken) throws IOException {
 		TokenVo tokenVo;
 		tokenVo = onlineUserService.refreshToken(refreshToken, cacheProvider);

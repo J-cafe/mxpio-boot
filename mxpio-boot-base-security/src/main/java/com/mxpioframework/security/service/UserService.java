@@ -18,25 +18,25 @@ public interface UserService {
 
     /**
      * 新增用户
-     * @param resources /
+     * @param user /
      */
 	User create(User user);
 
     /**
      * 编辑用户
-     * @param resources /
+     * @param user /
      */
     void update(User user) throws Exception;
 
     /**
      * 删除用户
-     * @param ids /
+     * @param usernames /
      */
     void delete(Set<String> usernames);
 
     /**
      * 根据用户名查询
-     * @param userName /
+     * @param username /
      * @return /
      */
     User findByName(String username);
@@ -87,9 +87,9 @@ public interface UserService {
 
     /**
      * 用户自助修改资料
-     * @param resources /
+     * @param user /
      */
-    void updateCenter(User resources);
+    void updateCenter(User user);
     
     /**
 

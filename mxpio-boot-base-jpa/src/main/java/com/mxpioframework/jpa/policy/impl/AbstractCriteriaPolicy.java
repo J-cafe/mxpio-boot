@@ -19,9 +19,9 @@ public abstract class AbstractCriteriaPolicy implements CriteriaPolicy {
 			parseOrder(context);
 		}
 	}
-	
+
 	abstract protected void parseOrder(CriteriaContext context);
-	
+
 	protected void parseCriterions(CriteriaContext context) {
 		List<Criterion> criterions = context.getCurrent();
 		if (criterions != null) {
@@ -31,20 +31,20 @@ public abstract class AbstractCriteriaPolicy implements CriteriaPolicy {
 			}
 		}
 	}
-	
+
 	protected void parseCriterion(CriteriaContext context) {
 		Criterion criterion = context.getCurrent();
 		if (criterion instanceof SimpleCriterion) {
 			parseSimpleCriterion(context);
 		} else if (criterion instanceof Junction) {
-			if(JunctionType.OR.equals(((Junction) criterion).getType())) {
+			if (JunctionType.OR.equals(((Junction) criterion).getType())) {
 				parseOrCriterion(context);
-			}else if(JunctionType.AND.equals(((Junction) criterion).getType())) {
+			} else if (JunctionType.AND.equals(((Junction) criterion).getType())) {
 				parseAndCriterion(context);
 			}
 		}
 	}
-	
+
 	abstract protected void parseAndCriterion(CriteriaContext context);
 
 	abstract protected void parseOrCriterion(CriteriaContext context);

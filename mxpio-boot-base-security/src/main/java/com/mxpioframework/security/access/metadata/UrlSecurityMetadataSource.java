@@ -21,9 +21,12 @@ import org.springframework.stereotype.Component;
 
 import com.mxpioframework.security.access.provider.FilterConfigAttributeProvider;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 菜单安全元数据源
  */
+@Slf4j
 @Component
 public class UrlSecurityMetadataSource  implements FilterInvocationSecurityMetadataSource {
 
@@ -55,7 +58,7 @@ public class UrlSecurityMetadataSource  implements FilterInvocationSecurityMetad
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 		
 		return null;

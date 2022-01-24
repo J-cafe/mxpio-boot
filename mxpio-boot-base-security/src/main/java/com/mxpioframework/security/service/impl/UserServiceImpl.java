@@ -21,9 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.initiator.JpaUtilAble;
 import com.mxpioframework.jpa.query.Criteria;
-import com.mxpioframework.jpa.query.CriteriaUtils;
-import com.mxpioframework.jpa.query.Junction;
-import com.mxpioframework.jpa.query.JunctionType;
 import com.mxpioframework.jpa.query.Operator;
 import com.mxpioframework.jpa.query.SimpleCriterion;
 import com.mxpioframework.security.entity.Element;
@@ -136,26 +133,19 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	@Transactional(readOnly = false)
 	public void afterPropertiesSet(ApplicationContext applicationContext) {
 		
-		SimpleCriterion sc = new SimpleCriterion("resourceType", Element.RESOURCE_TYPE, Operator.EQ);
-		SimpleCriterion sc1 = new SimpleCriterion("roleId", "111", Operator.EQ);
-		SimpleCriterion sc2 = new SimpleCriterion("id", "p111", Operator.EQ);
+		SimpleCriterion sc = new SimpleCriterion("resourceType", Operator.EQ, Element.RESOURCE_TYPE);
+		SimpleCriterion sc1 = new SimpleCriterion("roleId", Operator.EQ, "111");
+		SimpleCriterion sc2 = new SimpleCriterion("id", Operator.EQ, "p111");
 		
-		Criteria c = new Criteria();
-		c.add(sc);
-		Junction or = new Junction(JunctionType.OR);
-		or.add(sc1);
-		or.add(sc2);
-		c.add(or);
+		Criteria c = Criteria.create().addCriterion(sc).or().addCriterion(sc1).addCriterion(sc2);
+	
+		// String json = "{\"criterions\":[{\"fieldName\":\"resourceType\",\"operator\":\"EQ\",\"value\":\"ELEMENT\"},{\"criterions\":[{\"fieldName\":\"roleId\",\"operator\":\"EQ\",\"value\":\"111\"},{\"fieldName\":\"id\",\"operator\":\"EQ\",\"value\":\"p111\"}],\"type\":\"OR\"}],\"orders\":[]}";
 		
-		
-		
-		String json = "{\"criterions\":[{\"fieldName\":\"resourceType\",\"operator\":\"EQ\",\"value\":\"ELEMENT\"},{\"criterions\":[{\"fieldName\":\"roleId\",\"operator\":\"EQ\",\"value\":\"111\"},{\"fieldName\":\"id\",\"operator\":\"EQ\",\"value\":\"p111\"}],\"type\":\"OR\"}],\"orders\":[]}";
-		
-		Criteria c2 = CriteriaUtils.json2Criteria(json);
+		// Criteria c2 = CriteriaUtils.json2Criteria(json);
 		Pageable page = PageRequest.of(0, 10);
 		
 		JpaUtil.linq(Permission.class)
-			.where(c2)
+			.where(c)
 			.collect(Role.class, "roleId")
 			.collect(Element.class, "resourceId")
 			.exists(RoleGrantedAuthority.class)

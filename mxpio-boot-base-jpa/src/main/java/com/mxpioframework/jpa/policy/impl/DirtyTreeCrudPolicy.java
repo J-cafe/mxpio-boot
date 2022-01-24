@@ -19,7 +19,7 @@ import com.mxpioframework.jpa.policy.GeneratorPolicy;
 
 public class DirtyTreeCrudPolicy implements CrudPolicy {
 	private CrudPolicy crudPolicy;
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void apply(CrudContext context) {
@@ -34,17 +34,18 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 				target = new ArrayList();
 				target.add(obj);
 			}
-			
+
 			for (Object entity : target) {
 				context.setEntity(entity);
-				if(fields == null) {
+				if (fields == null) {
 					fields = getPersistentFields(context);
 				}
-				
+
 				if (generatorPolicies == null) {
 					try {
 						generatorPolicies = getNeedGeneratorFields(entity, context.getCrudType());
-					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+							| InvocationTargetException | NoSuchMethodException | SecurityException e) {
 						e.printStackTrace();
 					}
 				}
@@ -54,15 +55,14 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 			}
 		}
 	}
-	
-	protected void applyPersistentEntity(CrudContext context,
-			List<Map<String, Object>> generatorPolicies) {
+
+	protected void applyPersistentEntity(CrudContext context, List<Map<String, Object>> generatorPolicies) {
 		for (Map<String, Object> map : generatorPolicies) {
 			Field field = (Field) map.get("field");
 			GeneratorPolicy policy = (GeneratorPolicy) map.get("policy");
 			policy.apply(context.getEntity(), field.getName());
 		}
-		
+
 	}
 
 	protected void applyPersistentPropertyValue(CrudContext context, List<Field> fields) {
@@ -76,19 +76,19 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 		}
 		context.setParent(parent);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	protected List<Field> getPersistentFields(CrudContext context) {
 		Object entity = context.getEntity();
 		List<Field> result = new ArrayList<Field>();
 		List<Field> fields = BeanReflectionUtils.loadClassFields(BeanReflectionUtils.getClass(entity));
-		if(fields != null) {
+		if (fields != null) {
 			for (Field field : fields) {
 				Class<?> propertyClass = field.getType();
-				if(Collection.class.isAssignableFrom(propertyClass)) {
+				if (Collection.class.isAssignableFrom(propertyClass)) {
 					field.setAccessible(true);
 					Collection c = (Collection) BeanReflectionUtils.getProperty(entity, field.getName());
-					if(!CollectionUtils.isEmpty(c)) {
+					if (!CollectionUtils.isEmpty(c)) {
 						propertyClass = c.iterator().next().getClass();
 					}
 				}
@@ -99,22 +99,26 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 		}
 		return result;
 	}
-	
-	protected List<Map<String, Object>> getNeedGeneratorFields(Object entity, CrudType crudType) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+
+	protected List<Map<String, Object>> getNeedGeneratorFields(Object entity, CrudType crudType)
+			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+			NoSuchMethodException, SecurityException {
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		List<Field> fields = BeanReflectionUtils.loadClassFields(BeanReflectionUtils.getClass(entity));
-		
-		if(fields != null) {
+
+		if (fields != null) {
 			for (Field field : fields) {
 				Generator generator = field.getAnnotation(Generator.class);
-				Map<String, Object> map =new HashMap<String, Object>();
-				if(generator != null) {
-					GeneratorPolicy policy = generator.policy().getDeclaredConstructor().newInstance();;
-					if(crudType.equals(policy.getType()) || (CrudType.SAVE_OR_UPDATE.equals(policy.getType()) && !crudType.equals(CrudType.DELETE))) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				if (generator != null) {
+					GeneratorPolicy policy = generator.policy().getDeclaredConstructor().newInstance();
+					;
+					if (crudType.equals(policy.getType()) || (CrudType.SAVE_OR_UPDATE.equals(policy.getType())
+							&& !crudType.equals(CrudType.DELETE))) {
 						map.put("field", field);
 						map.put("policy", policy);
 						result.add(map);
-					}else {
+					} else {
 						continue;
 					}
 				}

@@ -172,7 +172,7 @@ public class RedisCacheProvider implements CacheProvider {
 	/**
 	 * 删除缓存
 	 *
-	 * @param key
+	 * @param keys
 	 *            可以传一个值 或多个
 	 */
 	public void del(String... keys) {
@@ -606,7 +606,7 @@ public class RedisCacheProvider implements CacheProvider {
 	 *
 	 * @param key
 	 *            键
-	 * @return
+	 * @return list缓存的长度
 	 */
 	public long lGetListSize(String key) {
 		try {
@@ -623,8 +623,8 @@ public class RedisCacheProvider implements CacheProvider {
 	 * @param key
 	 *            键
 	 * @param index
-	 *            索引 index>=0时， 0 表头，1 第二个元素，依次类推；index<0时，-1，表尾，-2倒数第二个元素，依次类推
-	 * @return
+	 *            索引 index 大于等于 0时， 0 表头，1 第二个元素，依次类推；index 小于 0时，-1，表尾，-2倒数第二个元素，依次类推
+	 * @return list中的值
 	 */
 	public Object lGetIndex(String key, long index) {
 		try {
@@ -642,7 +642,7 @@ public class RedisCacheProvider implements CacheProvider {
 	 *            键
 	 * @param value
 	 *            值
-	 * @return
+	 * @return true 成功，false 失败
 	 */
 	public boolean lSet(String key, Object value) {
 		try {
@@ -663,7 +663,7 @@ public class RedisCacheProvider implements CacheProvider {
 	 *            值
 	 * @param time
 	 *            时间(秒)
-	 * @return
+	 * @return true 成功，false 失败
 	 */
 	public boolean lSet(String key, Object value, long time) {
 		try {
@@ -685,7 +685,7 @@ public class RedisCacheProvider implements CacheProvider {
 	 *            键
 	 * @param value
 	 *            值
-	 * @return
+	 * @return true 成功，false 失败
 	 */
 	public boolean lSet(String key, List<Object> value) {
 		try {
@@ -706,7 +706,7 @@ public class RedisCacheProvider implements CacheProvider {
 	 *            值
 	 * @param time
 	 *            时间(秒)
-	 * @return
+	 * @return true 成功，false 失败
 	 */
 	public boolean lSet(String key, List<Object> value, long time) {
 		try {

@@ -13,7 +13,7 @@ public class JpaUtilInitiator implements com.mxpioframework.jpa.initiator.JpaUti
 
 	@Autowired
 	private GetEntityManagerFactoryStrategy getEntityManagerFactoryStrategy;
-	
+
 	@Autowired
 	private CriteriaPolicy defaultQBCCriteriaPolicy;
 

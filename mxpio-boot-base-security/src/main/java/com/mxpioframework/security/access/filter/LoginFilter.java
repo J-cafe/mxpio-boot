@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -57,12 +58,9 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 				throw new KaptchaAuthenticationException("验证码错误");
 			}
 		}
-
-		if (username == null)
-			username = "";
-		if (password == null)
-			password = "";
-		username = username.trim();
+		if(username == null || password == null) {
+			throw new BadCredentialsException("账户名密码错误！");
+		}
 		// 封装到token中提交
 		JwtLoginToken authRequest = new JwtLoginToken(username, password);
 

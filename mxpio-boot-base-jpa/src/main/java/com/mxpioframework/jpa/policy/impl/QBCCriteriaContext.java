@@ -15,19 +15,15 @@ public class QBCCriteriaContext implements CriteriaContext {
 	private String alias;
 	private Criteria criteria;
 	private List<CriterionParser> criterionParsers = new ArrayList<CriterionParser>();
-	
-	
-	
-	
+
 	@Override
 	public Criteria getCriteria() {
 		return criteria;
 	}
-	
+
 	public void setCriteria(Criteria criteria) {
 		this.criteria = criteria;
 	}
-
 
 	@Override
 	public <E> void setCurrent(E current) {
@@ -60,8 +56,7 @@ public class QBCCriteriaContext implements CriteriaContext {
 		return criterionParsers;
 	}
 
-	public void setCriterionParsers(
-			List<CriterionParser> criterionParsers) {
+	public void setCriterionParsers(List<CriterionParser> criterionParsers) {
 		this.criterionParsers = criterionParsers;
 	}
 

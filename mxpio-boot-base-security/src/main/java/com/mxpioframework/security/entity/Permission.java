@@ -11,11 +11,14 @@ import org.springframework.security.access.ConfigAttribute;
 import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.ToString;
 
 @Entity
 @Table(name = "MB_PERMISSION")
 @ToString
+@ApiModel(value="权限对象")
 public class Permission extends BaseEntity implements ConfigAttribute{
 	
 	private static final long serialVersionUID = 1L;
@@ -23,27 +26,35 @@ public class Permission extends BaseEntity implements ConfigAttribute{
 	@Id
 	@Generator
 	@Column(name = "ID_", length = 64)
+	@ApiModelProperty(value = "ID")
 	private String id;
 	
 	@Column(name = "ROLE_ID_", length = 64)
+	@ApiModelProperty(value = "角色ID")
 	private String roleId;
 	
 	@Column(name = "RESOURCE_ID_", length = 64)
+	@ApiModelProperty(value = "资源ID")
 	private String resourceId;
 	
 	@Column(name = "RESOURCE_TYPE_", length = 32)
+	@ApiModelProperty(value = "资源类型")
 	private String resourceType;
 	
 	@Column(name = "ATTRIBUTE_", length = 255)
+	@ApiModelProperty(value = "资源属性")
 	private String attribute;
 	
 	@Transient
+	@ApiModelProperty(value = "角色对象")
 	private Role role;
 	
 	@Transient
+	@ApiModelProperty(value = "组件对象")
 	private Element element;
 	
 	@Transient
+	@ApiModelProperty(value = "菜单对象")
 	private Url url;
 	
 	public Url getUrl() {

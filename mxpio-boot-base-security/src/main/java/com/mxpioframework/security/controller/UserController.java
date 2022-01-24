@@ -1,7 +1,9 @@
 package com.mxpioframework.security.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.websocket.server.PathParam;
 
@@ -19,8 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mxpioframework.cache.provider.CacheProvider;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.query.Criteria;
-import com.mxpioframework.jpa.query.Junction;
-import com.mxpioframework.jpa.query.JunctionType;
 import com.mxpioframework.jpa.query.Operator;
 import com.mxpioframework.jpa.query.SimpleCriterion;
 import com.mxpioframework.security.entity.User;
@@ -47,21 +47,24 @@ public class UserController {
 	private UserService userService;
 	
 	@GetMapping("/list")
-	@ApiOperation(value = "用户列表")
+	@ApiOperation(value = "用户列表", notes = "根据过滤字段filter获取用户列表，过滤用户名和昵称", httpMethod = "GET")
 	public Result<Collection<User>> list(@PathParam("filter") String filter) throws Exception {
-		 Criteria criteria = new Criteria();
+		List<User> list = new ArrayList<>();
 		
 		if(filter != null) {
-			Junction junction = new Junction(JunctionType.OR);
-			junction.add(new SimpleCriterion("username", filter, Operator.LIKE));
-			junction.add(new SimpleCriterion("nickname", filter, Operator.LIKE));
-			criteria.add(junction);
+			
+			Criteria c = Criteria.create()
+					.or()
+						.addCriterion(new SimpleCriterion("username", Operator.LIKE, filter))
+						.addCriterion(new SimpleCriterion("nickname", Operator.LIKE, filter))
+					.end();
+			list = userService.queryAll(c);
 		}
-		return Result.OK(userService.queryAll(criteria));
+		return Result.OK(list);
 	}
 	
 	@GetMapping("/info")
-	@ApiOperation(value = "用户信息")
+	@ApiOperation(value = "用户信息", notes = "获取当前登录用户信息", httpMethod = "GET")
 	public Result<UserDetails> info() throws Exception {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		log.info("user==>" + user);
@@ -70,21 +73,21 @@ public class UserController {
 	}
 	
 	@PostMapping("/add")
-	@ApiOperation(value = "添加用户")
+	@ApiOperation(value = "添加用户", notes = "添加用户信息", httpMethod = "POST")
 	public Result<UserDetails> add(@RequestBody User user) throws Exception {
 		userService.create(user);
 		return Result.OK("添加成功",user);
 	}
 	
 	@PutMapping("/edit")
-	@ApiOperation(value = "编辑用户")
+	@ApiOperation(value = "更新用户", notes = "更新用户信息", httpMethod = "PUT")
 	public Result<User> edit(@RequestBody User user) throws Exception {
 		userService.update(user);
 		return Result.OK("编辑成功",null);
 	}
 	
 	@DeleteMapping("/delete")
-	@ApiOperation(value = "删除用户")
+	@ApiOperation(value = "删除用户", notes = "根据用户名username删除用户信息", httpMethod = "DELETE")
 	public Result<UserDetails> delete(String username) throws Exception {
 		userService.delete(new HashSet<String>() {
 			private static final long serialVersionUID = 1L;
@@ -97,7 +100,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/logout")
-	@ApiOperation(value = "根据用户名强退用户")
+	@ApiOperation(value = "强退用户", notes = "根据用户名username强退用户", httpMethod = "POST")
 	public Result<User> logout(@PathParam("username") String username) throws Exception {
 		onlineUserService.kickOutForUsername(username, cacheProvider);
 		log.info("logout sucessful");

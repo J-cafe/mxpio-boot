@@ -39,30 +39,30 @@ public class PermissionController {
 	private UrlService urlService;
 	
 	@GetMapping("/loadElements")
-	@ApiOperation(value = "加载页面组件")
+	@ApiOperation(value = "加载页面组件", notes = "根据pageId获取已授权的组件清单", httpMethod = "GET")
 	public Result<Collection<Element>> loadElements(String pageId) throws Exception {
 		return Result.OK(permissionService.loadElements(pageId));
 	}
 	
 	@GetMapping("/loadPermissions")
 	@ResponseBody
-	@ApiOperation(value = "加载权限")
+	@ApiOperation(value = "加载权限", notes = "根据登录用户获取权限信息", httpMethod = "GET")
 	public Result<List<Permission>> loadPermissions() {
 		return Result.OK(roleUrlService.load());
 	}
 	
 	@GetMapping("/loadUrl")
-	@ApiOperation(value = "加载权限")
+	@ApiOperation(value = "加载路由", notes = "根据登录用户获取已授权的路由信息", httpMethod = "GET")
 	public Result<List<RouterVo>> loadUrl() {
 		List<Url> urls = urlService.findTreeByUsername(null);
 		return Result.OK(RouterUtil.buildRouter(urls));
 	}
 	
 	@PostMapping("/save")
-	@ApiOperation(value = "保存权限")
+	@ApiOperation(value = "保存权限", notes = "新增/更新权限信息", httpMethod = "POST")
 	public Result<Object> save(@RequestBody Permission permission) {
 		permissionService.save(permission);
-		return Result.OK();
+		return Result.OK(permission);
 	}
 
 }

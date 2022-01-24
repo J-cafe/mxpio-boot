@@ -19,6 +19,7 @@
 		<swagger.version>2.9.2</swagger.version>
 		<fastjson.version>1.2.76</fastjson.version>
 		<druid.version>1.2.6</druid.version>
+		<jackson.version>2.11.4</jackson.version>
 	</properties>
 	<modules>
 		<module>mxpio-boot-base-autoconfigure</module>
@@ -28,6 +29,7 @@
 		<module>mxpio-boot-base-cache</module>
 		<module>mxpio-boot-module-cache-redis</module>
 		<module>mxpio-boot-base-ui</module>
+		<module>mxpio-boot-base-system</module>
 	</modules>
 	<dependencies>
 		<dependency>
@@ -80,6 +82,19 @@
 			<artifactId>spring-boot-starter-cache</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+		</dependency>
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -113,6 +128,24 @@
 				<artifactId>mxpio-boot-module-cache-redis</artifactId>
 				<version>${mxpio.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.mxpioframework.boot</groupId>
+				<artifactId>mxpio-boot-base-system</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<!-- starters -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-websocket</artifactId>
+				<version>2.4.3</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-actuator</artifactId>
+				<version>2.4.3</version>
+			</dependency>
+
 			<dependency>
 				<groupId>com.github.whvcse</groupId>
 				<artifactId>easy-captcha</artifactId>
@@ -165,21 +198,114 @@
 			</dependency>
 			<!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
 			<dependency>
-			    <groupId>com.auth0</groupId>
-			    <artifactId>java-jwt</artifactId>
-			    <version>3.14.0</version>
+				<groupId>com.auth0</groupId>
+				<artifactId>java-jwt</artifactId>
+				<version>3.14.0</version>
 			</dependency>
 			<dependency>
-			    <groupId>commons-beanutils</groupId>
-			    <artifactId>commons-beanutils</artifactId>
-			    <version>1.9.4</version>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>1.9.4</version>
 			</dependency>
 			<dependency>
-			    <groupId>commons-codec</groupId>
-			    <artifactId>commons-codec</artifactId>
-			    <version>1.15</version>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>1.15</version>
 			</dependency>
 		</dependencies>
-
 	</dependencyManagement>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<configuration>
+					<attach>true</attach>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<additionalparam>-Xdoclint:none</additionalparam>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>woff</nonFilteredFileExtension>
+						<nonFilteredFileExtension>woff2</nonFilteredFileExtension>
+						<nonFilteredFileExtension>eot</nonFilteredFileExtension>
+						<nonFilteredFileExtension>ttf</nonFilteredFileExtension>
+						<nonFilteredFileExtension>svg</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
+				</configuration>
+			</plugin>
+		</plugins>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.json</include>
+					<include>**/*.ftl</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>https://gitee.com/i_mxpio/mxpio-boot/blob/master/LICENSE</url>
+			<distribution>repo,manual</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>MxpIO</name>
+			<email>i@mxpio.com</email>
+			<organization>mxpio</organization>
+			<url>https://gitee.com/i_mxpio</url>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:https://gitee.com/i_mxpio/mxpio-boot.git</connection>
+		<developerConnection>scm:git:https://gitee.com/i_mxpio/mxpio-boot.git</developerConnection>
+		<url>https://gitee.com/i_mxpio/mxpio-boot.git</url>
+		<tag>0.0.1-SNAPSHOT</tag>
+	</scm>
 </project>

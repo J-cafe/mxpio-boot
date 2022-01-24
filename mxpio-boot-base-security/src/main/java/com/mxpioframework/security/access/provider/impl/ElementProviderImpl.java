@@ -33,9 +33,8 @@ public class ElementProviderImpl implements ElementProvider {
 		Map<String, Collection<Element>> elementMap = new LinkedHashMap<String, Collection<Element>>();
 		for (Element element : elements) {
 			String key = element.getPath();
-			Collection<Element> cs = elementMap.get(key);
-			if (cs == null) {
-				cs = new ArrayList<Element>();
+			Collection<Element> cs = elementMap.computeIfAbsent(key,k -> new ArrayList<Element>());
+			if (cs.size() == 0) {
 				elementMap.put(key, cs);
 			}
 			cs.add(element);

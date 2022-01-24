@@ -14,6 +14,5 @@ public class AdditionalSupport {
 	public void setAdditional(Object additional) {
 		this.additional = additional;
 	}
-	
-	
+
 }

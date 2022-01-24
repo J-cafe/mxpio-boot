@@ -48,33 +48,32 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
-	
+
 	private LinqContext linqContext = new LinqContext();
 	private List<CollectInfo> collectInfos = new ArrayList<CollectInfo>();
 	private Map<Class<?>, String[]> projectionMap = new HashMap<Class<?>, String[]>();
 	private Filter filter;
-	private boolean disableBackFillFilter; 
+	private boolean disableBackFillFilter;
 	private List<CriterionParser> criterionParsers = new ArrayList<CriterionParser>();
 	private Criteria c;
 	private boolean disableSmartSubQueryCriterion;
-	
+
 	protected List<Order> orders = new ArrayList<Order>();
 	protected boolean distinct;
 	protected Class<?> resultClass;
 	protected ResultTransformer resultTransformer;
 
-	
 	public LinqImpl(Class<?> domainClass) {
 		this(domainClass, (EntityManager) null);
 	}
-	
+
 	public LinqImpl(Class<?> domainClass, EntityManager entityManager) {
 		super(domainClass, entityManager);
 		criteria = cb.createQuery(domainClass);
 		root = criteria.from(domainClass);
 		resultClass = domainClass;
 	}
-	
+
 	public LinqImpl(Class<?> domainClass, Class<?> resultClass) {
 		super(domainClass);
 		if (Tuple.class.isAssignableFrom(resultClass)) {
@@ -85,7 +84,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		root = criteria.from(domainClass);
 		this.resultClass = resultClass;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public LinqImpl(Class<?> domainClass, Class<?> resultClass, EntityManager entityManager) {
 		super(domainClass, entityManager);
@@ -100,7 +99,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 			String[] selections = new String[attrs.size()];
 			int i = 0;
 			for (Object attr : attrs) {
-				selections[i] = ((SingularAttribute)attr).getName();
+				selections[i] = ((SingularAttribute) attr).getName();
 				i++;
 			}
 			select(selections);
@@ -110,11 +109,11 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		}
 		this.resultClass = resultClass;
 	}
-	
+
 	public LinqImpl(Linq parent, Class<?> domainClass) {
 		super(parent, domainClass);
 	}
-	
+
 	@Override
 	public Linq distinct() {
 		if (!beforeMethodInvoke()) {
@@ -123,7 +122,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		distinct = true;
 		return this;
 	}
-	
+
 	@Override
 	public Linq groupBy(String... grouping) {
 		if (!beforeMethodInvoke()) {
@@ -140,7 +139,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		}
 		return this;
 	}
-	
+
 	@Override
 	public Linq desc(String... properties) {
 		if (!beforeMethodInvoke()) {
@@ -151,7 +150,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		}
 		return this;
 	}
-	
+
 	@Override
 	public Linq desc(Expression<?>... expressions) {
 		if (!beforeMethodInvoke()) {
@@ -162,7 +161,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		}
 		return this;
 	}
-	
+
 	@Override
 	public Linq asc(String... properties) {
 		if (!beforeMethodInvoke()) {
@@ -173,7 +172,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		}
 		return this;
 	}
-	
+
 	@Override
 	public Linq asc(Expression<?>... expressions) {
 		if (!beforeMethodInvoke()) {
@@ -184,7 +183,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		}
 		return this;
 	}
-	
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T findOne() {
@@ -206,7 +205,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		beforeExecute(criteria);
 		return transform(em.createQuery(criteria), false);
 	}
-	
+
 	@Override
 	public <T> Page<T> paging(Pageable pageable) {
 		if (parent != null) {
@@ -229,7 +228,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 			query.setMaxResults(pageable.getPageSize());
 
 			Long total = JpaUtil.count(criteria);
-			List<T> content = Collections.<T> emptyList();
+			List<T> content = Collections.<T>emptyList();
 			if (total > pageable.getOffset()) {
 				content = transform(query, false);
 			}
@@ -237,7 +236,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 			return new PageImpl<T>(content, pageable, total);
 		}
 	}
-	
+
 	@Override
 	public <T> List<T> list(Pageable pageable) {
 		if (parent != null) {
@@ -251,7 +250,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 			orders.addAll(QueryUtils.toOrders(sort, root, cb));
 			beforeExecute(criteria);
 			TypedQuery<?> query = em.createQuery(criteria);
-			
+
 			Long offset = pageable.getOffset();
 			query.setFirstResult(offset.intValue());
 			query.setMaxResults(pageable.getPageSize());
@@ -259,7 +258,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 			return transform(query, false);
 		}
 	}
-	
+
 	@Override
 	public <T> List<T> list(int page, int size) {
 		if (parent != null) {
@@ -268,13 +267,13 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		}
 		beforeExecute(criteria);
 		TypedQuery<?> query = em.createQuery(criteria);
-		
-		query.setFirstResult(page*size);
+
+		query.setFirstResult(page * size);
 		query.setMaxResults(size);
 
 		return transform(query, false);
 	}
-	
+
 	@Override
 	public Long count() {
 		if (parent != null) {
@@ -283,7 +282,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		}
 		return executeCountQuery(getCountQuery());
 	}
-	
+
 	@Override
 	public boolean exists() {
 		if (parent != null) {
@@ -292,7 +291,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		}
 		return count() > 0;
 	}
-	
+
 	protected Long executeCountQuery(TypedQuery<Long> query) {
 
 		Assert.notNull(query, "query can not be null.");
@@ -306,7 +305,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 
 		return total;
 	}
-	
+
 	protected TypedQuery<Long> getCountQuery() {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -321,26 +320,26 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		}
 		return em.createQuery(criteria);
 	}
-	
+
 	protected void applyPredicateToCriteria(AbstractQuery<?> query) {
 
 		Predicate predicate = parsePredicate(junction);
 		if (predicate != null) {
 			query.where(predicate);
 		}
-		
+
 		predicate = parsePredicate(having);
 		if (predicate != null) {
 			query.having(predicate);
 		}
-		
+
 		if (query instanceof CriteriaQuery) {
 			if (!CollectionUtils.isEmpty(orders)) {
 				((CriteriaQuery<?>) query).orderBy(orders);
 			}
 		}
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected <T> List<T> transform(TypedQuery<?> query, boolean single) {
 		List<T> result;
@@ -359,7 +358,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 					if (tuple.getClass().isArray()) {
 						result.add((T) resultTransformer.transformTuple((Object[]) tuple, aliases));
 					} else {
-						result.add((T) resultTransformer.transformTuple(new Object[]{ tuple }, aliases));
+						result.add((T) resultTransformer.transformTuple(new Object[] { tuple }, aliases));
 					}
 				}
 			}
@@ -390,7 +389,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		resultTransformer = Transformers.aliasToBean(domainClass);
 		return this;
 	}
-	
+
 	@Override
 	public Linq aliasToBean(Class<?> resultClass) {
 		if (!beforeMethodInvoke()) {
@@ -425,48 +424,47 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		resultClass = Tuple.class;
 		return this;
 	}
-	
+
 	@Override
 	public LinqContext getLinqContext() {
 		return linqContext;
 	}
-	
+
 	@Override
-	public Linq collect(String ...properties) {
+	public Linq collect(String... properties) {
 		if (!beforeMethodInvoke()) {
 			return this;
 		}
 		collect(null, null, null, null, null, properties);
 		return this;
 	}
-	
+
 	@Override
 	public Linq collect(Class<?> entityClass) {
 		return collect(null, null, null, JpaUtil.getIdName(entityClass), entityClass, JpaUtil.getIdName(domainClass));
 	}
-	
+
 	@Override
-	public Linq collect(Class<?> entityClass, String ...properties) {
+	public Linq collect(Class<?> entityClass, String... properties) {
 		return collect(null, null, null, JpaUtil.getIdName(entityClass), entityClass, properties);
 	}
-	
+
 	@Override
 	public Linq collect(String otherProperty, Class<?> entityClass) {
 		return collect(null, null, null, otherProperty, entityClass, JpaUtil.getIdName(domainClass));
 	}
-	
+
 	@Override
-	public Linq collect(String otherProperty, Class<?> entityClass, String ...properties) {
+	public Linq collect(String otherProperty, Class<?> entityClass, String... properties) {
 		return collect(null, null, null, otherProperty, entityClass, properties);
 	}
-	
+
 	@Override
 	public Linq collect(Class<?> relationClass, Class<?> entityClass) {
 		return collect(relationClass, Introspector.decapitalize(domainClass.getSimpleName()) + "Id",
 				Introspector.decapitalize(entityClass.getSimpleName()) + "Id", JpaUtil.getIdName(entityClass),
 				entityClass, JpaUtil.getIdName(domainClass));
 	}
-
 
 	@Override
 	public Linq collect(Class<?> relationClass, String relationProperty, String relationOtherProperty,
@@ -475,14 +473,13 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 				entityClass, JpaUtil.getIdName(domainClass));
 	}
 
-
 	@Override
 	public Linq collect(Class<?> relationClass, String relationProperty, String relationOtherProperty,
 			String otherProperty, Class<?> entityClass) {
 		return collect(relationClass, relationProperty, relationOtherProperty, otherProperty, entityClass,
 				JpaUtil.getIdName(domainClass));
 	}
-	
+
 	@Override
 	public Linq collect(Class<?> relationClass, String relationProperty, String relationOtherProperty,
 			String otherProperty, Class<?> entityClass, String... properties) {
@@ -499,16 +496,16 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		collectInfos.add(collectInfo);
 		return this;
 	}
-	
+
 	@Override
-	public Linq collectSelect(Class<?> entityClass, String ...projections) {
+	public Linq collectSelect(Class<?> entityClass, String... projections) {
 		if (!beforeMethodInvoke()) {
 			return this;
 		}
 		projectionMap.put(entityClass, projections);
 		return this;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	protected void doCollect(Collection list) {
 		if (!collectInfos.isEmpty()) {
@@ -517,7 +514,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		}
 		doBackfill();
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void buildMetadata() {
 		Map<Object, Object> metadata = linqContext.getMetadata();
@@ -525,15 +522,12 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 			Set collectSet = collectInfo.getSet();
 			Map<Object, Object> relationMap = null;
 			List collectList = null;
-		
+
 			if (!CollectionUtils.isEmpty(collectSet)) {
 				if (collectInfo.getRelationClass() != null) {
-					collectList = JpaUtil
-						.linq(collectInfo.getRelationClass())
-						.aliasToBean()
-						.select(collectInfo.getRelationProperty(), collectInfo.getRelationOtherProperty())
-						.in(collectInfo.getRelationProperty(), collectSet)
-						.list();
+					collectList = JpaUtil.linq(collectInfo.getRelationClass()).aliasToBean()
+							.select(collectInfo.getRelationProperty(), collectInfo.getRelationOtherProperty())
+							.in(collectInfo.getRelationProperty(), collectSet).list();
 					relationMap = JpaUtil.index(collectList, collectInfo.getRelationOtherProperty());
 					collectSet = relationMap.keySet();
 				}
@@ -545,7 +539,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 								metadata.put(property, metadata.get(entityClass));
 							} else {
 								String otherProperty = collectInfo.getOtherProperty();
-								
+
 								Linq linq = JpaUtil.linq(entityClass);
 								if (ArrayUtils.isNotEmpty(projectionMap.get(entityClass))) {
 									linq.aliasToBean();
@@ -557,9 +551,11 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 								Map<Object, List<Object>> map = new HashMap<Object, List<Object>>();
 								if (collectList != null) {
 									for (Object obj : collectList) {
-										Object key = BeanReflectionUtils.getPropertyValue(obj, collectInfo.getRelationOtherProperty());
+										Object key = BeanReflectionUtils.getPropertyValue(obj,
+												collectInfo.getRelationOtherProperty());
 										Object other = resultMap.get(key);
-										key = BeanReflectionUtils.getPropertyValue(obj, collectInfo.getRelationProperty());
+										key = BeanReflectionUtils.getPropertyValue(obj,
+												collectInfo.getRelationProperty());
 										List<Object> list = map.get(key);
 										if (list == null) {
 											list = new ArrayList<Object>(5);
@@ -568,7 +564,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 										if (other != null) {
 											list.add(other);
 										}
-										
+
 									}
 								} else {
 									for (Object obj : result) {
@@ -581,19 +577,19 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 										list.add(obj);
 									}
 								}
-								
+
 								metadata.put(property, map);
 								metadata.put(entityClass, map);
 							}
-							
+
 						} else {
 							metadata.put(property, collectInfo.getSet());
 						}
 					}
 				}
-				
+
 			}
-			
+
 		}
 	}
 
@@ -610,14 +606,14 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 			}
 		}
 	}
-	
+
 	private void doBackfill() {
 		if (!collectInfos.isEmpty() && !disableBackFillFilter) {
 			this.filter = new BackfillFilter(this.filter, collectInfos);
 		}
-		
+
 	}
-	
+
 	@Override
 	public Linq where(Criteria criteria) {
 		if (!beforeMethodInvoke()) {
@@ -627,13 +623,12 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		return this;
 	}
 
-	
 	@Override
 	public Linq filter(Filter filter) {
 		this.filter = filter;
 		return this;
 	}
-	
+
 	protected void beforeExecute(AbstractQuery<?> query) {
 		if (!disableSmartSubQueryCriterion && c != null) {
 			this.addParser(new SmartSubQueryParser(this, domainClass, collectInfos));
@@ -646,7 +641,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		doCollect(entities);
 		doFilter(entities);
 	}
-	
+
 	protected void doParseCriteria() {
 		if (c != null) {
 			QBCCriteriaContext context = new QBCCriteriaContext();
@@ -657,7 +652,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 			JpaUtil.getDefaultQBCCriteriaPolicy().apply(context);
 		}
 	}
-	
+
 	@Override
 	public Linq setDisableSmartSubQueryCriterion() {
 		if (!beforeMethodInvoke()) {
@@ -666,7 +661,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		this.disableSmartSubQueryCriterion = true;
 		return this;
 	}
-	
+
 	@Override
 	public Linq setDisableBackFillFilter() {
 		if (!beforeMethodInvoke()) {
@@ -675,9 +670,9 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		this.disableBackFillFilter = true;
 		return this;
 	}
-	
+
 	@SuppressWarnings({ "rawtypes" })
-	protected void doFilter(Collection list) {		
+	protected void doFilter(Collection list) {
 		if (filter != null) {
 			Iterator<?> iterator = list.iterator();
 			while (iterator.hasNext()) {
@@ -698,7 +693,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		this.criterionParsers.add(criterionParser);
 		return this;
 	}
-	
+
 	@Override
 	public Linq addSubQueryParser(Class<?>... entityClasses) {
 		if (!beforeMethodInvoke()) {
@@ -709,7 +704,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		}
 		return this;
 	}
-	
+
 	@Override
 	public Linq addSubQueryParser(Class<?> entityClass, String... foreignKeys) {
 		if (!beforeMethodInvoke()) {

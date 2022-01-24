@@ -138,8 +138,19 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 
     <Y extends Comparable<? super Y>> T between(Expression<? extends Y> v, Y x, Y y);
 
+    /**
+     * 添加条件：ID等于
+     * @param id
+     * @return
+     */
     T idEqual(Object id);
     
+    /**
+     * 添加条件：等于
+     * @param x 属性名
+     * @param y 对比值
+     * @return
+     */
 	T equal(String x, Object y);
 
 	T equal(Expression<?> x, Object y);
@@ -304,6 +315,11 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	 */
 	T end();
 	
+	/**
+	 * 分组
+	 * @param grouping 分组字段
+	 * @return
+	 */
 	T groupBy(String... grouping);
 
 	/**

@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 自动装载 权限模块 mxpio-boot-base-security
- * @author MxpIO <i@mxpio.com>
+ * @author MxpIO
  *
  */
 @Configuration

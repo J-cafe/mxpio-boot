@@ -56,7 +56,7 @@ public interface CacheProvider {
 	
 	/**
 	 * 删除缓存
-	 * @param key 可以传一个值 或多个
+	 * @param keys 可以传一个值 或多个
 	 */
 	public void del(String... keys);
 	
@@ -257,7 +257,7 @@ public interface CacheProvider {
 	/**
 	 * 通过索引 获取list中的值
 	 * @param key 键
-	 * @param index 索引 index>=0时， 0 表头，1 第二个元素，依次类推；index<0时，-1，表尾，-2倒数第二个元素，依次类推
+	 * @param index 索引 index 大于等于 0时， 0 表头，1 第二个元素，依次类推；index 小于 0时，-1，表尾，-2倒数第二个元素，依次类推
 	 * @return
 	 */
 	public Object lGetIndex(String key, long index);

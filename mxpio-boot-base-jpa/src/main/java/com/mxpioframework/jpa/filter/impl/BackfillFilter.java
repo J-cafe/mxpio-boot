@@ -25,7 +25,7 @@ import net.sf.cglib.beans.BeanMap;
 public class BackfillFilter implements Filter {
 
 	private List<CollectInfo> collectInfos;
-	
+
 	private Map<Class<?>, List<PropertyDescriptor>> propertyMap = new HashMap<Class<?>, List<PropertyDescriptor>>();
 
 	private Filter filter;
@@ -34,43 +34,43 @@ public class BackfillFilter implements Filter {
 		this.collectInfos = collectInfos;
 		this.filter = filter;
 	}
-	
+
 	@Override
 	public boolean invoke(LinqContext linqContext) {
 		Object entity = linqContext.getEntity();
 		for (CollectInfo collectInfo : collectInfos) {
 			Class<?> cls = collectInfo.getEntityClass();
-			
+
 			if (cls != null) {
 				List<PropertyDescriptor> pds = getPropertyMap(entity).get(cls);
 				String[] properties = collectInfo.getProperties();
 				if (CollectionUtils.isEmpty(pds)) {
 					Object value = linqContext.get(cls, BeanMap.create(entity).get(properties[0]));
 					if (value != null) {
-						BeanReflectionUtils.setPropertyValue(entity, Introspector.decapitalize(cls.getSimpleName()), value);
+						BeanReflectionUtils.setPropertyValue(entity, Introspector.decapitalize(cls.getSimpleName()),
+								value);
 					}
 				} else if (pds.size() == 1) {
 					doFill(linqContext, entity, cls, properties[0], pds.get(0));
 				} else {
 					for (String property : properties) {
 						for (PropertyDescriptor pd : pds) {
-							if (StringUtils.contains(property, pd.getName()) || StringUtils.contains(pd.getName(), property)) {
+							if (StringUtils.contains(property, pd.getName())
+									|| StringUtils.contains(pd.getName(), property)) {
 								doFill(linqContext, entity, cls, property, pd);
 							}
 						}
 					}
 				}
-				
-				
+
 			}
-			
+
 		}
-		
+
 		return filter == null ? true : filter.invoke(linqContext);
 	}
 
-	private void doFill(LinqContext linqContext, Object entity, Class<?> cls,
-			String property, PropertyDescriptor pd) {
+	private void doFill(LinqContext linqContext, Object entity, Class<?> cls, String property, PropertyDescriptor pd) {
 		Object value;
 		if (Collection.class.isAssignableFrom(pd.getPropertyType())) {
 			value = linqContext.getList(cls, BeanMap.create(entity).get(property));
@@ -85,8 +85,8 @@ public class BackfillFilter implements Filter {
 			}
 		}
 	}
-	
-	private Map<Class<?>,List<PropertyDescriptor>> getPropertyMap(Object entity) {
+
+	private Map<Class<?>, List<PropertyDescriptor>> getPropertyMap(Object entity) {
 		if (propertyMap.isEmpty()) {
 			Class<?> entityClass = entity.getClass();
 			PropertyDescriptor[] pds = PropertyUtils.getPropertyDescriptors(entityClass);
@@ -100,7 +100,8 @@ public class BackfillFilter implements Filter {
 						if (pd.getPropertyType().isAssignableFrom(cls)) {
 							addPd2PropertyMap(cls, pd);
 						} else if (Collection.class.isAssignableFrom(pd.getPropertyType())) {
-							Type[] pts = ((ParameterizedType)pd.getReadMethod().getGenericReturnType()).getActualTypeArguments();
+							Type[] pts = ((ParameterizedType) pd.getReadMethod().getGenericReturnType())
+									.getActualTypeArguments();
 							if (pts != null && pts.length > 0) {
 								Type pt = pts[0];
 								if (pt instanceof Class && ((Class<?>) pt).isAssignableFrom(cls)) {
@@ -112,7 +113,7 @@ public class BackfillFilter implements Filter {
 				}
 			}
 		}
-		
+
 		return propertyMap;
 	}
 
