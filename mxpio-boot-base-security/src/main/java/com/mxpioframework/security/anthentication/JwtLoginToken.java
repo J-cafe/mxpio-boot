@@ -6,8 +6,7 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
 /**
- * @Data: 2019/10/30
- * @Des: 用户鉴权 ： 保存当前用户的认证信息,如认证状态,用户名密码,拥有的权限等
+ * 用户鉴权 ： 保存当前用户的认证信息,如认证状态,用户名密码,拥有的权限等
  */
 public class JwtLoginToken extends AbstractAuthenticationToken {
 

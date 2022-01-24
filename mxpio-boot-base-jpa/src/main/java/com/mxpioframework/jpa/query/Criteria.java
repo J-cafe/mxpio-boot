@@ -98,7 +98,6 @@ public class Criteria {
 	 * 以and形式添加多个条件
 	 * 
 	 * @param junction 条件载体
-	 * @param map      map的key为属性名称（深层次属性用点.分隔），map的value为条件值
 	 * @return 条件载体
 	 */
 	public Criteria addJunction(Junction junction) {

@@ -314,7 +314,7 @@ public abstract class JpaUtil {
 	 * 
 	 * @param entity     实体类对象或者实体类集合
 	 * 
-	 * @param savePolicy 保存策略
+	 * @param crudPolicy 保存策略
 	 * 
 	 */
 	public static <T> void save(T entity, CrudPolicy crudPolicy) {
@@ -387,7 +387,7 @@ public abstract class JpaUtil {
 	 * 
 	 * @param entity     实体类对象或者实体类集合
 	 * 
-	 * @param savePolicy 更新策略
+	 * @param crudPolicy 更新策略
 	 * 
 	 */
 	public static <T> void update(T entity, CrudPolicy crudPolicy) {
@@ -461,7 +461,7 @@ public abstract class JpaUtil {
 	 * 
 	 * @param entity     实体类对象或者实体类集合
 	 * 
-	 * @param savePolicy 刪除策略
+	 * @param crudPolicy 刪除策略
 	 * 
 	 */
 	public static <T> void delete(T entity, CrudPolicy crudPolicy) {

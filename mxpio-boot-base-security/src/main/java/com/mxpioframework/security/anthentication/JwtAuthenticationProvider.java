@@ -12,8 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * @Data: 2019/10/30
- * @Des: 用户角色校验具体实现
+ * 用户角色校验具体实现
  */
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 

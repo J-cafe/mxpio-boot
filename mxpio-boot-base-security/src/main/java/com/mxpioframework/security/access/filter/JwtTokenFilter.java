@@ -30,8 +30,7 @@ import com.mxpioframework.security.util.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @Data: 2019/10/30
- * @Des: Token有效性验证拦截器
+ * Token有效性验证拦截器
  */
 @Slf4j
 public class JwtTokenFilter extends OncePerRequestFilter {
