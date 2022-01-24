@@ -1,4 +1,4 @@
-package com.mxpioframework.demo.webapp;
+package com.mxpio.webapp;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
