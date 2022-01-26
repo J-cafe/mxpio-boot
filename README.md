@@ -61,17 +61,94 @@ mxpio-boot-parent
 
 ## 6.快速开始
 
+### 6.1运行示例项目
+
+示例代码库：[https://gitee.com/i_mxpio/mxpio-boot-example](https://gitee.com/i_mxpio/mxpio-boot-example)
+
+
+检出代码
+
+```
+git clone https://gitee.com/i_mxpio/mxpio-boot-example.git
+```
+
+编译打包
+
+```
+cd mxpio-boot-example
+mvn clean package spring-boot:repackage
+
+```
+启动项目
+
+```
+java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.0.jar
+```
+
+### 6.2新建Maven项目运行
+
+修改pom.xml文件
+
+```xml
+<!-- 继承mxpio-boot-parent -->
+<parent>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-parent</artifactId>
+	<version>1.0.0</version>
+</parent>
+```
+
+```xml
+<!-- 添加模块依赖 -->
+<dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-base-autoconfigure</artifactId>
+</dependency>
+<dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-module-cache-redis</artifactId>
+</dependency>
+<dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-base-security</artifactId>
+</dependency>
+<dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-base-system</artifactId>
+</dependency>
+```
+
+编译打包
+
+```
+cd mxpio-boot-example
+mvn clean package spring-boot:repackage
+
+```
+启动项目
+
+```
+java -jar target\mxpio-boot-example-1.0.0.jar
+```
+
+### 6.3源码运行
+
 检出代码
 
 ```
 git clone https://gitee.com/i_mxpio/mxpio-boot.git
 ```
 
-启动项目
+编译打包
 
 ```
 cd mxpio-boot
 mvn clean package spring-boot:repackage
+
+```
+启动项目
+
+```
 java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.0.jar
 ```
 
