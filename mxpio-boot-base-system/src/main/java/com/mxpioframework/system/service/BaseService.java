@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.mxpioframework.jpa.BaseEntity;
+import com.mxpioframework.jpa.policy.CrudPolicy;
 import com.mxpioframework.jpa.query.Criteria;
 
 public interface BaseService<T extends BaseEntity> {
@@ -18,11 +19,27 @@ public interface BaseService<T extends BaseEntity> {
 	public T save(T entity);
 	
 	/**
+	 * 通用保存
+	 * @param entity
+	 * @param crudPolicy
+	 * @return
+	 */
+	public T save(T entity, CrudPolicy crudPolicy);
+	
+	/**
 	 * 通用更新
 	 * @param entity
 	 * @return
 	 */
 	public T update(T entity);
+	
+	/**
+	 * 通用更新
+	 * @param entity
+	 * @param crudPolicy
+	 * @return
+	 */
+	public T update(T entity, CrudPolicy crudPolicy);
 	
 	/**
 	 * 通用删除By id
@@ -32,11 +49,27 @@ public interface BaseService<T extends BaseEntity> {
 	public void delete(Class<T> clazz, String id);
 	
 	/**
+	 * 通用删除By id
+	 * @param clazz
+	 * @param id
+	 * @param crudPolicy
+	 */
+	public void delete(Class<T> clazz, String id, CrudPolicy crudPolicy);
+	
+	/**
 	 * 通用批量删除
 	 * @param clazz
 	 * @param c
 	 */
 	public void deleteBatch(Class<T> clazz, Criteria c);
+	
+	/**
+	 * 通用批量删除
+	 * @param clazz
+	 * @param c
+	 * @param crudPolicy
+	 */
+	public void deleteBatch(Class<T> clazz, Criteria c, CrudPolicy crudPolicy);
 	
 	/**
 	 * 通用查询

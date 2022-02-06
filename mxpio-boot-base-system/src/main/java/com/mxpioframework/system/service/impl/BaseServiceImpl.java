@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.JpaUtil;
+import com.mxpioframework.jpa.policy.CrudPolicy;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.system.service.BaseService;
 
@@ -19,6 +20,13 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 		JpaUtil.save(entity);
 		return entity;
 	}
+	
+	@Override
+	@Transactional(readOnly = false)
+	public T save(T entity, CrudPolicy crudPolicy) {
+		JpaUtil.save(entity, crudPolicy);
+		return entity;
+	}
 
 	@Override
 	@Transactional(readOnly = false)
@@ -26,7 +34,14 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 		JpaUtil.update(entity);
 		return entity;
 	}
-
+	
+	@Override
+	@Transactional(readOnly = false)
+	public T update(T entity, CrudPolicy crudPolicy) {
+		JpaUtil.update(entity, crudPolicy);
+		return entity;
+	}
+	
 	@Override
 	@Transactional(readOnly = false)
 	public void delete(Class<T> clazz, String id) {
@@ -39,6 +54,20 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	public void deleteBatch(Class<T> clazz, Criteria c) {
 		List<T> entities = JpaUtil.linq(clazz).where(c).list();
 		JpaUtil.delete(entities);
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public void delete(Class<T> clazz, String id, CrudPolicy crudPolicy) {
+		T entity = JpaUtil.getOne(clazz, id);
+		JpaUtil.delete(entity, crudPolicy);
+	}
+	
+	@Override
+	@Transactional(readOnly = false)
+	public void deleteBatch(Class<T> clazz, Criteria c, CrudPolicy crudPolicy) {
+		List<T> entities = JpaUtil.linq(clazz).where(c).list();
+		JpaUtil.delete(entities, crudPolicy);
 	}
 	
 	@Override

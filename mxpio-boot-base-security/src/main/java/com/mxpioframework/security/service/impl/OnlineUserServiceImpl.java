@@ -19,8 +19,8 @@ public class OnlineUserServiceImpl implements OnlineUserService {
 
 	@Override
 	public void save(User user, String token, String refreshToken, CacheProvider cacheProvider) {
-		cacheProvider.set(Constants.JWT_ACCESS_TOKEN_REDIS_KEY + token, user, Constants.DEFAULT_ACCESS_TOKEN_TIME_MS / 1000);
-		cacheProvider.set(Constants.JWT_REFRESH_TOKEN_REDIS_KEY + refreshToken, token, Constants.DEFAULT_REFRESH_TOKEN_TIME_MS / 1000);
+		cacheProvider.set(Constants.JWT_ACCESS_TOKEN_REDIS_KEY + token, user, Constants.DEFAULT_ACCESS_TOKEN_TIME_MS / 1000L);
+		cacheProvider.set(Constants.JWT_REFRESH_TOKEN_REDIS_KEY + refreshToken, token, Constants.DEFAULT_REFRESH_TOKEN_TIME_MS / 1000L);
 	}
 
 	@Override
