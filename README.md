@@ -61,17 +61,227 @@ mxpio-boot-parent
 
 ## 6.快速开始
 
+### 6.1运行示例项目
+
+示例代码库：[https://gitee.com/i_mxpio/mxpio-boot-example](https://gitee.com/i_mxpio/mxpio-boot-example)
+
+
 检出代码
 
+```bash
+git clone https://gitee.com/i_mxpio/mxpio-boot-example.git
 ```
+修改配置文件resources/application-dev.yml
+
+```yaml
+server:
+  # 服务端口号
+  port: 9005
+  tomcat:
+    max-swallow-size: -1
+  servlet:
+    # 服务跟路径
+    context-path: 
+spring:
+  servlet:
+     multipart:
+        max-file-size: 10MB
+        max-request-size: 10MB
+  jpa:
+    open-in-view: false
+    showSql: true
+    hibernate:
+      ddl-auto: update
+  # 数据库配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/mboot?characterEncoding=utf-8&useSSL=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    sql-script-encoding: UTF-8
+    continue-on-error: true
+    initialization-mode: ALWAYS
+  # redis配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout:
+    pool:
+      maxActive: 8
+      maxWait: -1
+      maxIdle: 8
+      minIdle: 0
+...
+
+```
+编译打包
+
+```bash
+cd mxpio-boot-example
+mvn clean package spring-boot:repackage
+
+```
+启动项目
+
+```bash
+java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.0.jar
+```
+
+### 6.2新建Maven项目运行
+
+修改pom.xml文件
+
+```xml
+<!-- 继承mxpio-boot-parent -->
+<parent>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-parent</artifactId>
+	<version>1.0.0</version>
+</parent>
+```
+
+```xml
+<!-- 添加模块依赖 -->
+<dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-base-autoconfigure</artifactId>
+</dependency>
+<dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-module-cache-redis</artifactId>
+</dependency>
+<dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-base-security</artifactId>
+</dependency>
+<dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-base-system</artifactId>
+</dependency>
+```
+
+修改配置文件resources/application-dev.yml的数据库信息和服务端口等信息
+
+```yaml
+server:
+  # 服务端口号
+  port: 9005
+  tomcat:
+    max-swallow-size: -1
+  servlet:
+    # 服务跟路径
+    context-path: 
+spring:
+  servlet:
+     multipart:
+        max-file-size: 10MB
+        max-request-size: 10MB
+  jpa:
+    open-in-view: false
+    showSql: true
+    hibernate:
+      ddl-auto: update
+  # 数据库配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/mboot?characterEncoding=utf-8&useSSL=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    sql-script-encoding: UTF-8
+    continue-on-error: true
+    initialization-mode: ALWAYS
+  # redis配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout:
+    pool:
+      maxActive: 8
+      maxWait: -1
+      maxIdle: 8
+      minIdle: 0
+...
+
+```
+
+编译打包
+
+```bash
+cd mxpio-boot-example
+mvn clean package spring-boot:repackage
+
+```
+启动项目
+
+```bash
+java -jar target\mxpio-boot-example-1.0.0.jar
+```
+
+### 6.3源码运行
+
+检出代码
+
+```bash
 git clone https://gitee.com/i_mxpio/mxpio-boot.git
 ```
 
-启动项目
+修改配置文件mxpio-boot-webapp/resources/application-dev.yml的数据库信息和服务端口等信息
+
+```yaml
+server:
+  # 服务端口号
+  port: 9005
+  tomcat:
+    max-swallow-size: -1
+  servlet:
+    # 服务跟路径
+    context-path: 
+spring:
+  servlet:
+     multipart:
+        max-file-size: 10MB
+        max-request-size: 10MB
+  jpa:
+    open-in-view: false
+    showSql: true
+    hibernate:
+      ddl-auto: update
+  # 数据库配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/mboot?characterEncoding=utf-8&useSSL=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    sql-script-encoding: UTF-8
+    continue-on-error: true
+    initialization-mode: ALWAYS
+  # redis配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout:
+    pool:
+      maxActive: 8
+      maxWait: -1
+      maxIdle: 8
+      minIdle: 0
+...
 
 ```
+
+编译打包
+
+```bash
 cd mxpio-boot
 mvn clean package spring-boot:repackage
+
+```
+启动项目
+
+```bash
 java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.0.jar
 ```
 
