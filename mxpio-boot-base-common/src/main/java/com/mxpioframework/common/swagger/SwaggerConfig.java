@@ -1,5 +1,6 @@
 package com.mxpioframework.common.swagger;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -17,6 +18,33 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig implements WebMvcConfigurer {
 	
+	@Value("${mxpio.swagger.title:MxpIO-Boot}")
+	private String swaggerTitle;
+	
+	@Value("${mxpio.swagger.desc:MxpIO-Boot API}")
+	private String swaggerDesc;
+	
+	@Value("${mxpio.swagger.version:1.0.0}")
+	private String swaggerVersion;
+	
+	@Value("${mxpio.swagger.author:MxpIO}")
+	private String swaggerAuthor;
+	
+	@Value("${mxpio.swagger.email:i@mxpio.com}")
+	private String swaggerEmail;
+	
+	@Value("${mxpio.swagger.homepage:www.mxpio.com}")
+	private String swaggerHomepage;
+	
+	@Value("${mxpio.swagger.license:MIT License}")
+	private String swaggerLicense;
+	
+	@Value("${mxpio.swagger.license.url:https://gitee.com/i_mxpio/mxpio-boot/blob/master/LICENSE}")
+	private String swaggerLicenseUrl;
+	
+	@Value("${mxpio.swagger.basepackage:com.mxpio}")
+	private String swaggerBasePackage;
+	
 	/**
 	 *
 	 * 显示swagger-ui.html文档展示页，还必须注入swagger资源：
@@ -33,15 +61,15 @@ public class SwaggerConfig implements WebMvcConfigurer {
 	@Bean
 	public Docket createRestApi() {
 		return new Docket(DocumentationType.SWAGGER_2).pathMapping("/").select()
-			.apis(RequestHandlerSelectors.basePackage("com.mxpio")).paths(PathSelectors.any()).build()
+			.apis(RequestHandlerSelectors.basePackage(swaggerBasePackage)).paths(PathSelectors.any()).build()
 			.apiInfo(
 				new ApiInfoBuilder()
-					.title("MxpIO-Boot")
-					.description("MxpIO-Boot API")
-					.version("1.0.0")
-					.contact(new Contact("MxpIO", "www.mxpio.com", "i@mxpio.com"))
-					.license("MIT License")
-					.licenseUrl("www.mxpio.com")
+					.title(swaggerTitle)
+					.description(swaggerDesc)
+					.version(swaggerVersion)
+					.contact(new Contact(swaggerAuthor, swaggerHomepage, swaggerEmail))
+					.license(swaggerLicense)
+					.licenseUrl(swaggerLicenseUrl)
 					.build()
 			);
 	}
