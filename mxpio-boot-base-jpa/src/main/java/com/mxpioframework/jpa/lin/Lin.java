@@ -364,5 +364,5 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	T in(String property, Set<?> values);
 
 	T notIn(String property, Set<?> values);
-
+	
 }

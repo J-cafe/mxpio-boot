@@ -713,4 +713,5 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		this.addParser(new SubQueryParser(this, entityClass, foreignKeys));
 		return this;
 	}
+
 }
