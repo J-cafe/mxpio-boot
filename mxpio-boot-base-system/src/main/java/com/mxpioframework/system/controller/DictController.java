@@ -70,7 +70,7 @@ public class DictController {
 		return Result.OK(itemValue);
 	}
 	
-	@GetMapping("{code}/default/value")
+	@GetMapping("{code}/default/text")
 	@ApiOperation(value = "默认字典文本", notes = "根据code获取默认字典文本", httpMethod = "GET")
 	public Result<String> getDefaultItemText(@PathVariable(name = "code", required = true) String code) {
 		
