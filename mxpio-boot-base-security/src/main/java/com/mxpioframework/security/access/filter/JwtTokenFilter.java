@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
@@ -80,6 +79,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             		JwtLoginToken jwtLoginToken = new JwtLoginToken(user, "", user.getAuthorities());
                     jwtLoginToken.setDetails(new WebAuthenticationDetails(httpServletRequest));
                     SecurityContextHolder.getContext().setAuthentication(jwtLoginToken);
+                    onlineUserService.refresh(user, token, cacheProvider);
                     filterChain.doFilter(httpServletRequest, httpServletResponse);
             	}
             }else {
@@ -104,7 +104,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         } catch (Exception e) {
         	log.info(httpServletRequest.getRequestURI());
         	log.error(e.getMessage());
-            throw new BadCredentialsException("登陆凭证失效，请重新登陆");
+        	e.printStackTrace();
         }
     }
     

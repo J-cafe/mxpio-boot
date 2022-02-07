@@ -18,6 +18,14 @@ public interface OnlineUserService {
 	public void save(User user, String token, String refreshToken, CacheProvider cacheProvider);
 	
 	/**
+	 * 保持在线
+	 * @param user
+	 * @param token
+	 * @param cacheProvider
+	 */
+	public void refresh(User user, String token,  CacheProvider cacheProvider);
+	
+	/**
      * 踢出用户
      * @param key /
      * @param cacheProvider
