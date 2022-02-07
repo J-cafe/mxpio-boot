@@ -171,14 +171,16 @@ public class CriteriaUtils {
 	}
 
 	public static Criteria json2Criteria(String json) {
-		JSONObject object = JSON.parseObject(json);
 		Criteria c = new Criteria();
-		if (object.get("criterions") != null) {
-			JSONArray jSONArray = (JSONArray) object.get("criterions");
-			List<Object> criterions = new ArrayList<>();
-			jSONArray.stream().forEach(obj -> paserCriterions((JSONObject) obj, criterions));
-			c.setCriterions(criterions);
-			c.setOrders(object.getJSONArray("orders").toJavaList(Order.class));
+		if(StringUtils.isNotEmpty(json)){
+			JSONObject object = JSON.parseObject(json);
+			if (object.get("criterions") != null) {
+				JSONArray jSONArray = (JSONArray) object.get("criterions");
+				List<Object> criterions = new ArrayList<>();
+				jSONArray.stream().forEach(obj -> paserCriterions((JSONObject) obj, criterions));
+				c.setCriterions(criterions);
+				c.setOrders(object.getJSONArray("orders").toJavaList(Order.class));
+			}
 		}
 
 		return c;

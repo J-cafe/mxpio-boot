@@ -6,8 +6,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.common.vo.Result;
+import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.system.SystemConstant;
 import com.mxpioframework.system.annotation.Dict;
+import com.mxpioframework.system.entity.DictItem;
 import com.mxpioframework.system.service.impl.DictServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -124,6 +126,7 @@ public class DictAspect {
                 }
                 items.add(item);
             }catch (Exception e) {
+            	e.printStackTrace();
             	return false;
 			}
         }
@@ -148,7 +151,8 @@ public class DictAspect {
             if (value.trim().length() == 0) {
                 continue; //跳过循环
             }
-            tmpText = dictSerivce.getTextByCode(code, value.trim());
+            DictItem item = JpaUtil.linq(DictItem.class).equal("itemValue", value.trim()).exists(Dict.class).equal("dictCode", code).equalProperty("id", "dictId").end().findOne();
+            tmpText = item.getItemText();
             
             if (tmpText != null) {
                 if (!"".equals(text.toString())) {

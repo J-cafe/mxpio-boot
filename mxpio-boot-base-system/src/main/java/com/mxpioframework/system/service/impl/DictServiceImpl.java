@@ -67,4 +67,9 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 		return item.getItemValue();
 	}
 
+	public void deleteItem(String key) {
+		DictItem item = JpaUtil.linq(DictItem.class).idEqual(key).findOne();
+		JpaUtil.delete(item);
+	}
+
 }
