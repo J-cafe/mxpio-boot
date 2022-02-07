@@ -19,21 +19,21 @@ public class BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "create_by", updatable = false)
+	@Column(name = "CREATE_BY", updatable = false)
 	@ApiModelProperty(value = "创建人", hidden = true)
 	private String createBy;
 
-	@Column(name = "update_by")
+	@Column(name = "UPDATE_BY")
 	@ApiModelProperty(value = "更新人", hidden = true)
 	private String updateBy;
 
 	@Generator(policy = CreatedDatePolicy.class)
-	@Column(name = "create_time", updatable = false)
+	@Column(name = "CREATE_TIME", updatable = false)
 	@ApiModelProperty(value = "创建时间", hidden = true)
 	private Date createTime;
 
 	@Generator(policy = UpdatedDatePolicy.class)
-	@Column(name = "update_time")
+	@Column(name = "UPDATE_TIME")
 	@ApiModelProperty(value = "更新时间", hidden = true)
 	private Date updateTime;
 
