@@ -22,6 +22,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -139,6 +141,7 @@ public class DictAspect {
      * @param valueStr
      * @return
      */
+    @Transactional(readOnly = true)
     private String translateDictValue(String code, String valueStr) {
     	if(StringUtils.isEmpty(valueStr)) {
     		return null;
