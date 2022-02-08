@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mxpioframework.common.vo.Result;
@@ -24,9 +23,9 @@ import com.mxpioframework.security.vo.RouterVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(value = "PermissionController", tags = {"权限管理"})
+@Api(value = "PermissionController", tags = {"授权管理"})
 @RestController
-@RequestMapping("/permiss")
+@RequestMapping("/permiss/")
 public class PermissionController {
 	
 	@Autowired
@@ -38,31 +37,30 @@ public class PermissionController {
 	@Autowired
 	private UrlService urlService;
 	
-	@GetMapping("/loadElements")
-	@ApiOperation(value = "加载页面组件", notes = "根据pageId获取已授权的组件清单", httpMethod = "GET")
-	public Result<Collection<Element>> loadElements(String pageId) throws Exception {
-		return Result.OK(permissionService.loadElements(pageId));
-	}
-	
-	@GetMapping("/loadPermissions")
-	@ResponseBody
-	@ApiOperation(value = "加载权限", notes = "根据登录用户获取权限信息", httpMethod = "GET")
+	@GetMapping("list")
+	@ApiOperation(value = "授权信息", notes = "根据登录用户获取权限信息", httpMethod = "GET")
 	public Result<List<Permission>> loadPermissions() {
 		return Result.OK(roleUrlService.load());
 	}
 	
-	@GetMapping("/loadUrl")
-	@ApiOperation(value = "加载路由", notes = "根据登录用户获取已授权的路由信息", httpMethod = "GET")
-	public Result<List<RouterVo>> loadUrl() {
-		List<Url> urls = urlService.findTreeByUsername(null);
-		return Result.OK(RouterUtil.buildRouter(urls));
-	}
-	
-	@PostMapping("/save")
+	@PostMapping("add")
 	@ApiOperation(value = "保存权限", notes = "新增/更新权限信息", httpMethod = "POST")
 	public Result<Object> save(@RequestBody Permission permission) {
 		permissionService.save(permission);
 		return Result.OK(permission);
 	}
-
+	
+	@GetMapping("element/list")
+	@ApiOperation(value = "加载页面组件", notes = "根据pageId获取已授权的组件清单", httpMethod = "GET")
+	public Result<Collection<Element>> loadElements(String pageId) throws Exception {
+		return Result.OK(permissionService.loadElements(pageId));
+	}
+	
+	@GetMapping("url/list")
+	@ApiOperation(value = "加载已授权路由", notes = "根据登录用户获取已授权的路由信息", httpMethod = "GET")
+	public Result<List<RouterVo>> loadUrl() {
+		List<Url> urls = urlService.findTreeByUsername(null);
+		return Result.OK(RouterUtil.buildRouter(urls));
+	}
+	
 }

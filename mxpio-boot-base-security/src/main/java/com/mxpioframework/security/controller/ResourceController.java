@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiOperation;
 
 @Api(value = "ResourceController", tags = {"资源管理"})
 @RestController
-@RequestMapping("/res")
+@RequestMapping("/res/")
 public class ResourceController {
 	
 	@Autowired
@@ -35,15 +35,15 @@ public class ResourceController {
 	@Autowired
 	private ElementService elementService;
 	
-	@GetMapping("/loadAllUrl")
+	@GetMapping("url/list")
 	@ApiOperation(value = "获取全部菜单", notes = "获取全部菜单", httpMethod = "GET")
 	public Result<List<RouterVo>> loadAllUrl() {
 		List<Url> urls = urlService.findAllTree();
 		return Result.OK(RouterUtil.buildRouter(urls));
 	}
 	
-	@PostMapping("/saveRouter")
-	@ApiOperation(value = "新增路由", notes = "新增路由信息", httpMethod = "POST")
+	@PostMapping("url/add")
+	@ApiOperation(value = "新增菜单", notes = "新增菜单", httpMethod = "POST")
 	@SecurityCacheEvict
 	public Result<Object> saveUrl(@RequestBody RouterVo router) {
 		Url url = RouterUtil.router2Url(router);
@@ -52,16 +52,16 @@ public class ResourceController {
 		return Result.OK();
 	}
 	
-	@PutMapping("/updateRouter")
-	@ApiOperation(value = "更新路由", notes = "更新路由信息", httpMethod = "PUT")
+	@PutMapping("url/edit")
+	@ApiOperation(value = "更新菜单", notes = "更新菜单信息", httpMethod = "PUT")
 	@SecurityCacheEvict
 	public Result<Object> updateUrl(@RequestBody RouterVo router) {
 		urlService.update(RouterUtil.router2Url(router));
 		return Result.OK();
 	}
 	
-	@DeleteMapping("/deleteUrl")
-	@ApiOperation(value = "删除菜单")
+	@DeleteMapping("url/remove")
+	@ApiOperation(value = "删除菜单", notes = "删除菜单信息", httpMethod = "DELETE")
 	@SecurityCacheEvict
 	public Result<Object> deleteUrl(@RequestParam("id") String id) {
 		boolean b = urlService.deleteBundleById(id);
@@ -73,24 +73,24 @@ public class ResourceController {
 		
 	}
 	
-	@PostMapping("/saveElement")
-	@ApiOperation(value = "保存组件")
+	@PostMapping("element/add")
+	@ApiOperation(value = "新增组件", notes = "新增组件信息", httpMethod = "POST")
 	@SecurityCacheEvict
-	public Result<Object> saveElement(Element element) {
+	public Result<Object> saveElement(@RequestBody Element element) {
 		elementService.save(element);
 		return Result.OK();
 	}
 	
-	@PutMapping("/updateElement")
-	@ApiOperation(value = "更新组件")
+	@PutMapping("element/edit")
+	@ApiOperation(value = "更新组件", notes = "更新组件信息", httpMethod = "PUT")
 	@SecurityCacheEvict
-	public Result<Object> updateElement(Element element) {
+	public Result<Object> updateElement(@RequestBody Element element) {
 		elementService.update(element);
 		return Result.OK();
 	}
 	
-	@DeleteMapping("/deleteElement")
-	@ApiOperation(value = "删除组件")
+	@DeleteMapping("element/remove")
+	@ApiOperation(value = "删除组件", notes = "删除组件信息", httpMethod = "DELETE")
 	@SecurityCacheEvict
 	public Result<Object> deleteElement(String id) {
 		elementService.delete(id, Element.class);

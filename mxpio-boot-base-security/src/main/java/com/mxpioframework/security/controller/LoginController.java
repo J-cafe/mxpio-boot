@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.List;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -19,10 +18,8 @@ import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.mxpioframework.cache.provider.CacheProvider;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.Constants;
-import com.mxpioframework.security.entity.Url;
 import com.mxpioframework.security.kaptcha.KaptchaDTO;
 import com.mxpioframework.security.service.OnlineUserService;
-import com.mxpioframework.security.service.UrlService;
 import com.mxpioframework.security.vo.TokenVo;
 
 import io.swagger.annotations.Api;
@@ -34,9 +31,6 @@ import io.swagger.annotations.ApiOperation;
 public class LoginController {
 
 	@Autowired
-	private UrlService urlService;
-	
-	@Autowired
 	private CacheProvider cacheProvider;
 	
 	@Autowired
@@ -45,13 +39,7 @@ public class LoginController {
 	@Autowired
 	private OnlineUserService onlineUserService;
 	
-	@GetMapping("/loadUrl")
-	@ApiOperation(value = "加载菜单", notes = "获取已授权的URL清单", httpMethod = "GET")
-	public Result<List<Url>> loadUrl() {
-		return Result.OK(urlService.findTreeByUsername(null));
-	}
-	
-	@GetMapping("/kaptcha")
+	@GetMapping("kaptcha")
 	@ApiOperation(value = "加载验证码", notes = "获取登录验证码", httpMethod = "GET")
 	public Result<KaptchaDTO> kaptcha() throws IOException {
 		KaptchaDTO captcha = new KaptchaDTO();;
@@ -71,7 +59,7 @@ public class LoginController {
 		return Result.OK(captcha);
 	}
 	
-	@PostMapping("/refreshToken")
+	@PostMapping("token/refresh")
 	@ApiOperation(value = "刷新token", notes = "双token机制下通过refreshToken刷新权限token", httpMethod = "POST")
 	public Result<Object> refreshToken(String refreshToken) throws IOException {
 		TokenVo tokenVo;
