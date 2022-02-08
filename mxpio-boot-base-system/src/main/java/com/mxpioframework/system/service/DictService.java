@@ -42,30 +42,50 @@ public interface DictService {
 	
 	/**
 	 * 根据code获取字典项
-	 * @param code
+	 * @param code 字典code
 	 * @return
 	 */
 	public DictItem getDefaultItemByCode(String code);
 	
 	/**
 	 * 根据code获取字典值
-	 * @param code
+	 * @param code 字典code
 	 * @return
 	 */
 	public String getDefaultValueByCode(String code);
 	
 	/**
 	 * 根据code获取字典文本
-	 * @param code
+	 * @param code 字典code
 	 * @return
 	 */
 	public String getDefaultTextByCode(String code);
 	
 	/**
 	 * 根据code获取字典列表
-	 * @param code
+	 * @param code 字典code
 	 * @return
 	 */
 	public List<DictItem> getItemsByCode(String code);
+	
+	/**
+	 * 根据字典code以及字典项的值获取字典项的文本
+	 * @param code 字典code
+	 * @param value 字典项值
+	 * @return 字典项文本
+	 */
+	public String getTextByCode(String code, String value);
+	
+	/**
+	 * 根据字典ID删除字典项
+	 * @param id
+	 */
+	public void deleteItem(String id);
+	
+	/**
+	 * 保存字典项
+	 * @param item
+	 */
+	public void saveItem(DictItem item);
 
 }

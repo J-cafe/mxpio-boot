@@ -57,19 +57,30 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<DictItem> getItemsByCode(String code) {
 		return JpaUtil.linq(DictItem.class).exists(Dict.class).equal("dictCode", code)
 				.equalProperty("id", "dictId").end().asc("itemSort").list();
 	}
 
+	@Override
+	@Transactional(readOnly = true)
 	public String getTextByCode(String code, String value) {
 		DictItem item = JpaUtil.linq(DictItem.class).equal("itemValue", value).exists(Dict.class).equal("dictCode", code).equalProperty("id", "dictId").end().findOne();
 		return item.getItemValue();
 	}
 
-	public void deleteItem(String key) {
-		DictItem item = JpaUtil.linq(DictItem.class).idEqual(key).findOne();
+	@Override
+	@Transactional(readOnly = false)
+	public void deleteItem(String id) {
+		DictItem item = JpaUtil.linq(DictItem.class).idEqual(id).findOne();
 		JpaUtil.delete(item);
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public void saveItem(DictItem item) {
+		JpaUtil.save(item);
 	}
 
 }

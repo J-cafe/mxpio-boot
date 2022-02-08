@@ -116,6 +116,33 @@ public class DictController {
 		return Result.OK(dict);
 	}
 	
+	@PostMapping("{code}/add")
+	@ApiOperation(value = "新增字典项", notes = "新增字典项", httpMethod = "POST")
+	public Result<DictItem> addItem(@PathVariable(name = "code", required = true) String code
+			,@RequestBody DictItem item) {
+		Dict dict = dictSerivce.getByCode(code);
+		item.setDictId(dict.getId());
+		dictSerivce.saveItem(item);
+		return Result.OK(item);
+	}
+	
+	@PostMapping("{id}/add")
+	@ApiOperation(value = "新增字典项", notes = "新增字典项", httpMethod = "POST")
+	public Result<DictItem> addItemById(@PathVariable(name = "id", required = true) String id
+			,@RequestBody DictItem item) {
+		item.setDictId(id);
+		dictSerivce.saveItem(item);
+		return Result.OK(item);
+	}
+	
+	@PutMapping("{code}/edit")
+	@ApiOperation(value = "更新字典项", notes = "更新字典项", httpMethod = "POST")
+	public Result<DictItem> editItem(@PathVariable(name = "code", required = true) String code
+			,@RequestBody DictItem item) {
+		dictSerivce.saveItem(item);
+		return Result.OK(item);
+	}
+	
 	@PutMapping("edit")
 	@ApiOperation(value = "编辑字典", notes = "编辑字典（全量）", httpMethod = "PUT")
 	public Result<Dict> edit(@RequestBody Dict dict) {
@@ -144,7 +171,7 @@ public class DictController {
 	}
 	
 	@DeleteMapping("remove/item/{id}")
-	@ApiOperation(value = "删除字典", notes = "删除字典", httpMethod = "DELETE")
+	@ApiOperation(value = "删除字典项", notes = "删除字典项", httpMethod = "DELETE")
 	public Result<DictItem> removeItem(@PathVariable(name = "id", required = true) String id) {
 		String ids[] = id.split(";");
 		for(String key : ids){
@@ -152,5 +179,5 @@ public class DictController {
 		}
 		return Result.OK();
 	}
-
+	
 }
