@@ -21,6 +21,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,12 +64,12 @@ public class DictAspect {
         if (result instanceof Result) {
             if (((Result) result).getResult() instanceof Page) {
                 List<JSONObject> items = new ArrayList<>();
-                boolean b = parseDictText(items, ((Page) ((Result) result).getResult()).getContent());
+                Page page = (Page) ((Result) result).getResult();
+                boolean b = parseDictText(items, page.getContent());
 
                 if(b) {
                 	List list = ((Page) ((Result) result).getResult()).getContent();
-                	list.clear();
-                	list.addAll(items);
+                	((Result) result).setResult(new PageImpl<JSONObject>(items, page.getPageable(), page.getTotalElements()));
                 }
             }else if(((Result) result).getResult() instanceof List) {
             	List<JSONObject> items = new ArrayList<>();
