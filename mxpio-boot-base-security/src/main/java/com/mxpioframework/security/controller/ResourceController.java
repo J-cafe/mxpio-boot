@@ -18,8 +18,6 @@ import com.mxpioframework.security.entity.Element;
 import com.mxpioframework.security.entity.Url;
 import com.mxpioframework.security.service.ElementService;
 import com.mxpioframework.security.service.UrlService;
-import com.mxpioframework.security.util.RouterUtil;
-import com.mxpioframework.security.vo.RouterVo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,16 +35,15 @@ public class ResourceController {
 	
 	@GetMapping("url/list")
 	@ApiOperation(value = "获取全部菜单", notes = "获取全部菜单", httpMethod = "GET")
-	public Result<List<RouterVo>> loadAllUrl() {
+	public Result<List<Url>> loadAllUrl() {
 		List<Url> urls = urlService.findAllTree();
-		return Result.OK(RouterUtil.buildRouter(urls));
+		return Result.OK(urls);
 	}
 	
 	@PostMapping("url/add")
 	@ApiOperation(value = "新增菜单", notes = "新增菜单", httpMethod = "POST")
 	@SecurityCacheEvict
-	public Result<Object> saveUrl(@RequestBody RouterVo router) {
-		Url url = RouterUtil.router2Url(router);
+	public Result<Object> saveUrl(@RequestBody Url url) {
 		url.setId(null);
 		urlService.save(url);
 		return Result.OK();
@@ -55,9 +52,9 @@ public class ResourceController {
 	@PutMapping("url/edit")
 	@ApiOperation(value = "更新菜单", notes = "更新菜单信息", httpMethod = "PUT")
 	@SecurityCacheEvict
-	public Result<Object> updateUrl(@RequestBody RouterVo router) {
-		urlService.update(RouterUtil.router2Url(router));
-		return Result.OK();
+	public Result<Object> updateUrl(@RequestBody Url url) {
+		urlService.update(url);
+		return Result.OK(url);
 	}
 	
 	@DeleteMapping("url/remove")

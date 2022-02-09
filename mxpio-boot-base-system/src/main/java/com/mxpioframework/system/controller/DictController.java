@@ -92,7 +92,7 @@ public class DictController {
 	
 	@GetMapping("tree/{code}")
 	@ApiOperation(value = "根据code获取字典", notes = "根据code获取字典", httpMethod = "GET")
-	public Result<Dict> getByKey(@PathVariable(name = "code", required = true) String code) {
+	public Result<Dict> getByCode(@PathVariable(name = "code", required = true) String code) {
 		Dict dict = dictSerivce.getByCode(code);
 		return Result.OK(dict);
 	}
