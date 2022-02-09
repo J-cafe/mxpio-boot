@@ -98,7 +98,7 @@ public class RoleController {
 	}
 	
 	@GetMapping("/list/{id}/within")
-	@ApiOperation(value = "绑定用户", notes = "获取绑定用户列表", httpMethod = "GET")
+	@ApiOperation(value = "获取绑定用户", notes = "获取绑定用户列表", httpMethod = "GET")
 	public Result<Page<User>> getUsersWithin(
 			@PathVariable(name = "id",required = true) String id,
 			String criteria,
@@ -111,7 +111,7 @@ public class RoleController {
 	}
 	
 	@PostMapping("/list/{id}/add/users")
-	@ApiOperation(value = "绑定用户", notes = "获取绑定用户列表", httpMethod = "POST")
+	@ApiOperation(value = "添加绑定用户", notes = "获取绑定用户列表", httpMethod = "POST")
 	public Result<?> addUsers(
 			@PathVariable(name = "id",required = true) String id,
 			@RequestParam(value = "actorIds[]") String[] actorIds) throws Exception {
