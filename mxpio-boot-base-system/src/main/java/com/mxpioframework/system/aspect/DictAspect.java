@@ -10,7 +10,6 @@ import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.system.SystemConstant;
 import com.mxpioframework.system.annotation.Dict;
 import com.mxpioframework.system.entity.DictItem;
-import com.mxpioframework.system.service.impl.DictServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +18,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
@@ -38,9 +36,6 @@ import java.util.regex.Pattern;
 @Slf4j
 public class DictAspect {
 	
-	@Autowired
-	private DictServiceImpl dictSerivce;
-
     private Pattern pattern = Pattern.compile("\\$\\{\\S+\\}");
     // 定义切点Pointcut
     @Pointcut("execution(public * *..*.*Controller.*(..))")
@@ -60,7 +55,8 @@ public class DictAspect {
         return result;
     }
 
-    private void parseDictText(Object result) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	private void parseDictText(Object result) {
         if (result instanceof Result) {
             if (((Result) result).getResult() instanceof Page) {
                 List<JSONObject> items = new ArrayList<>();
@@ -68,7 +64,6 @@ public class DictAspect {
                 boolean b = parseDictText(items, page.getContent());
 
                 if(b) {
-                	List list = ((Page) ((Result) result).getResult()).getContent();
                 	((Result) result).setResult(new PageImpl<JSONObject>(items, page.getPageable(), page.getTotalElements()));
                 }
             }else if(((Result) result).getResult() instanceof List) {
@@ -81,7 +76,8 @@ public class DictAspect {
         }
     }
 
-    private boolean parseDictText(List<JSONObject> items, List list) {
+    @SuppressWarnings("rawtypes")
+	private boolean parseDictText(List<JSONObject> items, List list) {
     	for (Object record : list) {
             ObjectMapper mapper = new ObjectMapper();
             String json="{}";

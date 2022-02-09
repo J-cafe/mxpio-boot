@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mxpioframework.common.vo.Result;
@@ -78,7 +79,9 @@ public class DictController {
 	
 	@GetMapping("tree/page")
 	@ApiOperation(value = "字典列表", notes = "获取字典列表(分页)", httpMethod = "GET")
-	public Result<Page<Dict>> page(String criteria, Integer pageSize, Integer pageNo) {
+	public Result<Page<Dict>> page(String criteria,
+			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
 		Page<Dict> page = dictSerivce.listPageWithItems(c, pageAble);

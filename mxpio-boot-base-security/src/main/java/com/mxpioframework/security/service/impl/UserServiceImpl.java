@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	public List<User> queryAll(Criteria criteria) {
 		return JpaUtil.linq(User.class).where(criteria).list();
 	}
-
+	
 	@Override
 	@Transactional(readOnly = true)
 	public void download(List<User> queryAll, HttpServletResponse response) throws IOException {

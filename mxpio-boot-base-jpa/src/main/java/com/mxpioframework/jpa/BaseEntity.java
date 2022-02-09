@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mxpioframework.jpa.annotation.Generator;
 import com.mxpioframework.jpa.policy.impl.CreatedDatePolicy;
 import com.mxpioframework.jpa.policy.impl.UpdatedDatePolicy;
@@ -29,11 +30,13 @@ public class BaseEntity implements Serializable {
 
 	@Generator(policy = CreatedDatePolicy.class)
 	@Column(name = "CREATE_TIME", updatable = false)
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	@ApiModelProperty(value = "创建时间", hidden = true)
 	private Date createTime;
 
 	@Generator(policy = UpdatedDatePolicy.class)
 	@Column(name = "UPDATE_TIME")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	@ApiModelProperty(value = "更新时间", hidden = true)
 	private Date updateTime;
 

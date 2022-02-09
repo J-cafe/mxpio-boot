@@ -1,13 +1,10 @@
 package com.mxpioframework.security.controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
-
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mxpioframework.cache.provider.CacheProvider;
@@ -48,19 +46,21 @@ public class UserController {
 	
 	@GetMapping("/list")
 	@ApiOperation(value = "用户列表", notes = "根据过滤字段filter获取用户列表，过滤用户名和昵称", httpMethod = "GET")
-	public Result<Collection<User>> list(@PathParam("filter") String filter) throws Exception {
-		List<User> list = new ArrayList<>();
-		
+	public Result<Page<User>> list(@RequestParam("filter") String filter,
+			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
+		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
+		Criteria c = Criteria.create();
 		if(filter != null) {
 			
-			Criteria c = Criteria.create()
+			c = Criteria.create()
 					.or()
 						.addCriterion(new SimpleCriterion("username", Operator.LIKE, filter))
 						.addCriterion(new SimpleCriterion("nickname", Operator.LIKE, filter))
 					.end();
-			list = userService.queryAll(c);
 		}
-		return Result.OK(list);
+		Page<User> page = userService.queryAll(c, pageAble);
+		return Result.OK(page);
 	}
 	
 	@GetMapping("/info")
@@ -101,7 +101,7 @@ public class UserController {
 	
 	@PostMapping("/logout")
 	@ApiOperation(value = "强退用户", notes = "根据用户名username强退用户", httpMethod = "POST")
-	public Result<User> logout(@PathParam("username") String username) throws Exception {
+	public Result<User> logout(@RequestParam("username") String username) throws Exception {
 		onlineUserService.kickOutForUsername(username, cacheProvider);
 		log.info("logout sucessful");
 		return Result.OK();

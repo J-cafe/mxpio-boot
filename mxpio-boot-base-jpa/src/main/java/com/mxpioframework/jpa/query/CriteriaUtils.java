@@ -22,7 +22,7 @@ public class CriteriaUtils {
 	 */
 	public static Criteria add(Criteria criteria, Map<String, ?> map) {
 		if (criteria == null) {
-			criteria = new Criteria();
+			criteria = Criteria.create();
 		}
 		if (map != null) {
 			for (Entry<String, ?> entry : map.entrySet()) {
@@ -61,7 +61,7 @@ public class CriteriaUtils {
 	 */
 	public static Criteria add(Criteria criteria, String propertyName, Operator filterOperator, Object value) {
 		if (criteria == null) {
-			criteria = new Criteria();
+			criteria = Criteria.create();
 		}
 		SimpleCriterion criterion = new SimpleCriterion(propertyName, filterOperator, value);
 		criteria.addCriterion(criterion);
@@ -171,7 +171,7 @@ public class CriteriaUtils {
 	}
 
 	public static Criteria json2Criteria(String json) {
-		Criteria c = new Criteria();
+		Criteria c = Criteria.create();
 		if(StringUtils.isNotEmpty(json)){
 			JSONObject object = JSON.parseObject(json);
 			if (object.get("criterions") != null) {
