@@ -25,10 +25,10 @@ import com.mxpioframework.security.vo.TokenVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(value = "LoginController", tags = { "系统接口" })
+@Api(value = "SystemController", tags = { "系统接口" })
 @RestController
 @RequestMapping("/")
-public class LoginController {
+public class SystemController {
 
 	@Autowired
 	private CacheProvider cacheProvider;

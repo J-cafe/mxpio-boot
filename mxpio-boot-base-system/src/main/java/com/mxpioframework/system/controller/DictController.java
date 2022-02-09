@@ -79,7 +79,7 @@ public class DictController {
 	@GetMapping("tree/page")
 	@ApiOperation(value = "字典列表", notes = "获取字典列表(分页)", httpMethod = "GET")
 	public Result<Page<Dict>> page(String criteria, Integer pageSize, Integer pageNo) {
-		Pageable pageAble = PageRequest.of(pageNo, pageSize);
+		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
 		Page<Dict> page = dictSerivce.listPageWithItems(c, pageAble);
 		return Result.OK(page);

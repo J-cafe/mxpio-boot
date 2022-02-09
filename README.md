@@ -299,6 +299,7 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.0.jar
 - [x] 系统监控
 - [x] 字典配置
 - [x] JpaUtil
+- [ ] 定时任务
 - [ ] Excel导入导出
 - [ ] 组织机构
 - [ ] 多租户
