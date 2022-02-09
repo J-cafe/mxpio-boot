@@ -145,9 +145,9 @@ public class UrlServiceImpl extends BaseServiceImpl<Url> implements UrlService {
 	}
 
 	private boolean decide(String username, Url copy, Url url, boolean administrator) {
-		if (!url.isNavigable()) {
-			return false;
-		}
+		/*
+		 * if (!url.isNavigable()) { return false; }
+		 */
 		if (administrator || securityDecisionManager.decide(username, url)) {
 			List<Url> children = url.getChildren();
 			List<Url> newChildren = new ArrayList<Url>();
