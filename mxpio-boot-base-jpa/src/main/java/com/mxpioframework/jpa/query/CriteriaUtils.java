@@ -1,5 +1,7 @@
 package com.mxpioframework.jpa.query;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mxpioframework.jpa.lin.Linq;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class CriteriaUtils {
 	/**
 	 * 以and形式添加多个条件
@@ -170,16 +175,24 @@ public class CriteriaUtils {
 		return c;
 	}
 
-	public static Criteria json2Criteria(String json) {
+	public static Criteria json2Criteria(String json) throws UnsupportedEncodingException {
+		log.info("Criteria-->" + json);
+		
 		Criteria c = Criteria.create();
 		if(StringUtils.isNotEmpty(json)){
+			if(json.startsWith("%")) {
+				json = URLDecoder.decode(json, "utf-8");
+				log.info("Criteria-->" + json);
+			}
 			JSONObject object = JSON.parseObject(json);
 			if (object.get("criterions") != null) {
 				JSONArray jSONArray = (JSONArray) object.get("criterions");
 				List<Object> criterions = new ArrayList<>();
 				jSONArray.stream().forEach(obj -> paserCriterions((JSONObject) obj, criterions));
 				c.setCriterions(criterions);
-				c.setOrders(object.getJSONArray("orders").toJavaList(Order.class));
+				if(object.getJSONArray("orders") != null) {
+					c.setOrders(object.getJSONArray("orders").toJavaList(Order.class));
+				}
 			}
 		}
 
@@ -202,7 +215,12 @@ public class CriteriaUtils {
 
 	public static void main(String[] args) {
 		String json = "{\"criterions\":[{\"fieldName\":\"resourceType\",\"operator\":\"EQ\",\"value\":\"ELEMENT\"},{\"criterions\":[{\"fieldName\":\"roleId\",\"operator\":\"EQ\",\"value\":\"111\"},{\"fieldName\":\"id\",\"operator\":\"EQ\",\"value\":\"p111\"}],\"type\":\"OR\"}],\"orders\":[{\"desc\":false,\"fieldName\":\"username\"},{\"desc\":false,\"fieldName\":\"createTime\"}]}";
-		Criteria c = json2Criteria(json);
+		Criteria c = Criteria.create();
+		try {
+			c = json2Criteria(json);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		
 		Criteria c2 = Criteria.create()
 				.addCriterion("resourceType", Operator.EQ, "ELEMENT")

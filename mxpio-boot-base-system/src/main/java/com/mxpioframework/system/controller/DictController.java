@@ -1,5 +1,6 @@
 package com.mxpioframework.system.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mxpioframework.common.vo.Result;
+import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.policy.CrudContext;
 import com.mxpioframework.jpa.policy.impl.SmartCrudPolicyAdapter;
 import com.mxpioframework.jpa.query.Criteria;
@@ -38,7 +40,7 @@ public class DictController {
 
 	@GetMapping("tree/list")
 	@ApiOperation(value = "字典树列表", notes = "获取字典树列表", httpMethod = "GET")
-	public Result<List<Dict>> list(String criteria) {
+	public Result<List<Dict>> list(String criteria) throws UnsupportedEncodingException {
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
 		
 		List<Dict> dicts = dictSerivce.listWithItems(c);
@@ -81,18 +83,11 @@ public class DictController {
 	@ApiOperation(value = "字典列表", notes = "获取字典列表(分页)", httpMethod = "GET")
 	public Result<Page<Dict>> page(String criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
-			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
+			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws UnsupportedEncodingException {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
 		Page<Dict> page = dictSerivce.listPageWithItems(c, pageAble);
 		return Result.OK(page);
-	}
-	
-	@GetMapping("tree/{id}")
-	@ApiOperation(value = "根据ID获取字典", notes = "根据ID获取字典", httpMethod = "GET")
-	public Result<Dict> getById(@PathVariable(name = "id", required = true) String id) {
-		Dict dict = dictSerivce.getById(id);
-		return Result.OK(dict);
 	}
 	
 	@GetMapping("tree/{code}")
@@ -159,7 +154,20 @@ public class DictController {
 	public Result<Dict> remove(@PathVariable(name = "id", required = true) String id) {
 		String ids[] = id.split(";");
 		for(String key : ids){
-			dictSerivce.delete(Dict.class, key);
+			dictSerivce.delete(Dict.class, key, new SmartCrudPolicyAdapter() {
+				@Override
+				public boolean beforeDelete(CrudContext context) {
+					Object o = context.getEntity();
+					if(o instanceof Dict) {
+						try{
+							JpaUtil.lind(DictItem.class).equal("dictId", ((Dict) o).getId()).delete();
+						}catch (Exception e) {
+							return false;
+						}
+					}
+					return true;
+				}
+			});
 		}
 		return Result.OK();
 	}
