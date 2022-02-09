@@ -129,20 +129,11 @@ public class DictController {
 		return Result.OK(item);
 	}
 	
-	@PostMapping("{id}/add")
-	@ApiOperation(value = "新增字典项", notes = "新增字典项", httpMethod = "POST")
-	public Result<DictItem> addItemById(@PathVariable(name = "id", required = true) String id
-			,@RequestBody DictItem item) {
-		item.setDictId(id);
-		dictSerivce.saveItem(item);
-		return Result.OK(item);
-	}
-	
 	@PutMapping("{code}/edit")
-	@ApiOperation(value = "更新字典项", notes = "更新字典项", httpMethod = "POST")
+	@ApiOperation(value = "更新字典项", notes = "更新字典项", httpMethod = "PUT")
 	public Result<DictItem> editItem(@PathVariable(name = "code", required = true) String code
 			,@RequestBody DictItem item) {
-		dictSerivce.saveItem(item);
+		dictSerivce.updateItem(item);
 		return Result.OK(item);
 	}
 	

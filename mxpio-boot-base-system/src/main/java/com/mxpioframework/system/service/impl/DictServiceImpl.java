@@ -83,4 +83,10 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 		JpaUtil.save(item);
 	}
 
+	@Override
+	@Transactional(readOnly = false)
+	public void updateItem(DictItem item) {
+		JpaUtil.update(item);
+	}
+
 }

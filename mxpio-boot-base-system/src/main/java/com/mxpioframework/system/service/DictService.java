@@ -87,5 +87,7 @@ public interface DictService {
 	 * @param item
 	 */
 	public void saveItem(DictItem item);
+	
+	public void updateItem(DictItem item);
 
 }
