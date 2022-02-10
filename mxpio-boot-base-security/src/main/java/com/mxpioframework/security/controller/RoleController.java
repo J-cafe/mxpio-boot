@@ -114,7 +114,7 @@ public class RoleController {
 	@ApiOperation(value = "添加绑定用户", notes = "获取绑定用户列表", httpMethod = "POST")
 	public Result<?> addUsers(
 			@PathVariable(name = "id",required = true) String id,
-			@RequestParam(value = "actorIds") List<String> actorIds) throws Exception {
+			@RequestBody List<String> actorIds) throws Exception {
 		roleService.addUsers(id, actorIds);
 		return Result.OK();
 	}
