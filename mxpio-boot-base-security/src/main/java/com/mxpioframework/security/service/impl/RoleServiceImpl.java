@@ -96,4 +96,11 @@ public class RoleServiceImpl implements RoleService {
 		}
 	}
 
+	@Override
+	@Transactional(readOnly = false)
+	@SecurityCacheEvict
+	public void removeUsers(String id, List<String> actorIds) {
+		JpaUtil.lind(RoleGrantedAuthority.class).equal("roldId", id).in("actorId", actorIds).delete();
+	}
+
 }

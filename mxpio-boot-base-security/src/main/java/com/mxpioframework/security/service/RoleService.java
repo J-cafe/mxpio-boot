@@ -29,4 +29,6 @@ public interface RoleService {
 
 	void addUsers(String id, List<String> usernames);
 
+	void removeUsers(String id, List<String> actorIds);
+
 }

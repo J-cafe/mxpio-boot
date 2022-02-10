@@ -74,7 +74,7 @@ public class RoleController {
 		return Result.OK("编辑成功",role);
 	}
 	
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/remove/{id}")
 	@ApiOperation(value = "删除角色", notes = "根据角色名rolename删除角色信息", httpMethod = "DELETE")
 	public Result<Role> delete(@PathVariable(name = "id", required = true) String id) throws Exception {
 		String ids[] = id.split(";");
@@ -116,6 +116,15 @@ public class RoleController {
 			@PathVariable(name = "id",required = true) String id,
 			@RequestBody List<String> actorIds) throws Exception {
 		roleService.addUsers(id, actorIds);
+		return Result.OK();
+	}
+	
+	@PostMapping("/list/{id}/remove/users")
+	@ApiOperation(value = "添加绑定用户", notes = "获取绑定用户列表", httpMethod = "POST")
+	public Result<?> removeUsers(
+			@PathVariable(name = "id",required = true) String id,
+			@RequestBody List<String> actorIds) throws Exception {
+		roleService.removeUsers(id, actorIds);
 		return Result.OK();
 	}
 	
