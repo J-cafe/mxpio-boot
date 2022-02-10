@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.util.CollectionUtils;
 
 import com.mxpioframework.common.util.BeanReflectionUtils;
+import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.annotation.Generator;
 import com.mxpioframework.jpa.policy.CrudContext;
@@ -34,8 +35,16 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 				target = new ArrayList();
 				target.add(obj);
 			}
-
+			CrudType crudType = context.getCrudType();
 			for (Object entity : target) {
+				if(entity instanceof BaseEntity) {
+					CrudType entityStatus = ((BaseEntity) entity).getCrudType();
+					if(entityStatus != null) {
+						context.setCrudType(entityStatus);
+					}else {
+						context.setCrudType(crudType);
+					}
+				}
 				context.setEntity(entity);
 				if (fields == null) {
 					fields = getPersistentFields(context);
@@ -51,7 +60,9 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 				}
 				applyPersistentEntity(context, generatorPolicies);
 				crudPolicy.apply(context);
-				applyPersistentPropertyValue(context, fields);
+				if(context.isSaveTransient()) {
+					applyPersistentPropertyValue(context, fields);
+				}
 			}
 		}
 	}
@@ -68,12 +79,18 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 	protected void applyPersistentPropertyValue(CrudContext context, List<Field> fields) {
 		Object entity = context.getEntity();
 		Object parent = context.getParent();
+		CrudType entityCrudType = context.getCrudType();
 		context.setParent(entity);
 		for (Field field : fields) {
 			Object value = BeanReflectionUtils.getProperty(entity, field.getName());
+			CrudType crudType = (CrudType) BeanReflectionUtils.getProperty(entity, "crudType");
 			context.setEntity(value);
+			if(crudType != null) {
+				context.setCrudType(crudType);
+			}
 			apply(context);
 		}
+		context.setCrudType(entityCrudType);
 		context.setParent(parent);
 	}
 
@@ -112,7 +129,6 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 				Map<String, Object> map = new HashMap<String, Object>();
 				if (generator != null) {
 					GeneratorPolicy policy = generator.policy().getDeclaredConstructor().newInstance();
-					;
 					if (crudType.equals(policy.getType()) || (CrudType.SAVE_OR_UPDATE.equals(policy.getType())
 							&& !crudType.equals(CrudType.DELETE))) {
 						map.put("field", field);

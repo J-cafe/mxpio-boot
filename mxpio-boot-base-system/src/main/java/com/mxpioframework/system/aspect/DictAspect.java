@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.JpaUtil;
+import com.mxpioframework.security.entity.User;
 import com.mxpioframework.system.SystemConstant;
 import com.mxpioframework.system.annotation.Dict;
 import com.mxpioframework.system.entity.DictItem;
@@ -117,10 +118,14 @@ public class DictAspect {
                         log.debug(" __翻译字典字段__ "+field.getName() + SystemConstant.DICT_TEXT_SUFFIX+"： "+ text);
                         item.put(field.getName() + SystemConstant.DICT_TEXT_SUFFIX, text);
                     }
-                    //date类型默认转换string格式化日期
+                    // date类型默认转换string格式化日期
                     if (field.getType().getName().equals("java.util.Date")&&field.getAnnotation(JsonFormat.class)==null&&item.get(field.getName())!=null){
                         SimpleDateFormat aDate=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         item.put(field.getName(), aDate.format(new Date((Long) item.get(field.getName()))));
+                    }
+                    // 敏感字段过滤
+                    if(record instanceof User && "password".equals(field.getName())) {
+                    	item.remove(field.getName());
                     }
                 }
                 items.add(item);

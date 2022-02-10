@@ -40,11 +40,11 @@ public class Role extends BaseEntity {
 	private String description;
 	
 	@Transient
-	@ApiModelProperty(value = "权限列表")
+	@ApiModelProperty(value = "权限列表", hidden = true)
 	private List<Permission> permissions;
 	
 	@Transient
-	@ApiModelProperty(value = "授权信息")
+	@ApiModelProperty(value = "授权信息", hidden = true)
 	private List<GrantedAuthority> authorities;
 	
 	public String getId() {

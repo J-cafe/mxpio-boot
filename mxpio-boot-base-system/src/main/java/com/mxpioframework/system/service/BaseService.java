@@ -1,5 +1,6 @@
 package com.mxpioframework.system.service;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -12,14 +13,21 @@ import com.mxpioframework.jpa.query.Criteria;
 public interface BaseService<T extends BaseEntity> {
 	
 	/**
-	 * 通用保存
+	 * 通用智能保存（智能保存默认会处理@Transient属性）
 	 * @param entity
 	 * @return
 	 */
 	public T save(T entity);
 	
 	/**
-	 * 通用保存
+	 * 通用智能保存（智能保存默认会处理@Transient属性）
+	 * @param entities
+	 * @return
+	 */
+	public Collection<T> save(Collection<T> entities);
+	
+	/**
+	 * 通用智能保存（智能保存默认会处理@Transient属性）
 	 * @param entity
 	 * @param crudPolicy
 	 * @return
@@ -27,14 +35,29 @@ public interface BaseService<T extends BaseEntity> {
 	public T save(T entity, CrudPolicy crudPolicy);
 	
 	/**
-	 * 通用更新
+	 * 通用智能保存（智能保存默认会处理@Transient属性）
+	 * @param entities
+	 * @param crudPolicy
+	 * @return
+	 */
+	public Collection<T> save(Collection<T> entities, CrudPolicy crudPolicy);
+	
+	/**
+	 * 通用新增
+	 * @param entity
+	 * @return
+	 */
+	public T persist(T entity);
+	
+	/**
+	 * 通用智能更新（智能更新默认会处理@Transient属性）
 	 * @param entity
 	 * @return
 	 */
 	public T update(T entity);
 	
 	/**
-	 * 通用更新
+	 * 通用智能更新（智能更新默认会处理@Transient属性）
 	 * @param entity
 	 * @param crudPolicy
 	 * @return
@@ -42,19 +65,48 @@ public interface BaseService<T extends BaseEntity> {
 	public T update(T entity, CrudPolicy crudPolicy);
 	
 	/**
-	 * 通用删除By id
+	 * 通用智能更新（智能更新默认会处理@Transient属性）
+	 * @param entities
+	 * @return
+	 */
+	public Collection<T> update(Collection<T> entities);
+	
+	/**
+	 * 通用智能更新（智能更新默认会处理@Transient属性）
+	 * @param entities
+	 * @param crudPolicy
+	 * @return
+	 */
+	public Collection<T> update(Collection<T> entities, CrudPolicy crudPolicy);
+	
+	/**
+	 * 通用更新
+	 * @param entity
+	 * @return
+	 */
+	public T merge(T entity);
+	
+	/**
+	 * 通用智能删除By id（智能删除默认会处理@Transient属性）
 	 * @param clazz
 	 * @param id
 	 */
 	public void delete(Class<T> clazz, String id);
 	
 	/**
-	 * 通用删除By id
+	 * 通用智能删除By id（智能删除默认会处理@Transient属性）
 	 * @param clazz
 	 * @param id
 	 * @param crudPolicy
 	 */
 	public void delete(Class<T> clazz, String id, CrudPolicy crudPolicy);
+	
+	/**
+	 * 通用删除
+	 * @param clazz
+	 * @param id
+	 */
+	public void remove(Class<T> clazz, String id);
 	
 	/**
 	 * 通用批量删除

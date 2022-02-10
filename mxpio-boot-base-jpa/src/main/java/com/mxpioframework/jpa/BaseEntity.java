@@ -5,10 +5,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mxpioframework.jpa.annotation.Generator;
 import com.mxpioframework.jpa.policy.impl.CreatedDatePolicy;
+import com.mxpioframework.jpa.policy.impl.CrudType;
 import com.mxpioframework.jpa.policy.impl.UpdatedDatePolicy;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -39,5 +41,13 @@ public class BaseEntity implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
 	@ApiModelProperty(value = "更新时间", hidden = true)
 	private Date updateTime;
+	
+	@Transient
+	@ApiModelProperty(value = "脏数据状态")
+	private CrudType crudType;
+	
+	@Transient
+	@ApiModelProperty(value = "是否处理瞬时属性")
+	private boolean saveTransient = true;
 
 }

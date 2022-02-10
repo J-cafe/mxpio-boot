@@ -1,5 +1,6 @@
 package com.mxpioframework.system.service.impl;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -20,6 +21,13 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 		JpaUtil.save(entity);
 		return entity;
 	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public Collection<T> save(Collection<T> entities) {
+		JpaUtil.save(entities);
+		return entities;
+	}
 	
 	@Override
 	@Transactional(readOnly = false)
@@ -27,7 +35,21 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 		JpaUtil.save(entity, crudPolicy);
 		return entity;
 	}
-
+	
+	@Override
+	@Transactional(readOnly = false)
+	public Collection<T> save(Collection<T> entities, CrudPolicy crudPolicy) {
+		JpaUtil.save(entities, crudPolicy);
+		return entities;
+	}
+	
+	@Override
+	@Transactional(readOnly = false)
+	public T persist(T entity) {
+		JpaUtil.persist(entity);
+		return entity;
+	}
+	
 	@Override
 	@Transactional(readOnly = false)
 	public T update(T entity) {
@@ -39,6 +61,27 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	@Transactional(readOnly = false)
 	public T update(T entity, CrudPolicy crudPolicy) {
 		JpaUtil.update(entity, crudPolicy);
+		return entity;
+	}
+	
+	@Override
+	@Transactional(readOnly = false)
+	public Collection<T> update(Collection<T> entities) {
+		JpaUtil.update(entities);
+		return entities;
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public Collection<T> update(Collection<T> entities, CrudPolicy crudPolicy) {
+		JpaUtil.update(entities, crudPolicy);
+		return entities;
+	}
+	
+	@Override
+	@Transactional(readOnly = false)
+	public T merge(T entity) {
+		JpaUtil.merge(entity);
 		return entity;
 	}
 	
@@ -61,6 +104,13 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	public void delete(Class<T> clazz, String id, CrudPolicy crudPolicy) {
 		T entity = JpaUtil.getOne(clazz, id);
 		JpaUtil.delete(entity, crudPolicy);
+	}
+	
+	@Override
+	@Transactional(readOnly = false)
+	public void remove(Class<T> clazz, String id) {
+		T entity = JpaUtil.getOne(clazz, id);
+		JpaUtil.remove(entity);
 	}
 	
 	@Override

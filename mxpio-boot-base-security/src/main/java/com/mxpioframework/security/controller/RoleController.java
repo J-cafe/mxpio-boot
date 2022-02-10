@@ -106,7 +106,7 @@ public class RoleController {
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		Page<User> users = roleService.getUsersWithout(pageAble, c, id);
+		Page<User> users = roleService.getUsersWithin(pageAble, c, id);
 		return Result.OK(users);
 	}
 	

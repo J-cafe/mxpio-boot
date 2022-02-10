@@ -9,6 +9,15 @@ public class CrudContext {
 	private EntityManager entityManager;
 	private Object parent;
 	private CrudType crudType;
+	private boolean saveTransient = true;
+
+	public boolean isSaveTransient() {
+		return saveTransient;
+	}
+
+	public void setSaveTransient(boolean saveTransient) {
+		this.saveTransient = saveTransient;
+	}
 
 	@SuppressWarnings("unchecked")
 	public <T> T getEntity() {
