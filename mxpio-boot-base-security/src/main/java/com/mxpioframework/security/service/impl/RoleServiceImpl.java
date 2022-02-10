@@ -87,7 +87,7 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	@Transactional(readOnly = false)
 	@SecurityCacheEvict
-	public void addUsers(String id, String[] actorIds) {
+	public void addUsers(String id, List<String> actorIds) {
 		for(String actorId : actorIds) {
 			RoleGrantedAuthority authority = new RoleGrantedAuthority();
 			authority.setActorId(actorId);

@@ -27,6 +27,6 @@ public interface RoleService {
 
 	Page<User> getUsersWithin(Pageable pageAble, Criteria criteria, String roleId);
 
-	void addUsers(String id, String[] usernames);
+	void addUsers(String id, List<String> usernames);
 
 }
