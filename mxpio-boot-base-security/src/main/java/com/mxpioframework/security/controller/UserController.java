@@ -19,8 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mxpioframework.cache.provider.CacheProvider;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.query.Criteria;
-import com.mxpioframework.jpa.query.Operator;
-import com.mxpioframework.jpa.query.SimpleCriterion;
+import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.OnlineUserService;
 import com.mxpioframework.security.service.UserService;
@@ -46,19 +45,11 @@ public class UserController {
 	
 	@GetMapping("/list")
 	@ApiOperation(value = "用户列表", notes = "根据过滤字段filter获取用户列表，过滤用户名和昵称", httpMethod = "GET")
-	public Result<Page<User>> list(@RequestParam("filter") String filter,
+	public Result<Page<User>> list(@RequestParam("criteria") String criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Criteria c = Criteria.create();
-		if(filter != null) {
-			
-			c = Criteria.create()
-					.or()
-						.addCriterion(new SimpleCriterion("username", Operator.LIKE, filter))
-						.addCriterion(new SimpleCriterion("nickname", Operator.LIKE, filter))
-					.end();
-		}
+		Criteria c = CriteriaUtils.json2Criteria(criteria);
 		Page<User> page = userService.queryAll(c, pageAble);
 		return Result.OK(page);
 	}
