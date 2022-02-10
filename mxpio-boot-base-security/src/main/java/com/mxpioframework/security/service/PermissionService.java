@@ -13,5 +13,7 @@ public interface PermissionService {
 	List<Permission> loadPermissions(String roleId, String urlId);
 
 	void save(Permission permission);
+	
+	public void delete(Permission permission);
 
 }

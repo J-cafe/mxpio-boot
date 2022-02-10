@@ -32,7 +32,7 @@ public class Element extends BaseEntity implements Resource {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final String RESOURCE_TYPE = "ELEMENT";
+	private ResourceType resourceType = ResourceType.ELEMENT;
 
 	@Id
 	@Generator

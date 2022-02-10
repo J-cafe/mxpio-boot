@@ -30,12 +30,7 @@ public class Url extends BaseEntity implements Resource {
 
 	private static final long serialVersionUID = 1L;
 
-	/**
-
-	 * 菜单资源类型
-
-	 */
-	public static final String RESOURCE_TYPE = "URL";
+	private ResourceType resourceType = ResourceType.URL;
 	
 	@Id
 	@Column(name = "ID_", length = 64)

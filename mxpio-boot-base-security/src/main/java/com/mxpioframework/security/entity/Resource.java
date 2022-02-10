@@ -15,4 +15,6 @@ public interface Resource extends Serializable {
 
 	 */
 	List<ConfigAttribute> getAttributes();
+	
+	ResourceType getResourceType();
 }

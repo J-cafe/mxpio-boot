@@ -18,6 +18,7 @@ import com.mxpioframework.security.cache.SecurityCacheEvict;
 import com.mxpioframework.security.decision.manager.SecurityDecisionManager;
 import com.mxpioframework.security.entity.Element;
 import com.mxpioframework.security.entity.Permission;
+import com.mxpioframework.security.entity.ResourceType;
 import com.mxpioframework.security.entity.Url;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.GrantedAuthorityService;
@@ -43,7 +44,7 @@ public class UrlServiceImpl extends BaseServiceImpl<Url> implements UrlService {
 	@Override
 	public List<Url> findAll() {
 		List<Url> urls = JpaUtil.linq(Url.class).list();
-		List<Permission> permissions = JpaUtil.linq(Permission.class).equal("resourceType", Url.RESOURCE_TYPE).list();
+		List<Permission> permissions = JpaUtil.linq(Permission.class).equal("resourceType", ResourceType.URL).list();
 		if (!permissions.isEmpty()) {
 			Map<String, Url> urlMap = JpaUtil.index(urls);
 			for (Permission permission : permissions) {
