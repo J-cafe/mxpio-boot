@@ -14,6 +14,8 @@ public interface PermissionService {
 
 	void save(Permission permission);
 	
+	public void save(List<Permission> permissions);
+	
 	public void delete(Permission permission);
 
 }

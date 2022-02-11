@@ -47,6 +47,13 @@ public class PermissionServiceImpl implements PermissionService {
 	@SecurityCacheEvict
 	@Override
 	@Transactional
+	public void save(List<Permission> permissions) {
+		JpaUtil.save(permissions);
+	}
+	
+	@SecurityCacheEvict
+	@Override
+	@Transactional
 	public void delete(Permission permission) {
 		JpaUtil.delete(permission);
 	}

@@ -50,6 +50,13 @@ public class PermissionController {
 		return Result.OK(permission);
 	}
 	
+	@PostMapping("add/batch")
+	@ApiOperation(value = "保存权限", notes = "新增权限信息", httpMethod = "POST")
+	public Result<Object> saveBatch(@RequestBody List<Permission> permissions) {
+		permissionService.save(permissions);
+		return Result.OK(permissions);
+	}
+	
 	@GetMapping("element/list")
 	@ApiOperation(value = "加载页面组件", notes = "根据pageId获取已授权的组件清单", httpMethod = "GET")
 	public Result<Collection<Element>> loadElements(String pageId) throws Exception {
