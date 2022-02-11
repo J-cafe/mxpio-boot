@@ -2,6 +2,8 @@ package com.mxpioframework.security.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -37,9 +39,10 @@ public class Permission extends BaseEntity implements ConfigAttribute{
 	@ApiModelProperty(value = "资源ID")
 	private String resourceId;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name = "RESOURCE_TYPE_", length = 32)
 	@ApiModelProperty(value = "资源类型")
-	private String resourceType;
+	private ResourceType resourceType;
 	
 	@Column(name = "ATTRIBUTE_", length = 255)
 	@ApiModelProperty(value = "资源属性")
@@ -50,35 +53,15 @@ public class Permission extends BaseEntity implements ConfigAttribute{
 	private Role role;
 	
 	@Transient
-	@ApiModelProperty(value = "组件对象")
-	private Element element;
+	@ApiModelProperty(value = "资源对象")
+	private Resource resource;
 	
-	@Transient
-	@ApiModelProperty(value = "菜单对象")
-	private Url url;
-	
-	public Url getUrl() {
-		return url;
-	}
-
-	public void setUrl(Url url) {
-		this.url = url;
-	}
-
 	public Role getRole() {
 		return role;
 	}
 
 	public void setRole(Role role) {
 		this.role = role;
-	}
-
-	public Element getElement() {
-		return element;
-	}
-
-	public void setElement(Element element) {
-		this.element = element;
 	}
 
 	public String getId() {
@@ -122,11 +105,11 @@ public class Permission extends BaseEntity implements ConfigAttribute{
 	 * @return resourceType
 
 	 */
-	public String getResourceType() {
+	public ResourceType getResourceType() {
 		return resourceType;
 	}
 
-	public void setResourceType(String resourceType) {
+	public void setResourceType(ResourceType resourceType) {
 		this.resourceType = resourceType;
 	}
 
@@ -148,6 +131,14 @@ public class Permission extends BaseEntity implements ConfigAttribute{
 	 */
 	public String getAttribute() {
 		return attribute;
+	}
+
+	public Resource getResource() {
+		return resource;
+	}
+
+	public void setResource(Resource resource) {
+		this.resource = resource;
 	}
 
 }

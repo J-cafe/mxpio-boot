@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.security.entity.Element;
 import com.mxpioframework.security.entity.Permission;
+import com.mxpioframework.security.entity.ResourceType;
 import com.mxpioframework.security.service.ElementService;
 
 @Service
@@ -20,7 +21,7 @@ public class ElementServiceImpl extends BaseServiceImpl<Element> implements Elem
 	@Override
 	public List<Element> findAll() {
 		List<Element> elements = JpaUtil.linq(Element.class).list();
-		List<Permission> permissions = JpaUtil.linq(Permission.class).equal("resourceType", Element.RESOURCE_TYPE).list();
+		List<Permission> permissions = JpaUtil.linq(Permission.class).equal("resourceType", ResourceType.ELEMENT).list();
 		if (!permissions.isEmpty()) {
 			Map<String, Element> elementMap = JpaUtil.index(elements);
 			for (Permission permission : permissions) {

@@ -44,7 +44,7 @@ public class PermissionController {
 	}
 	
 	@PostMapping("add")
-	@ApiOperation(value = "保存权限", notes = "新增/更新权限信息", httpMethod = "POST")
+	@ApiOperation(value = "保存权限", notes = "新增权限信息", httpMethod = "POST")
 	public Result<Object> save(@RequestBody Permission permission) {
 		permissionService.save(permission);
 		return Result.OK(permission);

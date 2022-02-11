@@ -25,6 +25,7 @@ import com.mxpioframework.jpa.query.Operator;
 import com.mxpioframework.jpa.query.SimpleCriterion;
 import com.mxpioframework.security.entity.Element;
 import com.mxpioframework.security.entity.Permission;
+import com.mxpioframework.security.entity.ResourceType;
 import com.mxpioframework.security.entity.Role;
 import com.mxpioframework.security.entity.RoleGrantedAuthority;
 import com.mxpioframework.security.entity.User;
@@ -133,7 +134,7 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	@Transactional(readOnly = false)
 	public void afterPropertiesSet(ApplicationContext applicationContext) {
 		
-		SimpleCriterion sc = new SimpleCriterion("resourceType", Operator.EQ, Element.RESOURCE_TYPE);
+		SimpleCriterion sc = new SimpleCriterion("resourceType", Operator.EQ, ResourceType.ELEMENT);
 		SimpleCriterion sc1 = new SimpleCriterion("roleId", Operator.EQ, "111");
 		SimpleCriterion sc2 = new SimpleCriterion("id", Operator.EQ, "p111");
 		
