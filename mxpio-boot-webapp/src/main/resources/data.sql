@@ -3,6 +3,9 @@ INSERT INTO `mb_user`(`username_`, `create_by`, `create_time`, `update_by`, `upd
 -- 20220208 字典管理菜单
 INSERT INTO `mb_url` (`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `component_`, `description_`, `icon_`, `keep_alive_`, `name_`, `navigable_`, `order_`, `parent_id_`, `path_`, `title_`) VALUES ('b583ca44-0371-4f77-a3e3-87890aedict5', NULL, NULL, NULL, NULL, 'system/DictList', '字典管理', NULL, '\0', 'dictList', '\1', '1', 'd7d6e2e4e2934f2c9385a623fd98c6f3', 'list/dict-list', '字典管理');
 
--- 20220109 组件示例菜单
+-- 20220209 组件示例菜单
 INSERT INTO `mb_url` (`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `component_`, `description_`, `icon_`, `keep_alive_`, `name_`, `navigable_`, `order_`, `parent_id_`, `path_`, `title_`) VALUES ('b583ca44-test-1234-a3e3-87890ae56785', NULL, NULL, NULL, NULL, 'blank', '示例页面', 'question-circle', '\1', 'test', '\0', '1', NULL, 'test', '示例页面');
 INSERT INTO `mb_url` (`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `component_`, `description_`, `icon_`, `keep_alive_`, `name_`, `navigable_`, `order_`, `parent_id_`, `path_`, `title_`) VALUES ('b583ca44-demo-1234-a3e3-87890ae56785', NULL, NULL, NULL, NULL, 'test/Demo', '常见组件', NULL, '\0', 'test', '\1', '1', 'b583ca44-test-1234-a3e3-87890ae56785', 'test/demo', '常见组件');
+
+-- 20220210 角色管理菜单
+INSERT INTO `mb_url` (`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `component_`, `description_`, `icon_`, `keep_alive_`, `name_`, `navigable_`, `order_`, `parent_id_`, `path_`, `title_`) VALUES ('4e672960-61ed-4c79-b895-52b3a3912bd5', NULL, NULL, NULL, NULL, 'system/RoleList', '角色管理', NULL, '\0', 'RoleList', '1', '4', 'd7d6e2e4e2934f2c9385a623fd98c6f3', 'RoleList', '角色管理');
