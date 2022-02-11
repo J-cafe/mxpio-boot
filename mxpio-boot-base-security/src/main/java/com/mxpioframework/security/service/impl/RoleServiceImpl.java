@@ -40,7 +40,7 @@ public class RoleServiceImpl implements RoleService {
 	@Transactional(readOnly = false)
 	@SecurityCacheEvict
 	public void save(Role role) {
-		JpaUtil.persist(role);
+		JpaUtil.save(role);
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class RoleServiceImpl implements RoleService {
 	@Transactional(readOnly = false)
 	@SecurityCacheEvict
 	public void removeUsers(String id, List<String> actorIds) {
-		JpaUtil.lind(RoleGrantedAuthority.class).equal("roldId", id).in("actorId", actorIds).delete();
+		JpaUtil.lind(RoleGrantedAuthority.class).equal("roleId", id).in("actorId", actorIds).delete();
 	}
 
 }
