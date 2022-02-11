@@ -6,7 +6,7 @@ import com.mxpioframework.security.entity.Permission;
 
 public interface RoleUrlService {
 
-	List<Permission> load();
+	public List<Permission> load(String roleId);
 
 	void save(List<Permission> permissions);
 

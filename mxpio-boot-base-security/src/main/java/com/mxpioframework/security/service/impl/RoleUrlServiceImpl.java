@@ -24,13 +24,18 @@ public class RoleUrlServiceImpl implements RoleUrlService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Permission> load() {
+	public List<Permission> load(String roleId) {
 		List<Permission> result = new ArrayList<>();
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		try{
-			List<RoleGrantedAuthority> roleAuths = JpaUtil.linq(RoleGrantedAuthority.class).equal("actorId", user.getUsername()).list();
 			Set<String> roleIds = new HashSet<>();
-			roleIds = roleAuths.stream().map(RoleGrantedAuthority :: getRoleId).collect(Collectors.toSet());
+			if(roleId == null) {
+				User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+				List<RoleGrantedAuthority> roleAuths = JpaUtil.linq(RoleGrantedAuthority.class).equal("actorId", user.getUsername()).list();
+				roleIds = roleAuths.stream().map(RoleGrantedAuthority :: getRoleId).collect(Collectors.toSet());
+			}else {
+				roleIds.add(roleId);
+			}
+			
 			if(roleIds.size() == 0) {
 				return null;
 			}
