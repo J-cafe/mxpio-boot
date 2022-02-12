@@ -32,6 +32,7 @@
 		<fastjson.version>1.2.76</fastjson.version>
 		<druid.version>1.2.6</druid.version>
 		<jackson.version>2.11.4</jackson.version>
+		<quartz.version>2.3.2</quartz.version>
 	</properties>
 	<modules>
 		<module>mxpio-boot-base-autoconfigure</module>
@@ -42,6 +43,8 @@
 		<module>mxpio-boot-module-cache-redis</module>
 		<module>mxpio-boot-base-ui</module>
 		<module>mxpio-boot-base-system</module>
+		<module>mxpio-boot-base-quartz</module>
+		<module>mxpio-boot-base-excel</module>
 	</modules>
 	<dependencies>
 		<dependency>
@@ -142,6 +145,16 @@
 			</dependency>
 			<dependency>
 				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-base-excel</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-base-quartz</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
 				<artifactId>mxpio-boot-base-system</artifactId>
 				<version>${mxpio.version}</version>
 			</dependency>
@@ -224,6 +237,18 @@
 				<artifactId>commons-codec</artifactId>
 				<version>1.15</version>
 			</dependency>
+			
+			<!-- Quartz -->
+			<dependency>
+	            <groupId>org.quartz-scheduler</groupId>
+	            <artifactId>quartz</artifactId>
+	            <version>${quartz.version}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>org.quartz-scheduler</groupId>
+	            <artifactId>quartz-jobs</artifactId>
+	            <version>${quartz.version}</version>
+	        </dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
