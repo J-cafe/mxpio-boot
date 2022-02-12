@@ -23,6 +23,14 @@
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-boot-base-excel</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-boot-base-quartz</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-base-system</artifactId>
 		</dependency>
 
