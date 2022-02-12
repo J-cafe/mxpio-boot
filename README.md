@@ -31,6 +31,8 @@ mxpio-boot-parent
 ├─mxpio-boot-base-jpa // JPA模块
 ├─mxpio-boot-base-security // 权鉴模块
 ├─mxpio-boot-base-system // 系统管理模块
+├─mxpio-boot-base-excel // Excel模块
+├─mxpio-boot-base-quartz // Job管理模块
 ├─mxpio-boot-base-ui // UI设计模块
 ├─mxpio-boot-module-cache-redis // 缓存Redis实现
 └─mxpio-boot-webapp // 业务项目
