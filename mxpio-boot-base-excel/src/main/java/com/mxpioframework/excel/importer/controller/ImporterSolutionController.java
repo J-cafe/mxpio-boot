@@ -136,7 +136,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	}
 	
 	@DeleteMapping("/remove/{id}")
-	@ApiOperation(value = "删除角色", notes = "根据角色名rolename删除角色信息", httpMethod = "DELETE")
+	@ApiOperation(value = "删除方案", notes = "删除方案信息", httpMethod = "DELETE")
 	public Result<ImporterSolution> delete(@PathVariable(name = "id", required = true) String id) throws Exception {
 		String ids[] = id.split(";");
 		for(String key : ids){
@@ -207,7 +207,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	
 	@Transactional
 	@PostMapping("upload/{importerSolutionId}")
-	@ApiOperation(value = "角色列表(分页)", notes = "获取角色列表(分页)", httpMethod = "POST")
+	@ApiOperation(value = "导入", notes = "上传导入", httpMethod = "POST")
 	public String upload(@RequestParam("file") MultipartFile multipartFile,
 			@PathVariable("importerSolutionId") String importerSolutionId) throws Exception {
 		String name = multipartFile.getOriginalFilename();
