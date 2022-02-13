@@ -33,6 +33,7 @@
 		<druid.version>1.2.6</druid.version>
 		<jackson.version>2.11.4</jackson.version>
 		<quartz.version>2.3.2</quartz.version>
+		<poi.version>5.2.0</poi.version>
 	</properties>
 	<modules>
 		<module>mxpio-boot-base-autoconfigure</module>
@@ -248,6 +249,27 @@
 	            <groupId>org.quartz-scheduler</groupId>
 	            <artifactId>quartz-jobs</artifactId>
 	            <version>${quartz.version}</version>
+	        </dependency>
+	        <!-- poi -->
+	        <dependency>
+	        	<groupId>org.apache.poi</groupId>
+	        	<artifactId>poi</artifactId>
+	        	<version>${poi.version}</version>
+	        </dependency>
+	        <dependency>
+	        	<groupId>org.apache.poi</groupId>
+	        	<artifactId>poi-ooxml</artifactId>
+	        	<version>${poi.version}</version>
+	        </dependency>
+	        <dependency>
+	        	<groupId>org.apache.poi</groupId>
+	        	<artifactId>poi-excelant</artifactId>
+	        	<version>${poi.version}</version>
+	        </dependency>
+	        <dependency>
+	        	<groupId>org.apache.poi</groupId>
+	        	<artifactId>poi-ooxml-lite</artifactId>
+	        	<version>${poi.version}</version>
 	        </dependency>
 		</dependencies>
 	</dependencyManagement>
