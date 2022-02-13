@@ -102,10 +102,10 @@ public class ImporterSolutionController implements ApplicationContextAware {
 		return entityManagerFactoryNames;
 	}
 	
-	@GetMapping("factory/list/{sessionFactoryName}/list")
-	@ApiOperation(value = "领域类", notes = "获取领域类", httpMethod = "GET")
-	public Collection<String> loadEntityClassNames(@PathVariable("sessionFactoryName") String sessionFactoryName) {
-		return entityClassNameMap.get(sessionFactoryName);
+	@GetMapping("factory/list/{entityManagerFactoryName}/list")
+	@ApiOperation(value = "领域类", notes = "根据数据源获取领域类", httpMethod = "GET")
+	public Collection<String> loadEntityClassNames(@PathVariable("entityManagerFactoryName") String entityManagerFactoryName) {
+		return entityClassNameMap.get(entityManagerFactoryName);
 	}
 	
 	@GetMapping("parser/pre/list")
