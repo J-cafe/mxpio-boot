@@ -51,6 +51,7 @@ import com.mxpioframework.jpa.query.CriteriaUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+@SuppressWarnings({"rawtypes","unchecked"})
 @Api(value = "ImporterSolutionController", tags = { "Excel导入接口" })
 @RestController
 @RequestMapping("/excel/import/")
