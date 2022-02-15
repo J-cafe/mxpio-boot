@@ -34,6 +34,7 @@
 		<jackson.version>2.11.4</jackson.version>
 		<quartz.version>2.3.2</quartz.version>
 		<poi.version>5.2.0</poi.version>
+		<flowable.version>6.7.2</flowable.version>
 	</properties>
 	<modules>
 		<module>mxpio-boot-base-autoconfigure</module>
@@ -46,6 +47,7 @@
 		<module>mxpio-boot-base-system</module>
 		<module>mxpio-boot-base-quartz</module>
 		<module>mxpio-boot-base-excel</module>
+		<module>mxpio-boot-base-flowable</module>
 	</modules>
 	<dependencies>
 		<dependency>
@@ -159,6 +161,17 @@
 				<artifactId>mxpio-boot-base-system</artifactId>
 				<version>${mxpio.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-base-flowable</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-core</artifactId>
+				<version>4.5.0</version>
+			</dependency>
+
 			<!-- starters -->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
@@ -238,39 +251,46 @@
 				<artifactId>commons-codec</artifactId>
 				<version>1.15</version>
 			</dependency>
-			
+
+			<!-- Flowable -->
+			<dependency>
+				<groupId>org.flowable</groupId>
+				<artifactId>flowable-spring-boot-starter</artifactId>
+				<version>${flowable.version}</version>
+			</dependency>
+
 			<!-- Quartz -->
 			<dependency>
-	            <groupId>org.quartz-scheduler</groupId>
-	            <artifactId>quartz</artifactId>
-	            <version>${quartz.version}</version>
-	        </dependency>
-	        <dependency>
-	            <groupId>org.quartz-scheduler</groupId>
-	            <artifactId>quartz-jobs</artifactId>
-	            <version>${quartz.version}</version>
-	        </dependency>
-	        <!-- poi -->
-	        <dependency>
-	        	<groupId>org.apache.poi</groupId>
-	        	<artifactId>poi</artifactId>
-	        	<version>${poi.version}</version>
-	        </dependency>
-	        <dependency>
-	        	<groupId>org.apache.poi</groupId>
-	        	<artifactId>poi-ooxml</artifactId>
-	        	<version>${poi.version}</version>
-	        </dependency>
-	        <dependency>
-	        	<groupId>org.apache.poi</groupId>
-	        	<artifactId>poi-excelant</artifactId>
-	        	<version>${poi.version}</version>
-	        </dependency>
-	        <dependency>
-	        	<groupId>org.apache.poi</groupId>
-	        	<artifactId>poi-ooxml-lite</artifactId>
-	        	<version>${poi.version}</version>
-	        </dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz</artifactId>
+				<version>${quartz.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz-jobs</artifactId>
+				<version>${quartz.version}</version>
+			</dependency>
+			<!-- poi -->
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>${poi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>${poi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-excelant</artifactId>
+				<version>${poi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml-lite</artifactId>
+				<version>${poi.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
@@ -293,21 +313,21 @@
 				</configuration>
 			</plugin>
 			<!-- 要将源码放上去，需要加入这个插件 -->
-            <plugin>
-                <artifactId>maven-source-plugin</artifactId>
-                <configuration>
-                    <attach>true</attach>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- Javadoc -->
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<configuration>
+					<attach>true</attach>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Javadoc -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
