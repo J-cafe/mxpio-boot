@@ -48,6 +48,8 @@ mxpio-boot-parent
 
 ## 4.前端技术栈（孵化中）
 
+前端地址：[Mxpio-Boot-Antd-Vue](https://gitee.com/i_mxpio/mxpio-boot-antd-vue)
+
 * Vue
 * Vuex
 * Vue-Cli
