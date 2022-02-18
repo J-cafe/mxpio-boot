@@ -49,6 +49,7 @@ mxpio-boot-parent
 
 ## 4.前端技术栈（孵化中）
 
+> 前端项目基于优秀的Vue开源项目[Vue-Antd-Admin](https://gitee.com/iczer/vue-antd-admin)开发。
 
 * Vue
 * Vuex
@@ -336,3 +337,7 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.0.jar
 | 多租户 |       | <font color="#dd0000">未开始</font> |
 | 低代码 |       | <font color="#dd0000">未开始</font> |
 
+## 相关开源项目
+
+- [Spring Boot](https://spring.io/projects/spring-boot)
+- [Vue-Antd-Admin](https://gitee.com/iczer/vue-antd-admin)
