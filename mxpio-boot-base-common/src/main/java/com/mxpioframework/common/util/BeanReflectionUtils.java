@@ -152,6 +152,19 @@ public final class BeanReflectionUtils {
 			}
 		}
 	}
+	
+	public static void copyProperties(Object target, Object source) {
+		List<Field> fields = loadClassFields(getClass(source));
+		
+		for(Field field : fields) {
+			try {
+				Object sourceValue = PropertyUtils.getProperty(source, field.getName());
+				PropertyUtils.setProperty(target, field.getName(), sourceValue);
+			} catch (Exception e) {
+				continue;
+			}
+		}
+	}
 
 	public static boolean isCglibProxyClass(Class<?> clazz) {
 		return (clazz != null && isCglibProxyClassName(clazz.getName()));
