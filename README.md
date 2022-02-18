@@ -5,6 +5,7 @@
 ## 1.简介
 >MxpIO-Boot基于spring-boot研发的开发框架。参考spring boot项目结构构建，目前处于孵化中。
 
+前端地址：[Mxpio-Boot-Antd-Vue](https://gitee.com/i_mxpio/mxpio-boot-antd-vue)
 ## 2.后端技术栈
 
 * Spring Boot 2.4.3
@@ -48,7 +49,6 @@ mxpio-boot-parent
 
 ## 4.前端技术栈（孵化中）
 
-前端地址：[Mxpio-Boot-Antd-Vue](https://gitee.com/i_mxpio/mxpio-boot-antd-vue)
 
 * Vue
 * Vuex
