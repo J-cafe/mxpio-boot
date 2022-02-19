@@ -17,8 +17,8 @@ public interface ImporterSolutionService {
 
 	Page<MappingRule> ruleListPage(Criteria c, String importerSolutionId, Pageable pageAble);
 
-	void save(ImporterSolution importerSolution);
+	ImporterSolution save(ImporterSolution importerSolution);
 
-	void update(ImporterSolution importerSolution);
+	ImporterSolution update(ImporterSolution importerSolution);
 
 }

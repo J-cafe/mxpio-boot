@@ -120,6 +120,14 @@ public final class BeanReflectionUtils {
 			return false;
 		}
 	}
+	
+	public static Class<?> getClassByName(String className) {
+		try {
+			return Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			return null;
+		}
+	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Map<String, Object> entityToMap(Object value) {

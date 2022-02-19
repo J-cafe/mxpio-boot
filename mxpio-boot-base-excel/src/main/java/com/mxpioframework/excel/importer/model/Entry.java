@@ -5,15 +5,19 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.mxpioframework.jpa.BaseEntity;
+import com.mxpioframework.jpa.annotation.Generator;
+
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name = "MB_EXCEL_ENTRY")
-public class Entry implements java.io.Serializable {
+public class Entry extends BaseEntity {
 
 	private static final long serialVersionUID = -6974265493073776949L;
 
 	@Id
+	@Generator
 	@Column(name = "ID_", length = 36)
 	@ApiModelProperty(value = "ID")
 	private String id;

@@ -1,7 +1,6 @@
 package com.mxpioframework.excel.importer.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -11,16 +10,24 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.mxpioframework.jpa.BaseEntity;
+import com.mxpioframework.jpa.annotation.Generator;
+
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name = "MB_EXCEL_IMPORTER_SOLUTION")
-public class ImporterSolution implements java.io.Serializable {
+public class ImporterSolution extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
+	@Generator
 	@Column(name = "ID_", length = 64)
-	@ApiModelProperty(value = "方案编码")
+	@ApiModelProperty(value = "ID")
 	private String id;
+	
+	@Column(name = "CODE_", length = 64, unique = true)
+	@ApiModelProperty(value = "方案编码")
+	private String code;
 	
 	@ApiModelProperty(value = "方案名称")
 	@Column(name = "NAME_", length = 60)
@@ -41,10 +48,6 @@ public class ImporterSolution implements java.io.Serializable {
 	@ApiModelProperty(value = "实体管理工厂")
 	@Column(name = "Entity_Manager_Factory_Name_", length = 60)
 	private String EntityManagerFactoryName;
-	
-	@Column(name = "CREATE_DATE_")
-	@ApiModelProperty(value = "创建时间")
-	private Date createDate;
 	
 	@Column(name = "START_ROW_")
 	@ApiModelProperty(value = "起始行")
@@ -102,14 +105,6 @@ public class ImporterSolution implements java.io.Serializable {
 		EntityManagerFactoryName = entityManagerFactoryName;
 	}
 
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
 	public List<MappingRule> getMappingRules() {
 		return mappingRules;
 	}
@@ -124,6 +119,14 @@ public class ImporterSolution implements java.io.Serializable {
 
 	public void setStartRow(Integer startRow) {
 		this.startRow = startRow;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 }

@@ -22,8 +22,9 @@ import com.mxpioframework.jpa.JpaUtil;
 public class AutoCreateMappingRulePolicyImpl implements AutoCreateMappingRulePolicy {
 
 	@Override
-	public void apply(ImporterSolution importerSolution) {
-		Class<?> entityClass = BeanReflectionUtils.getClass(importerSolution.getEntityClassName());
+	public ImporterSolution apply(ImporterSolution importerSolution) {
+		
+		Class<?> entityClass = BeanReflectionUtils.getClassByName(importerSolution.getEntityClassName());
 		List<Field> fields = BeanReflectionUtils.loadClassFields(entityClass);
 		List<String> propertyNames = getPropertyNames(importerSolution);
 		int col = propertyNames.size();
@@ -51,9 +52,10 @@ public class AutoCreateMappingRulePolicyImpl implements AutoCreateMappingRulePol
 
 			}
 			JpaUtil.persist(mappingRule);
+			importerSolution.getMappingRules().add(mappingRule);
 			col++;
 		}
-
+		return importerSolution;
 	}
 
 	private List<String> getPropertyNames(ImporterSolution importerSolution) {

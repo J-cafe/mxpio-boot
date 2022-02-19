@@ -62,6 +62,8 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	private Map<String, List<String>> entityClassNameMap = new HashMap<>();
 	private Collection<Map<String,String>> cellPreParsers = new ArrayList<>();
 	private Collection<Map<String,String>> cellPostParsers = new ArrayList<>();
+	
+	@Autowired
 	private AutoCreateMappingRulePolicy autoCreateMappingRulePolicy;
 	
 	@Autowired
@@ -123,16 +125,17 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	@Transactional(readOnly = false)
 	@PostMapping("/add")
 	@ApiOperation(value = "添加导入方案", notes = "添加导入方案", httpMethod = "POST")
-	public void saveImporterSolutions(@RequestBody ImporterSolution importerSolution) {
+	public Result<ImporterSolution> saveImporterSolutions(@RequestBody ImporterSolution importerSolution) {
 		importerSolutionService.save(importerSolution);
+		return Result.OK(importerSolution);
 	}
 	
 	@Transactional(readOnly = false)
 	@PutMapping("/edit")
 	@ApiOperation(value = "修改导入方案", notes = "修改导入方案", httpMethod = "PUT")
-	public void edit(@RequestBody ImporterSolution importerSolution) {
-		
+	public Result<ImporterSolution> edit(@RequestBody ImporterSolution importerSolution) {
 		importerSolutionService.update(importerSolution);
+		return Result.OK(importerSolution);
 	}
 	
 	@DeleteMapping("/remove/{id}")
@@ -145,17 +148,13 @@ public class ImporterSolutionController implements ApplicationContextAware {
 		return Result.OK("删除成功",null);
 	}
 	
+	@Transactional(readOnly = false)
 	@PostMapping("/rule/mapping/create")
 	@ApiOperation(value = "生成规则映射", notes = "生成规则映射", httpMethod = "POST")
-	public void autoCreateMappingRules(@RequestBody ImporterSolution importerSolution) {
-		autoCreateMappingRulePolicy.apply(importerSolution);
+	public Result<ImporterSolution> autoCreateMappingRules(@RequestBody ImporterSolution importerSolution) {
+		return Result.OK(autoCreateMappingRulePolicy.apply(importerSolution));
 	}
 	
-	public void setAutoCreateMappingRulePolicy(
-			AutoCreateMappingRulePolicy autoCreateMappingRulePolicy) {
-		this.autoCreateMappingRulePolicy = autoCreateMappingRulePolicy;
-	}
-
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext)
 			throws BeansException {

@@ -39,7 +39,7 @@ public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 	}
 
 	@Override
-	public void save(ImporterSolution importerSolution) {
+	public ImporterSolution save(ImporterSolution importerSolution) {
 		
 		JpaUtil.save(importerSolution, new SmartCrudPolicy() {
 			@Override
@@ -52,10 +52,12 @@ public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 				super.apply(context);
 			}
 		});
+		
+		return importerSolution;
 	}
 
 	@Override
-	public void update(ImporterSolution importerSolution) {
+	public ImporterSolution update(ImporterSolution importerSolution) {
 		
 		JpaUtil.update(importerSolution, new SmartCrudPolicy() {
 			@Override
@@ -67,7 +69,9 @@ public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 				}
 				super.apply(context);
 			}
-		});		
+		});
+		
+		return importerSolution;
 	}
 
 	@Override

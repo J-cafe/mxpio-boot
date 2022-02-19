@@ -18,14 +18,17 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.mxpioframework.excel.importer.parser.CellPostParser;
 import com.mxpioframework.excel.importer.parser.CellPreParser;
+import com.mxpioframework.jpa.BaseEntity;
+import com.mxpioframework.jpa.annotation.Generator;
 
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name = "MB_EXCEL_MAPPING_RULE")
-public class MappingRule implements java.io.Serializable {
+public class MappingRule extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
+	@Generator
 	@Column(name = "ID_", length = 36)
 	@ApiModelProperty(value = "ID")
 	private String id;
@@ -191,6 +194,14 @@ public class MappingRule implements java.io.Serializable {
 		}
 		
 		return value;
+	}
+
+	public Map<String, String> getMap() {
+		return map;
+	}
+
+	public void setMap(Map<String, String> map) {
+		this.map = map;
 	}
 
 }
