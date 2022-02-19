@@ -258,7 +258,7 @@
 				<artifactId>flowable-spring-boot-starter</artifactId>
 				<version>${flowable.version}</version>
 			</dependency>
-
+			
 			<!-- Quartz -->
 			<dependency>
 				<groupId>org.quartz-scheduler</groupId>
