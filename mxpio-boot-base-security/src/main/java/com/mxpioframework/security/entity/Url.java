@@ -30,6 +30,7 @@ public class Url extends BaseEntity implements Resource {
 
 	private static final long serialVersionUID = 1L;
 
+	@Transient
 	private ResourceType resourceType = ResourceType.URL;
 	
 	@Id
