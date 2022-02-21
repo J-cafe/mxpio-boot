@@ -1,27 +1,27 @@
-# Panda-expression 表达式引擎
+# mxpio-expression 表达式引擎
 
 ## 介绍
 
-Panda-expression构建在著名的aviator引擎之上。保留了aviator全部功能。
+mxpio-expression构建在著名的aviator引擎之上。保留了aviator全部功能。
 
 [Aviator](https://github.com/killme2008/aviator)是一个轻量级、高性能的Java表达式执行引擎,相关内容可参考官方文档。
 
 ## 使用方法
 
-Panda-expression可以使用在Panda环境中，也可以单独使用在其他Spring项目中。使用方法如下
+mxpio-expression可以使用在Mxpio-boot环境中，也可以单独使用在其他Spring项目中。使用方法如下
 
-> Panda环境中，您可以在pom中添加Panda-expression依赖即可，无需指定版本号，maven会自动拉取适合的版本
+> Mxpio-boot环境中，您可以在pom中添加mxpio-expression依赖即可，无需指定版本号，maven会自动拉取适合的版本
 
 ```xml
 
 	<dependency>
-		<groupId>org.malagu.panda</groupId>
-		<artifactId>panda-expression</artifactId>
+		<groupId>com.mxpio</groupId>
+		<artifactId>mxpio-boot-base-expression</artifactId>
 	</dependency>
 
 ```
 
-> 在非Panda环境中，您除了需要再maven中添加依赖以外（带版本号），同时扫描org.malagu.panda.expression包及其子包的Spring注解。
+> 在非Mxpio-boot环境中，您除了需要再maven中添加依赖以外（带版本号），同时扫描com.mxpioframework.expression包及其子包的Spring注解。
 
 ## 快速开始
 
@@ -98,7 +98,7 @@ class AddFunction extends AbstractFunction {
 
 ```
 
-> 现在您依然可以使用Aviator原生的方式注册函数，也可以直接实现org.malagu.panda.expression.func.type.AbstractSpringAviatorFunction接口，并注册到Spring IOC中即可，同时可以通过实现disabled()来设定函数是否启用.
+> 现在您依然可以使用Aviator原生的方式注册函数，也可以直接实现com.mxpioframework.expression.func.type.AbstractSpringAviatorFunction接口，并注册到Spring IOC中即可，同时可以通过实现disabled()来设定函数是否启用.
 
 ```java
 
