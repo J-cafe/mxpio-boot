@@ -60,5 +60,15 @@
 			<artifactId>mxpio-boot-base-excel</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-boot-base-log</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-boot-base-expression</artifactId>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 </project>

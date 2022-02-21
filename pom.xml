@@ -48,6 +48,8 @@
 		<module>mxpio-boot-base-quartz</module>
 		<module>mxpio-boot-base-excel</module>
 		<module>mxpio-boot-base-flowable</module>
+		<module>mxpio-boot-base-log</module>
+		<module>mxpio-boot-base-expression</module>
 	</modules>
 	<dependencies>
 		<dependency>
@@ -164,6 +166,16 @@
 			<dependency>
 				<groupId>com.mxpio</groupId>
 				<artifactId>mxpio-boot-base-flowable</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-base-log</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-base-expression</artifactId>
 				<version>${mxpio.version}</version>
 			</dependency>
 			<dependency>
@@ -290,6 +302,12 @@
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi-ooxml-lite</artifactId>
 				<version>${poi.version}</version>
+			</dependency>
+			<!-- Aviator -->
+			<dependency>
+				<groupId>com.googlecode.aviator</groupId>
+				<artifactId>aviator</artifactId>
+				<version>4.2.7</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

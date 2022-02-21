@@ -13,7 +13,9 @@ com.mxpioframework.autoconfigure.MxpioPreloadSpringApplicationRunListener
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.mxpioframework.autoconfigure.common.CommonAutoConfiguration,\
+com.mxpioframework.autoconfigure.expression.ExpressionAutoConfiguration,\
 com.mxpioframework.autoconfigure.jpa.LinqAutoConfiguration,\
+com.mxpioframework.autoconfigure.log.LogAutoConfiguration,\
 com.mxpioframework.autoconfigure.cache.CacheAutoConfiguration,\
 com.mxpioframework.autoconfigure.module.cache.redis.RedisCacheAutoConfiguration,\
 com.mxpioframework.autoconfigure.security.SecurityAutoConfiguration,\
