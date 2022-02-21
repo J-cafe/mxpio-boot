@@ -311,6 +311,8 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.0.jar
 
 - 权限说明： [mxpio-boot-base-security](https://gitee.com/i_mxpio/mxpio-boot/blob/master/mxpio-boot-base-security/README.md)
 
+- 表达式说明： [mxpio-boot-base-expression](https://gitee.com/i_mxpio/mxpio-boot/blob/master/mxpio-boot-base-expression/README.md)
+
 ## 8.开发计划
 
 
@@ -323,12 +325,14 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.0.jar
 |       | 数据权限 | <font color="#dd0000">未开始</font> |
 |       | 组件权限 | <font color="#dd0000">未开始</font> |
 |       | 字段权限 | <font color="#dd0000">未开始</font> |
+| 表达式模块 |       | <font color="#dddd00">进行中</font> |
 | 系统监控 | 性能监控 | <font color="#00dd00">已完成</font> |
-|       | 日志监控 | <font color="#dd0000">未开始</font> |
+|       | 日志监控 | <font color="#dd0000">进行中</font> |
 | 字典配置 | 字典管理 | <font color="#00dd00">已完成</font> |
 |       | 字典翻译 | <font color="#00dd00">已完成</font> |
 |       | 字典缓存 | <font color="#dd0000">未开始</font> |
 | JPA工具 | JPA工具 | <font color="#00dd00">已完成</font> |
+| 表达式模块 |       | <font color="#dddd00">已完成</font> |
 | Excel | 导入管理 | <font color="#00dd00">已完成</font> |
 |       | 导出管理 | <font color="#dddd00">进行中</font> |
 | 工作流 |       | <font color="#dddd00">进行中</font> |
