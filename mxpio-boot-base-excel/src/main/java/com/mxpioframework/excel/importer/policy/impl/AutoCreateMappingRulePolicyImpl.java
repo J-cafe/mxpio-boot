@@ -18,6 +18,8 @@ import com.mxpioframework.excel.importer.policy.AutoCreateMappingRulePolicy;
 import com.mxpioframework.jpa.EntityUtils;
 import com.mxpioframework.jpa.JpaUtil;
 
+import io.swagger.annotations.ApiModelProperty;
+
 @Component("importer.autoCreateMappingRulePolicyImpl")
 public class AutoCreateMappingRulePolicyImpl implements AutoCreateMappingRulePolicy {
 
@@ -45,8 +47,11 @@ public class AutoCreateMappingRulePolicyImpl implements AutoCreateMappingRulePol
 
 			Excel excel = field.getAnnotation(Excel.class);
 			Column column = field.getAnnotation(Column.class);
+			ApiModelProperty apiModelProperty = field.getAnnotation(ApiModelProperty.class);
 			if (excel != null) {
 				mappingRule.setName(excel.value());
+			}else if(apiModelProperty != null) {
+				mappingRule.setName(apiModelProperty.value());
 			}
 			if (column != null) {
 
