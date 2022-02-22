@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.security.access.ConfigAttribute;
 
+import io.swagger.annotations.ApiModel;
+
+@ApiModel(value="页面资源")
 public interface Resource extends Serializable {
 
 	/**

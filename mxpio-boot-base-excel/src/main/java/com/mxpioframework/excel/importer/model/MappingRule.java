@@ -21,8 +21,10 @@ import com.mxpioframework.excel.importer.parser.CellPreParser;
 import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel(value="Excel导入映射规则")
 @Entity
 @Table(name = "MB_EXCEL_MAPPING_RULE")
 public class MappingRule extends BaseEntity {

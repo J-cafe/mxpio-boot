@@ -13,9 +13,11 @@ import javax.persistence.Table;
 import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
+@ApiModel(value="Excel导入方案")
 @Table(name = "MB_EXCEL_IMPORTER_SOLUTION")
 public class ImporterSolution extends BaseEntity {
 	private static final long serialVersionUID = 1L;

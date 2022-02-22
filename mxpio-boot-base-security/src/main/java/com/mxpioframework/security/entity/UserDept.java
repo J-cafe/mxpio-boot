@@ -8,10 +8,12 @@ import javax.persistence.Table;
 import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name = "MB_USER_DEPT")
+@ApiModel(value="用户部门关系")
 public class UserDept extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;

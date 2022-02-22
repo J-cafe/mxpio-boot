@@ -11,11 +11,13 @@ import javax.persistence.Transient;
 import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 @Table(name = "MB_DEPT")
-public class Dept extends BaseEntity {
+@ApiModel(value="部门")
+public class Dept extends BaseEntity implements Actor {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -102,6 +104,11 @@ public class Dept extends BaseEntity {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	@Override
+	public String getActorId() {
+		return id;
 	}
 	
 }
