@@ -30,6 +30,8 @@ mxpio-boot-parent
 ├─mxpio-boot-base-common // 公共模块
 ├─mxpio-boot-base-cache // 缓存接口模块
 ├─mxpio-boot-base-jpa // JPA模块
+├─mxpio-boot-base-log // 日志模块
+├─mxpio-boot-base-expression // 表达式模块
 ├─mxpio-boot-base-security // 权鉴模块
 ├─mxpio-boot-base-system // 系统管理模块
 ├─mxpio-boot-base-excel // Excel模块
@@ -177,6 +179,10 @@ java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.0.jar
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-base-excel</artifactId>
 </dependency>
+<dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-base-log</artifactId>
+</dependency>
 ```
 
 修改配置文件resources/application-dev.yml的数据库信息和服务端口等信息
@@ -318,24 +324,24 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.0.jar
 
 | 模块 | 功能 | 状态 |
 |:-----:|:----:|:----:|
-| 权限管理 | 用户权限 | <font color="#00dd00">已完成</font> |
-|       | 角色管理 | <font color="#00dd00">已完成</font> |
-|       | 菜单管理 | <font color="#00dd00">已完成</font> |
-|       | 部门职位 | <font color="#dd0000">未开始</font> |
+| 权限管理 | 用户权限 | <font color="#00dd00">初版已完成</font> |
+|       | 角色管理 | <font color="#00dd00">初版已完成</font> |
+|       | 菜单管理 | <font color="#00dd00">初版已完成</font> |
+|       | 部门职位 | <font color="#dd0000">初版进行中</font> |
 |       | 数据权限 | <font color="#dd0000">未开始</font> |
 |       | 组件权限 | <font color="#dd0000">未开始</font> |
 |       | 字段权限 | <font color="#dd0000">未开始</font> |
-| 表达式模块 |       | <font color="#dddd00">进行中</font> |
-| 系统监控 | 性能监控 | <font color="#00dd00">已完成</font> |
-|       | 日志监控 | <font color="#dd0000">进行中</font> |
-| 字典配置 | 字典管理 | <font color="#00dd00">已完成</font> |
-|       | 字典翻译 | <font color="#00dd00">已完成</font> |
+| 表达式模块 |       | <font color="#dddd00">初版已完成</font> |
+| 系统监控 | 性能监控 | <font color="#00dd00">初版已完成</font> |
+|       | 日志监控 | <font color="#dd0000">初版进行中</font> |
+| 字典配置 | 字典管理 | <font color="#00dd00">初版已完成</font> |
+|       | 字典翻译 | <font color="#00dd00">初版已完成</font> |
 |       | 字典缓存 | <font color="#dd0000">未开始</font> |
-| JPA工具 | JPA工具 | <font color="#00dd00">已完成</font> |
-| 表达式模块 |       | <font color="#dddd00">已完成</font> |
-| Excel | 导入管理 | <font color="#00dd00">已完成</font> |
-|       | 导出管理 | <font color="#dddd00">进行中</font> |
-| 工作流 |       | <font color="#dddd00">进行中</font> |
+| JPA工具 | JPA工具 | <font color="#00dd00">初版已完成</font> |
+| 表达式模块 |       | <font color="#dddd00">初版已完成</font> |
+| Excel | 导入管理 | <font color="#00dd00">初版已完成</font> |
+|       | 导出管理 | <font color="#dddd00">初版进行中</font> |
+| 工作流 |       | <font color="#dddd00">初版进行中</font> |
 | 报表模块 |       | <font color="#dd0000">未开始</font> |
 | 图表模块 |       | <font color="#dd0000">未开始</font> |
 | 多租户 |       | <font color="#dd0000">未开始</font> |
