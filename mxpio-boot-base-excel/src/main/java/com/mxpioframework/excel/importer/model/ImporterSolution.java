@@ -3,8 +3,10 @@ package com.mxpioframework.excel.importer.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -55,7 +57,7 @@ public class ImporterSolution extends BaseEntity {
 	@ApiModelProperty(value = "起始行")
 	private Integer startRow;
 
-	@OneToMany
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JoinColumn(name = "IMPORTER_SOLUTION_ID_", insertable = false, updatable = false)
 	private List<MappingRule> mappingRules = new ArrayList<MappingRule>();
 

@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.druid.sql.ast.statement.SQLWithSubqueryClause.Entry;
 import com.mxpioframework.excel.importer.model.ImporterSolution;
 import com.mxpioframework.excel.importer.model.MappingRule;
 import com.mxpioframework.excel.importer.service.ImporterSolutionService;
@@ -77,6 +78,45 @@ public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 	@Override
 	public ImporterSolution getById(String id) {
 		return JpaUtil.linq(ImporterSolution.class).idEqual(id).findOne();
+	}
+
+	@Override
+	public void deleteRule(String ruleId) {
+		MappingRule rule = JpaUtil.linq(MappingRule.class).idEqual(ruleId).findOne();
+		JpaUtil.remove(rule);
+	}
+
+	@Override
+	public MappingRule saveRule(MappingRule mappingRule) {
+		JpaUtil.save(mappingRule, new SmartCrudPolicy() {
+			@Override
+			public void apply(CrudContext context) {
+				if (context.getEntity() instanceof com.mxpioframework.excel.importer.model.Entry) {
+					MappingRule mappingRule = context.getParent();
+					com.mxpioframework.excel.importer.model.Entry entry = context.getEntity();
+					entry.setMappingRuleId(mappingRule.getId());
+				}
+				super.apply(context);
+			}
+		});
+		return mappingRule;
+	}
+
+	@Override
+	public MappingRule updateRule(MappingRule mappingRule) {
+		JpaUtil.lind(Entry.class).equal("mappingRuleId", mappingRule.getId()).delete();
+		JpaUtil.update(mappingRule, new SmartCrudPolicy() {
+			@Override
+			public void apply(CrudContext context) {
+				if (context.getEntity() instanceof com.mxpioframework.excel.importer.model.Entry) {
+					MappingRule mappingRule = context.getParent();
+					com.mxpioframework.excel.importer.model.Entry entry = context.getEntity();
+					entry.setMappingRuleId(mappingRule.getId());
+				}
+				super.apply(context);
+			}
+		});
+		return mappingRule;
 	}
 
 }

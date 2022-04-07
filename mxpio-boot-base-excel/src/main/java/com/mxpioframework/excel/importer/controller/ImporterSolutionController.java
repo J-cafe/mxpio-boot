@@ -98,6 +98,27 @@ public class ImporterSolutionController implements ApplicationContextAware {
 		return Result.OK(page);
 	}
 	
+	@DeleteMapping("rule/remove/{ruleId}")
+	@ApiOperation(value = "删除规则", notes = "删除规则", httpMethod = "DELETE")
+	public Result<MappingRule> removeRule(@PathVariable(name = "ruleId", required = true) String ruleId) {
+		importerSolutionService.deleteRule(ruleId);
+		return Result.OK("删除成功！",null);
+	}
+	
+	@PostMapping("rule/add")
+	@ApiOperation(value = "新增规则", notes = "新增规则", httpMethod = "POST")
+	public Result<MappingRule> addRule(@RequestBody MappingRule mappingRule) throws UnsupportedEncodingException {
+		importerSolutionService.saveRule(mappingRule);
+		return Result.OK(mappingRule);
+	}
+	
+	@PutMapping("rule/edit")
+	@ApiOperation(value = "更新规则", notes = "更新规则", httpMethod = "PUT")
+	public Result<MappingRule> editRule(@RequestBody MappingRule mappingRule) throws UnsupportedEncodingException {
+		importerSolutionService.updateRule(mappingRule);
+		return Result.OK(mappingRule);
+	}
+	
 	@GetMapping("factory/list")
 	@ApiOperation(value = "数据源", notes = "获取数据源", httpMethod = "GET")
 	public Collection<String> loadEntityManagerFactoryNames() {
@@ -138,6 +159,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 		return Result.OK(importerSolution);
 	}
 	
+	@Transactional(readOnly = false)
 	@DeleteMapping("/remove/{id}")
 	@ApiOperation(value = "删除方案", notes = "删除方案信息", httpMethod = "DELETE")
 	public Result<ImporterSolution> delete(@PathVariable(name = "id", required = true) String id) throws Exception {

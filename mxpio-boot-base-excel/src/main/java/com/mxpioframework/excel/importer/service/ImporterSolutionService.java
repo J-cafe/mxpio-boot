@@ -21,4 +21,10 @@ public interface ImporterSolutionService {
 
 	ImporterSolution update(ImporterSolution importerSolution);
 
+	void deleteRule(String ruleId);
+
+	MappingRule saveRule(MappingRule mappingRule);
+
+	MappingRule updateRule(MappingRule mappingRule);
+
 }
