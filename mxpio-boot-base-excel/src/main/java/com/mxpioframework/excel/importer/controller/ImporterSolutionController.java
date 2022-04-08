@@ -98,6 +98,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 		return Result.OK(page);
 	}
 	
+	@Transactional(readOnly = false)
 	@DeleteMapping("rule/remove/{ruleId}")
 	@ApiOperation(value = "删除规则", notes = "删除规则", httpMethod = "DELETE")
 	public Result<MappingRule> removeRule(@PathVariable(name = "ruleId", required = true) String ruleId) {
@@ -105,6 +106,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 		return Result.OK("删除成功！",null);
 	}
 	
+	@Transactional(readOnly = false)
 	@PostMapping("rule/add")
 	@ApiOperation(value = "新增规则", notes = "新增规则", httpMethod = "POST")
 	public Result<MappingRule> addRule(@RequestBody MappingRule mappingRule) throws UnsupportedEncodingException {
@@ -112,6 +114,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 		return Result.OK(mappingRule);
 	}
 	
+	@Transactional(readOnly = false)
 	@PutMapping("rule/edit")
 	@ApiOperation(value = "更新规则", notes = "更新规则", httpMethod = "PUT")
 	public Result<MappingRule> editRule(@RequestBody MappingRule mappingRule) throws UnsupportedEncodingException {
