@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.druid.sql.ast.statement.SQLWithSubqueryClause.Entry;
+import com.mxpioframework.excel.importer.model.Entry;
 import com.mxpioframework.excel.importer.model.ImporterSolution;
 import com.mxpioframework.excel.importer.model.MappingRule;
 import com.mxpioframework.excel.importer.service.ImporterSolutionService;
@@ -91,9 +91,9 @@ public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 		JpaUtil.save(mappingRule, new SmartCrudPolicy() {
 			@Override
 			public void apply(CrudContext context) {
-				if (context.getEntity() instanceof com.mxpioframework.excel.importer.model.Entry) {
+				if (context.getEntity() instanceof Entry) {
 					MappingRule mappingRule = context.getParent();
-					com.mxpioframework.excel.importer.model.Entry entry = context.getEntity();
+					Entry entry = context.getEntity();
 					entry.setMappingRuleId(mappingRule.getId());
 				}
 				super.apply(context);
