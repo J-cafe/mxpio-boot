@@ -1,5 +1,7 @@
 package com.mxpioframework.excel.importer.service.impl;
 
+import java.util.UUID;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -114,7 +116,8 @@ public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 					MappingRule mappingRule = context.getParent();
 					Entry entry = context.getEntity();
 					if(StringUtils.isEmpty(entry.getId())) {
-						entry.setCrudType(CrudType.SAVE);
+						// entry.setCrudType(CrudType.SAVE);
+						entry.setId(UUID.randomUUID().toString());
 					}
 					entry.setMappingRuleId(mappingRule.getId());
 				}
