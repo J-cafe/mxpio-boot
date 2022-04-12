@@ -1,5 +1,6 @@
 package com.mxpioframework.excel.importer.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import com.mxpioframework.excel.importer.model.MappingRule;
 import com.mxpioframework.excel.importer.service.ImporterSolutionService;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.policy.CrudContext;
+import com.mxpioframework.jpa.policy.impl.CrudType;
 import com.mxpioframework.jpa.policy.impl.SmartCrudPolicy;
 import com.mxpioframework.jpa.query.Criteria;
 
@@ -108,9 +110,12 @@ public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 		JpaUtil.update(mappingRule, new SmartCrudPolicy() {
 			@Override
 			public void apply(CrudContext context) {
-				if (context.getEntity() instanceof com.mxpioframework.excel.importer.model.Entry) {
+				if (context.getEntity() instanceof Entry) {
 					MappingRule mappingRule = context.getParent();
-					com.mxpioframework.excel.importer.model.Entry entry = context.getEntity();
+					Entry entry = context.getEntity();
+					if(StringUtils.isEmpty(entry.getId())) {
+						entry.setCrudType(CrudType.SAVE);
+					}
 					entry.setMappingRuleId(mappingRule.getId());
 				}
 				super.apply(context);
