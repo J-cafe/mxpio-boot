@@ -184,6 +184,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
             	OnlineUserService onlineUserService = SpringUtil.getBean(OnlineUserService.class);
             	onlineUserService.logout(token, cacheProvider);
             }
+            response.getWriter().write(objectMapper.writeValueAsString(Result.OK("注销成功",null)));
 		}
 	}
 
