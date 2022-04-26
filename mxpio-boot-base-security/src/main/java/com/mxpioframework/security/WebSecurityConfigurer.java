@@ -17,6 +17,7 @@ import org.springframework.security.authentication.InsufficientAuthenticationExc
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -94,9 +95,32 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         
         JwtTokenFilter jwtTokenFilter = new JwtTokenFilter();
         
+        FilterSecurityInterceptor securityInterceptor = createFilterSecurityInterceptor();
+        
         JwtAuthenticationProvider jwtAuthenticationProvider = new JwtAuthenticationProvider(userDetailsService, passwordEncoder);
         
-		http.authenticationProvider(jwtAuthenticationProvider)
+        http.authenticationProvider(jwtAuthenticationProvider).cors().and().csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests()
+                // 添加系统及客户定义的白名单地址
+				.antMatchers(mergeAnonymous()).permitAll()
+				// 添加SWAGGER地址
+				.antMatchers(Constants.SWAGGER_WHITELIST).permitAll()
+                .anyRequest().authenticated()  // 所有请求需要身份认证
+                .and()
+                .addFilterAt(jwtLoginFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtTokenFilter, LoginFilter.class)
+                .addFilterAfter(securityInterceptor,
+        				org.springframework.security.web.access.intercept.FilterSecurityInterceptor.class)
+                .logout() // 默认注销行为为logout，可以通过下面的方式来修改
+                .logoutUrl(URL_PREFIX + logoutPath)
+                .logoutSuccessUrl("/login")// 设置注销成功后跳转页面，默认是跳转到登录页面;
+                .logoutSuccessHandler(new JwtLogoutSuccessHandler())
+                .permitAll();
+        
+        http.setSharedObject(FilterSecurityInterceptor.class, securityInterceptor);
+        
+		/*http.authenticationProvider(jwtAuthenticationProvider)
 			// 请求验证规则
 			.authorizeRequests()
 				// 添加系统及客户定义的白名单地址
@@ -122,10 +146,10 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		http.headers().xssProtection().disable();
 		http.headers().disable();
 
-		FilterSecurityInterceptor securityInterceptor = createFilterSecurityInterceptor();
+		
 		http.addFilterAfter(securityInterceptor,
 				org.springframework.security.web.access.intercept.FilterSecurityInterceptor.class);
-		http.setSharedObject(FilterSecurityInterceptor.class, securityInterceptor);
+		http.setSharedObject(FilterSecurityInterceptor.class, securityInterceptor);*/
 	}
 
 	private FilterSecurityInterceptor createFilterSecurityInterceptor() throws Exception {
