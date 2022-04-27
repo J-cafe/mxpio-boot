@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,11 +63,11 @@ public class SystemController {
 	
 	@PostMapping("token/refresh")
 	@ApiOperation(value = "刷新token", notes = "双token机制下通过refreshToken刷新权限token", httpMethod = "POST")
-	public Result<Object> refreshToken(@RequestParam("refreshToken") String refreshToken) throws IOException {
-		TokenVo tokenVo;
-		tokenVo = onlineUserService.refreshToken(refreshToken, cacheProvider);
-		if(tokenVo != null) {
-			return Result.OK(tokenVo);
+	public Result<Object> refreshToken(@RequestBody TokenVo tokenVo) throws IOException {
+		TokenVo result;
+		result = onlineUserService.refreshToken(tokenVo.getRefreshToken(), cacheProvider);
+		if(result != null) {
+			return Result.OK(result);
 		}else {
 			return Result.noauth("refreshToken已失效");
 		}
