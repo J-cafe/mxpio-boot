@@ -61,6 +61,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 result.setCode(CommonConstant.HTTP_NO_AUTHZ);
                 result.setMessage("未登录");
                 httpServletResponse.getWriter().write(JSON.toJSONString(result));
+                filterChain.doFilter(httpServletRequest, httpServletResponse);
                 return;
             }
             CacheProvider cacheProvider = SpringUtil.getBean(CacheProvider.class);
@@ -74,6 +75,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     result.setCode(CommonConstant.HTTP_NO_AUTHZ);
                     result.setMessage("登陆失效，请重新登陆");
                     httpServletResponse.getWriter().write(JSON.toJSONString(result));
+                    filterChain.doFilter(httpServletRequest, httpServletResponse);
                     return;
             	} else {
             		JwtLoginToken jwtLoginToken = new JwtLoginToken(user, "", user.getAuthorities());
@@ -93,6 +95,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     result.setCode(CommonConstant.HTTP_NO_AUTHZ);
                     result.setMessage("登陆失效，请重新登陆");
                     httpServletResponse.getWriter().write(JSON.toJSONString(result));
+                    filterChain.doFilter(httpServletRequest, httpServletResponse);
                     return;
                 }
                 User user = JSON.parseObject(jwt.getSubject(), User.class);
@@ -103,8 +106,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
         	log.info(httpServletRequest.getRequestURI());
-        	log.error(e.getMessage());
-        	e.printStackTrace();
+        	log.error("错误信息：" + e.getMessage());
         }
     }
     
