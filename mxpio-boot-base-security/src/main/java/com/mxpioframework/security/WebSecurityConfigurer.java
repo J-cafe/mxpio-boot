@@ -37,6 +37,7 @@ import com.mxpioframework.common.util.SpringUtil;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.access.filter.JwtTokenFilter;
 import com.mxpioframework.security.access.filter.LoginFilter;
+import com.mxpioframework.security.access.handler.MxpioAccessDeniedHandler;
 import com.mxpioframework.security.access.intercept.FilterSecurityInterceptor;
 import com.mxpioframework.security.anthentication.JwtAuthenticationProvider;
 import com.mxpioframework.security.entity.User;
@@ -119,6 +120,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .permitAll();
         
         http.setSharedObject(FilterSecurityInterceptor.class, securityInterceptor);
+        http.exceptionHandling().accessDeniedHandler(new MxpioAccessDeniedHandler());
         
 		/*http.authenticationProvider(jwtAuthenticationProvider)
 			// 请求验证规则
