@@ -23,6 +23,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -68,6 +69,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AccessDecisionManager accessDecisionManager;
+	
+	@Autowired
+	private AccessDeniedHandler mxpioAccessDeniedHandler;
 
 	@Autowired
 	private UserDetailsService userDetailsService;
@@ -119,6 +123,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .permitAll();
         
         http.setSharedObject(FilterSecurityInterceptor.class, securityInterceptor);
+        http.exceptionHandling().accessDeniedHandler(mxpioAccessDeniedHandler);
         
 		/*http.authenticationProvider(jwtAuthenticationProvider)
 			// 请求验证规则

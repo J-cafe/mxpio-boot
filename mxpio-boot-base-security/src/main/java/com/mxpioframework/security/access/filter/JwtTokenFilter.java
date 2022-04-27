@@ -18,9 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mxpioframework.cache.provider.CacheProvider;
-import com.mxpioframework.common.CommonConstant;
 import com.mxpioframework.common.util.SpringUtil;
-import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.anthentication.JwtLoginToken;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.OnlineUserService;
@@ -55,12 +53,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         try {
         	String token = getJwtToken(httpServletRequest);
             if (StringUtils.isEmpty(token)) {
-                httpServletResponse.setContentType("application/json;charset=UTF-8");
+                /*httpServletResponse.setContentType("application/json;charset=UTF-8");
                 Result<String> result = new Result<>();
                 result.setSuccess(false);
                 result.setCode(CommonConstant.HTTP_NO_AUTHZ);
                 result.setMessage("未登录");
-                httpServletResponse.getWriter().write(JSON.toJSONString(result));
+                httpServletResponse.getWriter().write(JSON.toJSONString(result));*/
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
                 return;
             }
@@ -69,12 +67,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             if(cacheProvider != null) {
             	User user = onlineUserService.getOne(token, cacheProvider);
             	if(user == null) {
-            		httpServletResponse.setContentType("application/json;charset=UTF-8");
+            		/*httpServletResponse.setContentType("application/json;charset=UTF-8");
                     Result<String> result = new Result<>();
                     result.setSuccess(false);
                     result.setCode(CommonConstant.HTTP_NO_AUTHZ);
                     result.setMessage("登陆失效，请重新登陆");
-                    httpServletResponse.getWriter().write(JSON.toJSONString(result));
+                    httpServletResponse.getWriter().write(JSON.toJSONString(result));*/
                     filterChain.doFilter(httpServletRequest, httpServletResponse);
                     return;
             	} else {
@@ -89,12 +87,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 Date date = jwt.getExpiresAt();
                 
                 if(date.before(new Date())) {
-                	httpServletResponse.setContentType("application/json;charset=UTF-8");
+                	/*httpServletResponse.setContentType("application/json;charset=UTF-8");
                     Result<String> result = new Result<>();
                     result.setSuccess(false);
                     result.setCode(CommonConstant.HTTP_NO_AUTHZ);
                     result.setMessage("登陆失效，请重新登陆");
-                    httpServletResponse.getWriter().write(JSON.toJSONString(result));
+                    httpServletResponse.getWriter().write(JSON.toJSONString(result));*/
                     filterChain.doFilter(httpServletRequest, httpServletResponse);
                     return;
                 }
