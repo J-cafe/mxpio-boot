@@ -124,26 +124,26 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	
 	@GetMapping("factory/list")
 	@ApiOperation(value = "数据源", notes = "获取数据源", httpMethod = "GET")
-	public Collection<String> loadEntityManagerFactoryNames() {
-		return entityManagerFactoryNames;
+	public Result<Collection<String>> loadEntityManagerFactoryNames() {
+		return Result.OK(entityManagerFactoryNames);
 	}
 	
 	@GetMapping("factory/list/{entityManagerFactoryName}/list")
 	@ApiOperation(value = "领域类", notes = "根据数据源获取领域类", httpMethod = "GET")
-	public Collection<String> loadEntityClassNames(@PathVariable("entityManagerFactoryName") String entityManagerFactoryName) {
-		return entityClassNameMap.get(entityManagerFactoryName);
+	public Result<Collection<String>> loadEntityClassNames(@PathVariable("entityManagerFactoryName") String entityManagerFactoryName) {
+		return Result.OK(entityClassNameMap.get(entityManagerFactoryName));
 	}
 	
 	@GetMapping("parser/pre/list")
 	@ApiOperation(value = "前置处理器", notes = "获取前置处理器", httpMethod = "GET")
-	public Collection<Map<String, String>> loadCellPreParsers() {
-		return cellPreParsers;
+	public Result<Collection<Map<String, String>>> loadCellPreParsers() {
+		return Result.OK(cellPreParsers);
 	}
 	
 	@GetMapping("parser/post/list")
 	@ApiOperation(value = "后置处理器", notes = "获取后置处理器", httpMethod = "GET")
-	public Collection<Map<String, String>> loadCellPostParsers() {
-		return cellPostParsers;
+	public Result<Collection<Map<String, String>>> loadCellPostParsers() {
+		return Result.OK(cellPostParsers);
 	}
 	
 	@Transactional(readOnly = false)
