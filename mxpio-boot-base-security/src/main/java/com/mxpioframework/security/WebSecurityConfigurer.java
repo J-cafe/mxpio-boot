@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AccountStatusException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
@@ -23,21 +24,23 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.www.NonceExpiredException;
 import org.springframework.stereotype.Component;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mxpioframework.cache.provider.CacheProvider;
+import com.mxpioframework.common.CommonConstant;
 import com.mxpioframework.common.util.SpringUtil;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.access.filter.JwtTokenFilter;
 import com.mxpioframework.security.access.filter.LoginFilter;
-import com.mxpioframework.security.access.handler.MxpioAccessDeniedHandler;
 import com.mxpioframework.security.access.intercept.FilterSecurityInterceptor;
 import com.mxpioframework.security.anthentication.JwtAuthenticationProvider;
 import com.mxpioframework.security.entity.User;
@@ -92,8 +95,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		LoginFilter jwtLoginFilter = new LoginFilter();
 		jwtLoginFilter.setAuthenticationManager(authenticationManagerBean());
         jwtLoginFilter.setAuthenticationSuccessHandler(new JwtLoginSuccessHandler());
-        jwtLoginFilter.setAuthenticationFailureHandler(new HttpStatusLoginFailureHandler());
-        
+        // jwtLoginFilter.setAuthenticationFailureHandler(new HttpStatusLoginFailureHandler());
         JwtTokenFilter jwtTokenFilter = new JwtTokenFilter();
         
         FilterSecurityInterceptor securityInterceptor = createFilterSecurityInterceptor();
@@ -109,6 +111,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 				.antMatchers(Constants.SWAGGER_WHITELIST).permitAll()
                 .anyRequest().authenticated()  // 所有请求需要身份认证
                 .and()
+                .exceptionHandling()
+                .accessDeniedHandler(new MxpioAccessDeniedHandler())
+                .and()
                 .addFilterAt(jwtLoginFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(jwtTokenFilter, LoginFilter.class)
                 .addFilterAfter(securityInterceptor,
@@ -117,41 +122,13 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .logoutUrl(URL_PREFIX + logoutPath)
                 .logoutSuccessUrl("/login")// 设置注销成功后跳转页面，默认是跳转到登录页面;
                 .logoutSuccessHandler(new JwtLogoutSuccessHandler())
-                .permitAll();
+                .permitAll()
+                .and()
+    			.rememberMe();
         
         http.setSharedObject(FilterSecurityInterceptor.class, securityInterceptor);
-        http.exceptionHandling().accessDeniedHandler(new MxpioAccessDeniedHandler());
+        http.exceptionHandling().authenticationEntryPoint(new MxpioAuthenticationEntryPoint()).accessDeniedHandler(new MxpioAccessDeniedHandler());
         
-		/*http.authenticationProvider(jwtAuthenticationProvider)
-			// 请求验证规则
-			.authorizeRequests()
-				// 添加系统及客户定义的白名单地址
-				.antMatchers(mergeAnonymous()).permitAll()
-				// 添加SWAGGER地址
-				.antMatchers(Constants.SWAGGER_WHITELIST).permitAll()
-				// 剩余请求全部验证
-				.anyRequest().authenticated()
-				.and()
-			.logout()
-				.logoutUrl(URL_PREFIX + logoutPath)
-				.logoutSuccessHandler(new JwtLogoutSuccessHandler())
-				.permitAll()
-				.and()
-			.rememberMe();
-
-		http.sessionManagement().disable()  //禁用session
-	    	.formLogin().disable() //禁用form登录
-	    	.csrf().disable()
-	    	.addFilterAt(jwtLoginFilter, UsernamePasswordAuthenticationFilter.class) // 添加拦截器
-            .addFilterAfter(jwtTokenFilter, LoginFilter.class);;
-		http.headers().frameOptions().disable();
-		http.headers().xssProtection().disable();
-		http.headers().disable();
-
-		
-		http.addFilterAfter(securityInterceptor,
-				org.springframework.security.web.access.intercept.FilterSecurityInterceptor.class);
-		http.setSharedObject(FilterSecurityInterceptor.class, securityInterceptor);*/
 	}
 
 	private FilterSecurityInterceptor createFilterSecurityInterceptor() throws Exception {
@@ -214,11 +191,11 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		}
 	}
 
-	//登录失败处理
-	class HttpStatusLoginFailureHandler implements AuthenticationFailureHandler {
+	class MxpioAuthenticationEntryPoint implements AuthenticationEntryPoint {
+
 		@Override
-		public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-				AuthenticationException exception) throws IOException, ServletException {
+		public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
+				throws IOException, ServletException {
 			response.setContentType("application/json;charset=UTF-8");
 			if(exception instanceof KaptchaAuthenticationException) {
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth(exception.getMessage())));
@@ -227,7 +204,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 			}else if(exception instanceof AccountStatusException){
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("账号已锁定")));
 			}else if(exception instanceof InsufficientAuthenticationException){
-				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("未认证的客户端")));
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("Token异常")));
 			}else if(exception instanceof NonceExpiredException){
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("Nonce已过期")));
 			}else if(exception instanceof UsernameNotFoundException){
@@ -235,7 +212,22 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 			}else {
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("登录异常")));
 			}
-			// response.setStatus(HttpStatus.UNAUTHORIZED.value());
 		}
+		
+	}
+	
+	class MxpioAccessDeniedHandler implements AccessDeniedHandler {
+
+		@Override
+		public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException arg2)
+				throws IOException, ServletException {
+			response.setContentType("application/json;charset=UTF-8");
+	        Result<String> result = new Result<>();
+	        result.setSuccess(false);
+	        result.setCode(CommonConstant.HTTP_NO_AUTHZ_403);
+	        result.setMessage("登陆失效，请重新登陆");
+	        response.getWriter().write(JSON.toJSONString(result));
+		}
+
 	}
 }
