@@ -4,9 +4,11 @@
 	<parent>
 		<groupId>com.mxpio</groupId>
 		<artifactId>mxpio-boot-parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 	</parent>
 	<artifactId>mxpio-boot-base-excel</artifactId>
+	<name>Excel模块</name>
+	<description>Excel模块</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.mxpio</groupId>

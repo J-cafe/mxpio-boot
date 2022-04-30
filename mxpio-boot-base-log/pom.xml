@@ -5,9 +5,11 @@
 	<parent>
 		<groupId>com.mxpio</groupId>
 		<artifactId>mxpio-boot-parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 	</parent>
 	<artifactId>mxpio-boot-base-log</artifactId>
+	<name>日志模块</name>
+	<description>日志模块</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.mxpio</groupId>
