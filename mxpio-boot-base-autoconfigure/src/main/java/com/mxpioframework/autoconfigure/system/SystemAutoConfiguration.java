@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.mxpioframework.autoconfigure.security.SecurityAutoConfiguration;
+import com.mxpioframework.common.CommonConstant;
+import com.mxpioframework.common.vo.ModuleVO;
 import com.mxpioframework.system.SystemConfiguration;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,7 @@ public class SystemAutoConfiguration {
 	
 	public SystemAutoConfiguration() {
 		log.info("[AutoConfiguration==>]:System Module Loading");
+		CommonConstant.addModule(new ModuleVO("System","系统模块"));
 	}
 
 }

@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.mxpioframework.cache.CacheConfiguration;
+import com.mxpioframework.common.CommonConstant;
+import com.mxpioframework.common.vo.ModuleVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +23,8 @@ public class CacheAutoConfiguration {
 	
 	public CacheAutoConfiguration() {
 		log.info("[AutoConfiguration==>]:Cache Module Loading");
+		
+		CommonConstant.addModule(new ModuleVO("Cache","缓存模块"));
 	}
 
 }

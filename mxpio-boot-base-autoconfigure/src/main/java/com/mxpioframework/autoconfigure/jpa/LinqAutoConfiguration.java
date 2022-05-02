@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.mxpioframework.common.CommonConfiguration;
+import com.mxpioframework.common.CommonConstant;
+import com.mxpioframework.common.vo.ModuleVO;
 import com.mxpioframework.jpa.LinqConfiguration;
 
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,7 @@ public class LinqAutoConfiguration {
 	
 	public LinqAutoConfiguration() {
 		log.info("[AutoConfiguration==>]:Linq Module Loading");
+		CommonConstant.addModule(new ModuleVO("Linq","LinqJpa模块"));
 	}
 
 }

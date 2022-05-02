@@ -8,6 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
 
+import com.mxpioframework.common.CommonConstant;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -20,12 +22,18 @@ public class MBootApplication {
         String ip = InetAddress.getLocalHost().getHostAddress();
         String port = env.getProperty("server.port");
         String path = env.getProperty("server.servlet.context-path");
+        StringBuffer s = new StringBuffer();
+        CommonConstant.getModules().forEach(item -> {
+        	s.append("\t--" + item.getModuleKey() + "：" + item.getModuleName() + "\n");
+		});
         log.info("\n----------------------------------------------------------\n\t" +
-            "Application MxpIO-Boot is running! Access URLs:\n\t" +
-            "Local: \t\thttp://localhost:" + port + path + "/\n\t" +
-            "External: \thttp://" + ip + ":" + port + path + "/\n\t" +
-            "Swagger文档: \thttp://" + ip + ":" + port + path + "/doc.html\n" +
-            "----------------------------------------------------------");
+                "Application MxpIO-Boot is running! Access URLs:\n\t" +
+                "Local: \t\thttp://localhost:" + port + path + "/\n\t" +
+                "External: \thttp://" + ip + ":" + port + path + "/\n\t" +
+                "Swagger文档: \thttp://" + ip + ":" + port + path + "/doc.html\n\t" +
+                "加载模块: \n" +
+                s.toString() +
+                "----------------------------------------------------------");
 	}
 
 }

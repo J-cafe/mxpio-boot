@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import com.mxpioframework.common.CommonConstant;
+import com.mxpioframework.common.vo.ModuleVO;
 import com.mxpioframework.jpa.LinqConfiguration;
 import com.mxpioframework.security.SecurityConfiguration;
 
@@ -29,6 +31,7 @@ public class SecurityAutoConfiguration {
 	
 	public SecurityAutoConfiguration() {
 		log.info("[AutoConfiguration==>]:Security Module Loading");
+		CommonConstant.addModule(new ModuleVO("Security","权鉴模块"));
 	}
 
 	@ConditionalOnClass(SimpleKeyGenerator.class)
