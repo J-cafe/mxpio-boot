@@ -129,8 +129,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	@Override
 	@Transactional(readOnly = true)
 	public T getById(Class<T> clazz, String id) {
-		JpaUtil.linq(clazz).idEqual(id).findOne();
-		return JpaUtil.linq(clazz).idEqual(id).findOne();
+		return JpaUtil.getOne(clazz, id);
 	}
 
 	@Override
