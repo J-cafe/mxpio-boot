@@ -24,11 +24,11 @@ public class SerialNumber extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "SN_EXPRESSION_", updatable = false)
+	@Column(name = "SN_EXPRESSION_")
 	@ApiModelProperty(value = "序列号表达式")
 	private String snExpression;
 	
-	@Column(name = "CURRENT_RECORD_", updatable = false)
+	@Column(name = "CURRENT_RECORD_")
 	@ApiModelProperty(value = "当前记录")
 	private String currentRecord;
 
