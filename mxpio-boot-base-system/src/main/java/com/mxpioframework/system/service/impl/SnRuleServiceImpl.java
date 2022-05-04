@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mxpioframework.system.entity.SerialNumber;
@@ -18,6 +19,7 @@ import com.mxpioframework.system.service.SnRuleService;
 public class SnRuleServiceImpl extends BaseServiceImpl<SerialNumber> implements SnRuleService {
 
 	@Override
+	@Transactional(readOnly = false)
 	public Object execute(String snExpression, JSONObject formData) {
 		// 判断是否有日期表达式，有则先替换
 		if (snExpression.contains("${YY}") || snExpression.contains("${YYYY}") || snExpression.contains("${MM}")
