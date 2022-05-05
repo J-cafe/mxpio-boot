@@ -133,7 +133,7 @@ mvn clean package spring-boot:repackage
 启动项目
 
 ```bash
-java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.3-SNAPSHOT.jar
+java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.3.jar
 ```
 
 ### 6.2新建Maven项目运行
@@ -145,7 +145,7 @@ java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.3-SNAPSHOT.jar
 <parent>
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-parent</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.3</version>
 </parent>
 ```
 
@@ -240,7 +240,7 @@ mvn clean package spring-boot:repackage
 启动项目
 
 ```bash
-java -jar target\mxpio-boot-example-1.0.3-SNAPSHOT.jar
+java -jar target\mxpio-boot-example-1.0.3.jar
 ```
 
 ### 6.3源码运行
@@ -306,7 +306,7 @@ mvn clean package spring-boot:repackage
 启动项目
 
 ```bash
-java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.3-SNAPSHOT.jar
+java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.3.jar
 ```
 
 ## 7.开发文档
