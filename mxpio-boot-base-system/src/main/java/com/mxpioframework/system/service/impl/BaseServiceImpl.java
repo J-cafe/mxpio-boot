@@ -1,5 +1,6 @@
 package com.mxpioframework.system.service.impl;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -128,7 +129,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	
 	@Override
 	@Transactional(readOnly = true)
-	public T getById(Class<T> clazz, String id) {
+	public <ID extends Serializable> T getById(Class<T> clazz, ID id) {
 		return JpaUtil.getOne(clazz, id);
 	}
 

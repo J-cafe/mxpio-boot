@@ -1,5 +1,6 @@
 package com.mxpioframework.system.service;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -137,7 +138,7 @@ public interface BaseService<T extends BaseEntity> {
 	 * @param id
 	 * @return
 	 */
-	public T getById(Class<T> clazz, String id);
+	public <ID extends Serializable> T getById(Class<T> clazz, ID id);
 	
 	/**
 	 * 分页查询
