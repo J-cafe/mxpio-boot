@@ -92,7 +92,7 @@ public interface BaseService<T extends BaseEntity> {
 	 * @param clazz
 	 * @param id
 	 */
-	public void delete(Class<T> clazz, String id);
+	public <ID extends Serializable> void delete(Class<T> clazz, ID id);
 	
 	/**
 	 * 通用智能删除By id（智能删除默认会处理@Transient属性）
@@ -100,14 +100,14 @@ public interface BaseService<T extends BaseEntity> {
 	 * @param id
 	 * @param crudPolicy
 	 */
-	public void delete(Class<T> clazz, String id, CrudPolicy crudPolicy);
+	public <ID extends Serializable> void delete(Class<T> clazz, ID id, CrudPolicy crudPolicy);
 	
 	/**
 	 * 通用删除
 	 * @param clazz
 	 * @param id
 	 */
-	public void remove(Class<T> clazz, String id);
+	public <ID extends Serializable> void remove(Class<T> clazz, ID id);
 	
 	/**
 	 * 通用批量删除

@@ -88,7 +88,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	
 	@Override
 	@Transactional(readOnly = false)
-	public void delete(Class<T> clazz, String id) {
+	public <ID extends Serializable> void delete(Class<T> clazz, ID id) {
 		T entity = JpaUtil.getOne(clazz, id);
 		JpaUtil.delete(entity);
 	}
@@ -102,14 +102,14 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 
 	@Override
 	@Transactional(readOnly = false)
-	public void delete(Class<T> clazz, String id, CrudPolicy crudPolicy) {
+	public <ID extends Serializable> void delete(Class<T> clazz, ID id, CrudPolicy crudPolicy) {
 		T entity = JpaUtil.getOne(clazz, id);
 		JpaUtil.delete(entity, crudPolicy);
 	}
 	
 	@Override
 	@Transactional(readOnly = false)
-	public void remove(Class<T> clazz, String id) {
+	public <ID extends Serializable> void remove(Class<T> clazz, ID id) {
 		T entity = JpaUtil.getOne(clazz, id);
 		JpaUtil.remove(entity);
 	}
