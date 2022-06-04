@@ -1,8 +1,11 @@
 package com.mxpioframework.system.service.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +15,7 @@ import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.policy.CrudPolicy;
 import com.mxpioframework.jpa.query.Criteria;
+import com.mxpioframework.system.entity.TreeAble;
 import com.mxpioframework.system.service.BaseService;
 
 public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
@@ -125,6 +129,40 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	@Transactional(readOnly = true)
 	public List<T> list(Class<T> clazz, Criteria c) {
 		return JpaUtil.linq(clazz).where(c).list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional(readOnly = true)
+	public List<T> tree(Class<T> clazz, Criteria c) {
+		List<T> result = new ArrayList<T>();
+		Map<String, List<T>> childrenMap = new HashMap<String, List<T>>();
+		List<T> records = JpaUtil.linq(clazz).where(c).list();
+		for(T record : records){
+			if(record instanceof TreeAble){
+				if (childrenMap.containsKey(((TreeAble<T>) record).getCurrentNodeKey())) {
+					((TreeAble<T>) record).setTreeChildren(childrenMap.get(((TreeAble<T>) record).getCurrentNodeKey()));
+				} else {
+					((TreeAble<T>) record).setTreeChildren(new ArrayList<T>());
+					childrenMap.put(((TreeAble<T>) record).getCurrentNodeKey(), ((TreeAble<T>) record).getTreeChildren());
+				}
+
+				if (((TreeAble<T>) record).getParentNodeKey() == null) {
+					result.add(record);
+				} else {
+					List<T> children;
+					if (childrenMap.containsKey(((TreeAble<T>) record).getParentNodeKey())) {
+						children = childrenMap.get(((TreeAble<T>) record).getParentNodeKey());
+					} else {
+						children = new ArrayList<T>();
+						childrenMap.put(((TreeAble<T>) record).getParentNodeKey(), children);
+					}
+					children.add(record);
+				}
+			}
+			
+		}
+		return result;
 	}
 	
 	@Override

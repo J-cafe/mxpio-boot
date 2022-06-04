@@ -133,6 +133,14 @@ public interface BaseService<T extends BaseEntity> {
 	public List<T> list(Class<T> clazz, Criteria c);
 	
 	/**
+	 * 通用树查询
+	 * @param clazz
+	 * @param c
+	 * @return
+	 */
+	public List<T> tree(Class<T> clazz, Criteria c);
+	
+	/**
 	 * 根据ID查询
 	 * @param clazz
 	 * @param id

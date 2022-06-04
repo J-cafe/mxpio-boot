@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.assertj.core.util.Arrays;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.Order;
 import com.mxpioframework.security.cache.SecurityCacheEvict;
 import com.mxpioframework.security.entity.Dept;
+import com.mxpioframework.security.entity.RoleDept;
 import com.mxpioframework.security.entity.RoleGrantedAuthority;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.entity.UserDept;
@@ -60,14 +63,6 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 	@Transactional(readOnly = false)
 	public void saveDepts(List<Dept> depts) {
 		JpaUtil.save(depts, new SmartCrudPolicyAdapter() {
-
-			@Override
-			public boolean beforeDelete(CrudContext context) {
-				Dept dept = context.getEntity();
-				JpaUtil.lind(UserDept.class).equal("deptId", dept.getId()).delete();
-				return true;
-			}
-
 			@Override
 			public void apply(CrudContext context) {
 				Dept dept = context.getEntity();
@@ -81,15 +76,51 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 			}
 		});
 	}
+	
+	@Override
+	@SecurityCacheEvict
+	@Transactional(readOnly = false)
+	public void updateDepts(List<Dept> depts) {
+		JpaUtil.update(depts, new SmartCrudPolicyAdapter() {
+			@Override
+			public void apply(CrudContext context) {
+				Dept dept = context.getEntity();
+				if (dept.getFaDeptId() == null) {
+					Dept parent = context.getParent();
+					if (parent != null) {
+						dept.setFaDeptId(parent.getId());
+					}
+				}
+				super.apply(context);
+			}
+		});
+	}
+	
+	@Override
+	@SecurityCacheEvict
+	@Transactional(readOnly = false)
+	public void deleteDepts(String[] deptIds) {
+		for(String deptId : deptIds){
+			Dept dept = JpaUtil.getOne(Dept.class, deptId);
+			JpaUtil.delete(dept, new SmartCrudPolicyAdapter() {
+				@Override
+				public boolean beforeDelete(CrudContext context) {
+					Dept dept = context.getEntity();
+					JpaUtil.lind(UserDept.class).equal("deptId", dept.getId()).delete();
+					return true;
+				}
+			});
+		}
+	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public void loadDeptsWithout(Pageable pageable, Criteria criteria, String roleId) {
+	public Page<Dept> loadDeptsWithout(Pageable pageable, Criteria criteria, String roleId) {
 		List<Order> orders = new ArrayList<Order>();
 		if(criteria != null){
 			orders = criteria.getOrders();
 		}
-		JpaUtil
+		return JpaUtil
 			.linq(Dept.class)
 			.where(criteria)
 			.notExists(RoleGrantedAuthority.class)
@@ -104,12 +135,12 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 	
 	@Override
 	@Transactional(readOnly = true)
-	public void loadDeptsWithin(Pageable pageable, Criteria criteria, String roleId) {
+	public Page<Dept> loadDeptsWithin(Pageable pageable, Criteria criteria, String roleId) {
 		List<Order> orders = new ArrayList<Order>();
 		if(criteria != null){
 			orders = criteria.getOrders();
 		}
-		JpaUtil
+		return JpaUtil
 			.linq(Dept.class)
 			.where(criteria)
 			.exists(RoleGrantedAuthority.class)
@@ -124,12 +155,12 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 	
 	@Override
 	@Transactional(readOnly = true)
-	public void loadUsersWithout(Pageable pageable, Criteria criteria, String deptId) {
+	public Page<User> loadUsersWithout(Pageable pageable, Criteria criteria, String deptId) {
 		List<Order> orders = new ArrayList<Order>();
 		if(criteria != null){
 			orders = criteria.getOrders();
 		}
-		JpaUtil
+		return JpaUtil
 			.linq(User.class)
 			.where(criteria)
 			.notExists(UserDept.class)
@@ -144,12 +175,12 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 	
 	@Override
 	@Transactional(readOnly = true)
-	public void loadUsersWithin(Pageable pageable, Criteria criteria, String deptId) {
+	public Page<User> loadUsersWithin(Pageable pageable, Criteria criteria, String deptId) {
 		List<Order> orders = new ArrayList<Order>();
 		if(criteria != null){
 			orders = criteria.getOrders();
 		}
-		JpaUtil
+		return JpaUtil
 			.linq(User.class)
 			.where(criteria)
 			.exists(UserDept.class)
@@ -160,6 +191,32 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 				.asc("username")
 			.endIf()
 			.paging(pageable);
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public void saveUserDepts(List<UserDept> userDepts) {
+		JpaUtil.save(userDepts);
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public int deleteUserDepts(String deptId, String userIds) {
+		String[] userId = userIds.split(";");
+		return JpaUtil.lind(UserDept.class).equal("deptId", deptId).in("userId", Arrays.asList(userId)).delete();
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public void saveRoleDepts(List<RoleDept> userDepts) {
+		JpaUtil.save(userDepts);
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public int deleteRoleDepts(String roleId, String deptIds) {
+		String[] deptId = deptIds.split(";");
+		return JpaUtil.lind(RoleDept.class).equal("roleId", roleId).in("deptId", Arrays.asList(deptId)).delete();
 	}
 
 }
