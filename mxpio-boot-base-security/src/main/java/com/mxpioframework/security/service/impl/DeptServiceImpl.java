@@ -80,8 +80,46 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 	@Override
 	@SecurityCacheEvict
 	@Transactional(readOnly = false)
+	public void saveDept(Dept dept) {
+		JpaUtil.save(dept, new SmartCrudPolicyAdapter() {
+			@Override
+			public void apply(CrudContext context) {
+				Dept dept = context.getEntity();
+				if (dept.getFaDeptId() == null) {
+					Dept parent = context.getParent();
+					if (parent != null) {
+						dept.setFaDeptId(parent.getId());
+					}
+				}
+				super.apply(context);
+			}
+		});
+	}
+	
+	@Override
+	@SecurityCacheEvict
+	@Transactional(readOnly = false)
 	public void updateDepts(List<Dept> depts) {
 		JpaUtil.update(depts, new SmartCrudPolicyAdapter() {
+			@Override
+			public void apply(CrudContext context) {
+				Dept dept = context.getEntity();
+				if (dept.getFaDeptId() == null) {
+					Dept parent = context.getParent();
+					if (parent != null) {
+						dept.setFaDeptId(parent.getId());
+					}
+				}
+				super.apply(context);
+			}
+		});
+	}
+	
+	@Override
+	@SecurityCacheEvict
+	@Transactional(readOnly = false)
+	public void updateDept(Dept dept) {
+		JpaUtil.update(dept, new SmartCrudPolicyAdapter() {
 			@Override
 			public void apply(CrudContext context) {
 				Dept dept = context.getEntity();

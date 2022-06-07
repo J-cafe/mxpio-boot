@@ -26,14 +26,26 @@ public interface DeptService extends BaseService<Dept> {
 	void saveDepts(List<Dept> depts);
 	
 	/**
+	 * 新增部门信息
+	 * @param dept
+	 */
+	void saveDept(Dept dept);
+	
+	/**
 	 * 更新部门信息
 	 * @param depts
 	 */
 	void updateDepts(List<Dept> depts);
 	
 	/**
+	 * 更新部门信息
+	 * @param dept
+	 */
+	void updateDept(Dept dept);
+	
+	/**
 	 * 删除部门信息
-	 * @param depts
+	 * @param deptId
 	 */
 	void deleteDepts(String[] deptId);
 	
@@ -42,6 +54,7 @@ public interface DeptService extends BaseService<Dept> {
 	 * @param pageable
 	 * @param criteria
 	 * @param roleId
+	 * @return
 	 */
 	Page<Dept> loadDeptsWithout(Pageable pageable, Criteria criteria, String roleId);
 	
@@ -50,6 +63,7 @@ public interface DeptService extends BaseService<Dept> {
 	 * @param pageable
 	 * @param criteria
 	 * @param roleId
+	 * @return
 	 */
 	Page<Dept> loadDeptsWithin(Pageable pageable, Criteria criteria, String roleId);
 	
@@ -58,6 +72,7 @@ public interface DeptService extends BaseService<Dept> {
 	 * @param pageable
 	 * @param criteria
 	 * @param deptId
+	 * @return
 	 */
 	Page<User> loadUsersWithout(Pageable pageable, Criteria criteria, String deptId);
 	
@@ -66,6 +81,7 @@ public interface DeptService extends BaseService<Dept> {
 	 * @param pageable
 	 * @param criteria
 	 * @param deptId
+	 * @return
 	 */
 	Page<User> loadUsersWithin(Pageable pageable, Criteria criteria, String deptId);
 
@@ -79,6 +95,7 @@ public interface DeptService extends BaseService<Dept> {
 	 * 删除关联用户
 	 * @param deptId
 	 * @param userIds
+	 * @return
 	 */
 	int deleteUserDepts(String deptId, String userIds);
 
