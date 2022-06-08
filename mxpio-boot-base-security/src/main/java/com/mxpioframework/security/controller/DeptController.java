@@ -134,7 +134,7 @@ public class DeptController {
 	@DeleteMapping("/remove/{deptIds}")
 	@ApiOperation(value = "删除部门", notes = "删除部门信息", httpMethod = "DELETE")
 	public Result<List<Dept>> remove(@PathVariable(name = "deptIds", required = true) String deptIds) throws Exception {
-		String[] deptId = deptIds.split(";");
+		String[] deptId = deptIds.split(",");
 		deptService.deleteDepts(deptId);
 		return Result.OK("删除部门成功",null);
 	}

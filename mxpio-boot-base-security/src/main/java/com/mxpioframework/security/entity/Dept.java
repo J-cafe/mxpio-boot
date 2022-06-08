@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.mxpioframework.common.annotation.Dict;
 import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
@@ -29,6 +30,7 @@ public class Dept extends BaseEntity implements Actor {
 
 	@ApiModelProperty(value = "部门类型")
 	@Column(name = "DEPT_TYPE_")
+	@Dict(dicCode = "MB_SYSTEM_DEPT_TYPE")
 	private Integer deptType;
 	
 	@ApiModelProperty(value = "部门代码")

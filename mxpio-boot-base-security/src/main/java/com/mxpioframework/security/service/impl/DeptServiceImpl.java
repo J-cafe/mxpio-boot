@@ -240,7 +240,7 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 	@Override
 	@Transactional(readOnly = false)
 	public int deleteUserDepts(String deptId, String userIds) {
-		String[] userId = userIds.split(";");
+		String[] userId = userIds.split(",");
 		return JpaUtil.lind(UserDept.class).equal("deptId", deptId).in("userId", Arrays.asList(userId)).delete();
 	}
 

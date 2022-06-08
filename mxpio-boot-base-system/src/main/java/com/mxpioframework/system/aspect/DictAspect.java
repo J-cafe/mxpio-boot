@@ -4,12 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mxpioframework.common.annotation.Dict;
 import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.system.SystemConstant;
-import com.mxpioframework.system.annotation.Dict;
 import com.mxpioframework.system.entity.DictItem;
 
 import lombok.extern.slf4j.Slf4j;

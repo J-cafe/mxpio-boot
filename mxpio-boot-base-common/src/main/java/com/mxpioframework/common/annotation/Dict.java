@@ -1,4 +1,4 @@
-package com.mxpioframework.system.annotation;
+package com.mxpioframework.common.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
