@@ -110,21 +110,21 @@ public class RoleController {
 		return Result.OK(users);
 	}
 	
-	@PostMapping("/list/{id}/add/users")
-	@ApiOperation(value = "添加绑定用户", notes = "获取绑定用户列表", httpMethod = "POST")
-	public Result<?> addUsers(
+	@PostMapping("/list/{id}/add/actors")
+	@ApiOperation(value = "添加绑定权限演员", notes = "获取绑定权限演员列表", httpMethod = "POST")
+	public Result<?> addActors(
 			@PathVariable(name = "id",required = true) String id,
 			@RequestBody List<String> actorIds) throws Exception {
-		roleService.addUsers(id, actorIds);
+		roleService.addActors(id, actorIds);
 		return Result.OK();
 	}
 	
-	@PostMapping("/list/{id}/remove/users")
-	@ApiOperation(value = "添加绑定用户", notes = "获取绑定用户列表", httpMethod = "POST")
-	public Result<?> removeUsers(
+	@PostMapping("/list/{id}/remove/actors")
+	@ApiOperation(value = "添加绑定权限演员", notes = "获取绑定权限演员列表", httpMethod = "POST")
+	public Result<?> removeActors(
 			@PathVariable(name = "id",required = true) String id,
 			@RequestBody List<String> actorIds) throws Exception {
-		roleService.removeUsers(id, actorIds);
+		roleService.removeActors(id, actorIds);
 		return Result.OK();
 	}
 	

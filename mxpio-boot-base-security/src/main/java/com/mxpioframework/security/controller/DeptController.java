@@ -20,7 +20,6 @@ import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.security.entity.Dept;
-import com.mxpioframework.security.entity.RoleGrantedAuthority;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.entity.UserDept;
 import com.mxpioframework.security.service.DeptService;
@@ -63,21 +62,6 @@ public class DeptController {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
 		return Result.OK(deptService.loadDeptsWithin(pageAble, c, roleId));
-	}
-	
-	@PostMapping("/role/add")
-	@ApiOperation(value = "关联角色", notes = "关联角色", httpMethod = "POST")
-	public Result<List<RoleGrantedAuthority>> roleAdd(@RequestBody List<RoleGrantedAuthority> roleDepts) throws Exception {
-		deptService.saveRoleDepts(roleDepts);
-		return Result.OK("关联角色成功",roleDepts);
-	}
-	
-	@DeleteMapping("/role/delete/{roleId}/{deptIds}")
-	@ApiOperation(value = "删除关联角色", notes = "删除关联角色", httpMethod = "DELETE")
-	public Result<List<RoleGrantedAuthority>> roleDelete(@PathVariable(name = "roleId", required = true) String roleId,
-			@PathVariable(name = "deptIds", required = true) String deptIds) throws Exception {
-		deptService.deleteRoleDepts(roleId,deptIds);
-		return Result.OK("删除关联用户成功", null);
 	}
 	
 	@GetMapping("/user/without/{deptId}")

@@ -87,7 +87,7 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	@Transactional(readOnly = false)
 	@SecurityCacheEvict
-	public void addUsers(String id, List<String> actorIds) {
+	public void addActors(String id, List<String> actorIds) {
 		for(String actorId : actorIds) {
 			RoleGrantedAuthority authority = new RoleGrantedAuthority();
 			authority.setActorId(actorId);
@@ -99,7 +99,7 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	@Transactional(readOnly = false)
 	@SecurityCacheEvict
-	public void removeUsers(String id, List<String> actorIds) {
+	public void removeActors(String id, List<String> actorIds) {
 		JpaUtil.lind(RoleGrantedAuthority.class).equal("roleId", id).in("actorId", actorIds).delete();
 	}
 
