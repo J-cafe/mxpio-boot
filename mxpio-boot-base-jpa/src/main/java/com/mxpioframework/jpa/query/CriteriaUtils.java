@@ -132,6 +132,10 @@ public class CriteriaUtils {
 			linq.notEqual(property, value);
 		} else if (Operator.LIKE.equals(operator)) {
 			linq.like(property, "%" + (String) value + "%");
+		} else if (Operator.IN.equals(operator)) {
+			linq.in(property, value);			
+		} else if (Operator.NOT_IN.equals(operator)) {
+			linq.notIn(property, value);
 		}
 
 	}
