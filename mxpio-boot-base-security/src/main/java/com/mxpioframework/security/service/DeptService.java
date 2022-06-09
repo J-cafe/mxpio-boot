@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.security.entity.Dept;
-import com.mxpioframework.security.entity.RoleDept;
+import com.mxpioframework.security.entity.RoleGrantedAuthority;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.entity.UserDept;
 
@@ -103,7 +103,7 @@ public interface DeptService extends BaseService<Dept> {
 	 * 添加关联角色
 	 * @param userDepts
 	 */
-	void saveRoleDepts(List<RoleDept> userDepts);
+	void saveRoleDepts(List<RoleGrantedAuthority> userDepts);
 
 	/**
 	 * 删除关联角色

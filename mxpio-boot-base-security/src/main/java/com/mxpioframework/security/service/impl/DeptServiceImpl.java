@@ -1,7 +1,6 @@
 package com.mxpioframework.security.service.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +17,6 @@ import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.Order;
 import com.mxpioframework.security.cache.SecurityCacheEvict;
 import com.mxpioframework.security.entity.Dept;
-import com.mxpioframework.security.entity.RoleDept;
 import com.mxpioframework.security.entity.RoleGrantedAuthority;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.entity.UserDept;
@@ -241,20 +239,20 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 	@Transactional(readOnly = false)
 	public int deleteUserDepts(String deptId, String userIds) {
 		String[] userId = userIds.split(",");
-		return JpaUtil.lind(UserDept.class).equal("deptId", deptId).in("userId", Arrays.asList(userId)).delete();
+		return JpaUtil.lind(UserDept.class).equal("deptId", deptId).in("userId",(Object[]) userId).delete();
 	}
 
 	@Override
 	@Transactional(readOnly = false)
-	public void saveRoleDepts(List<RoleDept> userDepts) {
-		JpaUtil.save(userDepts);
+	public void saveRoleDepts(List<RoleGrantedAuthority> roleDepts) {
+		JpaUtil.save(roleDepts);
 	}
 
 	@Override
 	@Transactional(readOnly = false)
 	public int deleteRoleDepts(String roleId, String deptIds) {
 		String[] deptId = deptIds.split(";");
-		return JpaUtil.lind(RoleDept.class).equal("roleId", roleId).in("deptId", Arrays.asList(deptId)).delete();
+		return JpaUtil.lind(RoleGrantedAuthority.class).equal("roleId", roleId).in("actorId",(Object[]) deptId).delete();
 	}
 
 }
