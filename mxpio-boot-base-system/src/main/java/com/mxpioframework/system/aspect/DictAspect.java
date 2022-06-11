@@ -7,10 +7,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mxpioframework.common.annotation.Dict;
 import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.common.vo.Result;
-import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.system.SystemConstant;
 import com.mxpioframework.system.entity.DictItem;
+import com.mxpioframework.system.service.DictService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,6 +19,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
@@ -36,6 +37,9 @@ import java.util.regex.Pattern;
 @Component
 @Slf4j
 public class DictAspect {
+	
+	@Autowired
+	private DictService dictService;
 	
     private Pattern pattern = Pattern.compile("\\$\\{\\S+\\}");
     // 定义切点Pointcut
@@ -156,7 +160,8 @@ public class DictAspect {
             if (value.trim().length() == 0) {
                 continue; //跳过循环
             }
-            DictItem item = JpaUtil.linq(DictItem.class).equal("itemValue", value.trim()).exists(Dict.class).equal("dictCode", code).equalProperty("id", "dictId").end().findOne();
+            // DictItem item = JpaUtil.linq(DictItem.class).equal("itemValue", value.trim()).exists(Dict.class).equal("dictCode", code).equalProperty("id", "dictId").end().findOne();
+            DictItem item = dictService.getItemByCode(code, value);
             tmpText = item.getItemText();
             
             if (tmpText != null) {

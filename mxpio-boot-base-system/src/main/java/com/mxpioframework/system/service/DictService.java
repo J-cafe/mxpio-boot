@@ -69,6 +69,14 @@ public interface DictService {
 	public List<DictItem> getItemsByCode(String code);
 	
 	/**
+	 * 根据字典code以及字典项的值获取字典项
+	 * @param code
+	 * @param value
+	 * @return
+	 */
+	public DictItem getItemByCode(String code, String value);
+	
+	/**
 	 * 根据字典code以及字典项的值获取字典项的文本
 	 * @param code 字典code
 	 * @param value 字典项值

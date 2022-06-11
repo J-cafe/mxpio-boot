@@ -62,11 +62,18 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 		return JpaUtil.linq(DictItem.class).exists(Dict.class).equal("dictCode", code)
 				.equalProperty("id", "dictId").end().asc("itemSort").list();
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public DictItem getItemByCode(String code, String value) {
+		DictItem item = JpaUtil.linq(DictItem.class).equal("itemValue", value).exists(Dict.class).equal("dictCode", code).equalProperty("id", "dictId").end().findOne();
+		return item;
+	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public String getTextByCode(String code, String value) {
-		DictItem item = JpaUtil.linq(DictItem.class).equal("itemValue", value).exists(Dict.class).equal("dictCode", code).equalProperty("id", "dictId").end().findOne();
+		DictItem item = getItemByCode(code, value);
 		return item.getItemValue();
 	}
 
