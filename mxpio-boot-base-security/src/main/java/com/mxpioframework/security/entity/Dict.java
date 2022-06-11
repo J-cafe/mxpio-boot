@@ -1,4 +1,4 @@
-package com.mxpioframework.system.entity;
+package com.mxpioframework.security.entity;
 
 import java.util.List;
 

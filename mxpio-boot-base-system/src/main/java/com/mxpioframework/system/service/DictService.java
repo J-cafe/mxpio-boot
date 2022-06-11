@@ -5,9 +5,10 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.query.Criteria;
-import com.mxpioframework.system.entity.Dict;
-import com.mxpioframework.system.entity.DictItem;
+import com.mxpioframework.security.entity.Dict;
+import com.mxpioframework.security.entity.DictItem;
 
 public interface DictService {
 	
@@ -97,5 +98,15 @@ public interface DictService {
 	public void saveItem(DictItem item);
 	
 	public void updateItem(DictItem item);
+
+	/**
+	 * 表字典翻译
+	 * @param code
+	 * @param clazz
+	 * @param dicText
+	 * @param value
+	 * @return
+	 */
+	public String getEntityDictText(String code, Class<? extends BaseEntity> clazz, String dicText, String value);
 
 }

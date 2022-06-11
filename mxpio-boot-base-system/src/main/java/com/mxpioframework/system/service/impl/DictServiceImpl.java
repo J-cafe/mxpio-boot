@@ -7,10 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mxpioframework.common.util.BeanReflectionUtils;
+import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
-import com.mxpioframework.system.entity.Dict;
-import com.mxpioframework.system.entity.DictItem;
+import com.mxpioframework.security.entity.Dict;
+import com.mxpioframework.security.entity.DictItem;
 import com.mxpioframework.system.service.DictService;
 
 @Service
@@ -94,6 +96,14 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 	@Transactional(readOnly = false)
 	public void updateItem(DictItem item) {
 		JpaUtil.update(item);
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public String getEntityDictText(String code, Class<? extends BaseEntity> clazz, String dicText, String value) {
+		Object entity = JpaUtil.linq(clazz).equal(code, value).findOne();
+		Object result = BeanReflectionUtils.getProperty(entity, dicText);
+		return result == null ? null : result.toString();
 	}
 
 }

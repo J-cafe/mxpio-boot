@@ -23,8 +23,8 @@ import com.mxpioframework.jpa.policy.CrudContext;
 import com.mxpioframework.jpa.policy.impl.SmartCrudPolicyAdapter;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.CriteriaUtils;
-import com.mxpioframework.system.entity.Dict;
-import com.mxpioframework.system.entity.DictItem;
+import com.mxpioframework.security.entity.Dict;
+import com.mxpioframework.security.entity.DictItem;
 import com.mxpioframework.system.service.impl.DictServiceImpl;
 
 import io.swagger.annotations.Api;

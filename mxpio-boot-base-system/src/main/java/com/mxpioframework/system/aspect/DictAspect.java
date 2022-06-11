@@ -4,12 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mxpioframework.common.annotation.Dict;
 import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.common.vo.Result;
+import com.mxpioframework.jpa.BaseEntity;
+import com.mxpioframework.security.annotation.Dict;
+import com.mxpioframework.security.entity.DictItem;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.system.SystemConstant;
-import com.mxpioframework.system.entity.DictItem;
 import com.mxpioframework.system.service.DictService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -111,12 +112,14 @@ public class DictAspect {
                         }
                 	} else if (field.getAnnotation(Dict.class) != null) {
                         String code = field.getAnnotation(Dict.class).dicCode();
+                        Class<? extends BaseEntity> clazz = field.getAnnotation(Dict.class).dicEntity();
+                        String dicText = field.getAnnotation(Dict.class).dicText();
                         String valueStr = String.valueOf(item.get(field.getName()));
                         if (code.contains("${")){//增加处理code中的动态变量
                             code = replace(code,item);
                         }
                         //翻译字典值对应的txt
-                        String text = translateDictValue(code, valueStr);
+                        String text = translateDictValue(code, clazz, dicText, valueStr);
 
                         log.debug(" 字典Text : "+ text);
                         log.debug(" __翻译字典字段__ "+field.getName() + SystemConstant.DICT_TEXT_SUFFIX+"： "+ text);
@@ -148,7 +151,7 @@ public class DictAspect {
      * @return
      */
     @Transactional(readOnly = true)
-    private String translateDictValue(String code, String valueStr) {
+    private String translateDictValue(String code, Class<? extends BaseEntity> clazz, String dicText, String valueStr) {
     	if(StringUtils.isEmpty(valueStr)) {
     		return null;
     	}
@@ -161,8 +164,13 @@ public class DictAspect {
                 continue; //跳过循环
             }
             // DictItem item = JpaUtil.linq(DictItem.class).equal("itemValue", value.trim()).exists(Dict.class).equal("dictCode", code).equalProperty("id", "dictId").end().findOne();
-            DictItem item = dictService.getItemByCode(code, value);
-            tmpText = item.getItemText();
+            if(clazz.equals(DictItem.class)){
+            	DictItem item = dictService.getItemByCode(code, value);
+                tmpText = item.getItemText();
+            }else{
+            	tmpText = dictService.getEntityDictText(code, clazz, dicText, value);
+            }
+            
             
             if (tmpText != null) {
                 if (!"".equals(text.toString())) {

@@ -1,4 +1,4 @@
-package com.mxpioframework.system.entity;
+package com.mxpioframework.security.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
