@@ -152,7 +152,7 @@ public class DictAspect {
      */
     @Transactional(readOnly = true)
     private String translateDictValue(String code, Class<? extends BaseEntity> clazz, String dicText, String valueStr) {
-    	if(StringUtils.isEmpty(valueStr)) {
+    	if(StringUtils.isEmpty(valueStr)||"null".equals(valueStr)) {
     		return null;
     	}
         StringBuffer text = new StringBuffer();
