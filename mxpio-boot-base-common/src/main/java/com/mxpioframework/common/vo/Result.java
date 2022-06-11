@@ -80,12 +80,12 @@ public class Result<T> implements Serializable {
 		return r;
 	}
 	
-	public static Result<Object> error(String msg) {
+	public static<T> Result<T> error(String msg) {
 		return error(CommonConstant.HTTP_SERVER_ERROR, msg);
 	}
 	
-	public static Result<Object> error(int code, String msg) {
-		Result<Object> r = new Result<Object>();
+	public static<T> Result<T> error(int code, String msg) {
+		Result<T> r = new Result<T>();
 		r.setCode(code);
 		r.setMessage(msg);
 		r.setSuccess(false);
@@ -101,7 +101,7 @@ public class Result<T> implements Serializable {
 	/**
 	 * 无权限访问返回结果
 	 */
-	public static Result<Object> noauth(String msg) {
+	public static<T> Result<T> noauth(String msg) {
 		return error(CommonConstant.HTTP_NO_AUTHZ_401, msg);
 	}
 
