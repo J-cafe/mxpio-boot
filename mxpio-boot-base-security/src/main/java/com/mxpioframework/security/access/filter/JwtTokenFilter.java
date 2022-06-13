@@ -105,6 +105,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         } catch (Exception e) {
         	log.info(httpServletRequest.getRequestURI());
         	log.error("错误信息：" + e.getMessage());
+        	e.printStackTrace();
         }
     }
     
