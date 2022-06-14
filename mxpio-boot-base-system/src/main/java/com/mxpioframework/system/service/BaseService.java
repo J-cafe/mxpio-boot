@@ -114,10 +114,17 @@ public interface BaseService<T extends BaseEntity> {
 	 * @param clazz
 	 * @param c
 	 */
+	public void removeBatch(Class<T> clazz, Criteria c);
+	
+	/**
+	 * 通用批量智能删除
+	 * @param clazz
+	 * @param c
+	 */
 	public void deleteBatch(Class<T> clazz, Criteria c);
 	
 	/**
-	 * 通用批量删除
+	 * 通用批量智能删除
 	 * @param clazz
 	 * @param c
 	 * @param crudPolicy

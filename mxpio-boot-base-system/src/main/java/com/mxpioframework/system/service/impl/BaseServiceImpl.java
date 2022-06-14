@@ -120,6 +120,13 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	
 	@Override
 	@Transactional(readOnly = false)
+	public void removeBatch(Class<T> clazz, Criteria c) {
+		List<T> entities = JpaUtil.linq(clazz).where(c).list();
+		JpaUtil.remove(entities);
+	}
+	
+	@Override
+	@Transactional(readOnly = false)
 	public void deleteBatch(Class<T> clazz, Criteria c, CrudPolicy crudPolicy) {
 		List<T> entities = JpaUtil.linq(clazz).where(c).list();
 		JpaUtil.delete(entities, crudPolicy);
