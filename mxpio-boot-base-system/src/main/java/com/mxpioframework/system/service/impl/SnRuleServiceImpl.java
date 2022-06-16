@@ -56,7 +56,7 @@ public class SnRuleServiceImpl extends BaseServiceImpl<SerialNumber> implements 
 		// 计数长度
 		int index = snExpression.length() - snExpression.replace("#", "").length();
 		// 当前记录计数值
-		String no = currentRecord.substring(snExpression.indexOf("#"), snExpression.indexOf("#") + index);
+		String no = currentRecord.substring(snExpression.indexOf('#'), snExpression.indexOf('#') + index);
 
 		StringBuffer sbPlaceHolder = new StringBuffer("");
 		for (int i = 0; i < index; i++) {

@@ -217,31 +217,21 @@ public class CriteriaUtils {
 		}
 	}
 
-	public static void main(String[] args) {
-		String json = "{\"criterions\":[{\"fieldName\":\"resourceType\",\"operator\":\"EQ\",\"value\":\"ELEMENT\"},{\"criterions\":[{\"fieldName\":\"roleId\",\"operator\":\"EQ\",\"value\":\"111\"},{\"fieldName\":\"id\",\"operator\":\"EQ\",\"value\":\"p111\"}],\"type\":\"OR\"}],\"orders\":[{\"desc\":false,\"fieldName\":\"username\"},{\"desc\":false,\"fieldName\":\"createTime\"}]}";
-		Criteria c = Criteria.create();
-		try {
-			c = json2Criteria(json);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		
-		Criteria c2 = Criteria.create()
-				.addCriterion("resourceType", Operator.EQ, "ELEMENT")
-				.or()
-					.addCriterion("username", Operator.EQ, "admin")
-					.and()
-						.addCriterion("username", Operator.EQ, "admin")
-						.addCriterion("username", Operator.EQ, "admin")
-					.end()
-					.addCriterion("username", Operator.EQ, "admin1")
-				.end()
-				.addOrder(new Order("createTime", true))
-				.addOrder(new Order("updateTime", true));
-		
-		System.out.println(json);
-		System.out.println(JSON.toJSONString(c));
-		System.out.println(JSON.toJSONString(c2));
-	}
+	/*
+	 * public static void main(String[] args) { String json =
+	 * "{\"criterions\":[{\"fieldName\":\"resourceType\",\"operator\":\"EQ\",\"value\":\"ELEMENT\"},{\"criterions\":[{\"fieldName\":\"roleId\",\"operator\":\"EQ\",\"value\":\"111\"},{\"fieldName\":\"id\",\"operator\":\"EQ\",\"value\":\"p111\"}],\"type\":\"OR\"}],\"orders\":[{\"desc\":false,\"fieldName\":\"username\"},{\"desc\":false,\"fieldName\":\"createTime\"}]}";
+	 * Criteria c = Criteria.create(); try { c = json2Criteria(json); } catch
+	 * (UnsupportedEncodingException e) { e.printStackTrace(); }
+	 * 
+	 * Criteria c2 = Criteria.create() .addCriterion("resourceType", Operator.EQ,
+	 * "ELEMENT") .or() .addCriterion("username", Operator.EQ, "admin") .and()
+	 * .addCriterion("username", Operator.EQ, "admin") .addCriterion("username",
+	 * Operator.EQ, "admin") .end() .addCriterion("username", Operator.EQ, "admin1")
+	 * .end() .addOrder(new Order("createTime", true)) .addOrder(new
+	 * Order("updateTime", true));
+	 * 
+	 * System.out.println(json); System.out.println(JSON.toJSONString(c));
+	 * System.out.println(JSON.toJSONString(c2)); }
+	 */
 
 }
