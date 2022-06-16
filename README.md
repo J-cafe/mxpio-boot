@@ -18,7 +18,6 @@
 * Springfox Swagger2
 * Jwt
 * Lombok
-* Easy-Captcha
 
 ### 2.1模块继承关系
 
@@ -327,7 +326,7 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.7.jar
 | 权限管理 | 用户权限 | 初版已完成 | 初版已完成 |
 |       | 角色管理 | 初版已完成 | 初版已完成 |
 |       | 菜单管理 | 初版已完成 | 初版已完成 |
-|       | 部门职位 | 初版进行中 | 未开始 |
+|       | 部门管理 | 初版已完成 | 初版已完成 |
 |       | 数据权限 | 未开始 | 未开始 |
 |       | 组件权限 | 未开始 | 未开始 |
 |       | 字段权限 | 未开始 | 未开始 |
@@ -338,7 +337,7 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.7.jar
 |       | 字典翻译 | 初版已完成 | 初版已完成 |
 |       | 字典缓存 | 未开始 | 不涉及 |
 | JPA工具 | JPA工具 | 初版已完成 | 不涉及 |
-| Excel | 导入管理 | 初版已完成 | 初版进行中 |
+| Excel | 导入管理 | 初版已完成 | 初版已完成 |
 |       | 导出管理 | 初版进行中 | 未开始 |
 | 工作流 |       | 初版进行中 | 未开始 |
 | 报表模块 |       | 未开始 | 未开始 |
@@ -350,3 +349,6 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.7.jar
 
 - [Spring Boot](https://spring.io/projects/spring-boot)
 - [Vue-Antd-Admin](https://gitee.com/iczer/vue-antd-admin)
+- [Druid](https://github.com/alibaba/druid)
+- [Fastjson](https://github.com/alibaba/fastjson)
+- [Kaptcha](https://code.google.com/archive/p/kaptcha/)
