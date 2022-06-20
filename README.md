@@ -132,7 +132,7 @@ mvn clean package spring-boot:repackage
 启动项目
 
 ```bash
-java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.7.jar
+java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.8.jar
 ```
 
 ### 6.2新建Maven项目运行
@@ -144,7 +144,7 @@ java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.7.jar
 <parent>
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-parent</artifactId>
-	<version>1.0.7</version>
+	<version>1.0.8</version>
 </parent>
 ```
 
@@ -239,7 +239,7 @@ mvn clean package spring-boot:repackage
 启动项目
 
 ```bash
-java -jar target\mxpio-boot-example-1.0.7.jar
+java -jar target\mxpio-boot-example-1.0.8.jar
 ```
 
 ### 6.3源码运行
@@ -305,7 +305,7 @@ mvn clean package spring-boot:repackage
 启动项目
 
 ```bash
-java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.7.jar
+java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.8.jar
 ```
 
 ## 7.开发文档
@@ -339,7 +339,7 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.7.jar
 | JPA工具 | JPA工具 | 初版已完成 | 不涉及 |
 | Excel | 导入管理 | 初版已完成 | 初版已完成 |
 |       | 导出管理 | 初版进行中 | 未开始 |
-| 工作流 |       | 初版进行中 | 未开始 |
+| 工作流 |       | 初版进行中 | 初版进行中 |
 | 报表模块 |       | 未开始 | 未开始 |
 | 图表模块 |       | 未开始 | 未开始 |
 | 多租户 |       | 未开始 | 未开始 |
