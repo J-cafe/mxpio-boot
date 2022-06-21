@@ -858,7 +858,6 @@ public abstract class JpaUtil {
 			getEntityManagerFactory(domainClass);
 			return true;
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
 		}
 		return false;
 	}
