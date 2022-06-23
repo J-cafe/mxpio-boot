@@ -32,7 +32,6 @@
 		<fastjson.version>1.2.76</fastjson.version>
 		<druid.version>1.2.6</druid.version>
 		<jackson.version>2.11.4</jackson.version>
-		<quartz.version>2.3.2</quartz.version>
 		<poi.version>5.2.0</poi.version>
 		<flowable.version>6.7.2</flowable.version>
 	</properties>
@@ -265,17 +264,6 @@
 				<version>${flowable.version}</version>
 			</dependency>
 			
-			<!-- Quartz -->
-			<dependency>
-				<groupId>org.quartz-scheduler</groupId>
-				<artifactId>quartz</artifactId>
-				<version>${quartz.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.quartz-scheduler</groupId>
-				<artifactId>quartz-jobs</artifactId>
-				<version>${quartz.version}</version>
-			</dependency>
 			<!-- poi -->
 			<dependency>
 				<groupId>org.apache.poi</groupId>
