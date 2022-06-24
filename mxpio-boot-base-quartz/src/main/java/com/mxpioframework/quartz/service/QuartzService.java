@@ -48,10 +48,10 @@ public interface QuartzService {
 
 	/**
 	 * 任务复位
-	 * @param quartzJob
+	 * @param jobId
 	 * @return
 	 */
-	boolean resumeJob(QuartzJob quartzJob);
+	boolean resume(String jobId);
 
 	/**
 	 * 执行一次
@@ -62,10 +62,10 @@ public interface QuartzService {
 
 	/**
 	 * 暂停任务
-	 * @param quartzJob
+	 * @param jobId
 	 * @return
 	 */
-	boolean pause(QuartzJob quartzJob);
+	boolean pause(String jobId);
 	
 	/**
 	 * 添加任务调度

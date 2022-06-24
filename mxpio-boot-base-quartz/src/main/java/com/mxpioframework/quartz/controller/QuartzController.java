@@ -66,6 +66,29 @@ public class QuartzController {
 		return Result.OK(job);
 	}
 	
+	@PostMapping("run/{id}")
+	@ApiOperation(value = "启动任务", notes = "启动任务", httpMethod = "POST")
+	public Result<QuartzJob> run(@PathVariable(value = "id") String id) {
+		boolean result = quartzService.resume(id);
+		if(result) {
+			return Result.OK("启动成功", null);
+		}else {
+			return Result.error("启动失败");
+		}
+	}
+	
+	@PostMapping("pause/{id}")
+	@ApiOperation(value = "暂停任务", notes = "暂停任务", httpMethod = "POST")
+	public Result<QuartzJob> pause(@PathVariable(value = "id") String id) {
+		boolean result = quartzService.pause(id);
+		if(result) {
+			return Result.OK("暂停成功", null);
+		}else {
+			return Result.error("暂停失败");
+		}
+		
+	}
+	
 	@DeleteMapping("delete/{id}")
 	@ApiOperation(value = "删除任务", notes = "删除任务", httpMethod = "DELETE")
 	public Result<QuartzJob> delete(@PathVariable(value = "id") String id) {

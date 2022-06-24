@@ -57,7 +57,7 @@ public class QuartzServiceImpl implements QuartzService {
 			removeScheduler(quartzJob.getJobClassName());
 			addScheduler(quartzJob.getJobClassName(), quartzJob.getJobCron(), quartzJob.getJobParams());
 		}else if("PAUSE".equals(quartzJob.getStatus())){
-			pause(quartzJob);
+			pause(quartzJob.getId());
 		}else {
 			removeScheduler(quartzJob.getJobClassName());
 		}
@@ -76,7 +76,8 @@ public class QuartzServiceImpl implements QuartzService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public boolean resumeJob(QuartzJob quartzJob) {
+	public boolean resume(String jobId) {
+		QuartzJob quartzJob = JpaUtil.linq(QuartzJob.class).idEqual(jobId).findOne();
 		removeScheduler(quartzJob.getJobClassName());
 		addScheduler(quartzJob.getJobClassName(), quartzJob.getJobCron(), quartzJob.getJobParams());
 		quartzJob.setStatus("RUNNING");
@@ -86,7 +87,8 @@ public class QuartzServiceImpl implements QuartzService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public boolean pause(QuartzJob quartzJob) {
+	public boolean pause(String jobId) {
+		QuartzJob quartzJob = JpaUtil.linq(QuartzJob.class).idEqual(jobId).findOne();
 		quartzJob.setStatus("PAUSE");
 		JpaUtil.update(quartzJob);
 		return true;
