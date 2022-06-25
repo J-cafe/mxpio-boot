@@ -2,13 +2,14 @@
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/J-cafe/mxpio-boot?include_prereleases)
 ![GitHub](https://img.shields.io/github/license/J-cafe/mxpio-boot)
 ![GitHub top language](https://img.shields.io/github/languages/top/J-cafe/mxpio-boot)
+![OSCS Status](https://www.oscs1024.com/platform/badge/J-cafe/mxpio-boot.svg?size=small)
 ## 1.简介
 >MxpIO Boot基于Spring Boot研发的开发框架，目前处于孵化中。MxpIO Boot采用宽泛的[MIT](https://gitee.com/i_mxpio/mxpio-boot/blob/master/LICENSE)开源协议，完全开源。
 
 前端地址：[Mxpio-Boot-Antd-Vue](https://gitee.com/i_mxpio/mxpio-boot-antd-vue)
 ## 2.后端技术栈
 
-* Spring Boot 2.4.3
+* Spring Boot 2.5.14
 * Spring Data Jpa
 * Spring Data Redis
 * Spring Security

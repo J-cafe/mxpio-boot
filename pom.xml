@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.4.3</version>
+		<version>2.5.14</version>
 	</parent>
 	<distributionManagement>
 		<snapshotRepository>
@@ -34,6 +34,7 @@
 		<jackson.version>2.11.4</jackson.version>
 		<poi.version>5.2.0</poi.version>
 		<flowable.version>6.7.2</flowable.version>
+		<liquibase.version>4.8.0</liquibase.version>
 	</properties>
 	<modules>
 		<module>mxpio-boot-base-autoconfigure</module>
@@ -180,7 +181,7 @@
 			<dependency>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-core</artifactId>
-				<version>4.5.0</version>
+				<version>${liquibase.version}</version>
 			</dependency>
 
 			<!-- starters -->
