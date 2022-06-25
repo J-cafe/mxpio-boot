@@ -23,7 +23,7 @@ public class SmartCrudPolicyAdapter implements CrudPolicy {
 			}
 		} else if (CrudType.DELETE.equals(context.getCrudType())) {
 			if (beforeDelete(context)) {
-				entityManager.merge(entity);
+				entityManager.remove(entityManager.merge(entity));
 				afterDelete(context);
 			}
 		}

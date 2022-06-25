@@ -83,7 +83,7 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 		context.setParent(entity);
 		for (Field field : fields) {
 			Object value = BeanReflectionUtils.getProperty(entity, field.getName());
-			CrudType crudType = (CrudType) BeanReflectionUtils.getProperty(value, "crudType");
+			CrudType crudType = (CrudType) BeanReflectionUtils.getProperty(entity, "crudType");
 			context.setEntity(value);
 			if(crudType != null) {
 				context.setCrudType(crudType);
