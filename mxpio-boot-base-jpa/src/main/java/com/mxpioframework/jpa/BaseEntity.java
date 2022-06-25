@@ -23,23 +23,23 @@ public class BaseEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "CREATE_BY", updatable = false)
-	@ApiModelProperty(value = "创建人", hidden = true)
+	@ApiModelProperty(value = "创建人")
 	private String createBy;
 
 	@Column(name = "UPDATE_BY")
-	@ApiModelProperty(value = "更新人", hidden = true)
+	@ApiModelProperty(value = "更新人")
 	private String updateBy;
 
 	@Generator(policy = CreatedDatePolicy.class)
 	@Column(name = "CREATE_TIME", updatable = false)
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-	@ApiModelProperty(value = "创建时间", hidden = true)
+	@ApiModelProperty(value = "创建时间")
 	private Date createTime;
 
 	@Generator(policy = UpdatedDatePolicy.class)
 	@Column(name = "UPDATE_TIME")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
-	@ApiModelProperty(value = "更新时间", hidden = true)
+	@ApiModelProperty(value = "更新时间")
 	private Date updateTime;
 	
 	@Transient
