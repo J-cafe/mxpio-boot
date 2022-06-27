@@ -1,9 +1,6 @@
 package com.mxpioframework.system.aspect;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.BaseEntity;
@@ -27,9 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -85,17 +80,8 @@ public class DictAspect {
     @SuppressWarnings("rawtypes")
 	private boolean parseDictText(List<JSONObject> items, List list) {
     	for (Object record : list) {
-            ObjectMapper mapper = new ObjectMapper();
-            String json="{}";
             try {
-                //解决@JsonFormat注解解析不了的问题详见SysAnnouncement类的@JsonFormat
-                 json = mapper.writeValueAsString(record);
-
-            } catch (JsonProcessingException e) {
-            	log.error("json解析失败"+e.getMessage(),e);
-            	return false;
-            }
-            try {
+            	String json = JSONObject.toJSONString(record);
             	JSONObject item = JSONObject.parseObject(json);
 
                 for (Field field : BeanReflectionUtils.loadClassFields(BeanReflectionUtils.getClass(record))) {
@@ -124,11 +110,6 @@ public class DictAspect {
                         log.debug(" 字典Text : "+ text);
                         log.debug(" __翻译字典字段__ "+field.getName() + SystemConstant.DICT_TEXT_SUFFIX+"： "+ text);
                         item.put(field.getName() + SystemConstant.DICT_TEXT_SUFFIX, text);
-                    }
-                    // date类型默认转换string格式化日期
-                    if (field.getType().getName().equals("java.util.Date")&&field.getAnnotation(JsonFormat.class)==null&&item.get(field.getName())!=null){
-                        SimpleDateFormat aDate=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        item.put(field.getName(), aDate.format(new Date((Long) item.get(field.getName()))));
                     }
                     // 敏感字段过滤
                     if(record instanceof User && "password".equals(field.getName())) {
