@@ -212,6 +212,7 @@ public class CriteriaUtils {
 							e.printStackTrace();
 						}
 					});
+					c.setCriterions(criterions);
 				}
 				
 			}
