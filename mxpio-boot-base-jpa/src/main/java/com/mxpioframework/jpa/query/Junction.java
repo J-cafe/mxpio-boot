@@ -3,11 +3,15 @@ package com.mxpioframework.jpa.query;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * 联合条件
  */
 public class Junction implements Criterion {
 	private JunctionType type;
+	
+	@JsonProperty(value = "criterions")
 	private List<Object> criterions = new ArrayList<Object>();
 	
 	public Junction addCriterion(String propertyName, Operator filterOperator, Object value) {

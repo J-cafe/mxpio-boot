@@ -4,15 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Criteria {
 
+	@JsonProperty(value = "criterions")
 	private List<Object> criterions = new ArrayList<Object>();
 
+	@JsonProperty(value = "orders")
 	private List<Order> orders = new ArrayList<Order>();
 	
-	@JSONField(serialize = false)
+	@JsonIgnore
 	private Stack<JunctionStack> stack;
 
 	/**
@@ -21,6 +24,16 @@ public class Criteria {
 	 */
 	public static Criteria create() {
 		Criteria c = new Criteria();
+		c.setStack(new Stack<JunctionStack>());
+		return c;
+	}
+	
+	/**
+	 * 构建查询构造器对象
+	 * @param c
+	 * @return
+	 */
+	public static Criteria create(Criteria c) {
 		c.setStack(new Stack<JunctionStack>());
 		return c;
 	}

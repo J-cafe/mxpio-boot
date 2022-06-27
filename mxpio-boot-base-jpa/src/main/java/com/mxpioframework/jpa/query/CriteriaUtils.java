@@ -1,17 +1,13 @@
 package com.mxpioframework.jpa.query;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mxpioframework.jpa.lin.Linq;
 
 import lombok.extern.slf4j.Slf4j;
@@ -133,7 +129,7 @@ public class CriteriaUtils {
 		} else if (Operator.LIKE.equals(operator)) {
 			linq.like(property, "%" + (String) value + "%");
 		} else if (Operator.IN.equals(operator)) {
-			linq.in(property, value);			
+			linq.in(property, value);
 		} else if (Operator.NOT_IN.equals(operator)) {
 			linq.notIn(property, value);
 		}
@@ -178,60 +174,68 @@ public class CriteriaUtils {
 		c.append(":" + property);
 		return c;
 	}
-
-	public static Criteria json2Criteria(String json) throws UnsupportedEncodingException {
+	
+	public static Criteria json2Criteria(String json) {
 		log.info("Criteria-->" + json);
-		
-		Criteria c = Criteria.create();
-		if(StringUtils.isNotEmpty(json)){
-			if(json.startsWith("%")) {
-				json = URLDecoder.decode(json, "utf-8");
-				log.info("Criteria-->" + json);
-			}
-			JSONObject object = JSON.parseObject(json);
-			if (object.get("criterions") != null) {
-				JSONArray jSONArray = (JSONArray) object.get("criterions");
-				List<Object> criterions = new ArrayList<>();
-				jSONArray.stream().forEach(obj -> paserCriterions((JSONObject) obj, criterions));
-				c.setCriterions(criterions);
-				if(object.getJSONArray("orders") != null) {
-					c.setOrders(object.getJSONArray("orders").toJavaList(Order.class));
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			Criteria c = Criteria.create();
+			if (StringUtils.isNotEmpty(json)) {
+				if (json.startsWith("%")) {
+					json = URLDecoder.decode(json, "utf-8");
+					log.info("Criteria-->" + json);
 				}
+				c = Criteria.create(objectMapper.readValue(json, Criteria.class));
 			}
-		}
-
-		return c;
-	}
-
-	public static void paserCriterions(JSONObject item, List<Object> criterions) {
-		if (item.containsKey("criterions")) {
-			List<Object> subCriterions = new ArrayList<>();
-			JSONArray subArray = item.getJSONArray("criterions");
-			subArray.stream().forEach(obj -> paserCriterions((JSONObject) obj, subCriterions));
-			Junction j = new Junction(Enum.valueOf(JunctionType.class, item.getString("type")));
-			j.setCriterions(subCriterions);
-			criterions.add(j);
-		} else {
-			SimpleCriterion sc = item.toJavaObject(SimpleCriterion.class);
-			criterions.add(sc);
+			return c;
+		}catch (IOException e) {
+			return null;
 		}
 	}
 
 	/*
-	 * public static void main(String[] args) { String json =
+	 * public static Criteria json2Criteria2(String json) throws
+	 * UnsupportedEncodingException { log.info("Criteria-->" + json);
+	 * 
+	 * Criteria c = Criteria.create(); if (StringUtils.isNotEmpty(json)) { if
+	 * (json.startsWith("%")) { json = URLDecoder.decode(json, "utf-8");
+	 * log.info("Criteria-->" + json); } JSONObject object = JSON.parseObject(json);
+	 * if (object.get("criterions") != null) { JSONArray jSONArray = (JSONArray)
+	 * object.get("criterions"); List<Object> criterions = new ArrayList<>();
+	 * jSONArray.stream().forEach(obj -> paserCriterions((JSONObject) obj,
+	 * criterions)); c.setCriterions(criterions); if (object.getJSONArray("orders")
+	 * != null) {
+	 * c.setOrders(object.getJSONArray("orders").toJavaList(Order.class)); } } }
+	 * 
+	 * return c; }
+	 * 
+	 * public static void paserCriterions(JSONObject item, List<Object> criterions)
+	 * { if (item.containsKey("criterions")) { List<Object> subCriterions = new
+	 * ArrayList<>(); JSONArray subArray = item.getJSONArray("criterions");
+	 * subArray.stream().forEach(obj -> paserCriterions((JSONObject) obj,
+	 * subCriterions)); Junction j = new Junction(Enum.valueOf(JunctionType.class,
+	 * item.getString("type"))); j.setCriterions(subCriterions); criterions.add(j);
+	 * } else { SimpleCriterion sc = item.toJavaObject(SimpleCriterion.class);
+	 * criterions.add(sc); } }
+	 */
+
+	/*
+	 * public static void main(String[] args) throws JsonMappingException,
+	 * JsonProcessingException { String json =
 	 * "{\"criterions\":[{\"fieldName\":\"resourceType\",\"operator\":\"EQ\",\"value\":\"ELEMENT\"},{\"criterions\":[{\"fieldName\":\"roleId\",\"operator\":\"EQ\",\"value\":\"111\"},{\"fieldName\":\"id\",\"operator\":\"EQ\",\"value\":\"p111\"}],\"type\":\"OR\"}],\"orders\":[{\"desc\":false,\"fieldName\":\"username\"},{\"desc\":false,\"fieldName\":\"createTime\"}]}";
-	 * Criteria c = Criteria.create(); try { c = json2Criteria(json); } catch
+	 * Criteria c = Criteria.create(); try { c = json2Criteria2(json); } catch
 	 * (UnsupportedEncodingException e) { e.printStackTrace(); }
 	 * 
-	 * Criteria c2 = Criteria.create() .addCriterion("resourceType", Operator.EQ,
-	 * "ELEMENT") .or() .addCriterion("username", Operator.EQ, "admin") .and()
-	 * .addCriterion("username", Operator.EQ, "admin") .addCriterion("username",
-	 * Operator.EQ, "admin") .end() .addCriterion("username", Operator.EQ, "admin1")
-	 * .end() .addOrder(new Order("createTime", true)) .addOrder(new
+	 * Criteria c2 = Criteria.create().addCriterion("resourceType", Operator.EQ,
+	 * "ELEMENT").or() .addCriterion("username", Operator.EQ,
+	 * "admin").and().addCriterion("username", Operator.EQ, "admin")
+	 * .addCriterion("username", Operator.EQ,
+	 * "admin").end().addCriterion("username", Operator.EQ, "admin1")
+	 * .end().addOrder(new Order("createTime", true)).addOrder(new
 	 * Order("updateTime", true));
 	 * 
 	 * System.out.println(json); System.out.println(JSON.toJSONString(c));
-	 * System.out.println(JSON.toJSONString(c2)); }
+	 * //System.out.println(JSON.toJSONString(c2)); }
 	 */
 
 }
