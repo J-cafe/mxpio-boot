@@ -45,14 +45,8 @@ public class DictAspect {
 
     @Around("excudeService()")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
-    	long time1=System.currentTimeMillis();
         Object result = pjp.proceed();
-        long time2=System.currentTimeMillis();
-        log.debug("获取JSON数据 耗时："+(time2-time1)+"ms");
-        long start=System.currentTimeMillis();
         this.parseDictText(result);
-        long end=System.currentTimeMillis();
-        log.debug("解析注入JSON数据  耗时"+(end-start)+"ms");
         return result;
     }
 
