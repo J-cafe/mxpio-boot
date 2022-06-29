@@ -1,9 +1,12 @@
 package com.mxpioframework.system.generate.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
@@ -36,6 +39,10 @@ public class GenModel extends BaseEntity {
 	@ApiModelProperty(value = "数据库表名")
 	private String tableName;
 	
+	@Column(name = "MODEL_CODE_")
+	@ApiModelProperty(value = "模型编码")
+	private String modelCode;
+	
 	@Column(name = "MODEL_NAME_")
 	@ApiModelProperty(value = "模型名称")
 	private String modelName;
@@ -53,7 +60,7 @@ public class GenModel extends BaseEntity {
 	private String modelStatus;
 	
 	@Column(name = "PACKAGE_NAME_")
-	@ApiModelProperty(value = "包名")
+	@ApiModelProperty(value = "子包名")
 	private String packageName;
 	
 	@Column(name = "TREE_ABLE_")
@@ -75,5 +82,8 @@ public class GenModel extends BaseEntity {
 	@Column(name = "MODEL_DESC_")
 	@ApiModelProperty(value = "属性描述")
 	private String modelDesc;
+	
+	@Transient
+	private List<GenProperty> genProperties;
 
 }

@@ -33,6 +33,10 @@ public class GenProperty extends BaseEntity {
 	private String modelId;
 	
 	@Column(name = "PROPERTY_NAME_")
+	@ApiModelProperty(value = "属性编码")
+	private String propertyCode;
+	
+	@Column(name = "PROPERTY_NAME_")
 	@ApiModelProperty(value = "属性名称")
 	private String propertyName;
 	
@@ -46,15 +50,19 @@ public class GenProperty extends BaseEntity {
 	
 	@Column(name = "COLUMN_LENGTH_")
 	@ApiModelProperty(value = "字段长度")
-	private String columnLength;
+	private Integer columnLength;
 	
 	@Column(name = "COLUMN_PRECISION_")
 	@ApiModelProperty(value = "字段精度")
-	private String columnPrecision;
+	private Integer columnPrecision;
 	
 	@Column(name = "COLUMN_SCALE_")
 	@ApiModelProperty(value = "小数位数")
-	private String columnScale;
+	private Integer columnScale;
+	
+	@Column(name = "KEY_")
+	@ApiModelProperty(value = "是否主键")
+	private boolean key;
 	
 	@Column(name = "UNIQUE_")
 	@ApiModelProperty(value = "是否唯一")
@@ -63,6 +71,10 @@ public class GenProperty extends BaseEntity {
 	@Column(name = "NULLABLE_")
 	@ApiModelProperty(value = "是否可空")
 	private boolean nullable;
+	
+	@Column(name = "VALUE_RULE_")
+	@ApiModelProperty(value = "值生成规则")
+	private String valueRule;
 	
 	@Column(name = "SHOW_TYPE_")
 	@ApiModelProperty(value = "展示类型")

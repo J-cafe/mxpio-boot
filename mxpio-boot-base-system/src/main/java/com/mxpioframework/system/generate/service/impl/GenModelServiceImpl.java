@@ -9,5 +9,10 @@ import com.mxpioframework.system.service.impl.BaseServiceImpl;
 @Service
 public class GenModelServiceImpl extends BaseServiceImpl<GenModel> implements GenModelService {
 
+	@Override
+	public boolean generateFilesByModelId(String modelId, String path) {
+		return false;
+	}
+
 
 }

@@ -28,7 +28,7 @@ public class GenSystem extends BaseEntity {
 	@ApiModelProperty(value = "ID")
 	private String id;
 	
-	@Column(name = "SYSTEM_CODE_")
+	@Column(name = "SYSTEM_CODE_", unique = true)
 	@ApiModelProperty(value = "系统编码")
 	private String systemCode;
 	
@@ -52,6 +52,4 @@ public class GenSystem extends BaseEntity {
 	@ApiModelProperty(value = "系统描述")
 	private String systemDesc;
 	
-	
-
 }
