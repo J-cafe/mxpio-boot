@@ -32,7 +32,7 @@ public class GenProperty extends BaseEntity {
 	@ApiModelProperty(value = "模型ID")
 	private String modelId;
 	
-	@Column(name = "PROPERTY_NAME_")
+	@Column(name = "PROPERTY_CODE_")
 	@ApiModelProperty(value = "属性编码")
 	private String propertyCode;
 	
