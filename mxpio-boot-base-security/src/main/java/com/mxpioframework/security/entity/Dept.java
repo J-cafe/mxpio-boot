@@ -11,6 +11,7 @@ import javax.persistence.Transient;
 import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
+import com.mxpioframework.security.annotation.Dict;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -46,6 +47,7 @@ public class Dept extends BaseEntity implements Actor {
 	
 	@ApiModelProperty(value = "父部门ID")
 	@Column(name = "FA_DEPT_ID_")
+	@com.mxpioframework.security.annotation.Dict(dicCode = "deptCode", dicEntity= Dept.class, dicText= "deptName")
 	private String faDeptId;
 	
 	@Transient

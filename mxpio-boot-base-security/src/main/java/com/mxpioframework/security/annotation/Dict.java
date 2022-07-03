@@ -17,4 +17,6 @@ public @interface Dict {
     Class<? extends BaseEntity> dicEntity() default DictItem.class;
 
     String dicText() default "";
+
+    String displayProp() default "";
 }
