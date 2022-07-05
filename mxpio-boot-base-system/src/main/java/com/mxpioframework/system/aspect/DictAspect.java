@@ -3,7 +3,6 @@ package com.mxpioframework.system.aspect;
 import com.mxpioframework.common.vo.Result;
 
 import com.mxpioframework.system.service.PojoDictParseService;
-import lombok.extern.slf4j.Slf4j;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-@Slf4j
 public class DictAspect {
 
   @Autowired
@@ -25,6 +23,7 @@ public class DictAspect {
   public void excudeService() {
   }
 
+  @SuppressWarnings("rawtypes")
   @Around("excudeService()")
   public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
     Object result = pjp.proceed();

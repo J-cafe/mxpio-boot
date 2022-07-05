@@ -32,252 +32,253 @@ import java.util.regex.Pattern;
 @Slf4j
 public class PojoDictParseServiceImpl implements PojoDictParseService {
 
-  final private Pattern pattern = Pattern.compile("\\$\\{\\S+\\}");
-  private DictService dictService;
-  final private Map<Class<?>, Map<String, Dict>> dictListOfClassMap = new ConcurrentHashMap<>();
-  private DictCacheService cacheService;
+	final private Pattern pattern = Pattern.compile("\\$\\{\\S+\\}");
+	private DictService dictService;
+	final private Map<Class<?>, Map<String, Dict>> dictListOfClassMap = new ConcurrentHashMap<>();
+	private DictCacheService cacheService;
 
-  @Autowired
-  public void setDictService(DictService dictService) {
-    this.dictService = dictService;
-  }
+	@Autowired
+	public void setDictService(DictService dictService) {
+		this.dictService = dictService;
+	}
 
-  @Autowired
-  public void setCacheService(DictCacheService cacheService) {
-    this.cacheService = cacheService;
-  }
+	@Autowired
+	public void setCacheService(DictCacheService cacheService) {
+		this.cacheService = cacheService;
+	}
 
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  @Override
-  public void parseDictResult(Result result) {
-    Object resultContent = result.getResult();
-    if (resultContent instanceof Page) {
-      Page page = (Page) resultContent;
-      parseDictTextCollection(page.getContent());
-    } else if (resultContent instanceof Collection) {
-      parseDictTextCollection((Collection) resultContent);
-    }
-  }
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void parseDictResult(Result result) {
+		Object resultContent = result.getResult();
+		if (resultContent instanceof Page) {
+			Page page = (Page) resultContent;
+			parseDictTextCollection(page.getContent());
+		} else if (resultContent instanceof Collection) {
+			parseDictTextCollection((Collection) resultContent);
+		}
+	}
 
-  @SuppressWarnings("unchecked")
-  private <T extends Annotation> T getAnnotationOfField(Class<?> clazz, String property, Class<T> annotationClass) {
-    Field field;
-    Annotation annotation = null;
-    try {
-      field = clazz.getDeclaredField(property);
-      annotation = field.getAnnotation(annotationClass);
-    } catch (NoSuchFieldException | SecurityException e) {
-      log.error("获取属性注解失败", e);
-    }
-    return (T) annotation;
-  }
+	@SuppressWarnings("unchecked")
+	private <T extends Annotation> T getAnnotationOfField(Class<?> clazz, String property, Class<T> annotationClass) {
+		Field field;
+		Annotation annotation = null;
+		try {
+			field = clazz.getDeclaredField(property);
+			annotation = field.getAnnotation(annotationClass);
+		} catch (NoSuchFieldException | SecurityException e) {
+			log.error("获取属性注解失败", e);
+		}
+		return (T) annotation;
+	}
 
-  private Map<String, Dict> loadDictInfo(Class<?> clazz) {
-    Map<String, Dict> dictInfoMap = new HashMap<>();
-    BeanInfo beanInfo;
-    try {
-      beanInfo = Introspector.getBeanInfo(clazz);
-    } catch (IntrospectionException e) {
-      log.error("introspection error", e);
-      return dictInfoMap;
-    }
+	private Map<String, Dict> loadDictInfo(Class<?> clazz) {
+		Map<String, Dict> dictInfoMap = new HashMap<>();
+		BeanInfo beanInfo;
+		try {
+			beanInfo = Introspector.getBeanInfo(clazz);
+		} catch (IntrospectionException e) {
+			log.error("introspection error", e);
+			return dictInfoMap;
+		}
 
-    PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-    for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
-      Method readMethod = propertyDescriptor.getReadMethod();
-      Dict dict = readMethod.getAnnotation(Dict.class);
-      if (Collection.class.isAssignableFrom(readMethod.getReturnType())) {
-        dictInfoMap.put(propertyDescriptor.getName(), EMPTY_COLL_DICT);
-      }
-      if (dict == null) {
-        dict = getAnnotationOfField(clazz, propertyDescriptor.getName(), Dict.class);
-      }
+		PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+		for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
+			Method readMethod = propertyDescriptor.getReadMethod();
+			Dict dict = readMethod.getAnnotation(Dict.class);
+			if (Collection.class.isAssignableFrom(readMethod.getReturnType())) {
+				dictInfoMap.put(propertyDescriptor.getName(), EMPTY_COLL_DICT);
+			}
+			if (dict == null) {
+				dict = getAnnotationOfField(clazz, propertyDescriptor.getName(), Dict.class);
+			}
 
-      if (dict == null) {
-        continue;
-      }
-      dictInfoMap.put(propertyDescriptor.getName(), dict);
-    }
-    return dictInfoMap;
-  }
+			if (dict == null) {
+				continue;
+			}
+			dictInfoMap.put(propertyDescriptor.getName(), dict);
+		}
+		return dictInfoMap;
+	}
 
-  private static final Dict EMPTY_COLL_DICT = new Dict() {
-    @Override
-    public Class<? extends Annotation> annotationType() {
-      return null;
-    }
+	private static final Dict EMPTY_COLL_DICT = new Dict() {
+		@Override
+		public Class<? extends Annotation> annotationType() {
+			return null;
+		}
 
-    @Override
-    public String dicCode() {
-      return "collection";
-    }
+		@Override
+		public String dicCode() {
+			return "collection";
+		}
 
-    @Override
-    public Class<? extends BaseEntity> dicEntity() {
-      return null;
-    }
+		@Override
+		public Class<? extends BaseEntity> dicEntity() {
+			return null;
+		}
 
-    @Override
-    public String dicText() {
-      return null;
-    }
+		@Override
+		public String dicText() {
+			return null;
+		}
 
-    /**
-     * 显示属性名称
-     */
-    @Override
-    public String displayProp() {
-      return null;
-    }
-  };
+		/**
+		 * 显示属性名称
+		 */
+		@Override
+		public String displayProp() {
+			return null;
+		}
+	};
 
-  Map<String, Dict> getDictMapping(Class<?> clazz) {
-    Map<String, Dict> dictInfos = dictListOfClassMap.get(clazz);
-    if (dictInfos == null) {
-      synchronized (this) {
-        dictInfos = dictListOfClassMap.get(clazz);
-        if (dictInfos == null) {
-          dictInfos = loadDictInfo(clazz);
-          dictListOfClassMap.put(clazz, dictInfos);
-        }
-      }
-    }
-    return dictInfos;
+	Map<String, Dict> getDictMapping(Class<?> clazz) {
+		Map<String, Dict> dictInfos = dictListOfClassMap.get(clazz);
+		if (dictInfos == null) {
+			synchronized (this) {
+				dictInfos = dictListOfClassMap.get(clazz);
+				if (dictInfos == null) {
+					dictInfos = loadDictInfo(clazz);
+					dictListOfClassMap.put(clazz, dictInfos);
+				}
+			}
+		}
+		return dictInfos;
 
-  }
+	}
 
+	@SuppressWarnings("unchecked")
+	private void parseDictPojo(Object pojo) {
+		Class<?> clazz = BeanReflectionUtils.getClass(pojo);
 
-  private void parseDictPojo(Object pojo) {
-    Class<?> clazz = BeanReflectionUtils.getClass(pojo);
+		Map<String, Dict> dictInfo = getDictMapping(clazz);
+		BeanMap itemBeanMap = new BeanMap(pojo);
+		for (Map.Entry<String, Dict> entry : dictInfo.entrySet()) {
+			String property = entry.getKey();
+			Object value = itemBeanMap.get(property);
+			if (value instanceof Collection) {
+				parseDictTextCollection((Collection<Object>) value);
+			} else {
+				Dict dict = entry.getValue();
+				String dictCode = convertDictCode(dict.dicCode(), itemBeanMap);
+				// 翻译字典值对应的txt
+				String text = translateDictValue(dictCode, dict.dicEntity(), dict.dicText(),
+						Objects.toString(value, null));
 
-    Map<String, Dict> dictInfo = getDictMapping(clazz);
-    BeanMap itemBeanMap = new BeanMap(pojo);
-    for (Map.Entry<String, Dict> entry : dictInfo.entrySet()) {
-      String property = entry.getKey();
-      Object value = itemBeanMap.get(property);
-      if (value instanceof Collection) {
-        parseDictTextCollection((Collection<Object>) value);
-      } else {
-        Dict dict = entry.getValue();
-        String dictCode = convertDictCode(dict.dicCode(), itemBeanMap);
-        // 翻译字典值对应的txt
-        String text = translateDictValue(dictCode, dict.dicEntity(), dict.dicText(),
-          Objects.toString(value, null));
+				log.debug(" 字典Text : " + text);
+				log.debug(" __翻译字典字段__ " + property + SystemConstant.DICT_TEXT_SUFFIX + "： " + text);
 
+				if (pojo instanceof BaseEntity) {
+					((BaseEntity) pojo).putText(property + SystemConstant.DICT_TEXT_SUFFIX, text);
+				}
 
-        log.debug(" 字典Text : " + text);
-        log.debug(" __翻译字典字段__ " + property + SystemConstant.DICT_TEXT_SUFFIX + "： " + text);
+				String labelProp = dict.displayProp();
+				if (StringUtils.isNotEmpty(dict.displayProp()) && itemBeanMap.containsKey(labelProp)) {
+					itemBeanMap.put(labelProp, text);
+				}
+			}
+		}
+	}
 
-        if (pojo instanceof BaseEntity) {
-          ((BaseEntity) pojo).putText(property + SystemConstant.DICT_TEXT_SUFFIX, text);
-        }
+	private void parseDictTextCollection(Collection<Object> list) {
+		for (Object record : list) {
+			parseDictPojo(record);
+		}
+	}
 
-        String labelProp = dict.displayProp();
-        if (StringUtils.isNotEmpty(dict.displayProp()) && itemBeanMap.containsKey(labelProp)) {
-          itemBeanMap.put(labelProp, text);
-        }
-      }
-    }
-  }
+	private Map<String, String> getDictMappings(String code) {
+		Map<String, String> dictMapping = cacheService.get("DictCache:" + code);
+		if (dictMapping == null) {
+			dictMapping = dictService.getDictMappingByCode(code);
+			cacheService.put(code, dictMapping);
+		}
+		return dictMapping;
+	}
 
-  private void parseDictTextCollection(Collection<Object> list) {
-    for (Object record : list) {
-      parseDictPojo(record);
-    }
-  }
+	private String parseDictValue(String code, String value) {
+		return getDictMappings(code).get(value);
+	}
 
-  private Map<String, String> getDictMappings(String code) {
-    Map<String, String> dictMapping = cacheService.get("DictCache:" + code);
-    if (dictMapping == null) {
-      dictMapping = dictService.getDictMappingByCode(code);
-      cacheService.put(code, dictMapping);
-    }
-    return dictMapping;
-  }
+	private String parseEntityDictValue(String code, Class<? extends BaseEntity> clazz, String dicText, String value) {
+		String cacheKey = "EntityCache:" + code + ":" + clazz.getName() + ":" + Objects.toString(dicText, "") + ":"
+				+ Objects.toString(value, "");
 
-  private String parseDictValue(String code, String value) {
-    return getDictMappings(code).get(value);
-  }
+		String result = cacheService.get(cacheKey);
+		if (result != null) {
+			return result;
+		}
 
-  private String parseEntityDictValue(String code, Class<? extends BaseEntity> clazz, String dicText, String value) {
-    String cacheKey = "EntityCache:" +
-      code + ":" + clazz.getName() + ":" + Objects.toString(dicText, "") + ":" + Objects.toString(value, "");
+		result = dictService.getEntityDictText(code, clazz, dicText, value);
+		if (result == null) {
+			result = "";
+		}
+		cacheService.put(cacheKey, result);
+		return result;
+	}
 
-    String result = cacheService.get(cacheKey);
-    if (result != null) {
-      return result;
-    }
+	/**
+	 * 翻译字典文本
+	 *
+	 * @param code
+	 *            字典编码
+	 * @param valueStr
+	 * @return
+	 */
+	private String translateDictValue(String code, Class<? extends BaseEntity> clazz, String dicText, String valueStr) {
+		if (StringUtils.isEmpty(valueStr) || "null".equals(valueStr)) {
+			return null;
+		}
+		StringBuilder text = new StringBuilder();
+		String[] values = valueStr.split(",");
+		for (String value : values) {
+			String tmpText = null;
+			log.debug(" 字典 value : " + value);
+			if (value.trim().length() == 0) {
+				continue; // 跳过循环
+			}
 
-    result = dictService.getEntityDictText(code, clazz, dicText, value);
-    if (result == null) {
-      result = "";
-    }
-    cacheService.put(cacheKey, result);
-    return result;
-  }
+			if (clazz.equals(DictItem.class)) {
+				tmpText = parseDictValue(code, value);
+			} else {
+				tmpText = parseEntityDictValue(code, clazz, dicText, value);
+			}
+			if (tmpText != null) {
+				if (!"".equals(text.toString())) {
+					text.append(",");
+				}
+				text.append(tmpText);
+			}
 
-  /**
-   * 翻译字典文本
-   *
-   * @param code     字典编码
-   * @param valueStr
-   * @return
-   */
-  private String translateDictValue(String code, Class<? extends BaseEntity> clazz, String dicText,
-    String valueStr) {
-    if (StringUtils.isEmpty(valueStr) || "null".equals(valueStr)) {
-      return null;
-    }
-    StringBuilder text = new StringBuilder();
-    String[] values = valueStr.split(",");
-    for (String value : values) {
-      String tmpText = null;
-      log.debug(" 字典 value : " + value);
-      if (value.trim().length() == 0) {
-        continue; // 跳过循环
-      }
+		}
+		return text.toString();
+	}
 
-      if (clazz.equals(DictItem.class)) {
-        tmpText = parseDictValue(code, value);
-      } else {
-        tmpText = parseEntityDictValue(code, clazz, dicText, value);
-      }
-      if (tmpText != null) {
-        if (!"".equals(text.toString())) {
-          text.append(",");
-        }
-        text.append(tmpText);
-      }
+	/**
+	 * 处理code字符串中的${变量}
+	 */
+	@SuppressWarnings("rawtypes")
+	private String replace(String context, Map item) {
+		String result = context;
+		Matcher matcher = pattern.matcher(context);
+		while (matcher.find()) {
+			String name = matcher.group(0);
+			String cleanName = name;
+			cleanName = cleanName.replace("${", "");
+			cleanName = cleanName.replace("}", "");
+			String variableValue = String.valueOf(item.get(cleanName));
+			if (variableValue == null) {
+				variableValue = "";
+			}
+			result = result.replace(name, variableValue);
+		}
+		return result;
+	}
 
-    }
-    return text.toString();
-  }
-
-  /**
-   * 处理code字符串中的${变量}
-   */
-  private String replace(String context, Map item) {
-    String result = context;
-    Matcher matcher = pattern.matcher(context);
-    while (matcher.find()) {
-      String name = matcher.group(0);
-      String cleanName = name;
-      cleanName = cleanName.replace("${", "");
-      cleanName = cleanName.replace("}", "");
-      String variableValue = String.valueOf(item.get(cleanName));
-      if (variableValue == null) {
-        variableValue = "";
-      }
-      result = result.replace(name, variableValue);
-    }
-    return result;
-  }
-
-  private String convertDictCode(String dictCode, Map itemBeanMap) {
-    if (dictCode.contains("${")) {// 增加处理code中的动态变量
-      dictCode = replace(dictCode, itemBeanMap);
-    }
-    return dictCode;
-  }
+	@SuppressWarnings("rawtypes")
+	private String convertDictCode(String dictCode, Map itemBeanMap) {
+		if (dictCode.contains("${")) {// 增加处理code中的动态变量
+			dictCode = replace(dictCode, itemBeanMap);
+		}
+		return dictCode;
+	}
 
 }
