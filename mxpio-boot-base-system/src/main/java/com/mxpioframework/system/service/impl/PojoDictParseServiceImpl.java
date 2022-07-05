@@ -3,6 +3,7 @@ package com.mxpioframework.system.service.impl;
 import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.BaseEntity;
+import com.mxpioframework.jpa.annotation.DictAble;
 import com.mxpioframework.security.annotation.Dict;
 import com.mxpioframework.security.entity.DictItem;
 import com.mxpioframework.system.SystemConstant;
@@ -66,13 +67,15 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
 		try {
 			field = clazz.getDeclaredField(property);
 			annotation = field.getAnnotation(annotationClass);
-		} catch (NoSuchFieldException | SecurityException e) {
+		} catch (NoSuchFieldException e) {
 			Class<?> superClass = clazz.getSuperclass();
 			if(superClass != null){
 				return getAnnotationOfField(superClass, property, annotationClass);
 			}else{
 				log.error("获取属性注解失败", e);
 			}
+		}catch (SecurityException e) {
+			log.error("获取属性注解失败", e);
 		}
 		return (T) annotation;
 	}
@@ -172,8 +175,8 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
 				log.debug(" 字典Text : " + text);
 				log.debug(" __翻译字典字段__ " + property + SystemConstant.DICT_TEXT_SUFFIX + "： " + text);
 
-				if (pojo instanceof BaseEntity) {
-					((BaseEntity) pojo).putText(property + SystemConstant.DICT_TEXT_SUFFIX, text);
+				if (pojo instanceof DictAble) {
+					((DictAble) pojo).putText(property + SystemConstant.DICT_TEXT_SUFFIX, text);
 				}
 
 				String labelProp = dict.displayProp();

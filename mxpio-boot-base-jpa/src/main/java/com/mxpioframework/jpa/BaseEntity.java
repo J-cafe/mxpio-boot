@@ -10,6 +10,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.mxpioframework.jpa.annotation.DictAble;
 import com.mxpioframework.jpa.annotation.Generator;
 import com.mxpioframework.jpa.policy.impl.CreatedDatePolicy;
 import com.mxpioframework.jpa.policy.impl.CrudType;
@@ -20,7 +21,7 @@ import lombok.Data;
 
 @Data
 @MappedSuperclass
-public class BaseEntity implements Serializable {
+public class BaseEntity implements DictAble, Serializable {
 
   private static final long serialVersionUID = 1L;
 
