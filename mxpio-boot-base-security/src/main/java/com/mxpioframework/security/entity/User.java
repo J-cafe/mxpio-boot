@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -45,6 +46,7 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 	private String avatar;
 
 	@Column(name = "PASSWORD_", length = 125)
+	@JsonIgnore
 	@ApiModelProperty(value = "密码")
 	private String password;
 	

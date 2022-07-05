@@ -1,6 +1,9 @@
 package com.mxpioframework.system.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -64,7 +67,14 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 		return JpaUtil.linq(DictItem.class).exists(Dict.class).equal("dictCode", code)
 				.equalProperty("id", "dictId").end().asc("itemSort").list();
 	}
-	
+
+	@Override
+	@Transactional(readOnly = true)
+	public Map<String, String> getDictMappingByCode(String code) {
+	    return getItemsByCode(code).stream().collect(Collectors.toMap(DictItem::getItemValue, DictItem::getItemText,
+	      (existing, replacement) -> existing));
+	}
+
 	@Override
 	@Transactional(readOnly = true)
 	public DictItem getItemByCode(String code, String value) {

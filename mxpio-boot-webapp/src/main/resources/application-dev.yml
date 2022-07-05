@@ -3,12 +3,12 @@ server:
   tomcat:
     max-swallow-size: -1
   servlet:
-    context-path: 
+    context-path:
 spring:
   servlet:
-     multipart:
-        max-file-size: 10MB
-        max-request-size: 10MB
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   jpa:
     open-in-view: false
     showSql: true
@@ -54,10 +54,10 @@ spring:
             threadCount: 10
             threadPriority: 5
             threadsInheritContextClassLoaderOfInitializingThread: true
-management: 
-  endpoints: 
-    web: 
-      exposure: 
+management:
+  endpoints:
+    web:
+      exposure:
         include: "*"
 flowable:
   #关闭定时任务JOB
