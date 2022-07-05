@@ -67,7 +67,12 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
 			field = clazz.getDeclaredField(property);
 			annotation = field.getAnnotation(annotationClass);
 		} catch (NoSuchFieldException | SecurityException e) {
-			log.error("获取属性注解失败", e);
+			Class<?> superClass = clazz.getSuperclass();
+			if(superClass != null){
+				return getAnnotationOfField(superClass, property, annotationClass);
+			}else{
+				log.error("获取属性注解失败", e);
+			}
 		}
 		return (T) annotation;
 	}
