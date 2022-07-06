@@ -44,7 +44,7 @@ public class DeptController {
 	
 	@GetMapping("/role/without/{roleId}")
 	@ApiOperation(value = "未绑定部门", notes = "分页获取未绑定角色ID的部门", httpMethod = "GET")
-	public Result<Page<Dept>> without(@RequestParam("criteria") String criteria,
+	public Result<Page<Dept>> without(@RequestParam(name = "criteria", required = false) String criteria,
 			@PathVariable(value = "roleId") String roleId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
