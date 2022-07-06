@@ -4,6 +4,6 @@ public interface ParseRecordPolicy {
 
 	final String BEAN_ID = "importer.parseRecordPolicy";
 	
-	void apply(Context context) throws ClassNotFoundException;
+	void apply(Context context) throws Exception;
 	
 }

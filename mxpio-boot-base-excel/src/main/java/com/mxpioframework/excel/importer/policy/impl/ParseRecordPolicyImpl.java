@@ -30,7 +30,7 @@ public class ParseRecordPolicyImpl implements ParseRecordPolicy, ApplicationCont
 	private Collection<CellPostprocessor> cellPostprocessors;
 	
 	@Override
-	public void apply(Context context) throws ClassNotFoundException {
+	public void apply(Context context) throws Exception {
 		List<Record> records = context.getRecords();
 		
 		for (int i = context.getStartRow(); i < records.size(); i++) {
