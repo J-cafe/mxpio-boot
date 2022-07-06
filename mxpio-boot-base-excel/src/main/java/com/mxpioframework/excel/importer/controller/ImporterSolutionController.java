@@ -232,12 +232,13 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	@Transactional
 	@PostMapping("upload/{importerSolutionId}")
 	@ApiOperation(value = "导入", notes = "上传导入", httpMethod = "POST")
-	public String upload(@RequestParam("file") MultipartFile multipartFile,
+	public Result<Object> upload(@RequestParam("file") MultipartFile multipartFile,
 			@PathVariable("importerSolutionId") String importerSolutionId) throws Exception {
 		String name = multipartFile.getOriginalFilename();
 		Assert.hasLength(importerSolutionId, "Excel导入方案编码必须配置。");
 		
 		InputStream inpuStream = multipartFile.getInputStream();
+		int count = 0;
 		try {			
 			for (ExcelPolicy excelPolicy : excelPolicies) {
 				if (excelPolicy.support(name)) {
@@ -249,13 +250,16 @@ public class ImporterSolutionController implements ApplicationContextAware {
 					context.setImporterSolutionId(importerSolutionId);
 					// context.setParams(parameter);
 					excelPolicy.apply(context);
+					count = context.getRecords().size() - context.getStartRow();
 					break;
 				}
 			}
+		}catch (Exception e) {
+			return Result.error("导入失败");
 		} finally {
 			IOUtils.closeQuietly(inpuStream);
 		}
-		return null;
+		return Result.OK("成功导入" + count + "条数据");
 	}
 
 }
