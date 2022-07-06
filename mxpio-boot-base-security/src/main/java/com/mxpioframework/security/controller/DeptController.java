@@ -37,9 +37,9 @@ public class DeptController {
 	
 	@GetMapping("/tree")
 	@ApiOperation(value = "部门列表", notes = "获取部门列表", httpMethod = "GET")
-	public Result<List<Dept>> tree() throws Exception {
-		
-		return Result.OK(deptService.getDeptTree());
+	public Result<List<Dept>> tree(@RequestParam("criteria") String criteria) throws Exception {
+		Criteria c = CriteriaUtils.json2Criteria(criteria);
+		return Result.OK(deptService.getDeptTree(c));
 	}
 	
 	@GetMapping("/role/without/{roleId}")

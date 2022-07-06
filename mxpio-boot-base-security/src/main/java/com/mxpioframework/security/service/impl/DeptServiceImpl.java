@@ -27,10 +27,10 @@ import com.mxpioframework.security.service.DeptService;
 public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptService {
 
 	@Override
-	public List<Dept> getDeptTree() {
+	public List<Dept> getDeptTree(Criteria c) {
 		List<Dept> result = new ArrayList<Dept>();
 		Map<String, List<Dept>> childrenMap = new HashMap<String, List<Dept>>();
-		List<Dept> depts = JpaUtil.linq(Dept.class).list();
+		List<Dept> depts = JpaUtil.linq(Dept.class).where(c).list();
 		for (Dept dept : depts) {
 
 			if (childrenMap.containsKey(dept.getId())) {
