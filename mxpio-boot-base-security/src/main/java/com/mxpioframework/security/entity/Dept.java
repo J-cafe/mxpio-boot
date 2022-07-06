@@ -46,7 +46,7 @@ public class Dept extends BaseEntity implements Actor {
 	
 	@ApiModelProperty(value = "父部门ID")
 	@Column(name = "FA_DEPT_ID_")
-	@com.mxpioframework.security.annotation.Dict(dicCode = "id", dicEntity= Dept.class, dicText= "faDeptName")
+	//@com.mxpioframework.security.annotation.Dict(dicCode = "id", dicEntity= Dept.class, dicText= "faDeptName")
 	private String faDeptId;
 	
 	@Transient
