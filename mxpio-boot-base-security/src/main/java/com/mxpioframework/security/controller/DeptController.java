@@ -37,7 +37,7 @@ public class DeptController {
 	
 	@GetMapping("/tree")
 	@ApiOperation(value = "部门列表", notes = "获取部门列表", httpMethod = "GET")
-	public Result<List<Dept>> tree(@RequestParam("criteria") String criteria) throws Exception {
+	public Result<List<Dept>> tree(@RequestParam(name = "criteria", required = false) String criteria) throws Exception {
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
 		return Result.OK(deptService.getDeptTree(c));
 	}
@@ -55,7 +55,7 @@ public class DeptController {
 	
 	@GetMapping("/role/within/{roleId}")
 	@ApiOperation(value = "绑定部门", notes = "分页获取绑定角色ID的部门", httpMethod = "GET")
-	public Result<Page<Dept>> within(@RequestParam("criteria") String criteria,
+	public Result<Page<Dept>> within(@RequestParam(name = "criteria", required = false) String criteria,
 			@PathVariable(value = "roleId") String roleId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
@@ -66,7 +66,7 @@ public class DeptController {
 	
 	@GetMapping("/user/without/{deptId}")
 	@ApiOperation(value = "未关联用户", notes = "分页获取未关联部门ID的用户", httpMethod = "GET")
-	public Result<Page<User>> userWithout(@RequestParam("criteria") String criteria,
+	public Result<Page<User>> userWithout(@RequestParam(name = "criteria", required = false) String criteria,
 			@PathVariable(value = "deptId") String deptId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
@@ -77,7 +77,7 @@ public class DeptController {
 	
 	@GetMapping("/user/within/{deptId}")
 	@ApiOperation(value = "关联用户", notes = "分页获取关联部门ID的用户", httpMethod = "GET")
-	public Result<Page<User>> userWithin(@RequestParam("criteria") String criteria,
+	public Result<Page<User>> userWithin(@RequestParam(name = "criteria", required = false) String criteria,
 			@PathVariable(value = "deptId") String deptId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
