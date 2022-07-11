@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.mxpioframework.cache.provider.CacheProvider;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.Constants;
-import com.mxpioframework.security.kaptcha.KaptchaDTO;
+import com.mxpioframework.security.captcha.CaptchaDTO;
+import com.mxpioframework.security.captcha.impl.DefaultCaptcha;
 import com.mxpioframework.security.service.OnlineUserService;
 import com.mxpioframework.security.vo.TokenVo;
 
@@ -35,22 +35,22 @@ public class SystemController {
 	private CacheProvider cacheProvider;
 	
 	@Autowired
-	private DefaultKaptcha defaultKaptcha;
+	private DefaultCaptcha defaultCaptcha;
 	
 	@Autowired
 	private OnlineUserService onlineUserService;
 	
-	@GetMapping("kaptcha")
+	@GetMapping("captcha")
 	@ApiOperation(value = "加载验证码", notes = "获取登录验证码", httpMethod = "GET")
-	public Result<KaptchaDTO> kaptcha() throws IOException {
-		KaptchaDTO captcha = new KaptchaDTO();;
+	public Result<CaptchaDTO> captcha() throws IOException {
+		CaptchaDTO captcha = new CaptchaDTO();;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         
-        String createText = defaultKaptcha.createText();
+        String createText = defaultCaptcha.createText();
         String uuid = UUID.randomUUID().toString();
-        cacheProvider.set(Constants.KAPTCHA_REDIS_KEY + uuid, createText, 180);
+        cacheProvider.set(Constants.CAPTCHA_REDIS_KEY + uuid, createText, 180);
         
-        BufferedImage bi = defaultKaptcha.createImage(createText);
+        BufferedImage bi = defaultCaptcha.createImage(createText);
         ImageIO.write(bi, "jpg", out);
 
         Base64.Encoder encoder = Base64.getEncoder();

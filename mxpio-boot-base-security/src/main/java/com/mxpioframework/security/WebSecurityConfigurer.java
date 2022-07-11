@@ -43,8 +43,8 @@ import com.mxpioframework.security.access.filter.JwtTokenFilter;
 import com.mxpioframework.security.access.filter.LoginFilter;
 import com.mxpioframework.security.access.intercept.FilterSecurityInterceptor;
 import com.mxpioframework.security.anthentication.JwtAuthenticationProvider;
+import com.mxpioframework.security.captcha.CaptchaAuthenticationException;
 import com.mxpioframework.security.entity.User;
-import com.mxpioframework.security.kaptcha.KaptchaAuthenticationException;
 import com.mxpioframework.security.service.OnlineUserService;
 import com.mxpioframework.security.util.TokenUtil;
 import com.mxpioframework.security.vo.TokenVo;
@@ -197,7 +197,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
 				throws IOException, ServletException {
 			response.setContentType("application/json;charset=UTF-8");
-			if(exception instanceof KaptchaAuthenticationException) {
+			if(exception instanceof CaptchaAuthenticationException) {
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth(exception.getMessage())));
 			}else if(exception instanceof BadCredentialsException){
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("账号或密码错误")));
