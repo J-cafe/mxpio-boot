@@ -30,9 +30,9 @@
 			<artifactId>java-jwt</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.penggle</groupId>
-			<artifactId>kaptcha</artifactId>
-			<version>2.3.2</version>
+			<groupId>com.jhlabs</groupId>
+			<artifactId>filters</artifactId>
+			<version>2.0.235-1</version>
 		</dependency>
 	</dependencies>
 </project>

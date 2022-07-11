@@ -21,8 +21,8 @@ import com.mxpioframework.cache.provider.CacheProvider;
 import com.mxpioframework.common.util.SpringUtil;
 import com.mxpioframework.security.Constants;
 import com.mxpioframework.security.anthentication.JwtLoginToken;
-import com.mxpioframework.security.kaptcha.KaptchaAuthenticationException;
-import com.mxpioframework.security.kaptcha.KaptchaProperties;
+import com.mxpioframework.security.captcha.CaptchaAuthenticationException;
+import com.mxpioframework.security.captcha.CaptchaProperties;
 
 public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -35,27 +35,27 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
 		// 从json中获取username和password
-		String username = null, password = null,kaptcha = null,uuid = null;
+		String username = null, password = null,captcha = null,uuid = null;
 		username = request.getParameter("username");
 		password = request.getParameter("password");
-		kaptcha = request.getParameter("kaptcha");
+		captcha = request.getParameter("captcha");
 		uuid = request.getParameter("uuid");
 		String body = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
 		if (StringUtils.hasText(body) && username == null) {
 			JSONObject jsonObj = JSON.parseObject(body);
 			username = jsonObj.getString("username");
 			password = jsonObj.getString("password");
-			kaptcha = jsonObj.getString("kaptcha");
+			captcha = jsonObj.getString("captcha");
 			uuid = jsonObj.getString("uuid");
 		}
-		KaptchaProperties kaptchaProperties = SpringUtil.getBean(KaptchaProperties.class);
-		if(kaptchaProperties.getOpen()) {
-			if(uuid == null || kaptcha == null) {
-				throw new KaptchaAuthenticationException("验证码错误");
+		CaptchaProperties captchaProperties = SpringUtil.getBean(CaptchaProperties.class);
+		if(captchaProperties.getOpen()) {
+			if(uuid == null || captcha == null) {
+				throw new CaptchaAuthenticationException("验证码错误");
 			}
 			CacheProvider cacheProvider = SpringUtil.getBean(CacheProvider.class);
-			if(!kaptcha.equals(cacheProvider.get(Constants.KAPTCHA_REDIS_KEY+uuid)+"")) {
-				throw new KaptchaAuthenticationException("验证码错误");
+			if(!captcha.equals(cacheProvider.get(Constants.CAPTCHA_REDIS_KEY+uuid)+"")) {
+				throw new CaptchaAuthenticationException("验证码错误");
 			}
 		}
 		if(username == null || password == null) {

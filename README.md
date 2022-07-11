@@ -14,7 +14,6 @@
 * Spring Data Redis
 * Spring Security
 * Spring Cache
-* Alibaba Fastjson
 * Alibaba Druid
 * Springfox Swagger2
 * Jwt
@@ -345,7 +344,7 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.11.jar
 | 报表模块 |       | 未开始 | 未开始 |
 | 图表模块 |       | 未开始 | 未开始 |
 | 多租户 |       | 未开始 | 未开始 |
-| 低代码 |       | 未开始 | 未开始 |
+| 代码生成 |       | 进行中 | 未开始 |
 
 ## 相关开源项目
 
@@ -353,4 +352,3 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.11.jar
 - [Vue-Antd-Admin](https://gitee.com/iczer/vue-antd-admin)
 - [Druid](https://github.com/alibaba/druid)
 - [Fastjson](https://github.com/alibaba/fastjson)
-- [Kaptcha](https://code.google.com/archive/p/kaptcha/)
