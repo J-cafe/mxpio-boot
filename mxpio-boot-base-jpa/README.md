@@ -381,4 +381,121 @@ public enum Operator {
 	JpaUtil.delete(users,crudPolicy);
 ```
 
+19. 前台使用示例 1
 
+```javascript
+// 简单使用示例
+import Criteria from "@/utils/criteria";
+import { OPERATOR } from "@/store/mutation-types";
+let searchData = {
+	username: "admin",
+	deptCode: "BM-001",
+};
+let isorter = {
+	fieldName: "createTime",
+	desc: true,
+};
+const queryParam1 = new Criteria();
+queryParam1.addCriterions(searchData, OPERATOR.LIKE);
+queryParam1.addOrder(isorter);
+```
+
+对应的序列化 JSON：
+
+```json
+{
+	"criterions": [
+		{
+			"fieldName": "username",
+			"value": "admin",
+			"operator": "LIKE"
+		},
+		{
+			"fieldName": "deptCode",
+			"value": "BM-001",
+			"operator": "LIKE"
+		}
+	],
+	"orders": [
+		{
+			"fieldName": "createTime",
+			"desc": true
+		}
+	]
+}
+```
+
+20. 前台使用示例 2
+
+```javascript
+// 复杂查询示例
+import Criteria from "@/utils/criteria";
+import { OPERATOR } from "@/store/mutation-types";
+const queryParam2 = new Criteria();
+queryParam2
+	.addCriterion("resourceType", OPERATOR.EQ, "ELEMENT")
+	.or()
+		.addCriterion("username", OPERATOR.EQ, "admin")
+		.addCriterion("username", OPERATOR.EQ, "admin1")
+		.and()
+			.addCriterion("age", OPERATOR.GT, 18)
+			.addCriterion("score", OPERATOR.LT, 60)
+		.end()
+	.end()
+	.addOrder("createTime", true)
+	.addOrder("updateTime", true);
+```
+
+对应的序列化 JSON：
+
+```json
+{
+	"criterions": [
+		{
+			"fieldName": "aa",
+			"value": "xxx",
+			"operator": "EQ"
+		},
+		{
+			"type": "OR",
+			"criterions": [
+				{
+					"fieldName": "username",
+					"value": "admin",
+					"operator": "EQ"
+				},
+				{
+					"fieldName": "username",
+					"value": "admin1",
+					"operator": "EQ"
+				},
+				{
+					"type": "AND",
+					"criterions": [
+						{
+							"fieldName": "age",
+							"value": 18,
+							"operator": "GT"
+						},
+						{
+							"fieldName": "score",
+							"value": 60,
+							"operator": "LT"
+						}
+					]
+				}
+			]
+		}
+	],
+	"orders": [
+		{
+			"fieldName": "createTime",
+			"desc": true
+		},
+		{
+			"fieldName": "updateTime",
+			"desc": true
+		}
+	]
+}
+```
