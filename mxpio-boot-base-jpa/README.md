@@ -499,3 +499,45 @@ queryParam2
 	]
 }
 ```
+21. 前台使用示例 3
+
+```javascript
+// 当页面简单使用时，两个字段一个使用LIKE，一个使用EQ类型，可以使用以下方式
+import Criteria from "@/utils/criteria";
+import { OPERATOR } from "@/store/mutation-types";
+let searchData = {
+	username@EQ: "admin",
+	deptCode: "BM-001",
+};
+let isorter = {
+	fieldName: "createTime",
+	desc: true,
+};
+const queryParam1 = new Criteria();
+queryParam1.addCriterions(searchData, OPERATOR.LIKE);
+queryParam1.addOrder(isorter);
+```
+对应的序列化 JSON：
+
+```json
+{
+	"criterions": [
+		{
+			"fieldName": "username",
+			"value": "admin",
+			"operator": "EQ"
+		},
+		{
+			"fieldName": "deptCode",
+			"value": "BM-001",
+			"operator": "LIKE"
+		}
+	],
+	"orders": [
+		{
+			"fieldName": "createTime",
+			"desc": true
+		}
+	]
+}
+```
