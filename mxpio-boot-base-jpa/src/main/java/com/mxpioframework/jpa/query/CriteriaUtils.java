@@ -132,9 +132,17 @@ public class CriteriaUtils {
 		} else if (Operator.LIKE.equals(operator)) {
 			linq.like(property, "%" + (String) value + "%");
 		} else if (Operator.IN.equals(operator)) {
-			linq.in(property, value);
+			if(value instanceof String) {
+				linq.in(property, (Object[]) ((String) value).split(","));
+			}else {
+				linq.in(property, value);
+			}
 		} else if (Operator.NOT_IN.equals(operator)) {
-			linq.notIn(property, value);
+			if(value instanceof String) {
+				linq.in(property, (Object[]) ((String) value).split(","));
+			}else {
+				linq.in(property, value);
+			}
 		}
 
 	}

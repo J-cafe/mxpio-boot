@@ -170,6 +170,62 @@ JpaUtil.linq(User.class).where(criteria).list();
 
 ```
 
+对应的序列化JSON：
+
+```json
+{
+    "criterions": [
+        {
+            "fieldName": "aa",
+            "value": "xxx",
+            "operator": "EQ"
+        },
+        {
+            "type": "OR",
+            "criterions": [
+                {
+                    "fieldName": "username",
+                    "value": "admin",
+                    "operator": "EQ"
+                },
+                {
+                    "fieldName": "username",
+                    "value": "admin1",
+                    "operator": "EQ"
+                },
+                {
+                    "type": "AND",
+                    "criterions": [
+                        {
+                            "fieldName": "age",
+                            "value": 18,
+                            "operator": "GT"
+                        },
+                        {
+                            "fieldName": "score",
+                            "value": 60,
+                            "operator": "LT"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "orders": [
+        {
+            "fieldName": "createTime",
+            "desc": true
+        },
+        {
+            "fieldName": "updateTime",
+            "desc": true
+        }
+    ]
+}
+
+```
+
+
 以上代码执行效果：
 
 ```sql
@@ -185,6 +241,15 @@ ORDER BY
 	updateTime DESC
 
 ```
+
+Operator支持的类型：
+
+```java
+public enum Operator {
+	EQ, NE, LIKE, LIKE_END, LIKE_START, NOT_LIKE, GT, LT, GE, LE, AND, OR, IN, NOT_IN
+}
+```
+
 
 ## 示例
 1. 查询所有数据
