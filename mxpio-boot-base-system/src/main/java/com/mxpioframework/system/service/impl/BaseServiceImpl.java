@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.JpaUtil;
+import com.mxpioframework.jpa.lin.Linq;
 import com.mxpioframework.jpa.policy.CrudPolicy;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.system.entity.TreeAble;
@@ -138,6 +139,17 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 		return JpaUtil.linq(clazz).where(c).list();
 	}
 	
+	@Override
+	@Transactional(readOnly = true)
+	public List<T> list(Class<T> clazz, Criteria c,
+			Map<Class<? extends BaseEntity>, String> subQueryEntity) {
+		Linq lin = JpaUtil.linq(clazz);
+		for(Map.Entry<Class<? extends BaseEntity>, String> entry : subQueryEntity.entrySet()) {
+			lin.addSubQueryParser(entry.getKey(), entry.getValue());
+		}
+		return lin.where(c).list();
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional(readOnly = true)
@@ -182,6 +194,17 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	@Transactional(readOnly = true)
 	public Page<T> listPage(Class<T> clazz, Pageable page, Criteria c) {
 		return JpaUtil.linq(clazz).where(c).paging(page);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<T> listPage(Class<T> clazz, Pageable page, Criteria c,
+			Map<Class<? extends BaseEntity>, String> subQueryEntity) {
+		Linq lin = JpaUtil.linq(clazz);
+		for(Map.Entry<Class<? extends BaseEntity>, String> entry : subQueryEntity.entrySet()) {
+			lin.addSubQueryParser(entry.getKey(), entry.getValue());
+		}
+		return lin.where(c).paging(page);
 	}
 
 }

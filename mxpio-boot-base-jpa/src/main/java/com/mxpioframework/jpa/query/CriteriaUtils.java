@@ -96,7 +96,7 @@ public class CriteriaUtils {
 
 		Object value = criterion.getValue();
 		Operator operator = criterion.getOperator();
-
+		
 		if (Operator.LIKE_END.equals(operator)) {
 			linq.like(property, "%" + (String) value);
 		} else if (Operator.LIKE_START.equals(operator)) {

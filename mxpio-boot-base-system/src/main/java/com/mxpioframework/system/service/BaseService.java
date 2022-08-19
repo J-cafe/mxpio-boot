@@ -3,6 +3,7 @@ package com.mxpioframework.system.service;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -140,6 +141,15 @@ public interface BaseService<T extends BaseEntity> {
 	public List<T> list(Class<T> clazz, Criteria c);
 	
 	/**
+	 * 通用查询(含子查询)
+	 * @param clazz
+	 * @param c
+	 * @param subQueryEntity
+	 * @return
+	 */
+	public List<T> list(Class<T> clazz, Criteria c, Map<Class<? extends BaseEntity>, String> subQueryEntity);
+	
+	/**
 	 * 通用树查询
 	 * @param clazz
 	 * @param c
@@ -163,5 +173,15 @@ public interface BaseService<T extends BaseEntity> {
 	 * @return
 	 */
 	public Page<T> listPage(Class<T> clazz, Pageable page, Criteria c);
+	
+	/**
+	 * 分页查询(含子查询)
+	 * @param clazz
+	 * @param page
+	 * @param c
+	 * @param subQueryEntity
+	 * @return
+	 */
+	public Page<T> listPage(Class<T> clazz, Pageable page, Criteria c, Map<Class<? extends BaseEntity>, String> subQueryEntity);
 
 }
