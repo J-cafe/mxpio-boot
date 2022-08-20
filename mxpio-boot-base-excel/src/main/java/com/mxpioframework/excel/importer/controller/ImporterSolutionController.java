@@ -166,7 +166,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	@DeleteMapping("/remove/{id}")
 	@ApiOperation(value = "删除方案", notes = "删除方案信息", httpMethod = "DELETE")
 	public Result<ImporterSolution> delete(@PathVariable(name = "id", required = true) String id) throws Exception {
-		String ids[] = id.split(";");
+		String ids[] = id.split(",");
 		for(String key : ids){
 			importerSolutionService.delete(key);
 		}
