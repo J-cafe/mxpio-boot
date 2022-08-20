@@ -66,7 +66,7 @@ public class XSSFExcelPolicy implements ExcelPolicy<XSSFContext>, ApplicationCon
 	
 	protected void initContext(Context context) throws ClassNotFoundException {
 		ImporterSolution importerSolution = getImporterSolution(context.getImporterSolutionId());
-		context.setStartRow(importerSolution.getStartRow());
+		context.setStartRow(importerSolution.getStartRow()-1);
 		Class<?> entityClass =  this.classLoader.loadClass(importerSolution.getEntityClassName());
 		List<MappingRule> mappingRules = importerSolution.getMappingRules();
 		Assert.notEmpty(mappingRules, "mappingRules can not be empty.");
