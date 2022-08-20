@@ -77,6 +77,13 @@ public class UserController {
 		return Result.OK("编辑成功",null);
 	}
 	
+	@PutMapping("/updatepass")
+	@ApiOperation(value = "修改密码", notes = "修改密码", httpMethod = "PUT")
+	public Result<User> updatePass(@RequestParam("username") String username, @RequestParam("newPassword") String newPassword) throws Exception {
+		userService.updatePass(username, newPassword);
+		return Result.OK("编辑成功",null);
+	}
+	
 	@DeleteMapping("/delete")
 	@ApiOperation(value = "删除用户", notes = "根据用户名username删除用户信息", httpMethod = "DELETE")
 	public Result<UserDetails> delete(String username) throws Exception {

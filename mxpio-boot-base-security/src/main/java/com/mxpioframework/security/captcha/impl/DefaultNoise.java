@@ -21,8 +21,7 @@ import com.mxpioframework.security.captcha.util.Configurable;
 public class DefaultNoise extends Configurable implements NoiseProducer
 {
 	/**
-	 * Draws a noise on the image. The noise curve depends on the factor values.
-	 * Noise won't be visible if all factors have the value > 1.0f
+	 * 为图片增加干扰，噪声曲线取决于factor值，如果所有因子的值都大于1.0f，则噪声将不可见
 	 * 
 	 * @param image
 	 *            the image to add the noise to
