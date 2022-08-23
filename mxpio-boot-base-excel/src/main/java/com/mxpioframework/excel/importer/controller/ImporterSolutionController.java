@@ -154,7 +154,6 @@ public class ImporterSolutionController implements ApplicationContextAware {
 		return Result.OK(importerSolution);
 	}
 	
-	@Transactional(readOnly = false)
 	@PutMapping("/edit")
 	@ApiOperation(value = "修改导入方案", notes = "修改导入方案", httpMethod = "PUT")
 	public Result<ImporterSolution> edit(@RequestBody ImporterSolution importerSolution) {
@@ -162,18 +161,16 @@ public class ImporterSolutionController implements ApplicationContextAware {
 		return Result.OK(importerSolution);
 	}
 	
-	@Transactional(readOnly = false)
 	@DeleteMapping("/remove/{id}")
 	@ApiOperation(value = "删除方案", notes = "删除方案信息", httpMethod = "DELETE")
 	public Result<ImporterSolution> delete(@PathVariable(name = "id", required = true) String id) throws Exception {
-		String ids[] = id.split(";");
+		String ids[] = id.split(",");
 		for(String key : ids){
 			importerSolutionService.delete(key);
 		}
 		return Result.OK("删除成功",null);
 	}
 	
-	@Transactional(readOnly = false)
 	@PostMapping("/rule/mapping/create")
 	@ApiOperation(value = "生成规则映射", notes = "生成规则映射", httpMethod = "POST")
 	public Result<ImporterSolution> autoCreateMappingRules(@RequestBody ImporterSolution importerSolution) {
