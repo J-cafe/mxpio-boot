@@ -251,7 +251,7 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 	@Override
 	@Transactional(readOnly = false)
 	public int deleteRoleDepts(String roleId, String deptIds) {
-		String[] deptId = deptIds.split(";");
+		String[] deptId = deptIds.split(",");
 		return JpaUtil.lind(RoleGrantedAuthority.class).equal("roleId", roleId).in("actorId",(Object[]) deptId).delete();
 	}
 

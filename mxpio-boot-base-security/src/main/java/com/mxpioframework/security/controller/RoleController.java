@@ -77,7 +77,7 @@ public class RoleController {
 	@DeleteMapping("/remove/{id}")
 	@ApiOperation(value = "删除角色", notes = "根据角色名rolename删除角色信息", httpMethod = "DELETE")
 	public Result<Role> delete(@PathVariable(name = "id", required = true) String id) throws Exception {
-		String ids[] = id.split(";");
+		String ids[] = id.split(",");
 		for(String key : ids){
 			roleService.delete(key);
 		}

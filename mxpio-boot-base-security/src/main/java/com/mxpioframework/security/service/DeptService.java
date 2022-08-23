@@ -15,7 +15,8 @@ public interface DeptService extends BaseService<Dept> {
 
 	/**
 	 * 获取部门树
-	 * @return
+	 * @param c
+	 * @return 部门树
 	 */
 	List<Dept> getDeptTree(Criteria c);
 	
