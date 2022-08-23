@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.mxpioframework.excel.importer.model.ImporterSolution;
@@ -35,6 +36,7 @@ public class XSSFExcelPolicy implements ExcelPolicy<XSSFContext>, ApplicationCon
 	private ClassLoader classLoader;
 	
 	@Override
+	@Transactional(readOnly = false)
 	public void apply(XSSFContext context) throws Exception {
         OPCPackage xlsxPackage = OPCPackage.open(context.getInpuStream());
         XSSFReader xssfReader = new XSSFReader(xlsxPackage);

@@ -98,7 +98,6 @@ public class ImporterSolutionController implements ApplicationContextAware {
 		return Result.OK(page);
 	}
 	
-	@Transactional(readOnly = false)
 	@DeleteMapping("rule/remove/{ruleId}")
 	@ApiOperation(value = "删除规则", notes = "删除规则", httpMethod = "DELETE")
 	public Result<MappingRule> removeRule(@PathVariable(name = "ruleId", required = true) String ruleId) {
@@ -106,7 +105,6 @@ public class ImporterSolutionController implements ApplicationContextAware {
 		return Result.OK("删除成功！",null);
 	}
 	
-	@Transactional(readOnly = false)
 	@PostMapping("rule/add")
 	@ApiOperation(value = "新增规则", notes = "新增规则", httpMethod = "POST")
 	public Result<MappingRule> addRule(@RequestBody MappingRule mappingRule) throws UnsupportedEncodingException {
@@ -114,7 +112,6 @@ public class ImporterSolutionController implements ApplicationContextAware {
 		return Result.OK(mappingRule);
 	}
 	
-	@Transactional(readOnly = false)
 	@PutMapping("rule/edit")
 	@ApiOperation(value = "更新规则", notes = "更新规则", httpMethod = "PUT")
 	public Result<MappingRule> editRule(@RequestBody MappingRule mappingRule) throws UnsupportedEncodingException {
@@ -146,7 +143,6 @@ public class ImporterSolutionController implements ApplicationContextAware {
 		return Result.OK(cellPostParsers);
 	}
 	
-	@Transactional(readOnly = false)
 	@PostMapping("/add")
 	@ApiOperation(value = "添加导入方案", notes = "添加导入方案", httpMethod = "POST")
 	public Result<ImporterSolution> saveImporterSolutions(@RequestBody ImporterSolution importerSolution) {
@@ -165,9 +161,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	@ApiOperation(value = "删除方案", notes = "删除方案信息", httpMethod = "DELETE")
 	public Result<ImporterSolution> delete(@PathVariable(name = "id", required = true) String id) throws Exception {
 		String ids[] = id.split(",");
-		for(String key : ids){
-			importerSolutionService.delete(key);
-		}
+		importerSolutionService.deleteBatch(ids);
 		return Result.OK("删除成功",null);
 	}
 	
@@ -226,7 +220,6 @@ public class ImporterSolutionController implements ApplicationContextAware {
 		
 	}
 	
-	@Transactional
 	@PostMapping("upload/{importerSolutionId}")
 	@ApiOperation(value = "导入", notes = "上传导入", httpMethod = "POST")
 	public Result<Object> upload(@RequestParam("file") MultipartFile multipartFile,

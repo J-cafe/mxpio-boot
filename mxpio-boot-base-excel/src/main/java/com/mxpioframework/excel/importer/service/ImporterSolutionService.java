@@ -12,6 +12,8 @@ public interface ImporterSolutionService {
 	ImporterSolution getById(String id);
 
 	void delete(String key);
+	
+	void deleteBatch(String... ids);
 
 	Page<ImporterSolution> listPage(Criteria c, Pageable pageAble);
 

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mxpioframework.excel.importer.model.Entry;
 import com.mxpioframework.excel.importer.model.ImporterSolution;
@@ -20,12 +21,23 @@ import com.mxpioframework.jpa.query.Criteria;
 public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 
 	@Override
+	@Transactional(readOnly = false)
 	public void delete(String key) {
 		ImporterSolution importerSolution = getById(key);
 		JpaUtil.remove(importerSolution);		
 	}
+	
+	@Override
+	@Transactional(readOnly = false)
+	public void deleteBatch(String... ids) {
+		for(String key : ids) {
+			ImporterSolution importerSolution = getById(key);
+			JpaUtil.remove(importerSolution);	
+		}
+	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Page<ImporterSolution> listPage(Criteria c, Pageable pageAble) {
 		return JpaUtil.linq(ImporterSolution.class)
 			.where(c)
@@ -43,6 +55,7 @@ public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public ImporterSolution save(ImporterSolution importerSolution) {
 		
 		JpaUtil.save(importerSolution, new SmartCrudPolicy() {
@@ -61,6 +74,7 @@ public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public ImporterSolution update(ImporterSolution importerSolution) {
 		
 		JpaUtil.update(importerSolution, new SmartCrudPolicy() {
@@ -84,12 +98,14 @@ public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public void deleteRule(String ruleId) {
 		MappingRule rule = JpaUtil.linq(MappingRule.class).idEqual(ruleId).findOne();
 		JpaUtil.remove(rule);
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public MappingRule saveRule(MappingRule mappingRule) {
 		JpaUtil.save(mappingRule, new SmartCrudPolicy() {
 			@Override
@@ -106,6 +122,7 @@ public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public MappingRule updateRule(MappingRule mappingRule) {
 		JpaUtil.lind(Entry.class).equal("mappingRuleId", mappingRule.getId()).delete();
 		JpaUtil.update(mappingRule, new SmartCrudPolicy() {

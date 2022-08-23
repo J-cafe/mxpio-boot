@@ -9,6 +9,7 @@ import javax.persistence.Transient;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.excel.annotation.Excel;
@@ -24,6 +25,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class AutoCreateMappingRulePolicyImpl implements AutoCreateMappingRulePolicy {
 
 	@Override
+	@Transactional(readOnly = false)
 	public ImporterSolution apply(ImporterSolution importerSolution) {
 		
 		Class<?> entityClass = BeanReflectionUtils.getClassByName(importerSolution.getEntityClassName());
