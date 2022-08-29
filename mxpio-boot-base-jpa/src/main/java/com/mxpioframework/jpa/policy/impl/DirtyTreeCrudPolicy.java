@@ -50,7 +50,7 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 					fields = getPersistentFields(context);
 				}
 
-				if (generatorPolicies == null) {
+				if (CollectionUtils.isEmpty(generatorPolicies)) {
 					try {
 						generatorPolicies = getNeedGeneratorFields(entity, context.getCrudType());
 					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
