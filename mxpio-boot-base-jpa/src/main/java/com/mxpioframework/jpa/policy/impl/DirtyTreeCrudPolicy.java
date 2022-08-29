@@ -49,15 +49,15 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 				if (fields == null) {
 					fields = getPersistentFields(context);
 				}
-
-				if (CollectionUtils.isEmpty(generatorPolicies)) {
+				//TODO 每次重新获取，后续优化根据crudType是否变化进行获取
+				// if (CollectionUtils.isEmpty(generatorPolicies)) {
 					try {
 						generatorPolicies = getNeedGeneratorFields(entity, context.getCrudType());
 					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 							| InvocationTargetException | NoSuchMethodException | SecurityException e) {
 						e.printStackTrace();
 					}
-				}
+				// }
 				applyPersistentEntity(context, generatorPolicies);
 				crudPolicy.apply(context);
 				if(context.isSaveTransient()) {
