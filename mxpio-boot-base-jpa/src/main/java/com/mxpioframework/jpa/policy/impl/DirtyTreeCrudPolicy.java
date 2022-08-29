@@ -36,6 +36,7 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 				target.add(obj);
 			}
 			CrudType crudType = context.getCrudType();
+			Map<CrudType,List<Map<String, Object>>> generatorPoliciesMap = new HashMap<>();
 			for (Object entity : target) {
 				if(entity instanceof BaseEntity) {
 					CrudType entityStatus = ((BaseEntity) entity).getCrudType();
@@ -49,15 +50,16 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 				if (fields == null) {
 					fields = getPersistentFields(context);
 				}
-				//TODO 每次重新获取，后续优化根据crudType是否变化进行获取
-				// if (CollectionUtils.isEmpty(generatorPolicies)) {
+				generatorPolicies = generatorPoliciesMap.get(context.getCrudType());
+				if (generatorPolicies == null) {
 					try {
 						generatorPolicies = getNeedGeneratorFields(entity, context.getCrudType());
+						generatorPoliciesMap.put(context.getCrudType(), generatorPolicies);
 					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 							| InvocationTargetException | NoSuchMethodException | SecurityException e) {
 						e.printStackTrace();
 					}
-				// }
+				}
 				applyPersistentEntity(context, generatorPolicies);
 				crudPolicy.apply(context);
 				if(context.isSaveTransient()) {
