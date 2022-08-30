@@ -23,6 +23,7 @@ import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.OnlineUserService;
 import com.mxpioframework.security.service.UserService;
+import com.mxpioframework.security.vo.UpatePassVo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -79,9 +80,9 @@ public class UserController {
 	
 	@PutMapping("/updatepass")
 	@ApiOperation(value = "修改密码", notes = "修改密码", httpMethod = "PUT")
-	public Result<User> updatePass(@RequestParam("username") String username, @RequestParam("newPassword") String newPassword) throws Exception {
-		userService.updatePass(username, newPassword);
-		return Result.OK("编辑成功",null);
+	public Result<User> updatePass(@RequestBody UpatePassVo upatePassVo) throws Exception {
+		userService.updatePass(upatePassVo.getUsername(), upatePassVo.getNewPassword());
+		return Result.OK("修改成功",null);
 	}
 	
 	@DeleteMapping("/delete")
