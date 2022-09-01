@@ -14,6 +14,7 @@ import com.mxpioframework.excel.importer.model.MappingRule;
 import com.mxpioframework.excel.importer.service.ImporterSolutionService;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.policy.CrudContext;
+import com.mxpioframework.jpa.policy.impl.CrudType;
 import com.mxpioframework.jpa.policy.impl.SmartCrudPolicy;
 import com.mxpioframework.jpa.query.Criteria;
 
@@ -135,7 +136,7 @@ public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 					MappingRule mappingRule = context.getParent();
 					Entry entry = context.getEntity();
 					if(StringUtils.isEmpty(entry.getId())) {
-						// entry.setCrudType(CrudType.SAVE);
+						entry.setCrudType(CrudType.SAVE);
 						entry.setId(UUID.randomUUID().toString());
 					}
 					entry.setMappingRuleId(mappingRule.getId());
