@@ -99,7 +99,8 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	@DeleteMapping("rule/remove/{ruleId}")
 	@ApiOperation(value = "删除规则", notes = "删除规则", httpMethod = "DELETE")
 	public Result<MappingRule> removeRule(@PathVariable(name = "ruleId", required = true) String ruleId) {
-		importerSolutionService.deleteRule(ruleId);
+		String ids[] = ruleId.split(",");
+		importerSolutionService.deleteRule(ids);
 		return Result.OK("删除成功！",null);
 	}
 	

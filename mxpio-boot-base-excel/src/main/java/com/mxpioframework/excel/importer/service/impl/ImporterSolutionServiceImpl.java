@@ -99,9 +99,12 @@ public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public void deleteRule(String ruleId) {
-		MappingRule rule = JpaUtil.linq(MappingRule.class).idEqual(ruleId).findOne();
-		JpaUtil.remove(rule);
+	public void deleteRule(String... ids) {
+		for(String key : ids) {
+			MappingRule rule = JpaUtil.linq(MappingRule.class).idEqual(key).findOne();
+			JpaUtil.remove(rule);
+		}
+		
 	}
 
 	@Override
