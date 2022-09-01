@@ -106,7 +106,7 @@ public class ImporterSolution extends BaseEntity {
 	}
 
 	public void setEntityManagerFactoryName(String entityManagerFactoryName) {
-		entityManagerFactoryName = this.entityManagerFactoryName;
+		this.entityManagerFactoryName = entityManagerFactoryName;
 	}
 
 	public List<MappingRule> getMappingRules() {

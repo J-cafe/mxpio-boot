@@ -22,7 +22,9 @@ public class Context {
 	
 	private long fileSize;
 	
-	private String importerSolutionId;
+	// private String importerSolutionId;
+	
+	private String importerSolutionCode;
 	
     private Cell currentCell;
     
@@ -76,12 +78,12 @@ public class Context {
 		this.fileSize = fileSize;
 	}
 
-	public String getImporterSolutionId() {
-		return importerSolutionId;
+	public String getImporterSolutionCode() {
+		return importerSolutionCode;
 	}
 
-	public void setImporterSolutionId(String importerSolutionId) {
-		this.importerSolutionId = importerSolutionId;
+	public void setImporterSolutionCode(String importerSolutionCode) {
+		this.importerSolutionCode = importerSolutionCode;
 	}
 	
 	public List<Record> getRecords() {

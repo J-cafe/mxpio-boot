@@ -1,8 +1,5 @@
 package com.mxpioframework.excel.importer.service.impl;
 
-import java.util.UUID;
-
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -99,9 +96,12 @@ public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public void deleteRule(String ruleId) {
-		MappingRule rule = JpaUtil.linq(MappingRule.class).idEqual(ruleId).findOne();
-		JpaUtil.remove(rule);
+	public void deleteRule(String... ids) {
+		for(String key : ids) {
+			MappingRule rule = JpaUtil.linq(MappingRule.class).idEqual(key).findOne();
+			JpaUtil.remove(rule);
+		}
+		
 	}
 
 	@Override
@@ -124,18 +124,17 @@ public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 	@Override
 	@Transactional(readOnly = false)
 	public MappingRule updateRule(MappingRule mappingRule) {
-		JpaUtil.lind(Entry.class).equal("mappingRuleId", mappingRule.getId()).delete();
+		// JpaUtil.lind(Entry.class).equal("mappingRuleId", mappingRule.getId()).delete();
+		// JpaUtil.update(mappingRule);
 		JpaUtil.update(mappingRule, new SmartCrudPolicy() {
 			@Override
 			public void apply(CrudContext context) {
 				if (context.getEntity() instanceof Entry) {
 					MappingRule mappingRule = context.getParent();
 					Entry entry = context.getEntity();
-					if(StringUtils.isEmpty(entry.getId())) {
-						// entry.setCrudType(CrudType.SAVE);
-						entry.setId(UUID.randomUUID().toString());
+					if(entry.getMappingRuleId() == null){
+						entry.setMappingRuleId(mappingRule.getId());
 					}
-					entry.setMappingRuleId(mappingRule.getId());
 				}
 				super.apply(context);
 			}

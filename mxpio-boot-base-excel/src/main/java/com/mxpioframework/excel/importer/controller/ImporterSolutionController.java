@@ -21,7 +21,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,7 +54,6 @@ import io.swagger.annotations.ApiOperation;
 @Api(value = "ImporterSolutionController", tags = { "Excel导入接口" })
 @RestController
 @RequestMapping("/excel/import/")
-@Transactional(readOnly = true)
 public class ImporterSolutionController implements ApplicationContextAware {
 	
 	private Collection<String> entityManagerFactoryNames;
@@ -101,7 +99,8 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	@DeleteMapping("rule/remove/{ruleId}")
 	@ApiOperation(value = "删除规则", notes = "删除规则", httpMethod = "DELETE")
 	public Result<MappingRule> removeRule(@PathVariable(name = "ruleId", required = true) String ruleId) {
-		importerSolutionService.deleteRule(ruleId);
+		String ids[] = ruleId.split(",");
+		importerSolutionService.deleteRule(ids);
 		return Result.OK("删除成功！",null);
 	}
 	
@@ -220,12 +219,12 @@ public class ImporterSolutionController implements ApplicationContextAware {
 		
 	}
 	
-	@PostMapping("upload/{importerSolutionId}")
+	@PostMapping("upload/{importerSolutionCode}")
 	@ApiOperation(value = "导入", notes = "上传导入", httpMethod = "POST")
 	public Result<Object> upload(@RequestParam("file") MultipartFile multipartFile,
-			@PathVariable("importerSolutionId") String importerSolutionId) throws Exception {
+			@PathVariable("importerSolutionCode") String importerSolutionCode) throws Exception {
 		String name = multipartFile.getOriginalFilename();
-		Assert.hasLength(importerSolutionId, "Excel导入方案编码必须配置。");
+		Assert.hasLength(importerSolutionCode, "Excel导入方案编码必须配置。");
 		
 		InputStream inpuStream = multipartFile.getInputStream();
 		int count = 0;
@@ -237,7 +236,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 					// context.setStartRow(startRow);
 					context.setFileName(name);
 					context.setFileSize(multipartFile.getSize());
-					context.setImporterSolutionId(importerSolutionId);
+					context.setImporterSolutionCode(importerSolutionCode);
 					// context.setParams(parameter);
 					excelPolicy.apply(context);
 					count = context.getRecords().size() - context.getStartRow();
@@ -251,5 +250,5 @@ public class ImporterSolutionController implements ApplicationContextAware {
 		}
 		return Result.OK("成功导入" + count + "条数据");
 	}
-
+	
 }

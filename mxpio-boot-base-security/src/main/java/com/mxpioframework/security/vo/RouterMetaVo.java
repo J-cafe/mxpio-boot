@@ -17,6 +17,9 @@ public class RouterMetaVo {
 	@ApiModelProperty(value = "是否保持链接")
 	private boolean keepAlive;
 	
+	@ApiModelProperty(value = "是否外部")
+	private boolean outside;
+	
 	@ApiModelProperty(value = "图标")
 	private String icon;
 	

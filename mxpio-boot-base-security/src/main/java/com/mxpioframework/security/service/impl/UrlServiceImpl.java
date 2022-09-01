@@ -123,6 +123,7 @@ public class UrlServiceImpl extends BaseServiceImpl<Url> implements UrlService {
 		u.setComponent(url.getComponent());
 		u.setKeepAlive(url.isKeepAlive());
 		u.setAttributes(url.getAttributes());
+		u.setOutside(url.isOutside());
 		u.setTitle(url.getTitle());
 		return u;
 	}
