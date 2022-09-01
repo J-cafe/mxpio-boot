@@ -48,8 +48,8 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
         this.cacheService = cacheService;
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public void parseDictResult(Result result) {
         Object resultContent = result.getResult();
         if (resultContent instanceof Page) {
@@ -57,6 +57,12 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
             parseDictTextCollection(page.getContent());
         } else if (resultContent instanceof Collection) {
             parseDictTextCollection((Collection) resultContent);
+        } else if (resultContent instanceof DictAble){
+        	try {
+                parseDictPojo(resultContent);
+            } catch (Exception e) {
+                log.error("parseDictPojo", e);
+            }
         }
     }
 
@@ -72,10 +78,10 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
             if (superClass != null) {
                 return getAnnotationOfField(superClass, property, annotationClass);
             } else {
-                log.error("获取属性注解失败", e);
+                log.error("获取属性注解失败:"+superClass, e);
             }
         } catch (SecurityException e) {
-            log.error("获取属性注解失败", e);
+            log.error("获取属性注解失败:"+clazz, e);
         }
         return (T) annotation;
     }
@@ -277,8 +283,11 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
             if (value.trim().length() == 0) {
                 continue; // 跳过循环
             }
+            if(clazz == null){
+            	continue; // 跳过循环
+            }
 
-            if (clazz.equals(DictItem.class)) {
+            if (DictItem.class.equals(clazz)) {
                 tmpText = parseDictValue(code, value);
             } else {
                 tmpText = parseEntityDictValue(code, clazz, dicText, value);
