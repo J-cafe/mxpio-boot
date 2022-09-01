@@ -67,7 +67,7 @@ public class XSSFExcelPolicy implements ExcelPolicy<XSSFContext>, ApplicationCon
 	}
 	
 	protected void initContext(Context context) throws ClassNotFoundException {
-		ImporterSolution importerSolution = getImporterSolution(context.getImporterSolutionId());
+		ImporterSolution importerSolution = getImporterSolution(context.getImporterSolutionCode());
 		context.setStartRow(importerSolution.getStartRow()-1);
 		Class<?> entityClass =  this.classLoader.loadClass(importerSolution.getEntityClassName());
 		List<MappingRule> mappingRules = importerSolution.getMappingRules();
@@ -78,11 +78,11 @@ public class XSSFExcelPolicy implements ExcelPolicy<XSSFContext>, ApplicationCon
 		context.setEntityClass(entityClass);
 	}
 	
-	private ImporterSolution getImporterSolution(String importerSolutionId) {
-		ImporterSolution importerSolution = JpaUtil.getOne(ImporterSolution.class, importerSolutionId);
+	private ImporterSolution getImporterSolution(String importerSolutionCode) {
+		ImporterSolution importerSolution = JpaUtil.linq(ImporterSolution.class).equal("code", importerSolutionCode).findOne();
 		List<MappingRule> mappingRules = JpaUtil
 				.linq(MappingRule.class)
-				.equal("importerSolutionId", importerSolutionId)
+				.equal("importerSolutionId", importerSolution.getId())
 				.list();
 		importerSolution.setMappingRules(mappingRules);
 		return importerSolution;
