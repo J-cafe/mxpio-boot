@@ -4,20 +4,19 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mxpioframework.jpa.annotation.DictAble;
 import com.mxpioframework.jpa.annotation.Generator;
 import com.mxpioframework.jpa.policy.impl.CreatedDatePolicy;
 import com.mxpioframework.jpa.policy.impl.CrudType;
 import com.mxpioframework.jpa.policy.impl.UpdatedDatePolicy;
-
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
 @MappedSuperclass
@@ -54,6 +53,8 @@ public class BaseEntity implements DictAble, Serializable {
   private boolean saveTransient = true;
 
   @Transient
+  @Getter(lombok.AccessLevel.NONE)
+  @Setter(lombok.AccessLevel.NONE)
   private Map<String, String> textMap;
 
   public String putText(String key, String value) {
