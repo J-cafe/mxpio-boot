@@ -21,7 +21,6 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,7 +54,6 @@ import io.swagger.annotations.ApiOperation;
 @Api(value = "ImporterSolutionController", tags = { "Excel导入接口" })
 @RestController
 @RequestMapping("/excel/import/")
-@Transactional(readOnly = true)
 public class ImporterSolutionController implements ApplicationContextAware {
 	
 	private Collection<String> entityManagerFactoryNames;
