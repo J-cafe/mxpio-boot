@@ -57,7 +57,7 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
             parseDictTextCollection(page.getContent());
         } else if (resultContent instanceof Collection) {
             parseDictTextCollection((Collection) resultContent);
-        } else if (resultContent instanceof DictAble){
+        } else if(!(resultContent instanceof Map)){
         	try {
                 parseDictPojo(resultContent);
             } catch (Exception e) {
@@ -100,24 +100,28 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
         for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
 
             Method readMethod = propertyDescriptor.getReadMethod();
+            String propertyName = propertyDescriptor.getName();
+            if("textMap".equals(propertyName)){
+            	continue;
+            }
             if (readMethod == null) {
                 continue;
             }
 
             if (isNestedObject(readMethod.getReturnType())) {
-                dictInfoMap.put(propertyDescriptor.getName(), NESTED_DICT);
+                dictInfoMap.put(propertyName, NESTED_DICT);
                 continue;
             }
 
             Dict dict = readMethod.getAnnotation(Dict.class);
             if (dict == null) {
-                dict = getAnnotationOfField(clazz, propertyDescriptor.getName(), Dict.class);
+                dict = getAnnotationOfField(clazz, propertyName, Dict.class);
             }
 
             if (dict == null) {
                 continue;
             }
-            dictInfoMap.put(propertyDescriptor.getName(), dict);
+            dictInfoMap.put(propertyName, dict);
         }
         return dictInfoMap;
     }

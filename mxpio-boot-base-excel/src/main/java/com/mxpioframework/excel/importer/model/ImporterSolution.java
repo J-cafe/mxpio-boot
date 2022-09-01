@@ -50,8 +50,8 @@ public class ImporterSolution extends BaseEntity {
 	private String desc;
 	
 	@ApiModelProperty(value = "实体管理工厂")
-	@Column(name = "Entity_Manager_Factory_Name_", length = 60)
-	private String EntityManagerFactoryName;
+	@Column(name = "ENTITY_MANAGER_FACTORY_NAME_", length = 60)
+	private String entityManagerFactoryName;
 	
 	@Column(name = "START_ROW_")
 	@ApiModelProperty(value = "起始行")
@@ -102,11 +102,11 @@ public class ImporterSolution extends BaseEntity {
 	}
 
 	public String getEntityManagerFactoryName() {
-		return EntityManagerFactoryName;
+		return entityManagerFactoryName;
 	}
 
 	public void setEntityManagerFactoryName(String entityManagerFactoryName) {
-		EntityManagerFactoryName = entityManagerFactoryName;
+		entityManagerFactoryName = this.entityManagerFactoryName;
 	}
 
 	public List<MappingRule> getMappingRules() {
