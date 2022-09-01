@@ -75,6 +75,10 @@ public class Url extends BaseEntity implements Resource {
 	@ApiModelProperty(value = "是否缓存")
 	private boolean keepAlive;
 	
+	@Column(name = "OUTSIDE_")
+	@ApiModelProperty(value = "是否外部")
+	private boolean outside;
+	
 	@Column(name = "DESCRIPTION_", length = 255)
 	@ApiModelProperty(value = "描述")
 	private String description;

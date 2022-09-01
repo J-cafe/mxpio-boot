@@ -17,6 +17,7 @@ public class RouterUtil {
 			meta.setHidden(url.isNavigable());
 			meta.setIcon(url.getIcon());
 			meta.setKeepAlive(url.isKeepAlive());
+			meta.setOutside(url.isOutside());
 			meta.setTitle(url.getTitle());
 			meta.setOrder(url.getOrder());
 			meta.setDesc(url.getDescription());
