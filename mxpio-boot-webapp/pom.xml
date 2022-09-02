@@ -35,6 +35,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-boot-base-filestorage</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-base-log</artifactId>
 		</dependency>
 		<dependency>

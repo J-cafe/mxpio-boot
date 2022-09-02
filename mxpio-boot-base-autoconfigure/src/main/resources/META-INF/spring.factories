@@ -21,5 +21,6 @@ com.mxpioframework.autoconfigure.module.cache.redis.RedisCacheAutoConfiguration,
 com.mxpioframework.autoconfigure.security.SecurityAutoConfiguration,\
 com.mxpioframework.autoconfigure.quartz.QuartzAutoConfiguration,\
 com.mxpioframework.autoconfigure.flowable.FlowableAutoConfiguration,\
+com.mxpioframework.autoconfigure.filestorage.FilestorageAutoConfiguration,\
 com.mxpioframework.autoconfigure.excel.ExcelAutoConfiguration,\
 com.mxpioframework.autoconfigure.system.SystemAutoConfiguration
