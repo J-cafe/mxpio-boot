@@ -29,9 +29,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.filestorage.entity.MxpioFileInfo;
 import com.mxpioframework.filestorage.service.FileStoragePolicy;
 import com.mxpioframework.filestorage.service.FileStorageService;
@@ -99,7 +99,7 @@ public class FileController {
 
 	@PostMapping("upload")
 	@ApiOperation(value = "上传文件", notes = "上传文件", httpMethod = "POST")
-	public @ResponseBody Object handleFileUpload(HttpServletRequest request) throws IOException {
+	public Result<Map<String, Object>> handleFileUpload(HttpServletRequest request) throws IOException {
 
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 
@@ -146,7 +146,7 @@ public class FileController {
 		if (!otherFiles.isEmpty()) {
 			result.put("files", otherFiles);
 		}
-		return result;
+		return Result.OK(result);
 	}
 
 	// @FileResolver
