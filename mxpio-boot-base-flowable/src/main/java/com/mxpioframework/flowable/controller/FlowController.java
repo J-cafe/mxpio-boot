@@ -33,7 +33,7 @@ public class FlowController {
 	@Autowired
 	private FlowService flowService;
 	
-	@GetMapping("/page")
+	@GetMapping("page")
 	@ApiOperation(value = "流程列表(分页)", notes = "流程列表(分页)", httpMethod = "GET")
 	public Result<Page<Flow>> page(@RequestParam("criteria") String criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
@@ -44,7 +44,7 @@ public class FlowController {
 		return Result.OK(page);
 	}
 	
-	@GetMapping("/list")
+	@GetMapping("list")
 	@ApiOperation(value = "流程列表", notes = "流程列表", httpMethod = "GET")
 	public Result<List<Flow>> list(@RequestParam("criteria") String criteria) throws Exception {
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
@@ -52,21 +52,21 @@ public class FlowController {
 		return Result.OK(flows);
 	}
 	
-	@PostMapping("/add")
+	@PostMapping("add")
 	@ApiOperation(value = "添加流程", notes = "添加流程信息", httpMethod = "POST")
 	public Result<Flow> add(@RequestBody Flow flow) throws Exception {
 		flowService.save(flow);
 		return Result.OK("添加成功",flow);
 	}
 	
-	@PutMapping("/edit")
+	@PutMapping("edit")
 	@ApiOperation(value = "更新流程", notes = "更新流程信息", httpMethod = "PUT")
 	public Result<Flow> edit(@RequestBody Flow flow) throws Exception {
 		flowService.update(flow);
 		return Result.OK("编辑成功",flow);
 	}
 	
-	@DeleteMapping("/remove/{flowCodes}")
+	@DeleteMapping("remove/{flowCodes}")
 	@ApiOperation(value = "删除流程", notes = "根据code删除流程信息", httpMethod = "DELETE")
 	public Result<Flow> remove(@PathVariable(name = "flowCodes", required = true) String flowCodes) throws Exception {
 		String[] flowCode = flowCodes.split(",");

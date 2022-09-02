@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-parent</artifactId>
-	<version>1.0.12-beta.1</version>
+	<version>1.0.12-beta.2</version>
 	<packaging>pom</packaging>
 	<name>mxpio-boot</name>
 	<parent>
@@ -24,7 +24,7 @@
 		</repository>
 	</distributionManagement>
 	<properties>
-		<mxpio.version>1.0.12-beta.1</mxpio.version>
+		<mxpio.version>1.0.12-beta.2</mxpio.version>
 		<java.version>1.8</java.version>
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
 		<swagger.version>2.10.5</swagger.version>
@@ -49,7 +49,7 @@
 		<module>mxpio-boot-base-flowable</module>
 		<module>mxpio-boot-base-log</module>
 		<module>mxpio-boot-base-expression</module>
-    <module>mxpio-boot-base-filestorage</module>
+    	<module>mxpio-boot-base-filestorage</module>
   </modules>
 	<dependencies>
 		<dependency>
@@ -444,6 +444,6 @@
 		<connection>scm:git:https://gitee.com/i_mxpio/mxpio-boot.git</connection>
 		<developerConnection>scm:git:https://gitee.com/i_mxpio/mxpio-boot.git</developerConnection>
 		<url>https://gitee.com/i_mxpio/mxpio-boot.git</url>
-		<tag>1.0.12-beta.1</tag>
+		<tag>1.0.12-beta.2</tag>
 	</scm>
 </project>
