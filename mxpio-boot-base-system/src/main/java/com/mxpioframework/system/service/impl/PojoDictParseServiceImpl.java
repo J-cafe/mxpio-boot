@@ -16,7 +16,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.persistence.Entity;
+
 import org.apache.commons.beanutils.BeanMap;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.ConcurrentReferenceHashMap;
+
 import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.BaseEntity;
@@ -35,6 +38,7 @@ import com.mxpioframework.system.SystemConstant;
 import com.mxpioframework.system.service.DictCacheService;
 import com.mxpioframework.system.service.DictService;
 import com.mxpioframework.system.service.PojoDictParseService;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Component
@@ -80,7 +84,8 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
   }
 
   @SuppressWarnings("unchecked")
-  private <T extends Annotation> T getAnnotationOfField(Class<?> clazz, String property, Class<T> annotationClass) {
+  private <T extends Annotation> T getAnnotationOfField(Class<?> clazz, String property,
+      Class<T> annotationClass) {
     Field field;
     Annotation annotation = null;
     Class<?> currCls = clazz;
@@ -278,44 +283,51 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
       return;
     }
 
-    Map<String, Dict> dictInfo = getDictMapping(clazz);
-
     BeanMap itemBeanMap = new BeanMap(pojo);
-    for (Map.Entry<String, Dict> entry : dictInfo.entrySet()) {
-      String property = entry.getKey();
-      Object value = itemBeanMap.get(property);
-      if (value == null) {
-        continue;
+    for (Map.Entry<String, Dict> entry : getDictMapping(clazz).entrySet()) {
+      try {
+        convertProperty(itemBeanMap, pojo, entry);
+      } catch (Exception e) {
+        log.error("error when convert property.", e);
+      }
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private void convertProperty(BeanMap itemBeanMap, Object pojo, Map.Entry<String, Dict> entry) {
+    String property = entry.getKey();
+    Object value = itemBeanMap.get(property);
+    if (value == null) {
+      return;
+    }
+
+    Dict dict = entry.getValue();
+
+    if (NESTED_DICT.equals(dict)) {
+      if (value instanceof Collection) {
+        parseDictTextCollection((Collection<Object>) value);
+      } else {
+        parseDictPojo(value);
+      }
+    } else {
+      String dictCode = convertDictCode(dict.dicCode(), itemBeanMap);
+      // 翻译字典值对应的txt
+      String text = translateDictValue(dictCode, dict.dicEntity(), dict.dicText(),
+          Objects.toString(value, null));
+
+      log.debug(" 字典Text : " + text);
+      log.debug(" __翻译字典字段__ " + property + SystemConstant.DICT_TEXT_SUFFIX + "： " + text);
+
+      if (pojo instanceof DictAble) {
+        ((DictAble) pojo).putText(property + SystemConstant.DICT_TEXT_SUFFIX, text);
       }
 
-      Dict dict = entry.getValue();
-
-      if (NESTED_DICT.equals(dict)) {
-        if (value instanceof Collection) {
-          parseDictTextCollection((Collection<Object>) value);
-        } else {
-          parseDictPojo(value);
-        }
-      } else {
-        String dictCode = convertDictCode(dict.dicCode(), itemBeanMap);
-        // 翻译字典值对应的txt
-        String text = translateDictValue(dictCode, dict.dicEntity(), dict.dicText(),
-            Objects.toString(value, null));
-
-        log.debug(" 字典Text : " + text);
-        log.debug(" __翻译字典字段__ " + property + SystemConstant.DICT_TEXT_SUFFIX + "： " + text);
-
-        if (pojo instanceof DictAble) {
-          ((DictAble) pojo).putText(property + SystemConstant.DICT_TEXT_SUFFIX, text);
-        }
-
-        String labelProp = dict.displayProp();
-        if (StringUtils.isNotEmpty(dict.displayProp()) && itemBeanMap.containsKey(labelProp)) {
-          try {
-            itemBeanMap.put(labelProp, text);
-          } catch (Exception e) {
-            log.error("set {} to {} failed", text, labelProp, e);
-          }
+      String labelProp = dict.displayProp();
+      if (StringUtils.isNotEmpty(dict.displayProp()) && itemBeanMap.containsKey(labelProp)) {
+        try {
+          itemBeanMap.put(labelProp, text);
+        } catch (Exception e) {
+          log.error("set {} to {} failed", text, labelProp, e);
         }
       }
     }
@@ -360,9 +372,11 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
     return getDictMappings(code).get(value);
   }
 
-  private String parseEntityDictValue(String code, Class<? extends BaseEntity> clazz, String dicText, String value) {
-    String cacheKey = "EntityCache:" + code + ":" + clazz.getName() + ":" + Objects.toString(dicText, "") + ":"
-        + Objects.toString(value, "");
+  private String parseEntityDictValue(String code, Class<? extends BaseEntity> clazz,
+      String dicText, String value) {
+    String cacheKey =
+        "EntityCache:" + code + ":" + clazz.getName() + ":" + Objects.toString(dicText, "") + ":"
+            + Objects.toString(value, "");
 
     String result = cacheService.get(cacheKey);
     if (result != null) {
@@ -384,7 +398,8 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
    * @param valueStr
    * @return
    */
-  private String translateDictValue(String code, Class<? extends BaseEntity> clazz, String dicText, String valueStr) {
+  private String translateDictValue(String code, Class<? extends BaseEntity> clazz, String dicText,
+      String valueStr) {
     if (StringUtils.isEmpty(valueStr) || "null".equals(valueStr)) {
       return null;
     }
