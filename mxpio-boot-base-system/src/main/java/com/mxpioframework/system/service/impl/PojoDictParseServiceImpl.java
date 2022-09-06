@@ -119,6 +119,10 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
 
       Method readMethod = propertyDescriptor.getReadMethod();
       String propertyName = propertyDescriptor.getName();
+      
+      if("textMap".equals(propertyName)){
+    	  continue;
+      }
 
       if (readMethod == null) {
         continue;
