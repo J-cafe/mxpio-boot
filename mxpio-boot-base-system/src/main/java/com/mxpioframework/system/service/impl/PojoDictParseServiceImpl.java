@@ -85,21 +85,24 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
 
   @SuppressWarnings("unchecked")
   private <T extends Annotation> T getAnnotationOfField(Class<?> clazz, String property,
-      Class<T> annotationClass) {
+                                                        Class<T> annotationClass) {
     Field field;
     Annotation annotation = null;
     Class<?> currCls = clazz;
-    while (!currCls.equals(Object.class) && annotation != null) {
+    while (!currCls.equals(Object.class) && annotation == null) {
       try {
-        field = getDeclaredFields(clazz, property);
+        field = getDeclaredFields(currCls, property);
         if (field == null) {
+          currCls = currCls.getSuperclass();
           continue;
         }
         annotation = field.getAnnotation(annotationClass);
+        if(annotation == null){
+          return null;
+        }
       } catch (SecurityException e) {
         log.error("获取属性注解失败:" + clazz, e);
       }
-      currCls = currCls.getSuperclass();
     }
     return (T) annotation;
   }
