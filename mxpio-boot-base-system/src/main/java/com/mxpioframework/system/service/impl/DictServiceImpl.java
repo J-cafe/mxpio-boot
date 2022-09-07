@@ -62,15 +62,15 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<DictItem> getItemsByCode(String code) {
+	public List<DictItem> getItemsByCode(String code, Criteria c) {
 		return JpaUtil.linq(DictItem.class).exists(Dict.class).equal("dictCode", code)
-				.equalProperty("id", "dictId").end().asc("itemSort").list();
+				.equalProperty("id", "dictId").end().where(c).asc("itemSort").list();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Map<String, String> getDictMappingByCode(String code) {
-	    return getItemsByCode(code).stream().collect(Collectors.toMap(DictItem::getItemValue, DictItem::getItemText,
+	    return getItemsByCode(code, Criteria.create()).stream().collect(Collectors.toMap(DictItem::getItemValue, DictItem::getItemText,
 	      (existing, replacement) -> existing));
 	}
 

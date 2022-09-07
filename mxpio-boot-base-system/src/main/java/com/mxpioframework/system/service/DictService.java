@@ -65,10 +65,11 @@ public interface DictService {
 
 	/**
 	 * 根据code获取字典列表
-	 * @param code 字典code
+	 * @param code
+	 * @param c
 	 * @return
 	 */
-	public List<DictItem> getItemsByCode(String code);
+	public List<DictItem> getItemsByCode(String code, Criteria c);
 
 	/**
 	 * 根据字典code以及字典项的值获取字典项

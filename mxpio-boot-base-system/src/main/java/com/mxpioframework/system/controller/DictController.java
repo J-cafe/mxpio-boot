@@ -49,9 +49,10 @@ public class DictController {
 	
 	@GetMapping("{code}/list")
 	@ApiOperation(value = "字典列表", notes = "根据code获取字典列表", httpMethod = "GET")
-	public Result<List<DictItem>> items(@PathVariable(name = "code", required = true) String code) {
-		
-		List<DictItem> items = dictSerivce.getItemsByCode(code);
+	public Result<List<DictItem>> items(@PathVariable(name = "code", required = true) String code,
+			@RequestParam(value = "criteria", required = false) String criteria) {
+		Criteria c = CriteriaUtils.json2Criteria(criteria);		
+		List<DictItem> items = dictSerivce.getItemsByCode(code, c);
 		return Result.OK(items);
 	}
 	
