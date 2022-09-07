@@ -27,7 +27,8 @@ public class SnRuleServiceImpl extends BaseServiceImpl<SerialNumber> implements 
 			Calendar data = Calendar.getInstance();
 			snExpression = snExpression.replace("${YYYY}", data.get(Calendar.YEAR) + "")
 					.replace("${MM}", StringUtils.leftPad(String.valueOf(data.get(Calendar.MONTH) + 1), 2, "0"))
-					.replace("${DD}", data.get(Calendar.DAY_OF_MONTH) + "")
+					.replace("${DD}", StringUtils.leftPad(String.valueOf(data.get(Calendar.DAY_OF_MONTH)), 2, "0"))
+					//.replace("${DD}", data.get(Calendar.DAY_OF_MONTH) + "")
 					.replace("${YY}", (data.get(Calendar.YEAR) + "").substring(2, 4));
 		}
 
