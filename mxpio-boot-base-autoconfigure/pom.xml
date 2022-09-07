@@ -75,5 +75,10 @@
 			<artifactId>mxpio-boot-base-expression</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-boot-base-multitenant</artifactId>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 </project>

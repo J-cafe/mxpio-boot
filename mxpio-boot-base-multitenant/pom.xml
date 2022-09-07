@@ -7,21 +7,15 @@
 		<artifactId>mxpio-boot-parent</artifactId>
 		<version>1.0.12-beta.2</version>
 	</parent>
-	<artifactId>mxpio-boot-base-filestorage</artifactId>
-	<name>文件管理模块</name>
-	<description>文件管理模块</description>
+	<artifactId>mxpio-boot-base-multitenant</artifactId>
+	<name>mxpio-boot-base-multitenant</name>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-base-security</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
 		</dependency>
 	</dependencies>
 </project>

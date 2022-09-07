@@ -23,4 +23,5 @@ com.mxpioframework.autoconfigure.quartz.QuartzAutoConfiguration,\
 com.mxpioframework.autoconfigure.flowable.FlowableAutoConfiguration,\
 com.mxpioframework.autoconfigure.filestorage.FilestorageAutoConfiguration,\
 com.mxpioframework.autoconfigure.excel.ExcelAutoConfiguration,\
-com.mxpioframework.autoconfigure.system.SystemAutoConfiguration
+com.mxpioframework.autoconfigure.system.SystemAutoConfiguration,\
+com.mxpioframework.autoconfigure.multitenant.MultitenantAutoConfiguration

@@ -50,6 +50,7 @@
 		<module>mxpio-boot-base-log</module>
 		<module>mxpio-boot-base-expression</module>
     	<module>mxpio-boot-base-filestorage</module>
+    	<module>mxpio-boot-base-multitenant</module>
   </modules>
 	<dependencies>
 		<dependency>
@@ -181,6 +182,11 @@
 			<dependency>
 				<groupId>com.mxpio</groupId>
 				<artifactId>mxpio-boot-base-expression</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-base-multitenant</artifactId>
 				<version>${mxpio.version}</version>
 			</dependency>
 			<dependency>
