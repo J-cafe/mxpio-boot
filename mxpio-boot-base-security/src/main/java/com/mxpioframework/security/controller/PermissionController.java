@@ -25,7 +25,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(value = "PermissionController", tags = {"授权管理"})
-@RestController
+@RestController("mxpio.security.permissionController")
 @RequestMapping("/permiss/")
 public class PermissionController {
 	

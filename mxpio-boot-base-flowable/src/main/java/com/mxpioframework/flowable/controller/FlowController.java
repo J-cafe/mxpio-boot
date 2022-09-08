@@ -26,7 +26,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(value = "FlowController", tags = {"流程管理"})
-@RestController
+@RestController("mxpio.flowable.flowController")
 @RequestMapping("/flow/")
 public class FlowController {
 	

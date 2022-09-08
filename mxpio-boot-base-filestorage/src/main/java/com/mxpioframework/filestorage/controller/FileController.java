@@ -40,7 +40,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(value = "FileController", tags = { "文件管理" })
-@RestController
+@RestController("mxpio.filestorage.fileController")
 @RequestMapping("/file/")
 public class FileController {
 

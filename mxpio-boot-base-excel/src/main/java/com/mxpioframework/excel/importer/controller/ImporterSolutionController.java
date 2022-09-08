@@ -52,7 +52,7 @@ import io.swagger.annotations.ApiOperation;
 
 @SuppressWarnings({"rawtypes","unchecked"})
 @Api(value = "ImporterSolutionController", tags = { "Excel导入接口" })
-@RestController
+@RestController("mxpio.excel.importerSolutionController")
 @RequestMapping("/excel/import/")
 public class ImporterSolutionController implements ApplicationContextAware {
 	

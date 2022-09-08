@@ -27,7 +27,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(value = "RoleController", tags = {"角色管理"})
-@RestController
+@RestController("mxpio.security.roleController")
 @RequestMapping("/role")
 public class RoleController {
 	

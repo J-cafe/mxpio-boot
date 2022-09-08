@@ -28,7 +28,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(value = "DeptController", tags = {"部门管理"})
-@RestController
+@RestController("mxpio.security.deptController")
 @RequestMapping("/dept/")
 public class DeptController {
 	

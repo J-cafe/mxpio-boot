@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Api(value = "UserController", tags = {"用户管理"})
-@RestController
+@RestController("mxpio.security.userController")
 @RequestMapping("/user")
 public class UserController {
 	

@@ -23,7 +23,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(value = "ResourceController", tags = {"资源管理"})
-@RestController
+@RestController("mxpio.security.resourceController")
 @RequestMapping("/res/")
 public class ResourceController {
 	

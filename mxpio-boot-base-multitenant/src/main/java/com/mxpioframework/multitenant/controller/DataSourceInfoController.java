@@ -17,7 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(value = "DataSourceInfoController", tags = { "多租户数据源接口" })
-@RestController
+@RestController("mxpio.multitenant.dataSourceInfoController")
 @RequestMapping("/multitenant/ds/")
 public class DataSourceInfoController {
 	

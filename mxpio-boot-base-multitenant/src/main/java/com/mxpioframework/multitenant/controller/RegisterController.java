@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiOperation;
 
 
 @Api(value = "RegisterController", tags = { "多租户注册接口" })
-@RestController
+@RestController("mxpio.multitenant.registerController")
 @RequestMapping("/multitenant/register/")
 public class RegisterController {
 	

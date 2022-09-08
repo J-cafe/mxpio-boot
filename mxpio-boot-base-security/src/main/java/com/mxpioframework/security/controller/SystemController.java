@@ -27,7 +27,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(value = "SystemController", tags = { "系统接口" })
-@RestController
+@RestController("mxpio.security.systemController")
 @RequestMapping("/")
 public class SystemController {
 

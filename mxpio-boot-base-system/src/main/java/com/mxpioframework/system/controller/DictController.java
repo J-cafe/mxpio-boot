@@ -31,7 +31,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(value = "DictController", tags = { "字典接口" })
-@RestController
+@RestController("mxpio.system.dictController")
 @RequestMapping("/sys/dict/")
 public class DictController {
 	

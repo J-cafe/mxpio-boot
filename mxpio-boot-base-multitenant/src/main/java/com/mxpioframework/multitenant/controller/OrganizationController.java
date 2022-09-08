@@ -24,7 +24,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(value = "OrganizationController", tags = { "租户接口" })
-@RestController
+@RestController("mxpio.multitenant.organizationController")
 @RequestMapping("/multitenant/org/")
 public class OrganizationController {
 	

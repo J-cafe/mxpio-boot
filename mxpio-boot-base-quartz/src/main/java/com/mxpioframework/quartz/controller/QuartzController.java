@@ -26,7 +26,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(value = "QuartzController", tags = { "任务调度接口" })
-@RestController
+@RestController("mxpio.quartz.quartzController")
 @RequestMapping("/quartz/")
 public class QuartzController {
 

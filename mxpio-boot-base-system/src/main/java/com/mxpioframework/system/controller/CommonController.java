@@ -12,7 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api(value = "CommonController", tags = { "通用接口" })
-@RestController("system.commonController")
+@RestController("mxpio.system.commonController")
 @RequestMapping("/common/")
 public class CommonController {
 	
