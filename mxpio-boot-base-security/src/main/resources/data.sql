@@ -6,7 +6,9 @@ INSERT INTO `mb_permission`(`id_`, `create_by`, `create_time`, `update_by`, `upd
 INSERT INTO `mb_permission`(`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `attribute_`, `resource_id_`, `resource_type_`, `role_id_`) VALUES ('dc9b95e1-b4b2-4c99-9d97-c8370f565517', NULL, NULL, NULL, NULL, 'ROLE_f51ee61d-089c-47a3-8b98-1e0cba84fa31', 'b583ca44-0371-4f77-a3e3-71546aedert5', 'URL', 'f51ee61d-089c-47a3-8b98-1e0cba84fa31');
 
 
-INSERT INTO `mb_role`(`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `description_`, `name_`) VALUES ('f51ee61d-089c-47a3-8b98-1e0cba84fa31', NULL, '2021-04-20 17:14:15.859000', NULL, NULL, '测试角色', '测试角色');
+-- INSERT INTO `mb_role`(`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `description_`, `name_`) VALUES ('f51ee61d-089c-47a3-8b98-1e0cba84fa31', NULL, '2021-04-20 17:14:15.859000', NULL, NULL, '测试角色', '测试角色');
+INSERT INTO `mb_role` (`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `description_`, `name_`) VALUES ('89b11cb5-7d27-45c4-89f3-60bf4dbf2820', NULL, '2022-07-12 14:26:56.954000', NULL, NULL, NULL, '管理员');
+
 
 INSERT INTO `mb_role_granted_authority`(`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `actor_id_`, `role_id_`) VALUES ('faa2fecd-f3a6-4c33-8f25-018d3f5636ea', NULL, '2021-04-20 17:18:50.431000', NULL, NULL, 'admin', 'f51ee61d-089c-47a3-8b98-1e0cba84fa31');
 
@@ -16,5 +18,6 @@ INSERT INTO `mb_url` (`id_`, `create_by`, `create_time`, `update_by`, `update_ti
 INSERT INTO `mb_url` (`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `component_`, `description_`, `icon_`, `keep_alive_`, `name_`, `navigable_`, `order_`, `parent_id_`, `path_`, `title_`, `outside_`) VALUES ('d7d6e2e4e2934f2c9385a623fd98c6f3', NULL, NULL, NULL, NULL, 'blank', '系统设置', 'setting', b'0', 'isystem', b'1', '11', NULL, 'isystem', '系统设置', '\0');
 INSERT INTO `mb_url` (`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `component_`, `description_`, `icon_`, `keep_alive_`, `name_`, `navigable_`, `order_`, `parent_id_`, `path_`, `title_`, `outside_`) VALUES ('b583ca44-0374-4f77-a3e3-71546aed6d6b', NULL, NULL, NULL, NULL, 'system/UserList', '用户管理', NULL, b'0', 'userList', b'1', '1', 'd7d6e2e4e2934f2c9385a623fd98c6f3', 'list/userList', '用户管理', '\0');
 INSERT INTO `mb_url` (`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `component_`, `description_`, `icon_`, `keep_alive_`, `name_`, `navigable_`, `order_`, `parent_id_`, `path_`, `title_`, `outside_`) VALUES ('b583ca44-0371-4f77-a3e3-71546aedert5', NULL, NULL, NULL, NULL, 'system/MenuList', '菜单管理', NULL, b'0', 'menuList', b'1', '1', 'd7d6e2e4e2934f2c9385a623fd98c6f3', 'list/menuList', '菜单管理', '\0');
+
 
 INSERT INTO `mb_user`(`username_`, `create_by`, `create_time`, `update_by`, `update_time`, `account_non_expired_`, `account_non_locked_`, `administrator_`, `credentials_non_expired_`, `enabled_`, `nickname_`, `password_`, `salt_`) VALUES ('admin', NULL, NULL, NULL, NULL, b'1', b'1', b'0', b'1', b'1', '系统管理员', '{bcrypt}$2a$10$.c/TiWuSmvwitqxBZsF5guQ6qQn08E1b1Aldff/LEb.dkeR0b4RGq', NULL);
