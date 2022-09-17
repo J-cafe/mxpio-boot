@@ -43,7 +43,6 @@ import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.access.filter.JwtTokenFilter;
 import com.mxpioframework.security.access.filter.LoginFilter;
 import com.mxpioframework.security.access.intercept.FilterSecurityInterceptor;
-import com.mxpioframework.security.anthentication.JwtAuthenticationProvider;
 import com.mxpioframework.security.captcha.CaptchaAuthenticationException;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.OnlineUserService;
