@@ -130,7 +130,7 @@ public class Permission extends BaseEntity implements ConfigAttribute{
 
 	 */
 	public String getAttribute() {
-		return "ROLE_"+this.roleId;
+		return attribute;
 	}
 
 	public Resource getResource() {

@@ -545,6 +545,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 									linq.aliasToBean();
 									linq.select(projectionMap.get(entityClass));
 								}
+								//TODO in有超过限度的异常
 								linq.in(otherProperty, collectSet);
 								List result = linq.list();
 								Map<Object, Object> resultMap = JpaUtil.index(result, otherProperty);
