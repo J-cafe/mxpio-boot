@@ -207,4 +207,44 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 		return lin.where(c).paging(page);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public Page<T> listPageCollect(Class<T> clazz, Pageable page, Criteria c, String otherProperty,
+			Class<? extends BaseEntity> collectClazz, String property) {
+		return JpaUtil.linq(clazz).collect(otherProperty, collectClazz, property).where(c).paging(page);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<T> listPageCollect(Class<T> clazz, Pageable page, Criteria c, Class<? extends BaseEntity> collectClazz,
+			String property) {
+		return JpaUtil.linq(clazz).collect(collectClazz, property).where(c).paging(page);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<T> listPageCollect(Class<T> clazz, Pageable page, Criteria c,
+			Class<? extends BaseEntity> collectClazz) {
+		return JpaUtil.linq(clazz).collect(collectClazz).where(c).paging(page);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<T> listCollect(Class<T> clazz, Criteria c, String otherProperty,
+			Class<? extends BaseEntity> collectClazz, String property) {
+		return JpaUtil.linq(clazz).collect(otherProperty, collectClazz, property).where(c).list();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<T> listCollect(Class<T> clazz, Criteria c, Class<? extends BaseEntity> collectClazz, String property) {
+		return JpaUtil.linq(clazz).collect(collectClazz, property).where(c).list();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<T> listCollect(Class<T> clazz, Criteria c, Class<? extends BaseEntity> collectClazz) {
+		return JpaUtil.linq(clazz).collect(collectClazz).where(c).list();
+	}
+
 }

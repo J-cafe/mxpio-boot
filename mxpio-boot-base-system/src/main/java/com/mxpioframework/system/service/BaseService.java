@@ -175,6 +175,38 @@ public interface BaseService<T extends BaseEntity> {
 	public Page<T> listPage(Class<T> clazz, Pageable page, Criteria c);
 	
 	/**
+	 * 分页查询collect
+	 * @param clazz
+	 * @param page
+	 * @param c
+	 * @param otherProperty
+	 * @param collectClazz
+	 * @param property
+	 * @return
+	 */
+	public Page<T> listPageCollect(Class<T> clazz, Pageable page, Criteria c, String otherProperty, Class<? extends BaseEntity> collectClazz, String property);
+	
+	/**
+	 * 分页查询collect
+	 * @param clazz
+	 * @param page
+	 * @param c
+	 * @param collectClazz
+	 * @param property
+	 * @return
+	 */
+	public Page<T> listPageCollect(Class<T> clazz, Pageable page, Criteria c, Class<? extends BaseEntity> collectClazz, String property);
+	
+	/**
+	 * 分页查询collect
+	 * @param clazz
+	 * @param page
+	 * @param c
+	 * @param collectClazz
+	 * @return
+	 */
+	public Page<T> listPageCollect(Class<T> clazz, Pageable page, Criteria c, Class<? extends BaseEntity> collectClazz);
+	/**
 	 * 分页查询(含子查询)
 	 * @param clazz
 	 * @param page
@@ -183,5 +215,35 @@ public interface BaseService<T extends BaseEntity> {
 	 * @return
 	 */
 	public Page<T> listPage(Class<T> clazz, Pageable page, Criteria c, Map<Class<? extends BaseEntity>, String> subQueryEntity);
+	
+	/**
+	 * 通用查询Collect
+	 * @param clazz
+	 * @param c
+	 * @param otherProperty
+	 * @param collectClazz
+	 * @param property
+	 * @return
+	 */
+	public List<T> listCollect(Class<T> clazz, Criteria c, String otherProperty, Class<? extends BaseEntity> collectClazz, String property);
+
+	/**
+	 * 通用查询Collect
+	 * @param clazz
+	 * @param c
+	 * @param collectClazz
+	 * @param property
+	 * @return
+	 */
+	public List<T> listCollect(Class<T> clazz, Criteria c, Class<? extends BaseEntity> collectClazz, String property);
+	
+	/**
+	 * 通用查询Collect
+	 * @param clazz
+	 * @param c
+	 * @param collectClazz
+	 * @return
+	 */
+	public List<T> listCollect(Class<T> clazz, Criteria c, Class<? extends BaseEntity> collectClazz);
 
 }
