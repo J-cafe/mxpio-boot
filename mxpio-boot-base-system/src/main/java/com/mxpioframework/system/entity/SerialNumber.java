@@ -5,10 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.mxpioframework.jpa.BaseEntity;
+import com.mxpioframework.security.entity.BaseEntity;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,7 +16,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(name = "MB_SERIAL_NUMBER")
-@ApiModel(value="序列号")
+@Schema(description="序列号")
 @ToString
 public class SerialNumber extends BaseEntity {
 	
@@ -25,11 +24,11 @@ public class SerialNumber extends BaseEntity {
 
 	@Id
 	@Column(name = "SN_EXPRESSION_")
-	@ApiModelProperty(value = "序列号表达式")
+	@Schema(description = "序列号表达式")
 	private String snExpression;
 	
 	@Column(name = "CURRENT_RECORD_")
-	@ApiModelProperty(value = "当前记录")
+	@Schema(description = "当前记录")
 	private String currentRecord;
 
 }

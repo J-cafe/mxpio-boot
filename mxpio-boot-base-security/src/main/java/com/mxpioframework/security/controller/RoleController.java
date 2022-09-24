@@ -23,10 +23,10 @@ import com.mxpioframework.security.entity.Role;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.RoleService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Api(value = "RoleController", tags = {"角色管理"})
+@Tag(name = "RoleController", description = "角色管理")
 @RestController("mxpio.security.roleController")
 @RequestMapping("/role")
 public class RoleController {
@@ -35,7 +35,7 @@ public class RoleController {
 	private RoleService roleService;
 	
 	@GetMapping("/page")
-	@ApiOperation(value = "角色列表(分页)", notes = "获取角色列表(分页)", httpMethod = "GET")
+	@Operation(summary = "角色列表(分页)", description = "获取角色列表(分页)", method = "GET")
 	public Result<Page<Role>> page(String criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
@@ -46,7 +46,7 @@ public class RoleController {
 	}
 	
 	@GetMapping("/list")
-	@ApiOperation(value = "角色列表", notes = "获取角色列表", httpMethod = "GET")
+	@Operation(summary = "角色列表", description = "获取角色列表", method = "GET")
 	public Result<List<Role>> page(String criteria) throws Exception {
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
 		List<Role> roles = roleService.list(c);
@@ -54,28 +54,28 @@ public class RoleController {
 	}
 	
 	@GetMapping("/list/{id}")
-	@ApiOperation(value = "获取角色", notes = "根据ID获取角色", httpMethod = "GET")
+	@Operation(summary = "获取角色", description = "根据ID获取角色", method = "GET")
 	public Result<Role> getById(@PathVariable(name = "id", required = true) String id) throws Exception {
 		Role role = roleService.getById(id);
 		return Result.OK(role);
 	}
 	
 	@PostMapping("/add")
-	@ApiOperation(value = "添加角色", notes = "添加角色信息", httpMethod = "POST")
+	@Operation(summary = "添加角色", description = "添加角色信息", method = "POST")
 	public Result<Role> add(@RequestBody Role role) throws Exception {
 		roleService.save(role);
 		return Result.OK("添加成功",role);
 	}
 	
 	@PutMapping("/edit")
-	@ApiOperation(value = "更新角色", notes = "更新角色信息", httpMethod = "PUT")
+	@Operation(summary = "更新角色", description = "更新角色信息", method = "PUT")
 	public Result<Role> edit(@RequestBody Role role) throws Exception {
 		roleService.update(role);
 		return Result.OK("编辑成功",role);
 	}
 	
 	@DeleteMapping("/remove/{id}")
-	@ApiOperation(value = "删除角色", notes = "根据角色名rolename删除角色信息", httpMethod = "DELETE")
+	@Operation(summary = "删除角色", description = "根据角色名rolename删除角色信息", method = "DELETE")
 	public Result<Role> delete(@PathVariable(name = "id", required = true) String id) throws Exception {
 		String ids[] = id.split(",");
 		for(String key : ids){
@@ -85,7 +85,7 @@ public class RoleController {
 	}
 	
 	@GetMapping("/list/{id}/without")
-	@ApiOperation(value = "未绑定用户", notes = "获取未绑定用户列表", httpMethod = "GET")
+	@Operation(summary = "未绑定用户", description = "获取未绑定用户列表", method = "GET")
 	public Result<Page<User>> getUsersWithout(
 			@PathVariable(name = "id",required = true) String id,
 			String criteria,
@@ -98,7 +98,7 @@ public class RoleController {
 	}
 	
 	@GetMapping("/list/{id}/within")
-	@ApiOperation(value = "获取绑定用户", notes = "获取绑定用户列表", httpMethod = "GET")
+	@Operation(summary = "获取绑定用户", description = "获取绑定用户列表", method = "GET")
 	public Result<Page<User>> getUsersWithin(
 			@PathVariable(name = "id",required = true) String id,
 			String criteria,
@@ -111,7 +111,7 @@ public class RoleController {
 	}
 	
 	@PostMapping("/list/{id}/add/actors")
-	@ApiOperation(value = "添加绑定权限演员", notes = "获取绑定权限演员列表", httpMethod = "POST")
+	@Operation(summary = "添加绑定权限演员", description = "获取绑定权限演员列表", method = "POST")
 	public Result<?> addActors(
 			@PathVariable(name = "id",required = true) String id,
 			@RequestBody List<String> actorIds) throws Exception {
@@ -120,7 +120,7 @@ public class RoleController {
 	}
 	
 	@PostMapping("/list/{id}/remove/actors")
-	@ApiOperation(value = "添加绑定权限演员", notes = "获取绑定权限演员列表", httpMethod = "POST")
+	@Operation(summary = "添加绑定权限演员", description = "获取绑定权限演员列表", method = "POST")
 	public Result<?> removeActors(
 			@PathVariable(name = "id",required = true) String id,
 			@RequestBody List<String> actorIds) throws Exception {

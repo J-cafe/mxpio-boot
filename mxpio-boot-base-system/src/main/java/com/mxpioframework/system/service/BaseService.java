@@ -8,9 +8,9 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.policy.CrudPolicy;
 import com.mxpioframework.jpa.query.Criteria;
+import com.mxpioframework.security.entity.BaseEntity;
 
 public interface BaseService<T extends BaseEntity> {
 	

@@ -1,32 +1,31 @@
 package com.mxpioframework.security.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@ApiModel(value="路由扩展信息")
+@Schema(description="路由扩展信息")
 public class RouterMetaVo {
 	
-	@ApiModelProperty(value = "标题")
+	@Schema(description = "标题")
 	private String title;
 	
-	@ApiModelProperty(value = "是否隐藏")
+	@Schema(description = "是否隐藏")
 	private boolean isHidden;
 	
-	@ApiModelProperty(value = "是否保持链接")
+	@Schema(description = "是否保持链接")
 	private boolean keepAlive;
 	
-	@ApiModelProperty(value = "是否外部")
+	@Schema(description = "是否外部")
 	private boolean outside;
 	
-	@ApiModelProperty(value = "图标")
+	@Schema(description = "图标")
 	private String icon;
 	
-	@ApiModelProperty(value = "排序")
+	@Schema(description = "排序")
 	private Integer order;
 	
-	@ApiModelProperty(value = "描述")
+	@Schema(description = "描述")
 	private String desc;
 	
 }

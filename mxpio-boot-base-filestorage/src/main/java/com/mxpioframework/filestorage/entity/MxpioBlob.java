@@ -6,11 +6,10 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
-import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
+import com.mxpioframework.security.entity.BaseEntity;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,7 +17,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(name = "MB_FILE_BLOB")
-@ApiModel(value="Blob对象")
+@Schema(description="Blob对象")
 public class MxpioBlob extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -26,7 +25,7 @@ public class MxpioBlob extends BaseEntity {
 	@Id
 	@Generator
 	@Column(name = "ID_")
-	@ApiModelProperty(value = "ID")
+	@Schema(description = "ID")
 	private String id;
 	
 	@Lob

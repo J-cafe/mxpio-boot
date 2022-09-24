@@ -11,11 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.lin.Linq;
 import com.mxpioframework.jpa.policy.CrudPolicy;
 import com.mxpioframework.jpa.query.Criteria;
+import com.mxpioframework.security.entity.BaseEntity;
 import com.mxpioframework.system.entity.TreeAble;
 import com.mxpioframework.system.service.BaseService;
 

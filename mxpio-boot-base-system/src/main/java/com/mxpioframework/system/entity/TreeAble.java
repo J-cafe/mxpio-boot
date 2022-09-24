@@ -2,7 +2,7 @@ package com.mxpioframework.system.entity;
 
 import java.util.List;
 
-import com.mxpioframework.jpa.BaseEntity;
+import com.mxpioframework.security.entity.BaseEntity;
 
 public interface TreeAble<T extends BaseEntity> {
 

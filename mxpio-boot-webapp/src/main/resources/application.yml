@@ -1,9 +1,11 @@
 spring:
   profiles:
     active: dev
-swagger:
-  production: false
-  basic:
-    enable: false
-    username: mxpio
-    password: 123456
+springdoc: 
+  swagger-ui: 
+    path: /swagger-ui.html
+    enabled: true
+  api-docs: 
+    path: /v3/api-docs
+    enabled: true
+  show-actuator: true

@@ -6,7 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import com.mxpioframework.jpa.BaseEntity;
+import com.mxpioframework.security.entity.BaseEntity;
 
 public class BaseController<E extends BaseEntity> {
 

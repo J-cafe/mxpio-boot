@@ -20,10 +20,10 @@ import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.multitenant.domain.Organization;
 import com.mxpioframework.multitenant.manager.service.OrganizationService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Api(value = "OrganizationController", tags = { "租户接口" })
+@Tag(name = "OrganizationController", description = "租户接口")
 @RestController("mxpio.multitenant.organizationController")
 @RequestMapping("/multitenant/org/")
 public class OrganizationController {
@@ -32,7 +32,7 @@ public class OrganizationController {
 	private OrganizationService organizationService;
 	
 	@GetMapping("page")
-	@ApiOperation(value = "企业列表", notes = "企业列表", httpMethod = "GET")
+	@Operation(summary = "企业列表", description = "企业列表", method = "GET")
 	public Result<Page<Organization>> page(String criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
@@ -43,14 +43,14 @@ public class OrganizationController {
 	}
 	
 	@PostMapping("add")
-	@ApiOperation(value = "新增企业", notes = "新增企业", httpMethod = "POST")
+	@Operation(summary = "新增企业", description = "新增企业", method = "POST")
 	public Result<List<Organization>> save(@RequestBody List<Organization> organizations) {
 		organizationService.save(organizations);
 		return Result.OK(organizations);
 	}
 	
 	@GetMapping("check/{organizationId}")
-	@ApiOperation(value = "查询企业是否存在", notes = "查询企业是否存在", httpMethod = "GET")
+	@Operation(summary = "查询企业是否存在", description = "查询企业是否存在", method = "GET")
 	public Result<Object> isExist(@PathVariable String organizationId) {
 		if (organizationService.isExist(organizationId)) {
 			return Result.error("公司ID已经存在。");

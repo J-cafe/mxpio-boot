@@ -308,7 +308,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.exists(lin.getSubquery()));
 		return lin;
 	}
-
+	
 	@Override
 	public T notExists(Class<?> domainClass) {
 		if (!beforeMethodInvoke()) {

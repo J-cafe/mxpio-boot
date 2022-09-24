@@ -5,30 +5,28 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @Entity
 @Table(name = "MB_USER_DEPT")
-@ApiModel(value="用户部门关系")
+@Schema(description="用户部门关系")
 public class UserDept extends BaseEntity {
 	
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@Generator
-	@ApiModelProperty(value = "ID")
+	@Schema(description = "ID")
 	@Column(name = "ID_")
 	private String id;
 
-	@ApiModelProperty(value = "USER_ID")
+	@Schema(description = "USER_ID")
 	@Column(name = "USER_ID_")
 	private String userId;
 	
-	@ApiModelProperty(value = "DEPT_ID")
+	@Schema(description = "DEPT_ID")
 	@Column(name = "DEPT_ID_")
 	private String deptId;
 	

@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.mxpioframework.jpa.BaseEntity;
+import com.mxpioframework.security.entity.BaseEntity;
 import com.mxpioframework.security.entity.DictItem;
 
 @Target(ElementType.FIELD)

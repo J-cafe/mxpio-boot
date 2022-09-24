@@ -1,6 +1,7 @@
 package com.mxpioframework.security.controller;
 
 import java.util.HashSet;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,12 +26,12 @@ import com.mxpioframework.security.service.OnlineUserService;
 import com.mxpioframework.security.service.UserService;
 import com.mxpioframework.security.vo.UpatePassVo;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Api(value = "UserController", tags = {"用户管理"})
+@Tag(name = "UserController", description = "用户管理")
 @RestController("mxpio.security.userController")
 @RequestMapping("/user")
 public class UserController {
@@ -45,7 +46,7 @@ public class UserController {
 	private UserService userService;
 	
 	@GetMapping("/list")
-	@ApiOperation(value = "用户列表", notes = "根据过滤字段filter获取用户列表，过滤用户名和昵称", httpMethod = "GET")
+	@Operation(summary = "用户列表", description = "根据过滤字段filter获取用户列表，过滤用户名和昵称", method = "GET")
 	public Result<Page<User>> list(@RequestParam("criteria") String criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
@@ -56,7 +57,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/info")
-	@ApiOperation(value = "用户信息", notes = "获取当前登录用户信息", httpMethod = "GET")
+	@Operation(summary = "用户信息", description = "获取当前登录用户信息", method = "GET")
 	public Result<UserDetails> info() throws Exception {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		log.info("user==>" + user);
@@ -65,28 +66,28 @@ public class UserController {
 	}
 	
 	@PostMapping("/add")
-	@ApiOperation(value = "添加用户", notes = "添加用户信息", httpMethod = "POST")
+	@Operation(summary = "添加用户", description = "添加用户信息", method = "POST")
 	public Result<UserDetails> add(@RequestBody User user) throws Exception {
 		userService.create(user);
 		return Result.OK("添加成功",user);
 	}
 	
 	@PutMapping("/edit")
-	@ApiOperation(value = "更新用户", notes = "更新用户信息", httpMethod = "PUT")
+	@Operation(summary = "更新用户", description = "更新用户信息", method = "PUT")
 	public Result<User> edit(@RequestBody User user) throws Exception {
 		userService.update(user);
 		return Result.OK("编辑成功",null);
 	}
 	
 	@PutMapping("/updatepass")
-	@ApiOperation(value = "修改密码", notes = "修改密码", httpMethod = "PUT")
+	@Operation(summary = "修改密码", description = "修改密码", method = "PUT")
 	public Result<User> updatePass(@RequestBody UpatePassVo upatePassVo) throws Exception {
 		userService.updatePass(upatePassVo.getUsername(), upatePassVo.getNewPassword());
 		return Result.OK("修改成功",null);
 	}
 	
 	@DeleteMapping("/delete")
-	@ApiOperation(value = "删除用户", notes = "根据用户名username删除用户信息", httpMethod = "DELETE")
+	@Operation(summary = "删除用户", description = "根据用户名username删除用户信息", method = "DELETE")
 	public Result<UserDetails> delete(String username) throws Exception {
 		userService.delete(new HashSet<String>() {
 			private static final long serialVersionUID = 1L;
@@ -99,7 +100,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/logout")
-	@ApiOperation(value = "强退用户", notes = "根据用户名username强退用户", httpMethod = "POST")
+	@Operation(summary = "强退用户", description = "根据用户名username强退用户", method = "POST")
 	public Result<User> logout(@RequestParam("username") String username) throws Exception {
 		onlineUserService.kickOutForUsername(username, cacheProvider);
 		log.info("logout sucessful");

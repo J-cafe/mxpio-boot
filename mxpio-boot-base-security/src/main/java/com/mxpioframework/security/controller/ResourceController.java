@@ -19,10 +19,10 @@ import com.mxpioframework.security.entity.Url;
 import com.mxpioframework.security.service.ElementService;
 import com.mxpioframework.security.service.UrlService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Api(value = "ResourceController", tags = {"资源管理"})
+@Tag(name = "ResourceController", description = "资源管理")
 @RestController("mxpio.security.resourceController")
 @RequestMapping("/res/")
 public class ResourceController {
@@ -34,14 +34,14 @@ public class ResourceController {
 	private ElementService elementService;
 	
 	@GetMapping("url/list")
-	@ApiOperation(value = "获取全部菜单", notes = "获取全部菜单", httpMethod = "GET")
+	@Operation(summary = "获取全部菜单", description = "获取全部菜单", method = "GET")
 	public Result<List<Url>> loadAllUrl() {
 		List<Url> urls = urlService.findAllTree();
 		return Result.OK(urls);
 	}
 	
 	@PostMapping("url/add")
-	@ApiOperation(value = "新增菜单", notes = "新增菜单", httpMethod = "POST")
+	@Operation(summary = "新增菜单", description = "新增菜单", method = "POST")
 	@SecurityCacheEvict
 	public Result<Object> saveUrl(@RequestBody Url url) {
 		url.setId(null);
@@ -50,7 +50,7 @@ public class ResourceController {
 	}
 	
 	@PutMapping("url/edit")
-	@ApiOperation(value = "更新菜单", notes = "更新菜单信息", httpMethod = "PUT")
+	@Operation(summary = "更新菜单", description = "更新菜单信息", method = "PUT")
 	@SecurityCacheEvict
 	public Result<Object> updateUrl(@RequestBody Url url) {
 		urlService.update(url);
@@ -58,7 +58,7 @@ public class ResourceController {
 	}
 	
 	@DeleteMapping("url/remove")
-	@ApiOperation(value = "删除菜单", notes = "删除菜单信息", httpMethod = "DELETE")
+	@Operation(summary = "删除菜单", description = "删除菜单信息", method = "DELETE")
 	@SecurityCacheEvict
 	public Result<Object> deleteUrl(@RequestParam("id") String id) {
 		boolean b = urlService.deleteBundleById(id);
@@ -71,7 +71,7 @@ public class ResourceController {
 	}
 	
 	@PostMapping("element/add")
-	@ApiOperation(value = "新增组件", notes = "新增组件信息", httpMethod = "POST")
+	@Operation(summary = "新增组件", description = "新增组件信息", method = "POST")
 	@SecurityCacheEvict
 	public Result<Object> saveElement(@RequestBody Element element) {
 		elementService.save(element);
@@ -79,7 +79,7 @@ public class ResourceController {
 	}
 	
 	@PutMapping("element/edit")
-	@ApiOperation(value = "更新组件", notes = "更新组件信息", httpMethod = "PUT")
+	@Operation(summary = "更新组件", description = "更新组件信息", method = "PUT")
 	@SecurityCacheEvict
 	public Result<Object> updateElement(@RequestBody Element element) {
 		elementService.update(element);
@@ -87,7 +87,7 @@ public class ResourceController {
 	}
 	
 	@DeleteMapping("element/remove")
-	@ApiOperation(value = "删除组件", notes = "删除组件信息", httpMethod = "DELETE")
+	@Operation(summary = "删除组件", description = "删除组件信息", method = "DELETE")
 	@SecurityCacheEvict
 	public Result<Object> deleteElement(String id) {
 		elementService.delete(id, Element.class);

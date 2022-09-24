@@ -13,10 +13,10 @@ import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.multitenant.domain.DataSourceInfo;
 import com.mxpioframework.multitenant.manager.service.DataSourceInfoService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Api(value = "DataSourceInfoController", tags = { "多租户数据源接口" })
+@Tag(name = "DataSourceInfoController", description = "多租户数据源接口")
 @RestController("mxpio.multitenant.dataSourceInfoController")
 @RequestMapping("/multitenant/ds/")
 public class DataSourceInfoController {
@@ -25,20 +25,20 @@ public class DataSourceInfoController {
 	private DataSourceInfoService dataSourceInfoService;
 	
 	@GetMapping("list")
-	@ApiOperation(value = "数据源列表", notes = "数据源列表", httpMethod = "GET")
+	@Operation(summary = "数据源列表", description = "数据源列表", method = "GET")
 	public Result<List<DataSourceInfo>> list() {
 		return Result.OK(dataSourceInfoService.load());
 	}
 	
 	@PostMapping("add")
-	@ApiOperation(value = "新增数据源", notes = "新增数据源", httpMethod = "POST")
+	@Operation(summary = "新增数据源", description = "新增数据源", method = "POST")
 	public Result<List<DataSourceInfo>> save(List<DataSourceInfo> organizations) {
 		dataSourceInfoService.save(organizations);
 		return Result.OK(organizations);
 	}
 	
 	@GetMapping("check/{dataSourceInfoId}")
-	@ApiOperation(value = "查询数据源是否存在", notes = "查询数据源是否存在", httpMethod = "GET")
+	@Operation(summary = "查询数据源是否存在", description = "查询数据源是否存在", method = "GET")
 	public Result<Object> isExist(@PathVariable String dataSourceInfoId) {
 		if (dataSourceInfoService.isExist(dataSourceInfoId)) {
 			return Result.error("数据源ID已经存在。");

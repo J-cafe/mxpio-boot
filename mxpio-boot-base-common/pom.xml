@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.mxpio</groupId>
 		<artifactId>mxpio-boot-parent</artifactId>
-		<version>1.0.12-beta.3</version>
+		<version>1.0.12-beta.4</version>
 	</parent>
 	<artifactId>mxpio-boot-base-common</artifactId>
 	<name>公共模块</name>
@@ -19,27 +19,17 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
-		<!-- Swagger UI 相关 -->
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-webmvc-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-spring-webmvc</artifactId>
-		</dependency>
-		<dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>swagger-bootstrap-ui</artifactId>
-            <version>1.9.6</version>
-        </dependency>
-		<dependency>
-		    <groupId>commons-beanutils</groupId>
-		    <artifactId>commons-beanutils</artifactId>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
 		</dependency>
 		<!-- fastjson -->
 		<dependency>

@@ -10,16 +10,14 @@ import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.ToString;
 
 @Entity
 @Table(name = "MB_ROLE")
-@ApiModel(value="角色对象")
+@Schema(description="角色对象")
 @ToString
 public class Role extends BaseEntity {
 
@@ -28,23 +26,23 @@ public class Role extends BaseEntity {
 	@Id
 	@Column(name = "ID_", length = 64)
 	@Generator
-	@ApiModelProperty(value = "ID")
+	@Schema(description = "ID")
 	private String id;
 	
 	@Column(name = "NAME_", length = 64)
-	@ApiModelProperty(value = "角色名称")
+	@Schema(description = "角色名称")
 	private String name;
 	
 	@Column(name = "DESCRIPTION_", length = 255)
-	@ApiModelProperty(value = "角色描述")
+	@Schema(description = "角色描述")
 	private String description;
 	
 	@Transient
-	@ApiModelProperty(value = "权限列表", hidden = true)
+	@Schema(description = "权限列表", hidden = true)
 	private List<Permission> permissions;
 	
 	@Transient
-	@ApiModelProperty(value = "授权信息", hidden = true)
+	@Schema(description = "授权信息", hidden = true)
 	private List<GrantedAuthority> authorities;
 	
 	public String getId() {

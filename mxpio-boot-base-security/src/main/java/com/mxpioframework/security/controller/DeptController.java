@@ -24,10 +24,10 @@ import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.entity.UserDept;
 import com.mxpioframework.security.service.DeptService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Api(value = "DeptController", tags = {"部门管理"})
+@Tag(name = "DeptController", description = "部门管理")
 @RestController("mxpio.security.deptController")
 @RequestMapping("/dept/")
 public class DeptController {
@@ -36,14 +36,14 @@ public class DeptController {
 	private DeptService deptService;
 	
 	@GetMapping("/tree")
-	@ApiOperation(value = "部门列表", notes = "获取部门列表", httpMethod = "GET")
+	@Operation(summary = "部门列表", description = "获取部门列表", method = "GET")
 	public Result<List<Dept>> tree(@RequestParam(name = "criteria", required = false) String criteria) throws Exception {
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
 		return Result.OK(deptService.getDeptTree(c));
 	}
 	
 	@GetMapping("/role/without/{roleId}")
-	@ApiOperation(value = "未绑定部门", notes = "分页获取未绑定角色ID的部门", httpMethod = "GET")
+	@Operation(summary = "未绑定部门", description = "分页获取未绑定角色ID的部门", method = "GET")
 	public Result<Page<Dept>> without(@RequestParam(name = "criteria", required = false) String criteria,
 			@PathVariable(value = "roleId") String roleId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
@@ -54,7 +54,7 @@ public class DeptController {
 	}
 	
 	@GetMapping("/role/within/{roleId}")
-	@ApiOperation(value = "绑定部门", notes = "分页获取绑定角色ID的部门", httpMethod = "GET")
+	@Operation(summary = "绑定部门", description = "分页获取绑定角色ID的部门", method = "GET")
 	public Result<Page<Dept>> within(@RequestParam(name = "criteria", required = false) String criteria,
 			@PathVariable(value = "roleId") String roleId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
@@ -65,7 +65,7 @@ public class DeptController {
 	}
 	
 	@GetMapping("/user/without/{deptId}")
-	@ApiOperation(value = "未关联用户", notes = "分页获取未关联部门ID的用户", httpMethod = "GET")
+	@Operation(summary = "未关联用户", description = "分页获取未关联部门ID的用户", method = "GET")
 	public Result<Page<User>> userWithout(@RequestParam(name = "criteria", required = false) String criteria,
 			@PathVariable(value = "deptId") String deptId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
@@ -76,7 +76,7 @@ public class DeptController {
 	}
 	
 	@GetMapping("/user/within/{deptId}")
-	@ApiOperation(value = "关联用户", notes = "分页获取关联部门ID的用户", httpMethod = "GET")
+	@Operation(summary = "关联用户", description = "分页获取关联部门ID的用户", method = "GET")
 	public Result<Page<User>> userWithin(@RequestParam(name = "criteria", required = false) String criteria,
 			@PathVariable(value = "deptId") String deptId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
@@ -87,14 +87,14 @@ public class DeptController {
 	}
 	
 	@PostMapping("/user/add")
-	@ApiOperation(value = "关联用户", notes = "关联用户", httpMethod = "POST")
+	@Operation(summary = "关联用户", description = "关联用户", method = "POST")
 	public Result<List<UserDept>> userAdd(@RequestBody List<UserDept> userDepts) throws Exception {
 		deptService.saveUserDepts(userDepts);
 		return Result.OK("关联用户成功",userDepts);
 	}
 	
 	@DeleteMapping("/user/delete/{deptId}/{userIds}")
-	@ApiOperation(value = "删除关联用户", notes = "删除关联用户", httpMethod = "DELETE")
+	@Operation(summary = "删除关联用户", description = "删除关联用户", method = "DELETE")
 	public Result<List<UserDept>> userDelete(@PathVariable(name = "deptId", required = true) String deptId,
 			@PathVariable(name = "userIds", required = true) String userIds) throws Exception {
 		deptService.deleteUserDepts(deptId,userIds);
@@ -102,21 +102,21 @@ public class DeptController {
 	}
 	
 	@PostMapping("/add")
-	@ApiOperation(value = "添加部门", notes = "添加部门信息", httpMethod = "POST")
+	@Operation(summary = "添加部门", description = "添加部门信息", method = "POST")
 	public Result<List<Dept>> add(@RequestBody List<Dept> depts) throws Exception {
 		deptService.saveDepts(depts);;
 		return Result.OK("添加部门成功",depts);
 	}
 	
 	@PutMapping("/edit")
-	@ApiOperation(value = "更新部门", notes = "更新部门信息", httpMethod = "PUT")
+	@Operation(summary = "更新部门", description = "更新部门信息", method = "PUT")
 	public Result<List<Dept>> edit(@RequestBody List<Dept> depts) throws Exception {
 		deptService.updateDepts(depts);;
 		return Result.OK("更新部门成功",depts);
 	}
 	
 	@DeleteMapping("/remove/{deptIds}")
-	@ApiOperation(value = "删除部门", notes = "删除部门信息", httpMethod = "DELETE")
+	@Operation(summary = "删除部门", description = "删除部门信息", method = "DELETE")
 	public Result<List<Dept>> remove(@PathVariable(name = "deptIds", required = true) String deptIds) throws Exception {
 		String[] deptId = deptIds.split(",");
 		deptService.deleteDepts(deptId);

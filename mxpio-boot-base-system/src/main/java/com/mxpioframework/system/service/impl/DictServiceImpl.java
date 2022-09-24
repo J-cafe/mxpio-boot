@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mxpioframework.common.util.BeanReflectionUtils;
-import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
+import com.mxpioframework.security.entity.BaseEntity;
 import com.mxpioframework.security.entity.Dict;
 import com.mxpioframework.security.entity.DictItem;
 import com.mxpioframework.system.service.DictService;

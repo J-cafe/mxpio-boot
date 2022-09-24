@@ -10,17 +10,15 @@ import javax.persistence.Transient;
 
 import org.springframework.security.access.ConfigAttribute;
 
-import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.ToString;
 
 @Entity
 @Table(name = "MB_PERMISSION")
 @ToString
-@ApiModel(value="权限对象")
+@Schema(description="权限对象")
 public class Permission extends BaseEntity implements ConfigAttribute{
 	
 	private static final long serialVersionUID = 1L;
@@ -28,32 +26,32 @@ public class Permission extends BaseEntity implements ConfigAttribute{
 	@Id
 	@Generator
 	@Column(name = "ID_", length = 64)
-	@ApiModelProperty(value = "ID")
+	@Schema(description = "ID")
 	private String id;
 	
 	@Column(name = "ROLE_ID_", length = 64)
-	@ApiModelProperty(value = "角色ID")
+	@Schema(description = "角色ID")
 	private String roleId;
 	
 	@Column(name = "RESOURCE_ID_", length = 64)
-	@ApiModelProperty(value = "资源ID")
+	@Schema(description = "资源ID")
 	private String resourceId;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "RESOURCE_TYPE_", length = 32)
-	@ApiModelProperty(value = "资源类型")
+	@Schema(description = "资源类型")
 	private ResourceType resourceType;
 	
 	@Column(name = "ATTRIBUTE_", length = 255)
-	@ApiModelProperty(value = "资源属性")
+	@Schema(description = "资源属性")
 	private String attribute;
 	
 	@Transient
-	@ApiModelProperty(value = "角色对象")
+	@Schema(description = "角色对象")
 	private Role role;
 	
 	@Transient
-	@ApiModelProperty(value = "资源对象")
+	@Schema(description = "资源对象")
 	private Resource resource;
 	
 	public Role getRole() {

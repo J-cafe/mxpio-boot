@@ -8,16 +8,14 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.ToString;
 
 @Entity
 @Table(name = "MB_ROLE_GRANTED_AUTHORITY")
-@ApiModel(value="角色授权对象")
+@Schema(description="角色授权对象")
 @ToString
 public class RoleGrantedAuthority extends BaseEntity implements GrantedAuthority {
 
@@ -26,15 +24,15 @@ public class RoleGrantedAuthority extends BaseEntity implements GrantedAuthority
 	@Id
 	@Column(name = "ID_", length = 64)
 	@Generator
-	@ApiModelProperty(value = "ID")
+	@Schema(description = "ID")
 	private String id;
 	
 	@Column(name = "ACTOR_ID_", length = 64)
-	@ApiModelProperty(value = "演员ID")
+	@Schema(description = "演员ID")
 	private String actorId;
 	
 	@Column(name = "ROLE_ID_", length = 64)
-	@ApiModelProperty(value = "角色ID")
+	@Schema(description = "角色ID")
 	private String roleId;
 
 	public String getId() {

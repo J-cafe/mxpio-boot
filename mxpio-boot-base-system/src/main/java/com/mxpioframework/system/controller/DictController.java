@@ -27,10 +27,10 @@ import com.mxpioframework.security.entity.Dict;
 import com.mxpioframework.security.entity.DictItem;
 import com.mxpioframework.system.service.impl.DictServiceImpl;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Api(value = "DictController", tags = { "字典接口" })
+@Tag(name = "DictController", description = "字典接口")
 @RestController("mxpio.system.dictController")
 @RequestMapping("/sys/dict/")
 public class DictController {
@@ -39,7 +39,7 @@ public class DictController {
 	private DictServiceImpl dictSerivce;
 
 	@GetMapping("tree/list")
-	@ApiOperation(value = "字典树列表", notes = "获取字典树列表", httpMethod = "GET")
+	@Operation(summary = "字典树列表", description = "获取字典树列表", method = "GET")
 	public Result<List<Dict>> list(String criteria) throws UnsupportedEncodingException {
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
 		
@@ -48,7 +48,7 @@ public class DictController {
 	}
 	
 	@GetMapping("{code}/list")
-	@ApiOperation(value = "字典列表", notes = "根据code获取字典列表", httpMethod = "GET")
+	@Operation(summary = "字典列表", description = "根据code获取字典列表", method = "GET")
 	public Result<List<DictItem>> items(@PathVariable(name = "code", required = true) String code,
 			@RequestParam(value = "criteria", required = false) String criteria) {
 		Criteria c = CriteriaUtils.json2Criteria(criteria);		
@@ -57,7 +57,7 @@ public class DictController {
 	}
 	
 	@GetMapping("{code}/default")
-	@ApiOperation(value = "默认字典项", notes = "根据code获取默认字典项", httpMethod = "GET")
+	@Operation(summary = "默认字典项", description = "根据code获取默认字典项", method = "GET")
 	public Result<DictItem> getDefaultItem(@PathVariable(name = "code", required = true) String code) {
 		
 		DictItem item = dictSerivce.getDefaultItemByCode(code);
@@ -65,7 +65,7 @@ public class DictController {
 	}
 	
 	@GetMapping("{code}/default/value")
-	@ApiOperation(value = "默认字典值", notes = "根据code获取默认字典值", httpMethod = "GET")
+	@Operation(summary = "默认字典值", description = "根据code获取默认字典值", method = "GET")
 	public Result<String> getDefaultItemValue(@PathVariable(name = "code", required = true) String code) {
 		
 		String itemValue = dictSerivce.getDefaultValueByCode(code);
@@ -73,7 +73,7 @@ public class DictController {
 	}
 	
 	@GetMapping("{code}/default/text")
-	@ApiOperation(value = "默认字典文本", notes = "根据code获取默认字典文本", httpMethod = "GET")
+	@Operation(summary = "默认字典文本", description = "根据code获取默认字典文本", method = "GET")
 	public Result<String> getDefaultItemText(@PathVariable(name = "code", required = true) String code) {
 		
 		String itemText = dictSerivce.getDefaultTextByCode(code);
@@ -81,7 +81,7 @@ public class DictController {
 	}
 	
 	@GetMapping("tree/page")
-	@ApiOperation(value = "字典列表", notes = "获取字典列表(分页)", httpMethod = "GET")
+	@Operation(summary = "字典列表", description = "获取字典列表(分页)", method = "GET")
 	public Result<Page<Dict>> page(String criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws UnsupportedEncodingException {
@@ -92,7 +92,7 @@ public class DictController {
 	}
 	
 	@GetMapping("tree/{code}")
-	@ApiOperation(value = "根据code获取字典", notes = "根据code获取字典", httpMethod = "GET")
+	@Operation(summary = "根据code获取字典", description = "根据code获取字典", method = "GET")
 	public Result<Dict> getByCode(@PathVariable(name = "code", required = true) String code) {
 		try{
 			Dict dict = dictSerivce.getByCode(code);
@@ -103,7 +103,7 @@ public class DictController {
 	}
 	
 	@PostMapping("add")
-	@ApiOperation(value = "新增字典", notes = "新增字典", httpMethod = "POST")
+	@Operation(summary = "新增字典", description = "新增字典", method = "POST")
 	public Result<Dict> add(@RequestBody Dict dict) {
 		dictSerivce.save(dict, new SmartCrudPolicyAdapter(){
 			@Override
@@ -120,7 +120,7 @@ public class DictController {
 	}
 	
 	@PostMapping("{code}/add")
-	@ApiOperation(value = "新增字典项", notes = "新增字典项", httpMethod = "POST")
+	@Operation(summary = "新增字典项", description = "新增字典项", method = "POST")
 	public Result<DictItem> addItem(@PathVariable(name = "code", required = true) String code
 			,@RequestBody DictItem item) {
 		Dict dict = dictSerivce.getByCode(code);
@@ -130,7 +130,7 @@ public class DictController {
 	}
 	
 	@PutMapping("{code}/edit")
-	@ApiOperation(value = "更新字典项", notes = "更新字典项", httpMethod = "PUT")
+	@Operation(summary = "更新字典项", description = "更新字典项", method = "PUT")
 	public Result<DictItem> editItem(@PathVariable(name = "code", required = true) String code
 			,@RequestBody DictItem item) {
 		dictSerivce.updateItem(item);
@@ -138,7 +138,7 @@ public class DictController {
 	}
 	
 	@PutMapping("edit")
-	@ApiOperation(value = "编辑字典", notes = "编辑字典（全量）", httpMethod = "PUT")
+	@Operation(summary = "编辑字典", description = "编辑字典（全量）", method = "PUT")
 	public Result<Dict> edit(@RequestBody Dict dict) {
 		dictSerivce.update(dict, new SmartCrudPolicyAdapter(){
 			@Override
@@ -155,7 +155,7 @@ public class DictController {
 	}
 	
 	@DeleteMapping("remove/{id}")
-	@ApiOperation(value = "删除字典", notes = "删除字典", httpMethod = "DELETE")
+	@Operation(summary = "删除字典", description = "删除字典", method = "DELETE")
 	public Result<Dict> remove(@PathVariable(name = "id", required = true) String id) {
 		String ids[] = id.split(",");
 		for(String key : ids){
@@ -178,7 +178,7 @@ public class DictController {
 	}
 	
 	@DeleteMapping("remove/item/{id}")
-	@ApiOperation(value = "删除字典项", notes = "删除字典项", httpMethod = "DELETE")
+	@Operation(summary = "删除字典项", description = "删除字典项", method = "DELETE")
 	public Result<DictItem> removeItem(@PathVariable(name = "id", required = true) String id) {
 		String ids[] = id.split(",");
 		for(String key : ids){

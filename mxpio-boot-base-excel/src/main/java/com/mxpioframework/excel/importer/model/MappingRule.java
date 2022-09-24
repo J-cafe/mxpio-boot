@@ -18,13 +18,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.mxpioframework.excel.importer.parser.CellPostParser;
 import com.mxpioframework.excel.importer.parser.CellPreParser;
-import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
+import com.mxpioframework.security.entity.BaseEntity;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-@ApiModel(value="Excel导入映射规则")
+@Schema(description="Excel导入映射规则")
 @Entity
 @Table(name = "MB_EXCEL_MAPPING_RULE")
 public class MappingRule extends BaseEntity {
@@ -32,41 +31,41 @@ public class MappingRule extends BaseEntity {
 	@Id
 	@Generator
 	@Column(name = "ID_", length = 36)
-	@ApiModelProperty(value = "ID")
+	@Schema(description = "ID")
 	private String id;
 	
-	@ApiModelProperty(value = "名称")
+	@Schema(description = "名称")
 	@Column(name = "NAME_", length = 255)
 	private String name;
 	
 	@Column(name = "IMPORTER_SOLUTION_ID_", length = 64)
 	private String importerSolutionId;
 	
-	@ApiModelProperty(value = "Excel列号")
+	@Schema(description = "Excel列号")
 	@Column(name = "EXCEL_COLUMN_")
 	private int excelColumn;
 	
-	@ApiModelProperty(value = "忽略错误格式数据")
+	@Schema(description = "忽略错误格式数据")
 	@Column(name = "IGNORE_ERROR_FORMAT_DATA_")
 	private boolean ignoreErrorFormatData;
 	
-	@ApiModelProperty(value = "实体属性")
+	@Schema(description = "实体属性")
 	@Column(name = "PROPERTY_NAME_", length = 60)
 	private String propertyName;
 	
-	@ApiModelProperty(value = "单元格后置解析器")
+	@Schema(description = "单元格后置解析器")
 	@Column(name = "CELL_POST_PARSER_BEAN_", length = 255)
 	private String cellPostParserBean = CellPostParser.DEFAULT;
 	
-	@ApiModelProperty(value = "单元格后置解析器参数")
+	@Schema(description = "单元格后置解析器参数")
 	@Column(name = "CELL_POST_PARSER_PARAM_", length = 255)
 	private String cellPostParserParam;
 	
-	@ApiModelProperty(value = "单元格前置解析器")
+	@Schema(description = "单元格前置解析器")
 	@Column(name = "CELL_PREV_PARSER_BEAN_", length = 255)
 	private String cellPreParserBean = CellPreParser.DEFAULT;
 	
-	@ApiModelProperty(value = "单元格前置解析器参数")
+	@Schema(description = "单元格前置解析器参数")
 	@Column(name = "CELL_PREV_PARSER_PARAM_", length = 255)
 	private String cellPreParserParam;
 	

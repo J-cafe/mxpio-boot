@@ -8,11 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -21,7 +19,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(name = "MB_DICT")
-@ApiModel(value="字典")
+@Schema(description="字典")
 @ToString
 public class Dict extends BaseEntity {
 
@@ -30,27 +28,27 @@ public class Dict extends BaseEntity {
 	@Id
 	@Generator
 	@Column(name = "ID_", updatable = false)
-	@ApiModelProperty(value = "ID", hidden = true)
+	@Schema(description = "ID", hidden = true)
 	private String id;
 	
 	@Column(name = "DICT_CODE_", updatable = false)
-	@ApiModelProperty(value = "编号")
+	@Schema(description = "编号")
 	private String dictCode;
 	
 	@Column(name = "DICT_NAME_")
-	@ApiModelProperty(value = "名称")
+	@Schema(description = "名称")
 	private String dictName;
 	
 	@Column(name = "DICT_DESC_")
-	@ApiModelProperty(value = "描述")
+	@Schema(description = "描述")
 	private String dictDesc;
 	
 	@Column(name = "DICT_TYPE_")
-	@ApiModelProperty(value = "类别")
+	@Schema(description = "类别")
 	private String dictType;
 	
 	@Column(name = "DICT_DEFAULT_VALUE_")
-	@ApiModelProperty(value = "默认值")
+	@Schema(description = "默认值")
 	private String dictDefaultValue;
 	
 	@Transient

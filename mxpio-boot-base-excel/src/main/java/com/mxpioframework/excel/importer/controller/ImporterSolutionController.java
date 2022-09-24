@@ -47,11 +47,11 @@ import com.mxpioframework.excel.importer.service.ImporterSolutionService;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.CriteriaUtils;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @SuppressWarnings({"rawtypes","unchecked"})
-@Api(value = "ImporterSolutionController", tags = { "Excel导入接口" })
+@Tag(name = "ImporterSolutionController", description = "Excel导入接口")
 @RestController("mxpio.excel.importerSolutionController")
 @RequestMapping("/excel/import/")
 public class ImporterSolutionController implements ApplicationContextAware {
@@ -72,7 +72,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 
 
 	@GetMapping("list")
-	@ApiOperation(value = "导入方案", notes = "获取导入方案列表", httpMethod = "GET")
+	@Operation(summary = "导入方案", description = "获取导入方案列表", method = "GET")
 	public Result<Page<ImporterSolution>> loadImporterSolutions(String criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws UnsupportedEncodingException {
@@ -84,7 +84,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	}
 	
 	@GetMapping("list/{importerSolutionId}/rules")
-	@ApiOperation(value = "方案规则", notes = "获取方案规则列表", httpMethod = "GET")
+	@Operation(summary = "方案规则", description = "获取方案规则列表", method = "GET")
 	public Result<Page<MappingRule>> loadMappingRules(String criteria, 
 			@PathVariable(value="importerSolutionId") String importerSolutionId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
@@ -97,7 +97,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	}
 	
 	@DeleteMapping("rule/remove/{ruleId}")
-	@ApiOperation(value = "删除规则", notes = "删除规则", httpMethod = "DELETE")
+	@Operation(summary = "删除规则", description = "删除规则", method = "DELETE")
 	public Result<MappingRule> removeRule(@PathVariable(name = "ruleId", required = true) String ruleId) {
 		String ids[] = ruleId.split(",");
 		importerSolutionService.deleteRule(ids);
@@ -105,59 +105,59 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	}
 	
 	@PostMapping("rule/add")
-	@ApiOperation(value = "新增规则", notes = "新增规则", httpMethod = "POST")
+	@Operation(summary = "新增规则", description = "新增规则", method = "POST")
 	public Result<MappingRule> addRule(@RequestBody MappingRule mappingRule) throws UnsupportedEncodingException {
 		importerSolutionService.saveRule(mappingRule);
 		return Result.OK(mappingRule);
 	}
 	
 	@PutMapping("rule/edit")
-	@ApiOperation(value = "更新规则", notes = "更新规则", httpMethod = "PUT")
+	@Operation(summary = "更新规则", description = "更新规则", method = "PUT")
 	public Result<MappingRule> editRule(@RequestBody MappingRule mappingRule) throws UnsupportedEncodingException {
 		importerSolutionService.updateRule(mappingRule);
 		return Result.OK(mappingRule);
 	}
 	
 	@GetMapping("factory/list")
-	@ApiOperation(value = "数据源", notes = "获取数据源", httpMethod = "GET")
+	@Operation(summary = "数据源", description = "获取数据源", method = "GET")
 	public Result<Collection<String>> loadEntityManagerFactoryNames() {
 		return Result.OK(entityManagerFactoryNames);
 	}
 	
 	@GetMapping("factory/list/{entityManagerFactoryName}/list")
-	@ApiOperation(value = "领域类", notes = "根据数据源获取领域类", httpMethod = "GET")
+	@Operation(summary = "领域类", description = "根据数据源获取领域类", method = "GET")
 	public Result<Collection<String>> loadEntityClassNames(@PathVariable("entityManagerFactoryName") String entityManagerFactoryName) {
 		return Result.OK(entityClassNameMap.get(entityManagerFactoryName));
 	}
 	
 	@GetMapping("parser/pre/list")
-	@ApiOperation(value = "前置处理器", notes = "获取前置处理器", httpMethod = "GET")
+	@Operation(summary = "前置处理器", description = "获取前置处理器", method = "GET")
 	public Result<Collection<Map<String, String>>> loadCellPreParsers() {
 		return Result.OK(cellPreParsers);
 	}
 	
 	@GetMapping("parser/post/list")
-	@ApiOperation(value = "后置处理器", notes = "获取后置处理器", httpMethod = "GET")
+	@Operation(summary = "后置处理器", description = "获取后置处理器", method = "GET")
 	public Result<Collection<Map<String, String>>> loadCellPostParsers() {
 		return Result.OK(cellPostParsers);
 	}
 	
 	@PostMapping("/add")
-	@ApiOperation(value = "添加导入方案", notes = "添加导入方案", httpMethod = "POST")
+	@Operation(summary = "添加导入方案", description = "添加导入方案", method = "POST")
 	public Result<ImporterSolution> saveImporterSolutions(@RequestBody ImporterSolution importerSolution) {
 		importerSolutionService.save(importerSolution);
 		return Result.OK(importerSolution);
 	}
 	
 	@PutMapping("/edit")
-	@ApiOperation(value = "修改导入方案", notes = "修改导入方案", httpMethod = "PUT")
+	@Operation(summary = "修改导入方案", description = "修改导入方案", method = "PUT")
 	public Result<ImporterSolution> edit(@RequestBody ImporterSolution importerSolution) {
 		importerSolutionService.update(importerSolution);
 		return Result.OK(importerSolution);
 	}
 	
 	@DeleteMapping("/remove/{id}")
-	@ApiOperation(value = "删除方案", notes = "删除方案信息", httpMethod = "DELETE")
+	@Operation(summary = "删除方案", description = "删除方案信息", method = "DELETE")
 	public Result<ImporterSolution> delete(@PathVariable(name = "id", required = true) String id) throws Exception {
 		String ids[] = id.split(",");
 		importerSolutionService.deleteBatch(ids);
@@ -165,7 +165,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	}
 	
 	@PostMapping("/rule/mapping/create")
-	@ApiOperation(value = "生成规则映射", notes = "生成规则映射", httpMethod = "POST")
+	@Operation(summary = "生成规则映射", description = "生成规则映射", method = "POST")
 	public Result<ImporterSolution> autoCreateMappingRules(@RequestBody ImporterSolution importerSolution) {
 		return Result.OK(autoCreateMappingRulePolicy.apply(importerSolution));
 	}
@@ -220,7 +220,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	}
 	
 	@PostMapping("upload/{importerSolutionCode}")
-	@ApiOperation(value = "导入", notes = "上传导入", httpMethod = "POST")
+	@Operation(summary = "导入", description = "上传导入", method = "POST")
 	public Result<Object> upload(@RequestParam("file") MultipartFile multipartFile,
 			@PathVariable("importerSolutionCode") String importerSolutionCode) throws Exception {
 		String name = multipartFile.getOriginalFilename();

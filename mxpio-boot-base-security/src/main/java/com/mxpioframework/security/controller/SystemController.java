@@ -23,10 +23,10 @@ import com.mxpioframework.security.captcha.impl.DefaultCaptcha;
 import com.mxpioframework.security.service.OnlineUserService;
 import com.mxpioframework.security.vo.TokenVo;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Api(value = "SystemController", tags = { "系统接口" })
+@Tag(name = "SystemController", description = "系统接口")
 @RestController("mxpio.security.systemController")
 @RequestMapping("/")
 public class SystemController {
@@ -41,7 +41,7 @@ public class SystemController {
 	private OnlineUserService onlineUserService;
 	
 	@GetMapping("captcha")
-	@ApiOperation(value = "加载验证码", notes = "获取登录验证码", httpMethod = "GET")
+	@Operation(summary = "加载验证码", description = "获取登录验证码", method = "GET")
 	public Result<CaptchaDTO> captcha() throws IOException {
 		CaptchaDTO captcha = new CaptchaDTO();;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -61,7 +61,7 @@ public class SystemController {
 	}
 	
 	@PostMapping("token/refresh")
-	@ApiOperation(value = "刷新token", notes = "双token机制下通过refreshToken刷新权限token", httpMethod = "POST")
+	@Operation(summary = "刷新token", description = "双token机制下通过refreshToken刷新权限token", method = "POST")
 	public Result<Object> refreshToken(@RequestBody TokenVo tokenVo) throws IOException {
 		TokenVo result;
 		result = onlineUserService.refreshToken(tokenVo.getRefreshToken(), cacheProvider);

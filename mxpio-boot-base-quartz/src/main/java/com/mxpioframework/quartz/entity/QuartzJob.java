@@ -5,11 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
+import com.mxpioframework.security.entity.BaseEntity;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,7 +16,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(name = "MB_QUARTZ_JOB")
-@ApiModel(value="定时任务")
+@Schema(description="定时任务")
 public class QuartzJob extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -25,27 +24,27 @@ public class QuartzJob extends BaseEntity {
 	@Id
 	@Generator
 	@Column(name = "ID_", updatable = false)
-	@ApiModelProperty(value = "ID")
+	@Schema(description = "ID")
 	private String id;
 	
 	@Column(name = "JOB_CLASS_NAME_")
-	@ApiModelProperty(value = "任务类名")
+	@Schema(description = "任务类名")
 	private String jobClassName;
 	
 	@Column(name = "JOB_CRON_")
-	@ApiModelProperty(value = "CRON表达式")
+	@Schema(description = "CRON表达式")
 	private String jobCron;
 	
 	@Column(name = "JOB_PARAMS_")
-	@ApiModelProperty(value = "参数")
+	@Schema(description = "参数")
 	private String jobParams;
 	
 	@Column(name = "JOB_DESC_")
-	@ApiModelProperty(value = "描述")
+	@Schema(description = "描述")
 	private String desc;
 	
 	@Column(name = "JOB_STATUS_")
-	@ApiModelProperty(value = "状态")
+	@Schema(description = "状态")
 	private String status;
 
 }

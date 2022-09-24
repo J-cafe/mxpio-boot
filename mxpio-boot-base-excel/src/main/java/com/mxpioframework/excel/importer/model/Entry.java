@@ -5,14 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
+import com.mxpioframework.security.entity.BaseEntity;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @Entity
-@ApiModel(value="Excel导入参数")
+@Schema(description="Excel导入参数")
 @Table(name = "MB_EXCEL_ENTRY")
 public class Entry extends BaseEntity {
 
@@ -21,19 +20,19 @@ public class Entry extends BaseEntity {
 	@Id
 	@Generator
 	@Column(name = "ID_", length = 36)
-	@ApiModelProperty(value = "ID")
+	@Schema(description = "ID")
 	private String id;
 	
-	@ApiModelProperty(value = "关键字")
+	@Schema(description = "关键字")
 	@Column(name = "KEY_", length = 100)
 	private String key;
 	
 	@Column(name = "VALUE_", length = 100)
-	@ApiModelProperty(value = "值")
+	@Schema(description = "值")
 	private String value;
 	
 	@Column(name = "MAPPING_RULE_ID_", length = 36)
-	@ApiModelProperty(value = "映射规则ID")
+	@Schema(description = "映射规则ID")
 	private String mappingRuleId;
 
 	public String getId() {

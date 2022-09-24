@@ -6,8 +6,8 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.query.Criteria;
+import com.mxpioframework.security.entity.BaseEntity;
 import com.mxpioframework.security.entity.Dict;
 import com.mxpioframework.security.entity.DictItem;
 

@@ -11,8 +11,8 @@ import java.util.Map;
 import org.springframework.util.CollectionUtils;
 
 import com.mxpioframework.common.util.BeanReflectionUtils;
-import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.JpaUtil;
+import com.mxpioframework.jpa.MxpioEntity;
 import com.mxpioframework.jpa.annotation.Generator;
 import com.mxpioframework.jpa.policy.CrudContext;
 import com.mxpioframework.jpa.policy.CrudPolicy;
@@ -38,8 +38,8 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 			CrudType crudType = context.getCrudType();
 			Map<CrudType,List<Map<String, Object>>> generatorPoliciesMap = new HashMap<>();
 			for (Object entity : target) {
-				if(entity instanceof BaseEntity) {
-					CrudType entityStatus = ((BaseEntity) entity).getCrudType();
+				if(entity instanceof MxpioEntity) {
+					CrudType entityStatus = ((MxpioEntity) entity).getCrudType();
 					if(entityStatus != null) {
 						context.setCrudType(entityStatus);
 					}else {

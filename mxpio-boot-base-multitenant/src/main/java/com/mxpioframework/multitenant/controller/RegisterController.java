@@ -15,11 +15,10 @@ import com.mxpioframework.multitenant.domain.Organization;
 import com.mxpioframework.multitenant.manager.service.RegisterService;
 import com.mxpioframework.security.entity.User;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-
-@Api(value = "RegisterController", tags = { "多租户注册接口" })
+@Tag(name = "RegisterController", description = "多租户注册接口")
 @RestController("mxpio.multitenant.registerController")
 @RequestMapping("/multitenant/register/")
 public class RegisterController {
@@ -28,7 +27,7 @@ public class RegisterController {
 	private RegisterService registerService;
 	
 	@PostMapping("organization")
-	@ApiOperation(value = "企业注册", notes = "企业注册", httpMethod = "POST")
+	@Operation(summary = "企业注册", description = "企业注册", method = "POST")
 	public Result<User> registerOrganization(@RequestBody Map<String, Object> info) throws Exception {
 		Organization organization = new Organization();
 		organization.setId((String)info.get("organizationId"));
@@ -48,7 +47,7 @@ public class RegisterController {
 	}
 	
 	@PostMapping("user")
-	@ApiOperation(value = "用户注册", notes = "用户注册", httpMethod = "POST")
+	@Operation(summary = "用户注册", description = "用户注册", method = "POST")
 	public Result<User> registerUser(@RequestBody Map<String, Object> info) throws Exception {
 		Organization organization = new Organization();
 		organization.setId((String)info.get("organizationId"));
@@ -68,19 +67,19 @@ public class RegisterController {
 	}
 	
 	@GetMapping("exist/user/{organizationId}/{username}")
-	@ApiOperation(value = "判断用户是否存在", notes = "判断用户是否存在", httpMethod = "GET")
+	@Operation(summary = "判断用户是否存在", description = "判断用户是否存在", method = "GET")
 	public Result<Boolean> isExistUser(@PathVariable String organizationId, @PathVariable String username) throws Exception {
 		return Result.OK(registerService.isExistUser(organizationId, username));
 	}
 	
 	@GetMapping("exist/organization/{organizationId}")
-	@ApiOperation(value = "判断企业是否存在", notes = "判断企业是否存在", httpMethod = "GET")
+	@Operation(summary = "判断企业是否存在", description = "判断企业是否存在", method = "GET")
 	public Result<Boolean> isExistOrganization(@PathVariable String organizationId) throws Exception {
 		return  Result.OK(registerService.isExistOrganization(organizationId));
 	}
 	
 	@GetMapping("organization/{organizationId}")
-	@ApiOperation(value = "查询企业名称", notes = "查询企业名称", httpMethod = "GET")
+	@Operation(summary = "查询企业名称", description = "查询企业名称", method = "GET")
 	public Result<String> getOrganizationName(@PathVariable String organizationId) throws Exception {
 		return Result.OK(registerService.getOrganization(organizationId).getName());
 	}

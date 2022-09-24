@@ -8,11 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.Generator;
+import com.mxpioframework.security.entity.BaseEntity;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,7 +19,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(name = "MB_GENERATE_MODEL")
-@ApiModel(value="领域模型")
+@Schema(description="领域模型")
 public class GenModel extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
@@ -28,59 +27,59 @@ public class GenModel extends BaseEntity {
 	@Id
 	@Generator
 	@Column(name = "ID_")
-	@ApiModelProperty(value = "ID")
+	@Schema(description = "ID")
 	private String id;
 	
 	@Column(name = "SYSTEM_ID_")
-	@ApiModelProperty(value = "系统ID")
+	@Schema(description = "系统ID")
 	private String systemId;
 	
 	@Column(name = "TABLE_NAME_")
-	@ApiModelProperty(value = "数据库表名")
+	@Schema(description = "数据库表名")
 	private String tableName;
 	
 	@Column(name = "MODEL_CODE_")
-	@ApiModelProperty(value = "模型编码")
+	@Schema(description = "模型编码")
 	private String modelCode;
 	
 	@Column(name = "MODEL_NAME_")
-	@ApiModelProperty(value = "模型名称")
+	@Schema(description = "模型名称")
 	private String modelName;
 	
 	@Column(name = "MODEL_TYPE_")
-	@ApiModelProperty(value = "模型类型")
+	@Schema(description = "模型类型")
 	private String modelType;
 	
 	@Column(name = "MODEL_VERSION_")
-	@ApiModelProperty(value = "版本")
+	@Schema(description = "版本")
 	private String modelVersion;
 	
 	@Column(name = "MODEL_STATUS_")
-	@ApiModelProperty(value = "状态")
+	@Schema(description = "状态")
 	private String modelStatus;
 	
 	@Column(name = "PACKAGE_NAME_")
-	@ApiModelProperty(value = "子包名")
+	@Schema(description = "子包名")
 	private String packageName;
 	
 	@Column(name = "TREE_ABLE_")
-	@ApiModelProperty(value = "是否树")
+	@Schema(description = "是否树")
 	private boolean treeAble;
 	
 	@Column(name = "TREE_CHILDREN_")
-	@ApiModelProperty(value = "叶子属性")
+	@Schema(description = "叶子属性")
 	private String treeChildren;
 	
 	@Column(name = "CURRENT_NODE_KEY_")
-	@ApiModelProperty(value = "当前节点属性")
+	@Schema(description = "当前节点属性")
 	private String currentNodeKey;
 	
 	@Column(name = "PARENT_NODE_KEY_")
-	@ApiModelProperty(value = "父节点属性")
+	@Schema(description = "父节点属性")
 	private String parentNodeKey;
 	
 	@Column(name = "MODEL_DESC_")
-	@ApiModelProperty(value = "属性描述")
+	@Schema(description = "属性描述")
 	private String modelDesc;
 	
 	@Transient

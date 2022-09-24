@@ -22,10 +22,11 @@ import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.quartz.entity.QuartzJob;
 import com.mxpioframework.quartz.service.QuartzService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
-@Api(value = "QuartzController", tags = { "任务调度接口" })
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "QuartzController", description = "任务调度接口")
 @RestController("mxpio.quartz.quartzController")
 @RequestMapping("/quartz/")
 public class QuartzController {
@@ -34,7 +35,7 @@ public class QuartzController {
 	private QuartzService quartzService;
 	
 	@GetMapping("list")
-	@ApiOperation(value = "任务列表", notes = "获取任务列表", httpMethod = "GET")
+	@Operation(summary = "任务列表", description = "获取任务列表", method = "GET")
 	public Result<List<QuartzJob>> list(String criteria) throws IOException {
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
 		List<QuartzJob> jobs = quartzService.list(c);
@@ -42,7 +43,7 @@ public class QuartzController {
 	}
 	
 	@GetMapping("page")
-	@ApiOperation(value = "任务列表(分页)", notes = "获取任务列表(分页)", httpMethod = "GET")
+	@Operation(summary = "任务列表(分页)", description = "获取任务列表(分页)", method = "GET")
 	public Result<Page<QuartzJob>> page(String criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws IOException {
@@ -53,21 +54,21 @@ public class QuartzController {
 	}
 	
 	@PostMapping("add")
-	@ApiOperation(value = "新增任务", notes = "新增任务", httpMethod = "POST")
+	@Operation(summary = "新增任务", description = "新增任务", method = "POST")
 	public Result<QuartzJob> add(@RequestBody QuartzJob job) {
 		quartzService.addJob(job);
 		return Result.OK(job);
 	}
 	
 	@PutMapping("edit")
-	@ApiOperation(value = "编辑任务", notes = "编辑任务", httpMethod = "PUT")
+	@Operation(summary = "编辑任务", description = "编辑任务", method = "PUT")
 	public Result<QuartzJob> edit(@RequestBody QuartzJob job) {
 		quartzService.editJob(job);
 		return Result.OK(job);
 	}
 	
 	@PostMapping("run/{id}")
-	@ApiOperation(value = "启动任务", notes = "启动任务", httpMethod = "POST")
+	@Operation(summary = "启动任务", description = "启动任务", method = "POST")
 	public Result<QuartzJob> run(@PathVariable(value = "id") String id) {
 		boolean result = quartzService.resume(id);
 		if(result) {
@@ -78,7 +79,7 @@ public class QuartzController {
 	}
 	
 	@PostMapping("pause/{id}")
-	@ApiOperation(value = "暂停任务", notes = "暂停任务", httpMethod = "POST")
+	@Operation(summary = "暂停任务", description = "暂停任务", method = "POST")
 	public Result<QuartzJob> pause(@PathVariable(value = "id") String id) {
 		boolean result = quartzService.pause(id);
 		if(result) {
@@ -90,7 +91,7 @@ public class QuartzController {
 	}
 	
 	@DeleteMapping("delete/{id}")
-	@ApiOperation(value = "删除任务", notes = "删除任务", httpMethod = "DELETE")
+	@Operation(summary = "删除任务", description = "删除任务", method = "DELETE")
 	public Result<QuartzJob> delete(@PathVariable(value = "id") String id) {
 		quartzService.deleteJob(id);
 		return Result.OK();

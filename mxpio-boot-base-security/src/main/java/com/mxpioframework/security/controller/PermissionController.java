@@ -21,10 +21,10 @@ import com.mxpioframework.security.service.UrlService;
 import com.mxpioframework.security.util.RouterUtil;
 import com.mxpioframework.security.vo.RouterVo;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Api(value = "PermissionController", tags = {"授权管理"})
+@Tag(name = "PermissionController", description = "授权管理")
 @RestController("mxpio.security.permissionController")
 @RequestMapping("/permiss/")
 public class PermissionController {
@@ -39,34 +39,34 @@ public class PermissionController {
 	private UrlService urlService;
 	
 	@GetMapping("list")
-	@ApiOperation(value = "授权信息", notes = "根据登录用户获取权限信息", httpMethod = "GET")
+	@Operation(summary = "授权信息", description = "根据登录用户获取权限信息", method = "GET")
 	public Result<List<Permission>> loadPermissions(
 			@RequestParam(value = "roleId", required = false) String roleId) {
 		return Result.OK(roleUrlService.load(roleId));
 	}
 	
 	@PostMapping("add")
-	@ApiOperation(value = "保存权限", notes = "新增权限信息", httpMethod = "POST")
+	@Operation(summary = "保存权限", description = "新增权限信息", method = "POST")
 	public Result<Object> save(@RequestBody Permission permission) {
 		permissionService.save(permission);
 		return Result.OK(permission);
 	}
 	
 	@PostMapping("add/batch")
-	@ApiOperation(value = "保存权限", notes = "新增权限信息", httpMethod = "POST")
+	@Operation(summary = "保存权限", description = "新增权限信息", method = "POST")
 	public Result<Object> saveBatch(@RequestBody List<Permission> permissions) {
 		permissionService.save(permissions);
 		return Result.OK(permissions);
 	}
 	
 	@GetMapping("element/list")
-	@ApiOperation(value = "加载页面组件", notes = "根据pageId获取已授权的组件清单", httpMethod = "GET")
+	@Operation(summary = "加载页面组件", description = "根据pageId获取已授权的组件清单", method = "GET")
 	public Result<Collection<Element>> loadElements(String pageId) throws Exception {
 		return Result.OK(permissionService.loadElements(pageId));
 	}
 	
 	@GetMapping("url/list")
-	@ApiOperation(value = "加载已授权路由", notes = "根据登录用户获取已授权的路由信息", httpMethod = "GET")
+	@Operation(summary = "加载已授权路由", description = "根据登录用户获取已授权的路由信息", method = "GET")
 	public Result<List<RouterVo>> loadUrl() {
 		List<Url> urls = urlService.findTreeByUsername(null);
 		return Result.OK(RouterUtil.buildRouter(urls));

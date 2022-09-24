@@ -22,10 +22,10 @@ import com.mxpioframework.flowable.service.FlowService;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.CriteriaUtils;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Api(value = "FlowController", tags = {"流程管理"})
+@Tag(name = "FlowController", description = "流程管理")
 @RestController("mxpio.flowable.flowController")
 @RequestMapping("/flow/")
 public class FlowController {
@@ -34,7 +34,7 @@ public class FlowController {
 	private FlowService flowService;
 	
 	@GetMapping("page")
-	@ApiOperation(value = "流程列表(分页)", notes = "流程列表(分页)", httpMethod = "GET")
+	@Operation(summary = "流程列表(分页)", description = "流程列表(分页)", method = "GET")
 	public Result<Page<Flow>> page(@RequestParam("criteria") String criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
@@ -45,7 +45,7 @@ public class FlowController {
 	}
 	
 	@GetMapping("list")
-	@ApiOperation(value = "流程列表", notes = "流程列表", httpMethod = "GET")
+	@Operation(summary = "流程列表", description = "流程列表", method = "GET")
 	public Result<List<Flow>> list(@RequestParam("criteria") String criteria) throws Exception {
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
 		List<Flow> flows = flowService.list(c);
@@ -53,21 +53,21 @@ public class FlowController {
 	}
 	
 	@PostMapping("add")
-	@ApiOperation(value = "添加流程", notes = "添加流程信息", httpMethod = "POST")
+	@Operation(summary = "添加流程", description = "添加流程信息", method = "POST")
 	public Result<Flow> add(@RequestBody Flow flow) throws Exception {
 		flowService.save(flow);
 		return Result.OK("添加成功",flow);
 	}
 	
 	@PutMapping("edit")
-	@ApiOperation(value = "更新流程", notes = "更新流程信息", httpMethod = "PUT")
+	@Operation(summary = "更新流程", description = "更新流程信息", method = "PUT")
 	public Result<Flow> edit(@RequestBody Flow flow) throws Exception {
 		flowService.update(flow);
 		return Result.OK("编辑成功",flow);
 	}
 	
 	@DeleteMapping("remove/{flowCodes}")
-	@ApiOperation(value = "删除流程", notes = "根据code删除流程信息", httpMethod = "DELETE")
+	@Operation(summary = "删除流程", description = "根据code删除流程信息", method = "DELETE")
 	public Result<Flow> remove(@PathVariable(name = "flowCodes", required = true) String flowCodes) throws Exception {
 		String[] flowCode = flowCodes.split(",");
         for(String key : flowCode){

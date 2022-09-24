@@ -29,10 +29,10 @@ import org.springframework.util.ConcurrentReferenceHashMap;
 
 import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.common.vo.Result;
-import com.mxpioframework.jpa.BaseEntity;
 import com.mxpioframework.jpa.annotation.DictAble;
 import com.mxpioframework.security.annotation.Dict;
 import com.mxpioframework.security.annotation.Translatable;
+import com.mxpioframework.security.entity.BaseEntity;
 import com.mxpioframework.security.entity.DictItem;
 import com.mxpioframework.system.SystemConstant;
 import com.mxpioframework.system.service.DictCacheService;

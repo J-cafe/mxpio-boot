@@ -36,10 +36,10 @@ import com.mxpioframework.filestorage.entity.MxpioFileInfo;
 import com.mxpioframework.filestorage.service.FileStoragePolicy;
 import com.mxpioframework.filestorage.service.FileStorageService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Api(value = "FileController", tags = { "文件管理" })
+@Tag(name = "FileController", description = "文件管理")
 @RestController("mxpio.filestorage.fileController")
 @RequestMapping("/file/")
 public class FileController {
@@ -61,7 +61,7 @@ public class FileController {
 	}
 
 	@GetMapping("download/{fileNo}")
-	@ApiOperation(value = "下载文件", notes = "根据fileNo下载文件", httpMethod = "GET")
+	@Operation(summary = "下载文件", description = "根据fileNo下载文件", method = "GET")
 	public void download(@PathVariable("fileNo") String fileNo, HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		MxpioFileInfo mxpioFileInfo = fileService.get(fileNo);
@@ -98,7 +98,7 @@ public class FileController {
 	}
 
 	@PostMapping("upload")
-	@ApiOperation(value = "上传文件", notes = "上传文件", httpMethod = "POST")
+	@Operation(summary = "上传文件", description = "上传文件", method = "POST")
 	public Result<Map<String, Object>> handleFileUpload(HttpServletRequest request) throws IOException {
 
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
