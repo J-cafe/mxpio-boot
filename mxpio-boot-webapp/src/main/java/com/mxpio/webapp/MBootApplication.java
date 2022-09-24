@@ -30,7 +30,8 @@ public class MBootApplication {
                 "Application MxpIO-Boot is running! Access URLs:\n\t" +
                 "Local: \t\thttp://localhost:" + port + path + "/\n\t" +
                 "External: \thttp://" + ip + ":" + port + path + "/\n\t" +
-                "Swagger文档: \thttp://" + ip + ":" + port + path + "/doc.html\n\t" +
+                "Swagger文档: \thttp://" + ip + ":" + port + path + "/swagger-ui.html\n\t" +
+                "Swagger api-docs文档: \thttp://" + ip + ":" + port + path + "/v3/api-docs\n\t" +
                 "加载模块: \n" +
                 s.toString() +
                 "----------------------------------------------------------");
