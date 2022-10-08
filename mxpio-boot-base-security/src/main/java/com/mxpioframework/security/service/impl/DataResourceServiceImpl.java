@@ -61,4 +61,11 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 		return JpaUtil.index(list, "path");
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public List<DataResource> getByUrlId(String urlId) {
+		List<DataResource> list = JpaUtil.linq(DataResource.class).equal("parentResId", urlId).list();
+		return list;
+	}
+
 }

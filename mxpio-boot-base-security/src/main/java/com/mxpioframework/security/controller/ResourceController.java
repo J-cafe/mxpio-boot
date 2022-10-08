@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,10 +47,17 @@ public class ResourceController {
 		return Result.OK(urls);
 	}
 	
-	@GetMapping("data/list")
-	@Operation(summary = "获取全部数据资源", description = "获取全部数据资源", method = "GET")
+	@GetMapping("data/api/list")
+	@Operation(summary = "获取全部接口", description = "获取全部接口", method = "GET")
 	public Result<List<DataVo>> loadAllData() {
 		List<DataVo> datas = dataResourceService.findAll();
+		return Result.OK(datas);
+	}
+	
+	@GetMapping("data/list/{urlId}")
+	@Operation(summary = "根据菜单获取数据资源", description = "根据菜单获取数据资源", method = "GET")
+	public Result<List<DataResource>> loadData(@PathVariable(name = "urlId") String urlId) {
+		List<DataResource> datas = dataResourceService.getByUrlId(urlId);
 		return Result.OK(datas);
 	}
 	
