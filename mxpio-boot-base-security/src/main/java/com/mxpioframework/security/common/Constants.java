@@ -22,6 +22,20 @@ public final class Constants {
 
 	 */
 	public final static String URL_TREE_CACHE_KEY = "UrlTree";
+	
+	/**
+
+	 * 数据资源缓存关键字
+
+	 */
+	public final static String DATA_RESOURCE_CACHE_KEY = "DataResource";
+	
+	/**
+
+	 *部门用户缓存关键字
+
+	 */
+	public final static String USER_DEPT_CACHE_KEY = "UserDept";
 	/**
 
 	 * 特定用户下的树形菜单缓存关键字

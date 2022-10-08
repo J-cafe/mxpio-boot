@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -21,51 +19,52 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper=false)
 @Entity
-@Table(name = "MB_ELEMENT")
-@Schema(description="组件对象")
+@Table(name = "MB_URL")
+@Schema(description="数据对象")
 @ToString
-public class Element extends BaseEntity implements Resource {
+public class DataResource extends BaseEntity implements Resource {
 
 	private static final long serialVersionUID = 1L;
 
 	@Transient
-	private ResourceType resourceType = ResourceType.ELEMENT;
-
+	private ResourceType resourceType = ResourceType.DATA;
+	
 	@Id
-	@Generator
 	@Column(name = "ID_", length = 64)
-	@Schema(description = "ID",example="mockOutputStrValue")
+	@Generator
+	@Schema(description = "ID")
 	private String id;
-
+	
+	@Column(name = "NAME_", length = 64)
+	@Schema(description = "名称")
+	private String name;
+	
+	@Column(name = "PATH_", length = 512)
+	@Schema(description = "路径")
+	private String path;
+	
+	@Column(name = "DATA_TYPE_", length = 255)
+	@Schema(description = "数据资源类别")
+	private String dataType;
+	
 	@Column(name = "ELEMENT_ID_", length = 255)
 	@Schema(description = "组件标识")
 	private String elementId;
-
-	@Column(name = "ELEMENT_TYPE", length = 64)
-	@Enumerated(EnumType.STRING)
-	@Schema(description = "组件类型")
-	private ElementType elementType;
-
-	@Column(name = "NAME_", length = 64)
-	@Schema(description = "组件名称")
-	private String name;
-
-	@Column(name = "PATH_", length = 512)
-	@Schema(description = "组件路径")
-	private String path;
-
-	@Column(name = "DESCRIPTION_", length = 512)
-	@Schema(description = "组件描述")
+	
+	@Column(name = "DATA_SCOPE_", length = 512)
+	@Schema(description = "权限范围")
+	private String dataScope;
+	
+	@Column(name = "PARENT_RES_ID_", length = 64)
+	@Schema(description = "所属资源的ID")
+	private String parentResId;
+	
+	@Column(name = "DESCRIPTION_", length = 255)
+	@Schema(description = "描述")
 	private String description;
-
-	@Transient
-	private boolean authorized;
-
-	@Transient
-	private String configAttributeId;
-
+	
 	@Transient
 	private List<ConfigAttribute> attributes = new ArrayList<ConfigAttribute>();
 

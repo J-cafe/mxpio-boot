@@ -53,16 +53,15 @@ public interface SecurityDecisionManager {
 ### 属性配置及默认值
 ```java
 #应用名称
-mxpio.appName=Bstek Development Framework
+mxpio.appName=MxpIO Boot
 #登陆页面背景图片
 mxpio.loginImageBg=dorado/res/static/images/login-bg.jpg
 #首次启动时，用户表为空的情况下是否自动创建一个默认的用户：admin/123456
 mxpio.autoCreateIfUserIsEmpty=true
-#登出地址
-mxpio.logoutPath=logout
 #系统需要匿名访问URL
 mxpio.systemAnonymous=/static/**,/**/*.js, /**/*.css
 #用户自定义需要匿名访问的URL
 mxpio.customAnonymous=
 ```
-
+## 接口/数据权限
+文档待补充

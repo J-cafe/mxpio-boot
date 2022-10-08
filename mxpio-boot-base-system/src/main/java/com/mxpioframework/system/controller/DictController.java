@@ -22,7 +22,6 @@ import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.policy.CrudContext;
 import com.mxpioframework.jpa.policy.impl.SmartCrudPolicyAdapter;
 import com.mxpioframework.jpa.query.Criteria;
-import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.security.entity.Dict;
 import com.mxpioframework.security.entity.DictItem;
 import com.mxpioframework.system.service.impl.DictServiceImpl;
@@ -40,19 +39,18 @@ public class DictController {
 
 	@GetMapping("tree/list")
 	@Operation(summary = "字典树列表", description = "获取字典树列表", method = "GET")
-	public Result<List<Dict>> list(String criteria) throws UnsupportedEncodingException {
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
+	public Result<List<Dict>> list(Criteria criteria) throws UnsupportedEncodingException {
+		// Criteria c = CriteriaUtils.json2Criteria(criteria);
 		
-		List<Dict> dicts = dictSerivce.listWithItems(c);
+		List<Dict> dicts = dictSerivce.listWithItems(criteria);
 		return Result.OK(dicts);
 	}
 	
 	@GetMapping("{code}/list")
 	@Operation(summary = "字典列表", description = "根据code获取字典列表", method = "GET")
 	public Result<List<DictItem>> items(@PathVariable(name = "code", required = true) String code,
-			@RequestParam(value = "criteria", required = false) String criteria) {
-		Criteria c = CriteriaUtils.json2Criteria(criteria);		
-		List<DictItem> items = dictSerivce.getItemsByCode(code, c);
+			@RequestParam(value = "criteria", required = false) Criteria criteria) {
+		List<DictItem> items = dictSerivce.getItemsByCode(code, criteria);
 		return Result.OK(items);
 	}
 	
@@ -82,12 +80,11 @@ public class DictController {
 	
 	@GetMapping("tree/page")
 	@Operation(summary = "字典列表", description = "获取字典列表(分页)", method = "GET")
-	public Result<Page<Dict>> page(String criteria,
+	public Result<Page<Dict>> page(Criteria criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws UnsupportedEncodingException {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		Page<Dict> page = dictSerivce.listPageWithItems(c, pageAble);
+		Page<Dict> page = dictSerivce.listPageWithItems(criteria, pageAble);
 		return Result.OK(page);
 	}
 	

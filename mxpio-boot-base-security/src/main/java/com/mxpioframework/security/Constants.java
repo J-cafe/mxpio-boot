@@ -24,5 +24,34 @@ public class Constants {
             "/webjars/**",
             "/doc.html"
     };
+    
+    public enum DatascopeEnum {
+		DEPT("DEPT", "部门过滤"), USER("USER", "用户过滤"),DEPT_AND_CHILD("DEPT_AND_CHILD", "部门及子部门过滤");
+
+    	DatascopeEnum(String code, String name) {
+			this.code = code;
+			this.name = name;
+		}
+
+		private String code;
+
+		private String name;
+
+		public String getCode() {
+			return code;
+		}
+
+		public void setCode(String code) {
+			this.code = code;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+	}
 
 }

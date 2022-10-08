@@ -1,6 +1,8 @@
 package com.mxpioframework.security.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -113,4 +115,17 @@ public interface DeptService extends BaseService<Dept> {
 	 * @return
 	 */
 	int deleteRoleDepts(String roleId, String deptIds);
+	
+	/**
+	 * 根据用户名获取部门ID（缓存）
+	 * @param username
+	 * @return
+	 */
+	Set<String> getDeptIdsByUser(String username);
+	
+	/**
+	 * 获取部门用户关系（缓存）
+	 * @return
+	 */
+	public Map<String, Set<String>> getAllDeptIdGroupByUser();
 }

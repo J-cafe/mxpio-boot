@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.security.cache.SecurityCacheEvict;
 import com.mxpioframework.security.decision.manager.SecurityDecisionManager;
+import com.mxpioframework.security.entity.DataResource;
 import com.mxpioframework.security.entity.Element;
 import com.mxpioframework.security.entity.Permission;
 import com.mxpioframework.security.entity.ResourceType;
@@ -197,6 +198,7 @@ public class UrlServiceImpl extends BaseServiceImpl<Url> implements UrlService {
 			return false;
 		}else {
 			JpaUtil.lind(Permission.class).equal("resourceId", id).delete();
+			JpaUtil.lind(DataResource.class).equal("parentResId", id).delete();
 			delete(id, Url.class);
 			return true;
 		}

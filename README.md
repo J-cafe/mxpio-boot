@@ -15,7 +15,7 @@
 * Spring Security
 * Spring Cache
 * Alibaba Druid
-* Springfox Swagger2
+* SpringDoc
 * Jwt
 * Lombok
 
@@ -38,6 +38,7 @@ mxpio-boot-parent
 ├─mxpio-boot-base-quartz // Job管理模块
 ├─mxpio-boot-base-ui // UI设计模块
 ├─mxpio-boot-module-cache-redis // 缓存Redis实现
+├─mxpio-boot-base-multitenant // 多租户
 └─mxpio-boot-webapp // 业务项目
 
 
@@ -132,7 +133,7 @@ mvn clean package spring-boot:repackage
 启动项目
 
 ```bash
-java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.4.jar
+java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.5.jar
 ```
 
 ### 6.2新建Maven项目运行
@@ -144,7 +145,7 @@ java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.4.jar
 <parent>
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-parent</artifactId>
-	<version>1.0.12-beta.4</version>
+	<version>1.0.12-beta.5</version>
 </parent>
 ```
 
@@ -239,7 +240,7 @@ mvn clean package spring-boot:repackage
 启动项目
 
 ```bash
-java -jar target\mxpio-boot-example-1.0.12-beta.4.jar
+java -jar target\mxpio-boot-example-1.0.12-beta.5.jar
 ```
 
 ### 6.3源码运行
@@ -305,7 +306,7 @@ mvn clean package spring-boot:repackage
 启动项目
 
 ```bash
-java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.4.jar
+java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.5.jar
 ```
 
 ## 7.开发文档
@@ -327,8 +328,8 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.4.jar
 |       | 角色管理 | 初版已完成 | 初版已完成 |
 |       | 菜单管理 | 初版已完成 | 初版已完成 |
 |       | 部门管理 | 初版已完成 | 初版已完成 |
-|       | 数据权限 | 未开始 | 未开始 |
-|       | 组件权限 | 未开始 | 未开始 |
+|       | 数据权限 | 初版进行中 | 初版进行中 |
+|       | 组件权限 | 初版进行中 | 初版进行中 |
 |       | 字段权限 | 未开始 | 未开始 |
 | 表达式模块 |       | 初版已完成 | 不涉及 |
 | 系统监控 | 性能监控 | 初版已完成 | 初版已完成 |
@@ -343,7 +344,7 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.4.jar
 | 任务调度 |       | 初版已完成 | 初版进行中 |
 | 报表模块 |       | 未开始 | 未开始 |
 | 图表模块 |       | 未开始 | 未开始 |
-| 多租户 |       | 未开始 | 未开始 |
+| 多租户 |       | 初版进行中 | 未开始 |
 | 代码生成 |       | 进行中 | 未开始 |
 
 ## 相关开源项目

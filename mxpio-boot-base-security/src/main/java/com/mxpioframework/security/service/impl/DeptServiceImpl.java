@@ -2,9 +2,13 @@ package com.mxpioframework.security.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,7 @@ import com.mxpioframework.jpa.policy.impl.SmartCrudPolicyAdapter;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.Order;
 import com.mxpioframework.security.cache.SecurityCacheEvict;
+import com.mxpioframework.security.common.Constants;
 import com.mxpioframework.security.entity.Dept;
 import com.mxpioframework.security.entity.RoleGrantedAuthority;
 import com.mxpioframework.security.entity.User;
@@ -253,6 +258,31 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 	public int deleteRoleDepts(String roleId, String deptIds) {
 		String[] deptId = deptIds.split(",");
 		return JpaUtil.lind(RoleGrantedAuthority.class).equal("roleId", roleId).in("actorId",(Object[]) deptId).delete();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Set<String> getDeptIdsByUser(String username) {
+		return getAllDeptIdGroupByUser().get(username);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	@Cacheable(cacheNames = Constants.USER_DEPT_CACHE_KEY, keyGenerator = Constants.KEY_GENERATOR_BEAN_NAME)
+	public Map<String, Set<String>> getAllDeptIdGroupByUser(){
+		List<UserDept> userDepts = JpaUtil.linq(UserDept.class).list();
+		Map<String, Set<String>> result = new HashMap<String, Set<String>>();
+		userDepts.forEach(userDept -> {
+			String username = userDept.getUserId();
+			String deptId = userDept.getDeptId();
+			Set<String> deptIds = result.get(username);
+			if(CollectionUtils.isEmpty(deptIds)){
+				deptIds = new HashSet<>();
+			}
+			deptIds.add(deptId);
+			result.put(username, deptIds);
+		});
+		return result;
 	}
 
 }
