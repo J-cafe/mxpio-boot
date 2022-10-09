@@ -78,10 +78,10 @@ public class ResourceController {
 		return Result.OK(data);
 	}
 	
-	@DeleteMapping("data/remove")
+	@DeleteMapping("data/remove/{id}")
 	@Operation(summary = "删除数据资源", description = "删除数据资源", method = "DELETE")
 	@SecurityCacheEvict
-	public Result<Object> deleteData(@RequestParam("id") String id) {
+	public Result<Object> deleteData(@PathVariable(name = "id") String id) {
 		dataResourceService.delete(id, DataResource.class);
 		return Result.OK();
 	}
