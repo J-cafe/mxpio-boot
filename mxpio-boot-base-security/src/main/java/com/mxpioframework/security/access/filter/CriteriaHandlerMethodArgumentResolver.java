@@ -3,12 +3,11 @@ package com.mxpioframework.security.access.filter;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -40,9 +39,15 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 			WebDataBinderFactory webDataBinderFactory) throws Exception {
 		String criteria = (String) request.getAttribute("criteria", NativeWebRequest.SCOPE_REQUEST);
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		HttpServletRequest servletRequest = request.getNativeRequest(HttpServletRequest.class);
+		// HttpServletRequest servletRequest = request.getNativeRequest(HttpServletRequest.class);
 		Map<String, DataResource> dataResourceMap = dataResourceService.findAllByCatch();
-		DataResource dataResource = dataResourceMap.get(servletRequest.getServletPath());
+		RequestMapping requestMapping = parameter.getMethodAnnotation(RequestMapping.class);
+		RequestMapping classRequestMapping = parameter.getContainingClass().getDeclaredAnnotation(RequestMapping.class);
+		
+		DataResource dataResource = null;
+		if(requestMapping != null){
+			dataResource = dataResourceMap.get(classRequestMapping.value()[0] + requestMapping.value()[0]);
+		}
 		if(dataResource != null){
 			if(!decide(dataResource, c)){
 				throw new InsufficientAuthenticationException("权限异常");
