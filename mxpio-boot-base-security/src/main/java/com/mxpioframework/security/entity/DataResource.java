@@ -45,9 +45,9 @@ public class DataResource extends BaseEntity implements Resource {
 	@Schema(description = "路径")
 	private String path;
 	
-	@Column(name = "DATA_TYPE_", length = 255)
+	@Column(name = "HAS_CRITERIA_")
 	@Schema(description = "数据资源类别")
-	private String dataType;
+	private boolean hasCriteria;
 	
 	@Column(name = "ELEMENT_ID_", length = 255)
 	@Schema(description = "组件标识")

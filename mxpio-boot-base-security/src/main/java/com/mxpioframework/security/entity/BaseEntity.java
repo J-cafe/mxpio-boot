@@ -33,6 +33,10 @@ public class BaseEntity implements DictAble, Serializable, MxpioEntity {
   @Column(name = "CREATE_BY", updatable = false)
   @Schema(description = "创建人")
   private String createBy;
+  
+  @Column(name = "CREATE_DEPT", updatable = false)
+  @Schema(description = "创建部门")
+  private String createDept;
 
   @Generator(policy = ModifierPolicy.class)
   @Column(name = "UPDATE_BY")
