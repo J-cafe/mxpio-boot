@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,12 @@ import com.mxpioframework.security.vo.DataVo;
 @Service
 public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> implements DataResourceService {
 	
+	@Value("${mxpio.systemAnonymous}")
+	private String systemAnonymous;
+
+	@Value("${mxpio.customAnonymous}")
+	private String customAnonymous;
+	
 	@Override
 	public List<DataVo> findAll() {
 		RequestMappingHandlerMapping mapping = ApplicationContextProvider.getBean(RequestMappingHandlerMapping.class);
@@ -32,6 +39,9 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 		for(Map.Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet()){
 			RequestMappingInfo info = m.getKey();
 	        HandlerMethod method = m.getValue();
+	        if("/error".equals(info.getPatternsCondition().getPatterns().toArray()[0])){
+	        	continue;
+	        }
 	        RequestMethodsRequestCondition methodsCondition = info.getMethodsCondition();
 	        MethodParameter[] parameters = method.getMethodParameters();
 	        boolean hasCriteria = false;
@@ -48,7 +58,7 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
     	        	.httpUrls(info.getPatternsCondition().getPatterns())
     	        	.hasCriteria(hasCriteria)
     	        	.build();
-    	        dataVos.add(dataVo);
+    	    dataVos.add(dataVo);
 		}
 		return dataVos;
 	}
@@ -67,5 +77,4 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 		List<DataResource> list = JpaUtil.linq(DataResource.class).equal("parentResId", urlId).list();
 		return list;
 	}
-
 }
