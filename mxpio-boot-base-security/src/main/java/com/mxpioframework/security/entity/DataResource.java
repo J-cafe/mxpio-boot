@@ -21,7 +21,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Entity
-@Table(name = "MB_URL")
+@Table(name = "MB_DATA_RESOURCE")
 @Schema(description="数据对象")
 @ToString
 public class DataResource extends BaseEntity implements Resource {
