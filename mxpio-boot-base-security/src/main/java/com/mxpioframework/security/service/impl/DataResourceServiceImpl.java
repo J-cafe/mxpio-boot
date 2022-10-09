@@ -22,6 +22,8 @@ import com.mxpioframework.security.service.DataResourceService;
 import com.mxpioframework.security.util.ApplicationContextProvider;
 import com.mxpioframework.security.vo.DataVo;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @Service
 public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> implements DataResourceService {
 	
@@ -51,7 +53,14 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 	        		break;
 	        	}
 	        }
+	        
+	        String title = null;
+	        Operation operation = method.getMethodAnnotation(Operation.class);
+	        if(operation != null){
+	        	title = operation.summary();
+	        }
         	DataVo dataVo = DataVo.builder()
+        			.title(title)
     	        	.requestMethods(methodsCondition.getMethods())
     	        	.className(method.getMethod().getDeclaringClass().getName())
     	        	.classMethod(method.getMethod().getName())

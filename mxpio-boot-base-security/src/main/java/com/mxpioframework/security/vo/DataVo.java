@@ -13,6 +13,8 @@ import lombok.Data;
 @Schema(description="数据资源")
 public class DataVo {
 
+	private String title;
+	
 	private Set<RequestMethod> requestMethods;
 	
 	private String className;
