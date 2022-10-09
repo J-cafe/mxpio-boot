@@ -263,7 +263,8 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 	@Override
 	@Transactional(readOnly = true)
 	public Set<String> getDeptIdsByUser(String username) {
-		return getAllDeptIdGroupByUser().get(username);
+		Set<String> deptIds = getAllDeptIdGroupByUser().get(username);
+		return deptIds==null?new HashSet<String>():deptIds;
 	}
 	
 	@Override
