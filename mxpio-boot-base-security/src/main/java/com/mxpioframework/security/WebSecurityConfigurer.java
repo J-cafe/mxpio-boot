@@ -200,6 +200,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
 				throws IOException, ServletException {
 			response.setContentType("application/json;charset=UTF-8");
+			exception.printStackTrace();
 			if(exception instanceof CaptchaAuthenticationException) {
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth(exception.getMessage())));
 			}else if(exception instanceof BadCredentialsException){
