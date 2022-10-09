@@ -61,7 +61,7 @@ public class ResourceController {
 		return Result.OK(datas);
 	}
 	
-	@GetMapping("data/add")
+	@PostMapping("data/add")
 	@Operation(summary = "新增数据资源", description = "新增数据资源", method = "POST")
 	@SecurityCacheEvict
 	public Result<Object> saveData(@RequestBody DataResource data) {
