@@ -65,7 +65,7 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 			if(dataResource.getDataScope() != null){
 				if(com.mxpioframework.security.Constants.DatascopeEnum.DEPT.getCode().equals(dataResource.getDataScope())){
 					Set<String> deptIds = deptService.getDeptIdsByUser(SecurityUtils.getLoginUsername());
-					c.addCriterion("deptId", Operator.IN, deptIds);
+					c.addCriterion("createDept", Operator.IN, deptIds);
 				}else if(com.mxpioframework.security.Constants.DatascopeEnum.USER.getCode().equals(dataResource.getDataScope())) {
 					c.addCriterion("createBy", Operator.EQ, SecurityUtils.getLoginUsername());
 				}
