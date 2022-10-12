@@ -46,7 +46,7 @@ public class UserController {
 	
 	@GetMapping("/list")
 	@Operation(summary = "用户列表", description = "根据过滤字段filter获取用户列表，过滤用户名和昵称", method = "GET")
-	public Result<Page<User>> list(@RequestParam("criteria") Criteria criteria,
+	public Result<Page<User>> list(Criteria criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);

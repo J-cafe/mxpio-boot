@@ -46,8 +46,7 @@ public class DictController {
 	
 	@GetMapping("{code}/list")
 	@Operation(summary = "字典列表", description = "根据code获取字典列表", method = "GET")
-	public Result<List<DictItem>> items(@PathVariable(name = "code", required = true) String code,
-			@RequestParam(value = "criteria", required = false) Criteria criteria) {
+	public Result<List<DictItem>> items(Criteria criteria, @PathVariable(name = "code", required = true) String code) {
 		List<DictItem> items = dictSerivce.getItemsByCode(code, criteria);
 		return Result.OK(items);
 	}

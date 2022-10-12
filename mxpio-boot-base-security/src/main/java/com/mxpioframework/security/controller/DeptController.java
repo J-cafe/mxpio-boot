@@ -36,13 +36,13 @@ public class DeptController {
 	
 	@GetMapping("/tree")
 	@Operation(summary = "部门列表", description = "获取部门列表", method = "GET")
-	public Result<List<Dept>> tree(@RequestParam(name = "criteria", required = false) Criteria criteria) throws Exception {
+	public Result<List<Dept>> tree(Criteria criteria) throws Exception {
 		return Result.OK(deptService.getDeptTree(criteria));
 	}
 	
 	@GetMapping("/role/without/{roleId}")
 	@Operation(summary = "未绑定部门", description = "分页获取未绑定角色ID的部门", method = "GET")
-	public Result<Page<Dept>> without(@RequestParam(name = "criteria", required = false) Criteria criteria,
+	public Result<Page<Dept>> without(Criteria criteria,
 			@PathVariable(value = "roleId") String roleId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
@@ -52,7 +52,7 @@ public class DeptController {
 	
 	@GetMapping("/role/within/{roleId}")
 	@Operation(summary = "绑定部门", description = "分页获取绑定角色ID的部门", method = "GET")
-	public Result<Page<Dept>> within(@RequestParam(name = "criteria", required = false) Criteria criteria,
+	public Result<Page<Dept>> within(Criteria criteria,
 			@PathVariable(value = "roleId") String roleId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
@@ -62,7 +62,7 @@ public class DeptController {
 	
 	@GetMapping("/user/without/{deptId}")
 	@Operation(summary = "未关联用户", description = "分页获取未关联部门ID的用户", method = "GET")
-	public Result<Page<User>> userWithout(@RequestParam(name = "criteria", required = false) Criteria criteria,
+	public Result<Page<User>> userWithout(Criteria criteria,
 			@PathVariable(value = "deptId") String deptId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
@@ -72,7 +72,7 @@ public class DeptController {
 	
 	@GetMapping("/user/within/{deptId}")
 	@Operation(summary = "关联用户", description = "分页获取关联部门ID的用户", method = "GET")
-	public Result<Page<User>> userWithin(@RequestParam(name = "criteria", required = false) Criteria criteria,
+	public Result<Page<User>> userWithin(Criteria criteria,
 			@PathVariable(value = "deptId") String deptId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
