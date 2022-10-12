@@ -39,7 +39,6 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 			WebDataBinderFactory webDataBinderFactory) throws Exception {
 		String criteria = (String) request.getAttribute("criteria", NativeWebRequest.SCOPE_REQUEST);
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		// HttpServletRequest servletRequest = request.getNativeRequest(HttpServletRequest.class);
 		Map<String, DataResource> dataResourceMap = dataResourceService.findAllByCatch();
 		RequestMapping requestMapping = parameter.getMethodAnnotation(RequestMapping.class);
 		RequestMapping classRequestMapping = parameter.getContainingClass().getDeclaredAnnotation(RequestMapping.class);

@@ -35,12 +35,11 @@ public class FlowController {
 	
 	@GetMapping("page")
 	@Operation(summary = "流程列表(分页)", description = "流程列表(分页)", method = "GET")
-	public Result<Page<Flow>> page(@RequestParam("criteria") String criteria,
+	public Result<Page<Flow>> page(@RequestParam("criteria") Criteria criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		Page<Flow> page = flowService.page(c, pageAble);
+		Page<Flow> page = flowService.page(criteria, pageAble);
 		return Result.OK(page);
 	}
 	

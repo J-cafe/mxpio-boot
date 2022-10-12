@@ -1,6 +1,7 @@
 package com.mxpioframework.security.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,12 +42,14 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 		RequestMappingHandlerMapping mapping = ApplicationContextProvider.getBean(RequestMappingHandlerMapping.class);
 		Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
 		List<DataVo> dataVos = new ArrayList<>();
+		Map<String,DataVo> patternsMap = new HashMap<>();
 		for(Map.Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet()){
 			RequestMappingInfo info = m.getKey();
 	        HandlerMethod method = m.getValue();
-	        if("/error".equals(info.getPatternsCondition().getPatterns().toArray()[0])){
-	        	continue;
-	        }
+			if(patternsMap.get(info.getPatternsCondition().getPatterns().toArray()[0]) != null){
+				continue;
+			}
+			
 	        RequestMethodsRequestCondition methodsCondition = info.getMethodsCondition();
 	        MethodParameter[] parameters = method.getMethodParameters();
 	        boolean hasCriteria = false;
@@ -71,6 +74,7 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
     	        	.hasCriteria(hasCriteria)
     	        	.build();
     	    dataVos.add(dataVo);
+    	    patternsMap.put(info.getPatternsCondition().getPatterns().toArray(new String[0])[0], dataVo);
 		}
 		return dataVos;
 	}
