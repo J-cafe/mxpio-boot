@@ -24,4 +24,6 @@ public interface Resource extends Serializable {
 	String getParentId();
 	
 	String getId();
+	
+	String getTitle();
 }

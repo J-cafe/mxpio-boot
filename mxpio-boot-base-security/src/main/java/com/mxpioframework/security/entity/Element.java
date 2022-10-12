@@ -48,9 +48,9 @@ public class Element extends BaseEntity implements Resource {
 	@Schema(description = "组件类型")
 	private ElementType elementType;
 
-	@Column(name = "NAME_", length = 64)
+	@Column(name = "TITLE_", length = 64)
 	@Schema(description = "组件名称")
-	private String name;
+	private String title;
 	
 	@Column(name = "PARENT_ID_", length = 64)
 	@Schema(description = "所属URL的ID")

@@ -37,9 +37,9 @@ public class DataResource extends BaseEntity implements Resource {
 	@Schema(description = "ID")
 	private String id;
 	
-	@Column(name = "NAME_", length = 64)
+	@Column(name = "TITLE_", length = 64)
 	@Schema(description = "名称")
-	private String name;
+	private String title;
 	
 	@Column(name = "PATH_", length = 512)
 	@Schema(description = "路径")
