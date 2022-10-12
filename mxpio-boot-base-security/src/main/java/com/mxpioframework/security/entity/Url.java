@@ -41,6 +41,10 @@ public class Url extends BaseEntity implements Resource {
 	@Schema(description = "标题")
 	private String title;
 	
+	@Column(name = "RUL_TYPE_", length = 64)
+	@Schema(description = "目录/菜单")
+	private String urlType;
+	
 	@Column(name = "ICON_", length = 255)
 	@Schema(description = "图标")
 	private String icon;
