@@ -2,6 +2,7 @@ package com.mxpioframework.security.service;
 
 import java.util.List;
 
+import com.mxpioframework.security.entity.Resource;
 import com.mxpioframework.security.entity.Url;
 
 /**
@@ -17,6 +18,12 @@ public interface UrlService extends BaseService<Url> {
 
 	 */
 	List<Url> findAll();
+	
+	/**
+	 * 获取所有菜单及资源
+	 * @return
+	 */
+	public List<Resource> findAllResource();
 	
 	/**
 	 * 获取所有菜单

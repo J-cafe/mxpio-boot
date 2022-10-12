@@ -17,6 +17,7 @@ import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.cache.SecurityCacheEvict;
 import com.mxpioframework.security.entity.DataResource;
 import com.mxpioframework.security.entity.Element;
+import com.mxpioframework.security.entity.Resource;
 import com.mxpioframework.security.entity.Url;
 import com.mxpioframework.security.service.DataResourceService;
 import com.mxpioframework.security.service.ElementService;
@@ -39,6 +40,12 @@ public class ResourceController {
 	
 	@Autowired
 	private DataResourceService dataResourceService;
+	
+	@GetMapping("list")
+	@Operation(summary = "获取全部资源", description = "获取全部资源", method = "GET")
+	public Result<List<Resource>> loadAllResource(){
+		return Result.OK(urlService.findAllResource());
+	}
 	
 	@GetMapping("url/list")
 	@Operation(summary = "获取全部菜单", description = "获取全部菜单", method = "GET")

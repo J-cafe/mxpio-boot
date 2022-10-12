@@ -19,6 +19,7 @@ import com.mxpioframework.security.decision.manager.SecurityDecisionManager;
 import com.mxpioframework.security.entity.DataResource;
 import com.mxpioframework.security.entity.Element;
 import com.mxpioframework.security.entity.Permission;
+import com.mxpioframework.security.entity.Resource;
 import com.mxpioframework.security.entity.ResourceType;
 import com.mxpioframework.security.entity.Url;
 import com.mxpioframework.security.entity.User;
@@ -63,6 +64,15 @@ public class UrlServiceImpl extends BaseServiceImpl<Url> implements UrlService {
 	
 	public List<Url> findTree() {
 		return urlServiceCache.findTree();
+	}
+	
+	public List<Resource> findAllResource(){
+		List<Resource> result = new ArrayList<Resource>();
+		List<DataResource> datas = JpaUtil.linq(DataResource.class).asc("order").list();
+		List<Url> urls = JpaUtil.linq(Url.class).asc("order").list();
+		result.addAll(urls);
+		result.addAll(datas);
+		return result;
 	}
 	
 	public List<Url> findAllTree() {
