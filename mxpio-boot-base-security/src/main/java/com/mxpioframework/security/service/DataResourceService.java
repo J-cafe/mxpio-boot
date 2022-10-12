@@ -12,7 +12,7 @@ public interface DataResourceService extends BaseService<DataResource> {
 	 * 获取全部接口
 	 * @return
 	 */
-	List<DataVo> findAll();
+	List<DataVo> findAllApi();
 
 	/**
 	 * 数据资源索引
@@ -26,5 +26,11 @@ public interface DataResourceService extends BaseService<DataResource> {
 	 * @return
 	 */
 	List<DataResource> getByUrlId(String urlId);
+
+	/**
+	 * 获取所有数据权限
+	 * @return
+	 */
+	List<DataResource> findAll();
 
 }

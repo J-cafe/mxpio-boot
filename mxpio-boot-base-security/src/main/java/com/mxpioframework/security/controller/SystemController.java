@@ -68,7 +68,7 @@ public class SystemController {
 		if(result != null) {
 			return Result.OK(result);
 		}else {
-			return Result.noauth("refreshToken已失效");
+			return Result.noauth403("refreshToken已失效");
 		}
 	}
 }

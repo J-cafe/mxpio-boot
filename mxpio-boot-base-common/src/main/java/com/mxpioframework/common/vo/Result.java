@@ -100,8 +100,15 @@ public class Result<T> implements Serializable {
 	/**
 	 * 无权限访问返回结果
 	 */
-	public static<T> Result<T> noauth(String msg) {
+	public static<T> Result<T> noauth401(String msg) {
 		return error(CommonConstant.HTTP_NO_AUTHZ_401, msg);
+	}
+	
+	/**
+	 * 无权限访问返回结果
+	 */
+	public static<T> Result<T> noauth403(String msg) {
+		return error(CommonConstant.HTTP_NO_AUTHZ_403, msg);
 	}
 
 }

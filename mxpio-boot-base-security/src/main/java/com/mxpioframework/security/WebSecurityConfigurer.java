@@ -202,19 +202,21 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 			response.setContentType("application/json;charset=UTF-8");
 			exception.printStackTrace();
 			if(exception instanceof CaptchaAuthenticationException) {
-				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth(exception.getMessage())));
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401(exception.getMessage())));
 			}else if(exception instanceof BadCredentialsException){
-				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("账号或密码错误")));
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("账号或密码错误")));
 			}else if(exception instanceof AccountStatusException){
-				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("账号已锁定")));
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("账号已锁定")));
 			}else if(exception instanceof InsufficientAuthenticationException){
-				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("Token异常")));
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("Token异常")));
 			}else if(exception instanceof NonceExpiredException){
-				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("Nonce已过期")));
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("Nonce已过期")));
 			}else if(exception instanceof UsernameNotFoundException){
-				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("用户未找到")));
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("用户未找到")));
+			}else if(exception instanceof DataAuthenticationException){
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth403("无权访问")));
 			}else {
-				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth("登录异常")));
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("登录异常")));
 			}
 		}
 		

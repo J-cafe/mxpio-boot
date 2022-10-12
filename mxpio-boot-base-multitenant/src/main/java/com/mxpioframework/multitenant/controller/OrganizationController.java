@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.query.Criteria;
-import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.multitenant.domain.Organization;
 import com.mxpioframework.multitenant.manager.service.OrganizationService;
 
@@ -33,12 +32,11 @@ public class OrganizationController {
 	
 	@GetMapping("page")
 	@Operation(summary = "企业列表", description = "企业列表", method = "GET")
-	public Result<Page<Organization>> page(String criteria,
+	public Result<Page<Organization>> page(Criteria criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		Page<Organization> page = organizationService.load(pageAble, c);
+		Page<Organization> page = organizationService.load(pageAble, criteria);
 		return Result.OK(page);
 	}
 	

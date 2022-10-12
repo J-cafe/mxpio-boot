@@ -50,7 +50,7 @@ public class ResourceController {
 	@GetMapping("data/api/list")
 	@Operation(summary = "获取全部接口", description = "获取全部接口", method = "GET")
 	public Result<List<DataVo>> loadAllData() {
-		List<DataVo> datas = dataResourceService.findAll();
+		List<DataVo> datas = dataResourceService.findAllApi();
 		return Result.OK(datas);
 	}
 	

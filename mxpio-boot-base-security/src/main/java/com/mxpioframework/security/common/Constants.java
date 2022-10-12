@@ -52,6 +52,13 @@ public final class Constants {
 	
 	/**
 
+	 * 所有数据权限缓存关键字
+
+	 */
+	public final static String DATA_ATTRIBUTE_MAP_CACHE_KEY = "DataAttributeMap";
+	
+	/**
+
 	 * 所有组件缓存关键字
 
 	 */

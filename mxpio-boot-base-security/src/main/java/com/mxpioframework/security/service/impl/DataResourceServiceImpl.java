@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.MethodParameter;
+import org.springframework.security.access.ConfigAttribute;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.method.HandlerMethod;
@@ -18,6 +19,8 @@ import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.security.common.Constants;
 import com.mxpioframework.security.entity.DataResource;
+import com.mxpioframework.security.entity.Permission;
+import com.mxpioframework.security.entity.ResourceType;
 import com.mxpioframework.security.service.DataResourceService;
 import com.mxpioframework.security.util.ApplicationContextProvider;
 import com.mxpioframework.security.vo.DataVo;
@@ -34,7 +37,7 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 	private String customAnonymous;
 	
 	@Override
-	public List<DataVo> findAll() {
+	public List<DataVo> findAllApi() {
 		RequestMappingHandlerMapping mapping = ApplicationContextProvider.getBean(RequestMappingHandlerMapping.class);
 		Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
 		List<DataVo> dataVos = new ArrayList<>();
@@ -85,5 +88,25 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 	public List<DataResource> getByUrlId(String urlId) {
 		List<DataResource> list = JpaUtil.linq(DataResource.class).equal("parentResId", urlId).list();
 		return list;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<DataResource> findAll() {
+		List<DataResource> datas = JpaUtil.linq(DataResource.class).list();
+		List<Permission> permissions = JpaUtil.linq(Permission.class).equal("resourceType", ResourceType.DATA).list();
+		if (!permissions.isEmpty()) {
+			Map<String, DataResource> dataMap = JpaUtil.index(datas);
+			for (Permission permission : permissions) {
+				DataResource data = dataMap.get(permission.getResourceId());
+				List<ConfigAttribute> configAttributes = data.getAttributes();
+				if (configAttributes == null) {
+					configAttributes = new ArrayList<ConfigAttribute>();
+					data.setAttributes(configAttributes);
+				}
+				configAttributes.add(permission);
+			}
+		}
+		return datas;
 	}
 }

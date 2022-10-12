@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.query.Criteria;
-import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.security.entity.Dept;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.entity.UserDept;
@@ -37,53 +36,48 @@ public class DeptController {
 	
 	@GetMapping("/tree")
 	@Operation(summary = "部门列表", description = "获取部门列表", method = "GET")
-	public Result<List<Dept>> tree(@RequestParam(name = "criteria", required = false) String criteria) throws Exception {
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		return Result.OK(deptService.getDeptTree(c));
+	public Result<List<Dept>> tree(@RequestParam(name = "criteria", required = false) Criteria criteria) throws Exception {
+		return Result.OK(deptService.getDeptTree(criteria));
 	}
 	
 	@GetMapping("/role/without/{roleId}")
 	@Operation(summary = "未绑定部门", description = "分页获取未绑定角色ID的部门", method = "GET")
-	public Result<Page<Dept>> without(@RequestParam(name = "criteria", required = false) String criteria,
+	public Result<Page<Dept>> without(@RequestParam(name = "criteria", required = false) Criteria criteria,
 			@PathVariable(value = "roleId") String roleId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		return Result.OK(deptService.loadDeptsWithout(pageAble, c, roleId));
+		return Result.OK(deptService.loadDeptsWithout(pageAble, criteria, roleId));
 	}
 	
 	@GetMapping("/role/within/{roleId}")
 	@Operation(summary = "绑定部门", description = "分页获取绑定角色ID的部门", method = "GET")
-	public Result<Page<Dept>> within(@RequestParam(name = "criteria", required = false) String criteria,
+	public Result<Page<Dept>> within(@RequestParam(name = "criteria", required = false) Criteria criteria,
 			@PathVariable(value = "roleId") String roleId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		return Result.OK(deptService.loadDeptsWithin(pageAble, c, roleId));
+		return Result.OK(deptService.loadDeptsWithin(pageAble, criteria, roleId));
 	}
 	
 	@GetMapping("/user/without/{deptId}")
 	@Operation(summary = "未关联用户", description = "分页获取未关联部门ID的用户", method = "GET")
-	public Result<Page<User>> userWithout(@RequestParam(name = "criteria", required = false) String criteria,
+	public Result<Page<User>> userWithout(@RequestParam(name = "criteria", required = false) Criteria criteria,
 			@PathVariable(value = "deptId") String deptId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		return Result.OK(deptService.loadUsersWithout(pageAble, c, deptId));
+		return Result.OK(deptService.loadUsersWithout(pageAble, criteria, deptId));
 	}
 	
 	@GetMapping("/user/within/{deptId}")
 	@Operation(summary = "关联用户", description = "分页获取关联部门ID的用户", method = "GET")
-	public Result<Page<User>> userWithin(@RequestParam(name = "criteria", required = false) String criteria,
+	public Result<Page<User>> userWithin(@RequestParam(name = "criteria", required = false) Criteria criteria,
 			@PathVariable(value = "deptId") String deptId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		return Result.OK(deptService.loadUsersWithin(pageAble, c, deptId));
+		return Result.OK(deptService.loadUsersWithin(pageAble, criteria, deptId));
 	}
 	
 	@PostMapping("/user/add")

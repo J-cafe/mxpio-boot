@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mxpioframework.cache.provider.CacheProvider;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.query.Criteria;
-import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.OnlineUserService;
 import com.mxpioframework.security.service.UserService;
@@ -47,12 +46,11 @@ public class UserController {
 	
 	@GetMapping("/list")
 	@Operation(summary = "用户列表", description = "根据过滤字段filter获取用户列表，过滤用户名和昵称", method = "GET")
-	public Result<Page<User>> list(@RequestParam("criteria") String criteria,
+	public Result<Page<User>> list(@RequestParam("criteria") Criteria criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		Page<User> page = userService.queryAll(c, pageAble);
+		Page<User> page = userService.queryAll(criteria, pageAble);
 		return Result.OK(page);
 	}
 	

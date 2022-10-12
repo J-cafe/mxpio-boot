@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -16,6 +15,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.jpa.query.Operator;
+import com.mxpioframework.security.DataAuthenticationException;
 import com.mxpioframework.security.decision.manager.SecurityDecisionManager;
 import com.mxpioframework.security.entity.DataResource;
 import com.mxpioframework.security.service.DataResourceService;
@@ -50,7 +50,7 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 		}
 		if(dataResource != null){
 			if(!decide(dataResource, c)){
-				throw new InsufficientAuthenticationException("权限异常");
+				throw new DataAuthenticationException("权限异常");
 			}
 		}
 		return c;

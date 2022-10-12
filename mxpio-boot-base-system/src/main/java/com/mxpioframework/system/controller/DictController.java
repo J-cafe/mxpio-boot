@@ -40,8 +40,6 @@ public class DictController {
 	@GetMapping("tree/list")
 	@Operation(summary = "字典树列表", description = "获取字典树列表", method = "GET")
 	public Result<List<Dict>> list(Criteria criteria) throws UnsupportedEncodingException {
-		// Criteria c = CriteriaUtils.json2Criteria(criteria);
-		
 		List<Dict> dicts = dictSerivce.listWithItems(criteria);
 		return Result.OK(dicts);
 	}

@@ -36,9 +36,8 @@ public class QuartzController {
 	
 	@GetMapping("list")
 	@Operation(summary = "任务列表", description = "获取任务列表", method = "GET")
-	public Result<List<QuartzJob>> list(String criteria) throws IOException {
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		List<QuartzJob> jobs = quartzService.list(c);
+	public Result<List<QuartzJob>> list(Criteria criteria) throws IOException {
+		List<QuartzJob> jobs = quartzService.list(criteria);
 		return Result.OK(jobs);
 	}
 	

@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.query.Criteria;
-import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.security.entity.Role;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.RoleService;
@@ -36,20 +35,18 @@ public class RoleController {
 	
 	@GetMapping("/page")
 	@Operation(summary = "角色列表(分页)", description = "获取角色列表(分页)", method = "GET")
-	public Result<Page<Role>> page(String criteria,
+	public Result<Page<Role>> page(Criteria criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		Page<Role> page = roleService.listPage(c, pageAble);
+		Page<Role> page = roleService.listPage(criteria, pageAble);
 		return Result.OK(page);
 	}
 	
 	@GetMapping("/list")
 	@Operation(summary = "角色列表", description = "获取角色列表", method = "GET")
-	public Result<List<Role>> page(String criteria) throws Exception {
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		List<Role> roles = roleService.list(c);
+	public Result<List<Role>> page(Criteria criteria) throws Exception {
+		List<Role> roles = roleService.list(criteria);
 		return Result.OK(roles);
 	}
 	
@@ -88,12 +85,11 @@ public class RoleController {
 	@Operation(summary = "未绑定用户", description = "获取未绑定用户列表", method = "GET")
 	public Result<Page<User>> getUsersWithout(
 			@PathVariable(name = "id",required = true) String id,
-			String criteria,
+			Criteria criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		Page<User> users = roleService.getUsersWithout(pageAble, c, id);
+		Page<User> users = roleService.getUsersWithout(pageAble, criteria, id);
 		return Result.OK(users);
 	}
 	
@@ -101,12 +97,11 @@ public class RoleController {
 	@Operation(summary = "获取绑定用户", description = "获取绑定用户列表", method = "GET")
 	public Result<Page<User>> getUsersWithin(
 			@PathVariable(name = "id",required = true) String id,
-			String criteria,
+			Criteria criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		Page<User> users = roleService.getUsersWithin(pageAble, c, id);
+		Page<User> users = roleService.getUsersWithin(pageAble, criteria, id);
 		return Result.OK(users);
 	}
 	

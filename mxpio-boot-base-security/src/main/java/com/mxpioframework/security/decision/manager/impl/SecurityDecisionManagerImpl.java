@@ -50,6 +50,7 @@ public class SecurityDecisionManagerImpl implements SecurityDecisionManager {
 			try {
 				accessDecisionManager.decide(authentication, resource, attributes);
 			} catch (AccessDeniedException e) {
+				e.printStackTrace();
 				return false;
 			} catch (InsufficientAuthenticationException e) {
 				return false;
