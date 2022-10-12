@@ -13,9 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.security.cache.SecurityCacheEvict;
 import com.mxpioframework.security.entity.Permission;
-import com.mxpioframework.security.entity.ResourceType;
 import com.mxpioframework.security.entity.RoleGrantedAuthority;
-import com.mxpioframework.security.entity.Url;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.RoleUrlService;
 
@@ -42,8 +40,8 @@ public class RoleUrlServiceImpl implements RoleUrlService {
 			result = JpaUtil
 				.linq(Permission.class)
 				.in("roleId",roleIds)
-				.equal("resourceType", ResourceType.URL)
-				.collect(Url.class, "resourceId")
+				//.equal("resourceType", ResourceType.URL)
+				//.collect(Url.class, "resourceId")
 				.list();
 		}catch (Exception e) {
 			e.printStackTrace();

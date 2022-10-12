@@ -52,9 +52,9 @@ public class Element extends BaseEntity implements Resource {
 	@Schema(description = "组件名称")
 	private String name;
 	
-	@Column(name = "URL_ID_", length = 64)
+	@Column(name = "PARENT_ID_", length = 64)
 	@Schema(description = "所属URL的ID")
-	private String urlId;
+	private String parentId;
 
 	@Column(name = "PATH_", length = 512)
 	@Schema(description = "组件路径")

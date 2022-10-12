@@ -35,7 +35,7 @@ public class PermissionServiceImpl implements PermissionService {
 				.equal("resourceType", ResourceType.ELEMENT)
 				.exists(Element.class)
 					.equalProperty("id", "resourceId")
-					.equal("urlId", urlId)
+					.equal("parentId", urlId)
 				.list();
 	}
 	

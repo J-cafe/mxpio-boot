@@ -20,4 +20,8 @@ public interface Resource extends Serializable {
 	List<ConfigAttribute> getAttributes();
 	
 	ResourceType getResourceType();
+	
+	String getParentId();
+	
+	String getId();
 }

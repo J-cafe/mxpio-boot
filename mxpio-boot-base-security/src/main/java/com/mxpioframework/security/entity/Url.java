@@ -85,6 +85,9 @@ public class Url extends BaseEntity implements Resource {
 	private List<Url> children;
 	
 	@Transient
+	private List<DataResource> datas;
+	
+	@Transient
 	private List<ConfigAttribute> attributes = new ArrayList<ConfigAttribute>();
 
 }

@@ -70,9 +70,17 @@ public class UrlServiceImpl extends BaseServiceImpl<Url> implements UrlService {
 		List<Url> urls = JpaUtil.linq(Url.class).asc("order").list();
 		Map<String, Url> urlMap = new HashMap<String, Url>(urls.size());
 		Map<String, List<Url>> childrenMap = new HashMap<String, List<Url>>(urls.size());
+		
+		List<DataResource> datas = JpaUtil.linq(DataResource.class).asc("order").list();
+		Map<String, List<DataResource>> dataMap = JpaUtil.classify(datas, "parentId");
 
 		for (Url url : urls) {
 			urlMap.put(url.getId(), url);
+			
+			if(dataMap.containsKey(url.getId())){
+				url.setDatas(dataMap.get(url.getId()));
+			}
+			
 			if (childrenMap.containsKey(url.getId())) {
 				url.setChildren(childrenMap.get(url.getId()));
 			} else {
@@ -193,12 +201,12 @@ public class UrlServiceImpl extends BaseServiceImpl<Url> implements UrlService {
 	@SecurityCacheEvict
 	@Transactional(readOnly = false)
 	public boolean deleteBundleById(String id) {
-		Long elementCount = JpaUtil.linq(Element.class).equal("urlId",id).count();
+		Long elementCount = JpaUtil.linq(Element.class).equal("parentId",id).count();
 		if(elementCount > 0) {
 			return false;
 		}else {
 			JpaUtil.lind(Permission.class).equal("resourceId", id).delete();
-			JpaUtil.lind(DataResource.class).equal("parentResId", id).delete();
+			JpaUtil.lind(DataResource.class).equal("parentId", id).delete();
 			delete(id, Url.class);
 			return true;
 		}

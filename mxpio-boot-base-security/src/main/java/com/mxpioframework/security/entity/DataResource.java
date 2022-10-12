@@ -57,13 +57,17 @@ public class DataResource extends BaseEntity implements Resource {
 	@Schema(description = "权限范围")
 	private String dataScope;
 	
-	@Column(name = "PARENT_RES_ID_", length = 64)
-	@Schema(description = "所属资源的ID")
-	private String parentResId;
+	@Column(name = "PARENT_ID_", length = 64)
+	@Schema(description = "所属URL的ID")
+	private String parentId;
 	
 	@Column(name = "DESCRIPTION_", length = 255)
 	@Schema(description = "描述")
 	private String description;
+	
+	@Column(name = "ORDER_")
+	@Schema(description = "顺序")
+	private Integer order;
 	
 	@Transient
 	private List<ConfigAttribute> attributes = new ArrayList<ConfigAttribute>();

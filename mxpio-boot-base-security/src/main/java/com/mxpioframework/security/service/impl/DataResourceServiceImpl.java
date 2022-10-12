@@ -90,7 +90,7 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 	@Override
 	@Transactional(readOnly = true)
 	public List<DataResource> getByUrlId(String urlId) {
-		List<DataResource> list = JpaUtil.linq(DataResource.class).equal("parentResId", urlId).list();
+		List<DataResource> list = JpaUtil.linq(DataResource.class).equal("parentId", urlId).list();
 		return list;
 	}
 
