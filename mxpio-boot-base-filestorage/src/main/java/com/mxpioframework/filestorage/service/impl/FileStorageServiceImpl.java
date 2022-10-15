@@ -51,7 +51,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 		fileInfo.setFileNo(UUID.randomUUID().toString());
 		fileInfo.setFileStorageType(fileStorageType);
 		fileInfo.setRelativePath(relativePath);
-		JpaUtil.persist(fileInfo);
+		JpaUtil.save(fileInfo);
 		return fileInfo;
 	}
 

@@ -5,12 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -18,11 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.filestorage.entity.MxpioFileInfo;
@@ -99,84 +91,14 @@ public class FileController {
 
 	@PostMapping("upload")
 	@Operation(summary = "上传文件", description = "上传文件", method = "POST")
-	public Result<Map<String, Object>> handleFileUpload(HttpServletRequest request) throws IOException {
-
-		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-
-		Map<String, Object> result = new LinkedHashMap<String, Object>();
-
-		Collection<Map<String, Object>> otherFiles = new ArrayList<Map<String, Object>>();
-		if (isMultipart) {
-			FileItemFactory factory = new DiskFileItemFactory();
-			ServletFileUpload upload = new ServletFileUpload(factory);
-
-			String fileStorageType = null;
-			try {
-				List<FileItem> items = upload.parseRequest(request);
-				Iterator<FileItem> iterator = items.iterator();
-				while (iterator.hasNext()) {
-					FileItem item = (FileItem) iterator.next();
-					if (item.isFormField() && "FileStorageType".equals(item.getFieldName())) {
-						fileStorageType = item.getString();
-					}
-				}
-
-				iterator = items.iterator();
-				while (iterator.hasNext()) {
-					FileItem item = (FileItem) iterator.next();
-
-					if (!item.isFormField()) {
-						String fileName = item.getName();
-						MxpioFileInfo mxpioFileInfo = fileService.put(fileStorageType, item.getInputStream(), fileName);
-
-						if ("file".equals(item.getFieldName())) {
-							putFileInfo(mxpioFileInfo, result);
-						} else {
-							Map<String, Object> otherFile = new LinkedHashMap<String, Object>();
-							putFileInfo(mxpioFileInfo, otherFile);
-							otherFiles.add(otherFile);
-						}
-					}
-				}
-			} catch (FileUploadException e) {
-				e.printStackTrace();
-			}
+	public Result<MxpioFileInfo> handleFileUpload(MultipartFile file,String fileStorageType,HttpServletRequest request) throws IOException {
+		
+		if(file != null){
+			String fileName = file.getName();
+			MxpioFileInfo mxpioFileInfo = fileService.put(fileStorageType, file.getInputStream(), fileName);
+			return Result.OK(mxpioFileInfo);
 		}
-
-		if (!otherFiles.isEmpty()) {
-			result.put("files", otherFiles);
-		}
-		return Result.OK(result);
-	}
-
-	// @FileResolver
-	/*
-	 * public Map<String, Object> handleFileUploadByDoradoAction(UploadFile
-	 * file, Map<String, Object> parameter) throws IOException {
-	 * 
-	 * MultipartFile multipartFile = file.getMultipartFile(); String
-	 * fileStorageType = (String) parameter.get("fileStorageType");
-	 * 
-	 * Map<String, Object> result = new LinkedHashMap<String, Object>();
-	 * MxpioFileInfo mxpioFileInfo = fileService.put(fileStorageType,
-	 * multipartFile.getInputStream(), multipartFile.getOriginalFilename());
-	 * putFileInfo(mxpioFileInfo, result); result.put("parameter", parameter);
-	 * 
-	 * String fileStoragePolicyName = (String)
-	 * parameter.get("fileStoragePolicyName"); if (fileStoragePolicyMap.size()
-	 * != 0) { if (fileStoragePolicyName != null) { FileStoragePolicy
-	 * fileStoragePolicy = fileStoragePolicyMap.get(fileStoragePolicyName);
-	 * Assert.notNull(fileStoragePolicy, "不存在" + fileStoragePolicyName +
-	 * "的处理器"); fileStoragePolicy.apply(result); } for (FileStoragePolicy
-	 * publicPolicy : fileStoragePolicyMap.values()) { if
-	 * (publicPolicy.support(parameter)) { publicPolicy.apply(parameter); } } }
-	 * 
-	 * return result; }
-	 */
-
-	void putFileInfo(MxpioFileInfo mxpioFileInfo, Map<String, Object> result) {
-		result.put("fileNo", mxpioFileInfo.getFileNo());
-		result.put("fileName", mxpioFileInfo.getFileName());
+		return Result.error("上传失败");
 	}
 
 	void findNotFound(HttpServletResponse response, String fileNo) throws IOException {
