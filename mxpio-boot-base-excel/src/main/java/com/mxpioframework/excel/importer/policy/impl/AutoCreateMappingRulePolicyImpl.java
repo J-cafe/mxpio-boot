@@ -53,7 +53,7 @@ public class AutoCreateMappingRulePolicyImpl implements AutoCreateMappingRulePol
 			if (excel != null) {
 				mappingRule.setName(excel.value());
 			}else if(schema != null) {
-				mappingRule.setName(schema.name());
+				mappingRule.setName(schema.description());
 			}
 			if (column != null) {
 
