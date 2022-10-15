@@ -113,6 +113,9 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 			Map<String, DataResource> dataMap = JpaUtil.index(datas);
 			for (Permission permission : permissions) {
 				DataResource data = dataMap.get(permission.getResourceId());
+				if(data == null) {
+					continue;
+				}
 				List<ConfigAttribute> configAttributes = data.getAttributes();
 				if (configAttributes == null) {
 					configAttributes = new ArrayList<ConfigAttribute>();
