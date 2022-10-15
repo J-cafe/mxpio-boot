@@ -37,7 +37,7 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer container, NativeWebRequest request,
 			WebDataBinderFactory webDataBinderFactory) throws Exception {
-		String criteria = (String) request.getAttribute("criteria", NativeWebRequest.SCOPE_REQUEST);
+		String criteria = request.getParameter("criteria");
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
 		Map<String, DataResource> dataResourceMap = dataResourceService.findAllByCatch();
 		RequestMapping requestMapping = parameter.getMethodAnnotation(RequestMapping.class);
