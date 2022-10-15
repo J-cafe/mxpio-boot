@@ -78,7 +78,7 @@ public class PermissionController {
 	}
 	
 	@GetMapping("data/list")
-	@Operation(summary = "加载已授权路由", description = "根据登录用户获取已授权的路由信息", method = "GET")
+	@Operation(summary = "加载已授权数据权限", description = "根据登录用户获取已授权的数据权限", method = "GET")
 	public Result<List<DataResource>> loadDataResource(){
 		List<DataResource> datas = dataResourceService.findByUsername(null);
 		return Result.OK(datas);
