@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mxpioframework.filestorage.entity.MxpioFileInfo;
-import com.mxpioframework.filestorage.service.FileStorageProvider;
+import com.mxpioframework.filestorage.provider.FileStorageProvider;
 import com.mxpioframework.filestorage.service.FileStorageService;
 import com.mxpioframework.jpa.JpaUtil;
 

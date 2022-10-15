@@ -1,4 +1,4 @@
-package com.mxpioframework.filestorage.service.impl;
+package com.mxpioframework.filestorage.provider.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mxpioframework.filestorage.entity.MxpioBlob;
-import com.mxpioframework.filestorage.service.FileStorageProvider;
+import com.mxpioframework.filestorage.provider.FileStorageProvider;
 import com.mxpioframework.filestorage.service.MxpioBlobService;
 
 @Service

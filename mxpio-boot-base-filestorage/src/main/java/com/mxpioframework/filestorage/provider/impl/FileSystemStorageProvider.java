@@ -1,4 +1,4 @@
-package com.mxpioframework.filestorage.service.impl;
+package com.mxpioframework.filestorage.provider.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mxpioframework.filestorage.service.FileStorageProvider;
+import com.mxpioframework.filestorage.provider.FileStorageProvider;
 
 @Service
 public class FileSystemStorageProvider implements FileStorageProvider {

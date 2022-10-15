@@ -1,4 +1,4 @@
-package com.mxpioframework.filestorage.service;
+package com.mxpioframework.filestorage.provider;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

@@ -94,7 +94,7 @@ public class FileController {
 	public Result<MxpioFileInfo> handleFileUpload(MultipartFile file,String fileStorageType,HttpServletRequest request) throws IOException {
 		
 		if(file != null){
-			String fileName = file.getName();
+			String fileName = file.getOriginalFilename();
 			MxpioFileInfo mxpioFileInfo = fileService.put(fileStorageType, file.getInputStream(), fileName);
 			return Result.OK(mxpioFileInfo);
 		}
