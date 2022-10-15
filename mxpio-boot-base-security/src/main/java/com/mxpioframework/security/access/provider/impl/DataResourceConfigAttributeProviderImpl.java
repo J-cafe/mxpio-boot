@@ -1,7 +1,6 @@
 package com.mxpioframework.security.access.provider.impl;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +32,7 @@ public class DataResourceConfigAttributeProviderImpl implements DataResourceConf
 		List<DataResource> datas = dataResourceService.findAll();
 		Map<String, Collection<ConfigAttribute>> dataMap = new LinkedHashMap<String, Collection<ConfigAttribute>>();
 		for (DataResource data : datas) {
-			String key = data.toString();
+			String key = data.getPath();
 			Collection<ConfigAttribute> attributes = dataMap.get(key);
 			if (attributes == null) {
 				attributes = data.getAttributes();
@@ -44,7 +43,6 @@ public class DataResourceConfigAttributeProviderImpl implements DataResourceConf
 				}
 			}
 
-			dataMap.put(data.getPath(), Collections.<ConfigAttribute>emptyList());
 		}
 		return dataMap;
 	}

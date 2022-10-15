@@ -1,6 +1,7 @@
 package com.mxpioframework.security.access.metadata;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,17 +12,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityMetadataSource;
+import org.springframework.stereotype.Component;
 
 import com.mxpioframework.security.access.provider.DataResourceConfigAttributeProvider;
 import com.mxpioframework.security.entity.DataResource;
 
+@Component
 public class DataResourceSecurityMetadataSource implements SecurityMetadataSource {
 	@Autowired
 	private List<DataResourceConfigAttributeProvider> providers;
 
 	@Override
 	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-		return getDataResourceMap().get(object.toString());
+		Collection<ConfigAttribute> result = Collections.emptyList();
+		if(object instanceof DataResource){
+			result = getDataResourceMap().get(((DataResource) object).getPath());
+		}
+		return result;
 	}
 
 	@Override

@@ -43,15 +43,16 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 		RequestMapping requestMapping = parameter.getMethodAnnotation(RequestMapping.class);
 		RequestMapping classRequestMapping = parameter.getContainingClass().getDeclaredAnnotation(RequestMapping.class);
 		
-		DataResource dataResource = null;
 		if(requestMapping != null){
+			DataResource dataResource = null;
 			dataResource = dataResourceMap.get(classRequestMapping.value()[0] + requestMapping.value()[0]);
-		}
-		if(dataResource != null){
-			if(!decide(dataResource, c)){
-				throw new DataAuthenticationException("权限异常");
+			if(dataResource != null){
+				if(!decide(dataResource, c)){
+					throw new DataAuthenticationException("权限异常");
+				}
 			}
 		}
+		
 		return c;
 	}
 
