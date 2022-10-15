@@ -53,6 +53,7 @@ public class SecurityDecisionManagerImpl implements SecurityDecisionManager {
 				e.printStackTrace();
 				return false;
 			} catch (InsufficientAuthenticationException e) {
+				e.printStackTrace();
 				return false;
 			}
 

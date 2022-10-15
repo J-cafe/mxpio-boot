@@ -45,7 +45,6 @@ import com.mxpioframework.excel.importer.policy.Context;
 import com.mxpioframework.excel.importer.policy.ExcelPolicy;
 import com.mxpioframework.excel.importer.service.ImporterSolutionService;
 import com.mxpioframework.jpa.query.Criteria;
-import com.mxpioframework.jpa.query.CriteriaUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -73,26 +72,24 @@ public class ImporterSolutionController implements ApplicationContextAware {
 
 	@GetMapping("list")
 	@Operation(summary = "导入方案", description = "获取导入方案列表", method = "GET")
-	public Result<Page<ImporterSolution>> loadImporterSolutions(String criteria,
+	public Result<Page<ImporterSolution>> loadImporterSolutions(Criteria criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws UnsupportedEncodingException {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
 		
-		Page<ImporterSolution> page = importerSolutionService.listPage(c, pageAble);
+		Page<ImporterSolution> page = importerSolutionService.listPage(criteria, pageAble);
 		return Result.OK(page);
 	}
 	
 	@GetMapping("list/{importerSolutionId}/rules")
 	@Operation(summary = "方案规则", description = "获取方案规则列表", method = "GET")
-	public Result<Page<MappingRule>> loadMappingRules(String criteria, 
+	public Result<Page<MappingRule>> loadMappingRules(Criteria criteria, 
 			@PathVariable(value="importerSolutionId") String importerSolutionId,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws UnsupportedEncodingException {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
 		
-		Page<MappingRule> page = importerSolutionService.ruleListPage(c, importerSolutionId, pageAble);
+		Page<MappingRule> page = importerSolutionService.ruleListPage(criteria, importerSolutionId, pageAble);
 		return Result.OK(page);
 	}
 	

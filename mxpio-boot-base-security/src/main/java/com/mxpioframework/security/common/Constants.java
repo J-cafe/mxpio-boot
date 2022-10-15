@@ -25,6 +25,13 @@ public final class Constants {
 	
 	/**
 
+	 * 数据资源列表缓存关键字
+
+	 */
+	public final static String DATA_LIST_CACHE_KEY = "DataList";
+	
+	/**
+
 	 * 数据资源缓存关键字
 
 	 */

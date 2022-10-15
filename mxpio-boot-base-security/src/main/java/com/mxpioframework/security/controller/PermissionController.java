@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mxpioframework.common.vo.Result;
+import com.mxpioframework.security.entity.DataResource;
 import com.mxpioframework.security.entity.Element;
 import com.mxpioframework.security.entity.Permission;
 import com.mxpioframework.security.entity.Url;
+import com.mxpioframework.security.service.DataResourceService;
 import com.mxpioframework.security.service.PermissionService;
 import com.mxpioframework.security.service.RoleUrlService;
 import com.mxpioframework.security.service.UrlService;
@@ -37,6 +39,9 @@ public class PermissionController {
 	
 	@Autowired
 	private UrlService urlService;
+	
+	@Autowired
+	private DataResourceService dataResourceService;
 	
 	@GetMapping("list")
 	@Operation(summary = "授权信息", description = "根据登录用户获取权限信息", method = "GET")
@@ -70,6 +75,13 @@ public class PermissionController {
 	public Result<List<RouterVo>> loadUrl() {
 		List<Url> urls = urlService.findTreeByUsername(null);
 		return Result.OK(RouterUtil.buildRouter(urls));
+	}
+	
+	@GetMapping("data/list")
+	@Operation(summary = "加载已授权路由", description = "根据登录用户获取已授权的路由信息", method = "GET")
+	public Result<List<DataResource>> loadDataResource(){
+		List<DataResource> datas = dataResourceService.findByUsername(null);
+		return Result.OK(datas);
 	}
 	
 }

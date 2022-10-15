@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.query.Criteria;
-import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.quartz.entity.QuartzJob;
 import com.mxpioframework.quartz.service.QuartzService;
 
@@ -43,12 +42,11 @@ public class QuartzController {
 	
 	@GetMapping("page")
 	@Operation(summary = "任务列表(分页)", description = "获取任务列表(分页)", method = "GET")
-	public Result<Page<QuartzJob>> page(String criteria,
+	public Result<Page<QuartzJob>> page(Criteria criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws IOException {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		Page<QuartzJob> jobs = quartzService.page(pageAble, c);
+		Page<QuartzJob> jobs = quartzService.page(pageAble, criteria);
 		return Result.OK(jobs);
 	}
 	

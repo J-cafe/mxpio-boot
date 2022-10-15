@@ -20,7 +20,6 @@ import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.flowable.entity.Flow;
 import com.mxpioframework.flowable.service.FlowService;
 import com.mxpioframework.jpa.query.Criteria;
-import com.mxpioframework.jpa.query.CriteriaUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -45,9 +44,8 @@ public class FlowController {
 	
 	@GetMapping("list")
 	@Operation(summary = "流程列表", description = "流程列表", method = "GET")
-	public Result<List<Flow>> list(@RequestParam("criteria") String criteria) throws Exception {
-		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		List<Flow> flows = flowService.list(c);
+	public Result<List<Flow>> list(@RequestParam("criteria") Criteria criteria) throws Exception {
+		List<Flow> flows = flowService.list(criteria);
 		return Result.OK(flows);
 	}
 	

@@ -33,4 +33,11 @@ public interface DataResourceService extends BaseService<DataResource> {
 	 */
 	List<DataResource> findAll();
 
+	/**
+	 * 获取用户有权访问的接口(基于当前登录用户)
+	 * @param username 用户名
+	 * @return 权限列表
+	 */
+	List<DataResource> findByUsername(String username);
+
 }
