@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -52,7 +53,7 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 			Map<String, List<DataResource>> dataResourceMap = JpaUtil.classify(datas, "path");
 			// DataResource dataResource = null;
 			List<DataResource> dataResources = dataResourceMap.get(classRequestMapping.value()[0] + requestMapping.value()[0]);
-			if(dataResources != null){
+			if(CollectionUtils.isNotEmpty(dataResources)){
 				if(!decide(dataResources, c)){
 					throw new DataAuthenticationException("权限异常");
 				}
