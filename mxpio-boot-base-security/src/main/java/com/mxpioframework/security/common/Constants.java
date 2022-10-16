@@ -42,7 +42,11 @@ public final class Constants {
 	 *部门用户缓存关键字
 
 	 */
-	public final static String USER_DEPT_CACHE_KEY = "UserDept";
+	public final static String USER_DEPT_CODE_CACHE_KEY = "UserDeptCode";
+	
+	public final static String USER_DEPT_ID_CACHE_KEY = "UserDeptId";
+	
+	public final static String DEPT_CACHE_KEY = "DeptKey";
 	/**
 
 	 * 特定用户下的树形菜单缓存关键字

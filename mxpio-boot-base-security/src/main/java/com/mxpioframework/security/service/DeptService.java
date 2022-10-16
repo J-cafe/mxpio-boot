@@ -117,15 +117,28 @@ public interface DeptService extends BaseService<Dept> {
 	int deleteRoleDepts(String roleId, String deptIds);
 	
 	/**
-	 * 根据用户名获取部门ID（缓存）
+	 * 根据用户名获取部门Key（缓存）
 	 * @param username
 	 * @return
 	 */
-	Set<String> getDeptIdsByUser(String username);
+	Set<String> getDeptKeysByUser(String username, String key);
 	
 	/**
 	 * 获取部门用户关系（缓存）
 	 * @return
 	 */
+	public Map<String, Set<String>> getAllDeptCodeGroupByUser();
+	
+	/**
+	 * 获取部门索引（缓存）
+	 * @return
+	 */
+	public Map<String, Dept> getDeptMap();
+
+	/**
+	 * 获取部门用户关系,ID索引（缓存）
+	 * @return
+	 */
 	public Map<String, Set<String>> getAllDeptIdGroupByUser();
+	
 }

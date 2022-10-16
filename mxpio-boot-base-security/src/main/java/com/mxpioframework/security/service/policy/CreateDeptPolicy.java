@@ -1,7 +1,10 @@
 package com.mxpioframework.security.service.policy;
 
+import java.util.Set;
+
 import com.mxpioframework.jpa.policy.impl.AbstractGeneratorPolicy;
 import com.mxpioframework.jpa.policy.impl.CrudType;
+import com.mxpioframework.security.util.SecurityUtils;
 
 public class CreateDeptPolicy extends AbstractGeneratorPolicy {
 
@@ -12,7 +15,8 @@ public class CreateDeptPolicy extends AbstractGeneratorPolicy {
 
 	@Override
 	protected Object getValue(Object entity, String name) {
-		return "";
+		Set<String> deptCodes = SecurityUtils.getDeptCode();
+		return deptCodes==null?"":deptCodes.toArray(new String[0])[0];
 	}
 
 }

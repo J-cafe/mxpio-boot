@@ -25,7 +25,7 @@ public class DeptGrantedAuthorityProvider implements GrantedAuthorityProvider  {
 	
 	@Override
 	public Collection<? extends GrantedAuthority> provide(UserDetails userDetails) {
-		Set<String> deptIds = deptService.getDeptIdsByUser(userDetails.getUsername());
+		Set<String> deptIds = deptService.getDeptKeysByUser(userDetails.getUsername(), "id");
 		List<GrantedAuthority> authorities = null;
 		
 		for(String deptId : deptIds){

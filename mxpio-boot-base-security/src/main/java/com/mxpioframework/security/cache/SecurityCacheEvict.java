@@ -23,7 +23,9 @@ import com.mxpioframework.security.common.Constants;
 				Constants.ELEMENT_ATTRIBUTE_MAP_CACHE_KEY,
 				Constants.DATA_ATTRIBUTE_MAP_CACHE_KEY,
 				Constants.DATA_RESOURCE_CACHE_KEY,
-				Constants.USER_DEPT_CACHE_KEY,
+				Constants.USER_DEPT_CODE_CACHE_KEY,
+				Constants.USER_DEPT_ID_CACHE_KEY,
+				Constants.DEPT_CACHE_KEY,
 		}, keyGenerator = Constants.KEY_GENERATOR_BEAN_NAME)
 })
 public @interface SecurityCacheEvict {

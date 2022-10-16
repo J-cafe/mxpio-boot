@@ -16,6 +16,7 @@ import com.mxpioframework.jpa.annotation.Generator;
 import com.mxpioframework.jpa.policy.impl.CreatedDatePolicy;
 import com.mxpioframework.jpa.policy.impl.CrudType;
 import com.mxpioframework.jpa.policy.impl.UpdatedDatePolicy;
+import com.mxpioframework.security.service.policy.CreateDeptPolicy;
 import com.mxpioframework.security.service.policy.CreatorPolicy;
 import com.mxpioframework.security.service.policy.ModifierPolicy;
 
@@ -34,6 +35,7 @@ public class BaseEntity implements DictAble, Serializable, MxpioEntity {
   @Schema(description = "创建人")
   private String createBy;
   
+  @Generator(policy = CreateDeptPolicy.class)
   @Column(name = "CREATE_DEPT", updatable = false)
   @Schema(description = "创建部门")
   private String createDept;
