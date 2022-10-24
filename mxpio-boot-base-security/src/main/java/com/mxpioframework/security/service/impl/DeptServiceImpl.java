@@ -264,10 +264,10 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 	@Transactional(readOnly = true)
 	public Set<String> getDeptKeysByUser(String username, String key) {
 		if("code".equals(key)){
-			Set<String> deptCodes = getAllDeptIdGroupByUser().get(username);
+			Set<String> deptCodes = getAllDeptCodeGroupByUser().get(username);
 			return deptCodes==null?new HashSet<String>():deptCodes;
 		}else if("id".equals(key)){
-			Set<String> deptIds = getAllDeptCodeGroupByUser().get(username);
+			Set<String> deptIds = getAllDeptIdGroupByUser().get(username);
 			return deptIds==null?new HashSet<String>():deptIds;
 		}else{
 			return new HashSet<String>();
