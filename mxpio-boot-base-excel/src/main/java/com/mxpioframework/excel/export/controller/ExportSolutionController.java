@@ -82,7 +82,7 @@ public class ExportSolutionController {
 		return Result.OK("更新导出方案",exportSolution);
 	}
 	
-	@DeleteMapping("remove/{deptIds}")
+	@DeleteMapping("remove/{solutionIds}")
 	@Operation(summary = "删除导出方案", description = "删除导出方案", method = "DELETE")
 	public Result<List<ExportSolution>> remove(@PathVariable(name = "solutionIds", required = true) String solutionIds) throws Exception {
 		String[] solutionId = solutionIds.split(",");
