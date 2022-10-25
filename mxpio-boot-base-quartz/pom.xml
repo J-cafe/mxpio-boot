@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.mxpio</groupId>
 		<artifactId>mxpio-boot-parent</artifactId>
-		<version>1.0.12-beta.5</version>
+		<version>1.0.12-beta.6</version>
 	</parent>
 	<artifactId>mxpio-boot-base-quartz</artifactId>
 	<name>调度模块</name>

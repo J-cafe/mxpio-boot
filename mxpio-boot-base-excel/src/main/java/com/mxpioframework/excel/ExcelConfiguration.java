@@ -9,4 +9,5 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan
 public class ExcelConfiguration {
 
+	public final static ExcelProperties EXCEL_PROPERTIES = new ExcelProperties();
 }

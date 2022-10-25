@@ -47,7 +47,7 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 	private UserService userService;
 	
 	@Override
-	public List<DataVo> findAllApi() {
+	public List<DataVo> findAllApi(boolean onlyCriteria) {
 		RequestMappingHandlerMapping mapping = ApplicationContextProvider.getBean(RequestMappingHandlerMapping.class);
 		Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
 		List<DataVo> dataVos = new ArrayList<>();
@@ -68,22 +68,23 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 	        		break;
 	        	}
 	        }
-	        
-	        String title = null;
-	        Operation operation = method.getMethodAnnotation(Operation.class);
-	        if(operation != null){
-	        	title = operation.summary();
+	        if(!onlyCriteria || hasCriteria){
+	        	String title = null;
+		        Operation operation = method.getMethodAnnotation(Operation.class);
+		        if(operation != null){
+		        	title = operation.summary();
+		        }
+	        	DataVo dataVo = DataVo.builder()
+	        			.title(title)
+	    	        	.requestMethods(methodsCondition.getMethods())
+	    	        	.className(method.getMethod().getDeclaringClass().getName())
+	    	        	.classMethod(method.getMethod().getName())
+	    	        	.httpUrls(info.getPatternsCondition().getPatterns())
+	    	        	.hasCriteria(hasCriteria)
+	    	        	.build();
+	    	    dataVos.add(dataVo);
+	    	    patternsMap.put(info.getPatternsCondition().getPatterns().toArray(new String[0])[0], dataVo);
 	        }
-        	DataVo dataVo = DataVo.builder()
-        			.title(title)
-    	        	.requestMethods(methodsCondition.getMethods())
-    	        	.className(method.getMethod().getDeclaringClass().getName())
-    	        	.classMethod(method.getMethod().getName())
-    	        	.httpUrls(info.getPatternsCondition().getPatterns())
-    	        	.hasCriteria(hasCriteria)
-    	        	.build();
-    	    dataVos.add(dataVo);
-    	    patternsMap.put(info.getPatternsCondition().getPatterns().toArray(new String[0])[0], dataVo);
 		}
 		return dataVos;
 	}

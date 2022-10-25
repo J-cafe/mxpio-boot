@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-parent</artifactId>
-	<version>1.0.12-beta.5</version>
+	<version>1.0.12-beta.6</version>
 	<packaging>pom</packaging>
 	<name>mxpio-boot</name>
 	<parent>
@@ -24,7 +24,7 @@
 		</repository>
 	</distributionManagement>
 	<properties>
-		<mxpio.version>1.0.12-beta.5</mxpio.version>
+		<mxpio.version>1.0.12-beta.6</mxpio.version>
 		<java.version>1.8</java.version>
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
 		<swagger.version>1.6.11</swagger.version>
@@ -301,12 +301,22 @@
 				<artifactId>poi-ooxml-lite</artifactId>
 				<version>${poi.version}</version>
 			</dependency>
-			<!-- Aviator -->
 			<dependency>
-				<groupId>com.googlecode.aviator</groupId>
-				<artifactId>aviator</artifactId>
-				<version>4.2.7</version>
+				<groupId>com.itextpdf</groupId>
+				<artifactId>itextpdf</artifactId>
+				<version>5.5.13.3</version>
 			</dependency>
+			<dependency>
+				<groupId>com.itextpdf</groupId>
+				<artifactId>itext-asian</artifactId>
+				<version>5.2.0</version>
+			</dependency>
+	<!-- Aviator -->
+	<dependency>
+		<groupId>com.googlecode.aviator</groupId>
+		<artifactId>aviator</artifactId>
+		<version>4.2.7</version>
+	</dependency>
 
 			<dependency>
 				<groupId>org.liquibase</groupId>
@@ -449,6 +459,6 @@
 		<connection>scm:git:https://gitee.com/i_mxpio/mxpio-boot.git</connection>
 		<developerConnection>scm:git:https://gitee.com/i_mxpio/mxpio-boot.git</developerConnection>
 		<url>https://gitee.com/i_mxpio/mxpio-boot.git</url>
-		<tag>1.0.12-beta.5</tag>
+		<tag>1.0.12-beta.6</tag>
 	</scm>
 </project>
