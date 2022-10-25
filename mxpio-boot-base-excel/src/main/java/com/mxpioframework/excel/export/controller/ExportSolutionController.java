@@ -38,9 +38,9 @@ public class ExportSolutionController {
 	@Autowired
 	private ExportColumnService exportColumnService;
 	
-	@GetMapping("list")
+	@GetMapping("page")
 	@Operation(summary = "导出方案列表", description = "获取导出方案列表", method = "GET")
-	public Result<Page<ExportSolution>> list(Criteria criteria,
+	public Result<Page<ExportSolution>> page(Criteria criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
