@@ -70,16 +70,16 @@ public class ExportSolutionController {
 	
 	@PostMapping("add")
 	@Operation(summary = "添加导出方案", description = "添加导出方案", method = "POST")
-	public Result<List<ExportSolution>> add(@RequestBody List<ExportSolution> exportSolutions) throws Exception {
-		exportSolutionService.save(exportSolutions);
-		return Result.OK("添加导出方案",exportSolutions);
+	public Result<ExportSolution> add(@RequestBody ExportSolution exportSolution) throws Exception {
+		exportSolutionService.save(exportSolution);
+		return Result.OK("添加导出方案",exportSolution);
 	}
 	
 	@PutMapping("edit")
 	@Operation(summary = "更新导出方案", description = "更新导出方案", method = "PUT")
-	public Result<List<ExportSolution>> edit(@RequestBody List<ExportSolution> exportSolutions) throws Exception {
-		exportSolutionService.update(exportSolutions);
-		return Result.OK("更新导出方案",exportSolutions);
+	public Result<ExportSolution> edit(@RequestBody ExportSolution exportSolution) throws Exception {
+		exportSolutionService.update(exportSolution);
+		return Result.OK("更新导出方案",exportSolution);
 	}
 	
 	@DeleteMapping("remove/{deptIds}")
