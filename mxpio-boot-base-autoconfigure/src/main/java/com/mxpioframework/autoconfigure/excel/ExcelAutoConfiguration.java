@@ -31,7 +31,6 @@ public class ExcelAutoConfiguration {
 	private Environment environment;
 	
 	public ExcelAutoConfiguration() {
-		ExcelConfiguration.EXCEL_PROPERTIES.init(environment);
 		log.info("[AutoConfiguration==>]:Excel Module Loading");
 		CommonConstant.addModule(new ModuleVO("Excel","Excel模块"));
 	}

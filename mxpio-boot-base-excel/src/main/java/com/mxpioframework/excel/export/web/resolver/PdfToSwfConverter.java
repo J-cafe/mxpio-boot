@@ -15,8 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PdfToSwfConverter {
 
-	private String pdfToSwfPath = ExcelConfiguration.EXCEL_PROPERTIES.getPdfToSwfPath();
-	private String xpdfPath = ExcelConfiguration.EXCEL_PROPERTIES.getXpdfPath();
+	private String pdfToSwfPath = "";
+	private String xpdfPath = "";
 
 	public PdfToSwfConverter() {
 
