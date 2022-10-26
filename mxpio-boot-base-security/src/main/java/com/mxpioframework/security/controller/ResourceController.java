@@ -56,12 +56,11 @@ public class ResourceController {
 	
 	@GetMapping("data/api/list")
 	@Operation(summary = "获取全部接口", description = "获取全部接口", method = "GET")
-	public Result<List<DataVo>> loadAllData(@RequestParam(value = "onlyCriteria", required = false) Boolean onlyCriteria,
-			@RequestParam(value = "path", required = false) String path) {
+	public Result<List<DataVo>> loadAllData(@RequestParam(value = "onlyCriteria", required = false) Boolean onlyCriteria) {
 		if(onlyCriteria == null){
 			onlyCriteria = false;
 		}
-		List<DataVo> datas = dataResourceService.findAllApi(onlyCriteria, path);
+		List<DataVo> datas = dataResourceService.findAllApi(onlyCriteria, null);
 		return Result.OK(datas);
 	}
 	
