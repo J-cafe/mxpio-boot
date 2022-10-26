@@ -1,31 +1,24 @@
 package com.mxpioframework.excel.export;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.common.util.SpringUtil;
+import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.excel.export.entity.ExportColumn;
 import com.mxpioframework.excel.export.entity.ExportSolution;
 import com.mxpioframework.excel.export.interceptor.IDataInterceptor;
 import com.mxpioframework.excel.export.model.ReportTitle;
 import com.mxpioframework.excel.export.model.ReportTitleStyle;
 import com.mxpioframework.excel.util.ColorUtils;
-import com.mxpioframework.security.entity.Dict;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mxpioframework.excel.util.ParamUtil;
 
 public abstract class AbstractReportModelGenerater {
 
@@ -45,9 +38,44 @@ public abstract class AbstractReportModelGenerater {
 		return reportTitle;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<Map<String, Object>> getGridModelData(ExportSolution exportSolution, String intercepterBean) throws Exception {
-		List<Map<String, Object>> dataList = null;
+		List<Map<String, Object>> dataList = new ArrayList<>();
+		Map<String, String[]> params = exportSolution.getParams();
+		Class<?> beanType = exportSolution.getDataResource().getBeanClass();
+		Method method = exportSolution.getDataResource().getMethod();
+		Parameter[] methodParams = method.getParameters();
+		Object[] paramsAry = new Object[methodParams.length];
+		int i = 0;
+		for(Parameter methodParam : methodParams){
+			String[] values = params.get(methodParam.getName());
+			Object value = ParamUtil.getParamValue(methodParam, values);
+			paramsAry[i] = value;
+			i++;
+		}
+		Object result = method.invoke(SpringUtil.getBean(beanType), paramsAry);
+		List<Object> resultList = new ArrayList<>();
+		if(result instanceof List){
+			resultList = (List<Object>) result;
+		}else if(result instanceof Result){
+			Object o = ((Result) result).getResult();
+			if(o instanceof List){
+				resultList = (List<Object>) o;
+			}else if(o instanceof Page){
+				resultList = ((Page) o).getContent();
+			}else {
+				resultList.add(o);
+			}
+		}else {
+			resultList.add(result);
+		}
+		for(Object o : resultList){
+			Map<String, Object> record = new HashMap<>();
+			for(ExportColumn column : exportSolution.getColumns()){
+				record.put(column.getColumnName(), BeanReflectionUtils.getPropertyValue(o, column.getColumnName()));
+			}
+			dataList.add(record);
+		}
 		/*int pageNo = Integer.valueOf(map.get("pageNo").toString());
 		int pageSize = Integer.valueOf(map.get("pageSize").toString());
 		Object dataProviderParameter = map.get("dataProviderParameter");
@@ -99,8 +127,8 @@ public abstract class AbstractReportModelGenerater {
 					dataList.add(PropertyUtils.describe(obj));
 				}
 			}
-		}
-		fireGridDataInterceptor(intercepterBean, dataList);*/
+		}*/
+		fireGridDataInterceptor(intercepterBean, dataList);
 		return dataList;
 	}
 

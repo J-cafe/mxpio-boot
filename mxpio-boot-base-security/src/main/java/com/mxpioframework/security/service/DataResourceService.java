@@ -10,10 +10,11 @@ public interface DataResourceService extends BaseService<DataResource> {
 
 	/**
 	 * 获取全部接口
-	 * @param containCriteria
+	 * @param onlyCriteria
+	 * @param path
 	 * @return
 	 */
-	List<DataVo> findAllApi(boolean onlyCriteria);
+	List<DataVo> findAllApi(boolean onlyCriteria, String path);
 
 	/**
 	 * 数据资源索引

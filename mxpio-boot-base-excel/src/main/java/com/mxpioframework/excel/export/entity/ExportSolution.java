@@ -1,6 +1,7 @@
 package com.mxpioframework.excel.export.entity;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.Transient;
 
 import com.mxpioframework.jpa.annotation.Generator;
 import com.mxpioframework.security.entity.BaseEntity;
+import com.mxpioframework.security.vo.DataVo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -92,4 +94,10 @@ public class ExportSolution extends BaseEntity {
 	
 	@Transient
 	private List<ExportColumn> columns;
+	
+	@Transient
+	private Map<String,String[]> params;
+	
+	@Transient
+	private DataVo dataResource;
 }

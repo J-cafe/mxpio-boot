@@ -13,4 +13,6 @@ public interface ExportSolutionService extends BaseService<ExportSolution> {
 
 	ExportSolution getById(String id);
 
+	ExportSolution getByCode(String solutionCode);
+
 }

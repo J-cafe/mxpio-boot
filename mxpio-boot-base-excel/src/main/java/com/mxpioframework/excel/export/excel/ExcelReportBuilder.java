@@ -43,7 +43,10 @@ public class ExcelReportBuilder extends AbstractExcelReportBuilder {
 		CellStyle titleStyle = new TitleStyleBuilder().builder(reportTitle, sheet.getWorkbook());
 		titleCell.setCellStyle(titleStyle);
 		CellRangeAddress rangle = new CellRangeAddress(row, row, firstCol, lastCol);
-		sheet.addMergedRegion(rangle);
+		if(firstCol != lastCol){
+			sheet.addMergedRegion(rangle);
+		}
+		
 		this.setCellRangeAddressBorder(rangle, sheet);
 		return row + 1;
 	}
@@ -90,7 +93,9 @@ public class ExcelReportBuilder extends AbstractExcelReportBuilder {
 			if (headerModel.getHeaders().size() == 0) {
 				int rowspan = maxHeaderLevel - headerModel.getLevel();
 				cellRangeAddress = new CellRangeAddress(firstRow, lastRow + rowspan, firstCol, lastCol + colspan - 1);
-				sheet.addMergedRegion(cellRangeAddress);
+				if(firstCol != lastCol + colspan - 1){
+					sheet.addMergedRegion(cellRangeAddress);
+				}
 				this.setCellRangeAddressBorder(cellRangeAddress, sheet);
 			} else {
 				cellRangeAddress = new CellRangeAddress(firstRow, lastRow, firstCol, lastCol + colspan - 1);

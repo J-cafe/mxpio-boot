@@ -20,6 +20,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -53,6 +54,8 @@ import com.mxpioframework.excel.export.pdf.PdfReportModelGenerater;
 import com.mxpioframework.excel.export.service.ExportSolutionService;
 import com.mxpioframework.excel.swfviewer.handler.ISwfFileHandler;
 import com.mxpioframework.excel.util.ExportUtils;
+import com.mxpioframework.security.service.DataResourceService;
+import com.mxpioframework.security.vo.DataVo;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -91,6 +94,9 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 	public CvsReportBuilder cvsReportBuilder;
 	
 	@Autowired
+	public DataResourceService dataResourceService;
+	
+	@Autowired
 	private Map<String, ISwfFileHandler> swfFileHandlers;
 
 	public int rowAccessWindowSize = 500;
@@ -104,10 +110,16 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 	@Autowired
 	private ExportSolutionService exportSolutionService;
 	
-	@GetMapping("download/{extension}/{solutionId}")
+	@GetMapping("download/{extension}/{solutionCode}")
 	@Operation(summary = "导出数据", description = "导出数据", method = "GET")
-	public void generateReportFile(@PathVariable("solutionId") String solutionId, @PathVariable("extension") String extension,HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ExportSolution exportSolution = exportSolutionService.getById(solutionId);
+	public void generateReportFile(@PathVariable("solutionCode") String solutionCode, @PathVariable("extension") String extension,HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ExportSolution exportSolution = exportSolutionService.getByCode(solutionCode);
+		exportSolution.setParams(request.getParameterMap());
+		List<DataVo> dataResourceVos = dataResourceService.findAllApi(true, exportSolution.getApi());
+		if(CollectionUtils.isNotEmpty(dataResourceVos)){
+			exportSolution.setDataResource(dataResourceVos.get(0));
+		}
+		
 		String fileName = exportSolution.getFileName();
 		String interceptorName = null;
 		if (exportSolution.getInterceptorName() != null) {
@@ -279,6 +291,7 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 		out.close();
 	}
 	
+	@SuppressWarnings("unused")
 	private void doDownloadPdfReport(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("UTF-8");
 		response.setDateHeader("Expires", 0);
@@ -286,7 +299,7 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
 		response.setHeader("Pragma", "no-cache");
 		Map<String, Object> parameterMap = new HashMap<String, Object>();
-		Enumeration parameters = request.getParameterNames();
+		Enumeration<String> parameters = request.getParameterNames();
 		while (parameters.hasMoreElements()) {
 			String parameter = (String) parameters.nextElement();
 			String value = request.getParameter(parameter);

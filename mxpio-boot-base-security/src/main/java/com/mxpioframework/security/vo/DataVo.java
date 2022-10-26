@@ -1,5 +1,6 @@
 package com.mxpioframework.security.vo;
 
+import java.lang.reflect.Method;
 import java.util.Set;
 
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,5 +25,9 @@ public class DataVo {
 	private Set<String> httpUrls;
 	
 	private boolean hasCriteria;
+	
+	private Method method;
+	
+	private Class<?> beanClass;
 	
 }

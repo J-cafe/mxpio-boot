@@ -31,4 +31,14 @@ public class ExportSolutionServiceImpl extends BaseServiceImpl<ExportSolution> i
 		return exportSolution;
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public ExportSolution getByCode(String solutionCode) {
+		ExportSolution exportSolution = JpaUtil.linq(ExportSolution.class).equal("code", solutionCode).findOne();
+		if(exportSolution != null){
+			exportSolution.setColumns(JpaUtil.linq(ExportColumn.class).equal("solutionId", exportSolution.getId()).list());
+		}
+		return exportSolution;
+	}
+
 }

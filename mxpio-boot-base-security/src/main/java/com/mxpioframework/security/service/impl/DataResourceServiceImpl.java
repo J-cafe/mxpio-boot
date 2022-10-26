@@ -47,7 +47,7 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 	private UserService userService;
 	
 	@Override
-	public List<DataVo> findAllApi(boolean onlyCriteria) {
+	public List<DataVo> findAllApi(boolean onlyCriteria, String path) {
 		RequestMappingHandlerMapping mapping = ApplicationContextProvider.getBean(RequestMappingHandlerMapping.class);
 		Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
 		List<DataVo> dataVos = new ArrayList<>();
@@ -55,6 +55,10 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 		for(Map.Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet()){
 			RequestMappingInfo info = m.getKey();
 	        HandlerMethod method = m.getValue();
+			if(path != null && !info.getPatternsCondition().getPatterns().toArray()[0].equals(path)){
+				continue;
+			}
+			
 			if(patternsMap.get(info.getPatternsCondition().getPatterns().toArray()[0]) != null){
 				continue;
 			}
@@ -81,6 +85,8 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 	    	        	.classMethod(method.getMethod().getName())
 	    	        	.httpUrls(info.getPatternsCondition().getPatterns())
 	    	        	.hasCriteria(hasCriteria)
+	    	        	.method(method.getMethod())
+	    	        	.beanClass(method.getBeanType())
 	    	        	.build();
 	    	    dataVos.add(dataVo);
 	    	    patternsMap.put(info.getPatternsCondition().getPatterns().toArray(new String[0])[0], dataVo);
