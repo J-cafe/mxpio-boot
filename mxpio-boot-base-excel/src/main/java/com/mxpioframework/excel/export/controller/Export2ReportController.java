@@ -105,7 +105,7 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 	private ExportSolutionService exportSolutionService;
 	
 	@GetMapping("download/{extension}/{solutionId}")
-	@Operation(summary = "导出数据", description = "导出数据", method = "POST")
+	@Operation(summary = "导出数据", description = "导出数据", method = "GET")
 	public void generateReportFile(@PathVariable("solutionId") String solutionId, @PathVariable("extension") String extension,HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ExportSolution exportSolution = exportSolutionService.getById(solutionId);
 		String fileName = exportSolution.getFileName();
