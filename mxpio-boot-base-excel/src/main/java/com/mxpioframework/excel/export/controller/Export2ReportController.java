@@ -1,14 +1,26 @@
 package com.mxpioframework.excel.export.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -39,11 +51,14 @@ import com.mxpioframework.excel.export.model.ReportTitle;
 import com.mxpioframework.excel.export.pdf.PdfReportBuilder;
 import com.mxpioframework.excel.export.pdf.PdfReportModelGenerater;
 import com.mxpioframework.excel.export.service.ExportSolutionService;
+import com.mxpioframework.excel.swfviewer.handler.ISwfFileHandler;
 import com.mxpioframework.excel.util.ExportUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Tag(name = "Export2ReportController", description = "导出接口")
 @RestController(Export2ReportController.BEAN_ID)
 @RequestMapping("/excel/export/")
@@ -74,18 +89,24 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 	@Autowired
 	@Qualifier(CvsReportBuilder.BEAN_ID)
 	public CvsReportBuilder cvsReportBuilder;
+	
+	@Autowired
+	private Map<String, ISwfFileHandler> swfFileHandlers;
 
 	public int rowAccessWindowSize = 500;
 	
 	@Value("${mxpio.excel.exporter.cacheSize}")
 	private String cacheSize;
 	
+	@Value("${mxpio.excel.exporter.extension.fileType}")
+	public String extensionFileType;
+	
 	@Autowired
 	private ExportSolutionService exportSolutionService;
 	
-	@GetMapping("download/{solutionId}/{extension}")
+	@GetMapping("download/{extension}/{solutionId}")
 	@Operation(summary = "导出数据", description = "导出数据", method = "POST")
-	public Map<String, String> generateReportFile(@PathVariable("solutionId") String solutionId, @PathVariable("extension") String extension) throws Exception {
+	public void generateReportFile(@PathVariable("solutionId") String solutionId, @PathVariable("extension") String extension,HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ExportSolution exportSolution = exportSolutionService.getById(solutionId);
 		String fileName = exportSolution.getFileName();
 		String interceptorName = null;
@@ -105,7 +126,7 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 		Map<String, String> outParameter = new HashMap<String, String>();
 		outParameter.put("id", id);
 		outParameter.put("name", fileName + "." + extension);
-		return outParameter;
+		doDownloadExcelReport(outParameter,request,response);
 	}
 
 	private void generatePdfFile(ReportTitle reportTitle, ExportSolution exportSolution, String fileName, String interceptorName) throws Exception {
@@ -183,6 +204,128 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
+	}
+	
+	private void doDownloadExcelReport(Map<String, String> outParameter, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("UTF-8");
+		String id = outParameter.get("id");
+		String name = outParameter.get("name");
+		if (!StringUtils.isNotEmpty(id) || !id.matches("[a-z0-9-]+")) {
+			this.processError(request, response, "request parameter id error");
+			return;
+		}
+		String type = "";
+		if (StringUtils.isNotEmpty(extensionFileType)) {
+			type = "|" + extensionFileType;
+		}
+		if (!StringUtils.isNotEmpty(name) || !name.matches("[^/\\\\?<>*:\"|]+(\\.(xls|xlsx|pdf|csv" + type + "))$")) {
+			this.processError(request, response, "request parameter name error");
+			return;
+		}
+		String fileName = id + "_" + name;
+		String location = ExportUtils.getFileStorePath();
+		File file = new File(location, fileName);
+		if (!file.exists() || !file.isFile()) {
+			this.processError(request, response, "find not found " + file);
+			return;
+		}
+		response.setCharacterEncoding("UTF-8");
+		response.setHeader("Server", "http://www.bstek.com");
+		response.setContentType("application/octet-stream;charset=utf-8");
+		response.setHeader("Connection", "close");
+		response.setHeader("Accept-Ranges", "bytes");
+		name = URLEncoder.encode(name, "UTF-8");
+		name = name.replaceAll("\\+", "%20");
+		response.setHeader("Content-Disposition", "attachment;filename=\"" + name + "\";filename*=utf-8''" + name + "");
+		FileInputStream input = null;
+		OutputStream out = null;
+		try {
+			input = new FileInputStream(file);
+			out = response.getOutputStream();
+			IOUtils.copy(input, out);
+			out.flush();
+		} finally {
+			IOUtils.closeQuietly(input);
+			IOUtils.closeQuietly(out);
+			if (file != null) {
+				deletePreviousDayTempFile();
+			}
+		}
+	}
+
+	private void deletePreviousDayTempFile() throws IOException {
+		String location = ExportUtils.getFileStorePath();
+		File file = new File(location);
+		if (file.isDirectory()) {
+			File[] files = file.listFiles();
+			for (File f : files) {
+				long time = f.lastModified();
+				Calendar cal = Calendar.getInstance();
+				cal.setTimeInMillis(time);
+				Calendar last = Calendar.getInstance();
+				last.add(Calendar.DAY_OF_MONTH, -1);
+				if (cal.before(last)) {
+					f.delete();
+				}
+			}
+		}
+	}
+
+	private void processError(HttpServletRequest request, HttpServletResponse response, String message) throws IOException {
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.write(message);
+		out.flush();
+		out.close();
+	}
+	
+	private void doDownloadPdfReport(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		request.setCharacterEncoding("UTF-8");
+		response.setDateHeader("Expires", 0);
+		response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+		response.setHeader("Pragma", "no-cache");
+		Map<String, Object> parameterMap = new HashMap<String, Object>();
+		Enumeration parameters = request.getParameterNames();
+		while (parameters.hasMoreElements()) {
+			String parameter = (String) parameters.nextElement();
+			String value = request.getParameter(parameter);
+			parameterMap.put(parameter, value);
+		}
+		String handler = (String) parameterMap.get("handler");
+		Assert.hasText(handler, "url请求必须包含handler参数!");
+		// Map<String, ISwfFileHandler> beanMap = DoradoContext.getAttachedWebApplicationContext().getBeansOfType(ISwfFileHandler.class);
+		ISwfFileHandler swfFileHandler = null;
+		for (Map.Entry<String, ISwfFileHandler> entry : swfFileHandlers.entrySet()) {
+			if (entry.getValue().getHandlerName().equals(handler)) {
+				swfFileHandler = entry.getValue();
+				break;
+			}
+		}
+		log.info("SwfFileHandler Parameter: " + parameterMap);
+		Assert.notNull(swfFileHandler, "没有找到com.bstek.bdf2.swfviewer.controller.ISwfFileHandler的实现类！");
+		File file = swfFileHandler.execute(parameterMap);
+		if (file == null || !file.exists()) {
+			String msg = swfFileHandler.getHandlerName()+"返回的SWF文件不存在！";
+			if (file!=null){
+				msg += " path:" + file.getAbsolutePath();
+			}
+			throw new RuntimeException(msg);
+		}
+		response.setHeader("Server", "http://www.bstek.com");
+		response.setContentType("application/x-shockwave-flash");
+		response.setHeader("Content-Disposition", "attachment;filename=\"report.swf\"");
+		OutputStream output = response.getOutputStream();
+		InputStream input = null;
+		try {
+			input = new FileInputStream(file);
+			IOUtils.copy(input, output);
+			output.flush();
+		} finally {
+			IOUtils.closeQuietly(input);
+			IOUtils.closeQuietly(output);
+		}
+
 	}
 
 }

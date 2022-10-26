@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SwfFileResolver/* extends UrlBasedViewResolver */{
 	
-/*	@Autowired
+	/*@Autowired
 	private Map<String, ISwfFileHandler> swfFileHandlers;
 
 	@Override

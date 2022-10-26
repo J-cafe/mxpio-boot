@@ -47,8 +47,8 @@ public abstract class AbstractReportModelGenerater {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<Map<String, Object>> getGridModelData(ExportSolution exportSolution, String intercepterBean) throws Exception {
-		/*List<Map<String, Object>> dataList = null;
-		int pageNo = Integer.valueOf(map.get("pageNo").toString());
+		List<Map<String, Object>> dataList = null;
+		/*int pageNo = Integer.valueOf(map.get("pageNo").toString());
 		int pageSize = Integer.valueOf(map.get("pageSize").toString());
 		Object dataProviderParameter = map.get("dataProviderParameter");
 		String dataProviderId = (String) map.get("dataProviderId");
@@ -100,9 +100,8 @@ public abstract class AbstractReportModelGenerater {
 				}
 			}
 		}
-		fireGridDataInterceptor(intercepterBean, dataList);
-		return dataList;*/
-		return null;
+		fireGridDataInterceptor(intercepterBean, dataList);*/
+		return dataList;
 	}
 
 	@SuppressWarnings({ "unchecked" })
