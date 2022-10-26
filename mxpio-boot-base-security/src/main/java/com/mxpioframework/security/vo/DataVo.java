@@ -5,6 +5,8 @@ import java.util.Set;
 
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -26,8 +28,10 @@ public class DataVo {
 	
 	private boolean hasCriteria;
 	
+	@JsonIgnore
 	private Method method;
 	
+	@JsonIgnore
 	private Class<?> beanClass;
 	
 }
