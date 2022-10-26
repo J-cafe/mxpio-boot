@@ -34,6 +34,7 @@
 		<poi.version>5.2.0</poi.version>
 		<flowable.version>6.7.2</flowable.version>
 		<liquibase.version>4.8.0</liquibase.version>
+		<caffeine.version>2.9.3</caffeine.version>
 	</properties>
 	<modules>
 		<module>mxpio-boot-base-autoconfigure</module>
@@ -51,7 +52,8 @@
 		<module>mxpio-boot-base-expression</module>
     	<module>mxpio-boot-base-filestorage</module>
     	<module>mxpio-boot-base-multitenant</module>
-  </modules>
+		<module>mxpio-boot-module-cache-caffeine</module>
+	</modules>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -339,6 +341,12 @@
 				<groupId>commons-fileupload</groupId>
 				<artifactId>commons-fileupload</artifactId>
 				<version>1.4</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.github.ben-manes.caffeine</groupId>
+				<artifactId>caffeine</artifactId>
+				<version>${caffeine.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
