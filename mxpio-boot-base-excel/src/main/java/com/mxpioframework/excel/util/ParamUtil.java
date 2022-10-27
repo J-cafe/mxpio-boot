@@ -1,10 +1,13 @@
 package com.mxpioframework.excel.util;
 
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.collections4.CollectionUtils;
 
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
@@ -29,6 +32,9 @@ public class ParamUtil {
 			List<DataResource> datas = dataResourceService.findAll();
 			Map<String, List<DataResource>> dataResourceMap = JpaUtil.classify(datas, "path");
 			List<DataResource> dataResources = dataResourceMap.get(path);
+			if(CollectionUtils.isEmpty(dataResources)){
+				dataResources = new ArrayList<>();
+			}
 			for(DataResource dataResource : dataResources){
 				if (securityDecisionManager.decide(dataResource)) {
 					if(dataResource.getDataScope() != null){
