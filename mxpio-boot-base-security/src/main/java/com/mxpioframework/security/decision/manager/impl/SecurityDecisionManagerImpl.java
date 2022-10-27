@@ -21,6 +21,9 @@ import com.mxpioframework.security.decision.manager.SecurityDecisionManager;
 import com.mxpioframework.security.entity.Resource;
 import com.mxpioframework.security.entity.User;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class SecurityDecisionManagerImpl implements SecurityDecisionManager {
 
@@ -50,10 +53,10 @@ public class SecurityDecisionManagerImpl implements SecurityDecisionManager {
 			try {
 				accessDecisionManager.decide(authentication, resource, attributes);
 			} catch (AccessDeniedException e) {
-				e.printStackTrace();
+				log.error(e.getMessage()+ ":" + resource.getResourceType()+":"+resource.getId());
 				return false;
 			} catch (InsufficientAuthenticationException e) {
-				e.printStackTrace();
+				log.error(e.getMessage()+ ":" + resource.getResourceType()+":"+resource.getId());
 				return false;
 			}
 

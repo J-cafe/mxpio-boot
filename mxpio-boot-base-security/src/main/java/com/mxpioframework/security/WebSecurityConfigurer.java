@@ -69,10 +69,13 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private FilterInvocationSecurityMetadataSource securityMetadataSource;
-
+	
 	@Autowired
 	private AccessDecisionManager accessDecisionManager;
 	
+	/*@Autowired
+	private FilterSecurityInterceptor securityInterceptor;*/
+
 	@Autowired
 	private UserDetailsService userDetailsService;
 
@@ -119,7 +122,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterAt(jwtLoginFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(jwtTokenFilter, LoginFilter.class)
-                .addFilterAfter(securityInterceptor,
+                .addFilterBefore(securityInterceptor,
         				org.springframework.security.web.access.intercept.FilterSecurityInterceptor.class)
                 .logout() // 默认注销行为为logout，可以通过下面的方式来修改
                 .logoutUrl(URL_PREFIX + logoutPath)

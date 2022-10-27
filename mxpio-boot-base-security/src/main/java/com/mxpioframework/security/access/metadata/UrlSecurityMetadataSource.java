@@ -19,6 +19,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 
+import com.mxpioframework.security.access.provider.DataResourceConfigAttributeProvider;
 import com.mxpioframework.security.access.provider.FilterConfigAttributeProvider;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,8 @@ public class UrlSecurityMetadataSource  implements FilterInvocationSecurityMetad
 	@Autowired
 	private List<FilterConfigAttributeProvider> providers;
 	
+	@Autowired
+	private List<DataResourceConfigAttributeProvider> dataProviders;
 	
 	public Collection<ConfigAttribute> getAllConfigAttributes() {
 		Set<ConfigAttribute> allAttributes = new HashSet<ConfigAttribute>();
@@ -50,6 +53,7 @@ public class UrlSecurityMetadataSource  implements FilterInvocationSecurityMetad
 
 	public Collection<ConfigAttribute> getAttributes(Object object) {
 		final HttpServletRequest request = ((FilterInvocation) object).getRequest();
+		System.out.println(request.getHttpServletMapping().getPattern());
 		try {
 			for (Map.Entry<RequestMatcher, Collection<ConfigAttribute>> entry : getRequestMap()
 				.entrySet()) {
@@ -72,6 +76,15 @@ public class UrlSecurityMetadataSource  implements FilterInvocationSecurityMetad
 		AnnotationAwareOrderComparator.sort(providers);
 		requestMap = new ConcurrentHashMap<RequestMatcher, Collection<ConfigAttribute>>();
 		for (FilterConfigAttributeProvider provider : providers) {
+			Map<String, Collection<ConfigAttribute>> map = provider.provide();
+			if (map != null && !map.isEmpty()) {
+				for (Entry<String, Collection<ConfigAttribute>> entry : map.entrySet()) {
+					requestMap.put(new AntPathRequestMatcher("/" + entry.getKey(), null), entry.getValue());
+				}
+			}
+		}
+		AnnotationAwareOrderComparator.sort(dataProviders);
+		for (DataResourceConfigAttributeProvider provider : dataProviders) {
 			Map<String, Collection<ConfigAttribute>> map = provider.provide();
 			if (map != null && !map.isEmpty()) {
 				for (Entry<String, Collection<ConfigAttribute>> entry : map.entrySet()) {

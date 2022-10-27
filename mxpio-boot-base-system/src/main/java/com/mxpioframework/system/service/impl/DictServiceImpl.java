@@ -110,9 +110,14 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 	@Override
 	@Transactional(readOnly = false)
 	public String getEntityDictText(String code, Class<? extends BaseEntity> clazz, String dicText, String value) {
-		Object entity = JpaUtil.linq(clazz).equal(code, value).findOne();
-		Object result = BeanReflectionUtils.getProperty(entity, dicText);
-		return result == null ? null : result.toString();
+		try{
+			Object entity = JpaUtil.linq(clazz).equal(code, value).findOne();
+			Object result = BeanReflectionUtils.getProperty(entity, dicText);
+			return result == null ? null : result.toString();
+		}catch (Exception e) {
+			return null;
+		}
+		
 	}
 
 }

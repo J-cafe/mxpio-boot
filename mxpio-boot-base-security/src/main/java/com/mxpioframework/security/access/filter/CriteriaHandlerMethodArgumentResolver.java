@@ -18,8 +18,6 @@ import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.jpa.query.Operator;
-import com.mxpioframework.security.DataAuthenticationException;
-import com.mxpioframework.security.decision.manager.SecurityDecisionManager;
 import com.mxpioframework.security.entity.DataResource;
 import com.mxpioframework.security.service.DataResourceService;
 import com.mxpioframework.security.service.DeptService;
@@ -28,8 +26,8 @@ import com.mxpioframework.security.util.SecurityUtils;
 @Component
 public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 	
-	@Autowired
-	private SecurityDecisionManager securityDecisionManager;
+	/*@Autowired
+	private SecurityDecisionManager securityDecisionManager;*/
 	
 	@Autowired
 	private DataResourceService dataResourceService;
@@ -43,7 +41,6 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 		String criteria = request.getParameter("criteria");
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
 		
-		
 		// Map<String, DataResource> dataResourceMap = dataResourceService.findAllByCatch();
 		RequestMapping requestMapping = parameter.getMethodAnnotation(RequestMapping.class);
 		RequestMapping classRequestMapping = parameter.getContainingClass().getDeclaredAnnotation(RequestMapping.class);
@@ -54,8 +51,21 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 			// DataResource dataResource = null;
 			List<DataResource> dataResources = dataResourceMap.get(classRequestMapping.value()[0] + requestMapping.value()[0]);
 			if(CollectionUtils.isNotEmpty(dataResources)){
-				if(!decide(dataResources, c)){
+				/*if(!decide(dataResources, c)){
 					throw new DataAuthenticationException("权限异常");
+				}*/
+				
+				/*for(DataResource dataResource : dataResources){
+					
+				}*/
+				DataResource dataResource = dataResources.get(0);
+				if(dataResource.getDataScope() != null){
+					if(com.mxpioframework.security.Constants.DatascopeEnum.DEPT.getCode().equals(dataResource.getDataScope())){
+						Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(),"code");
+						c.addCriterion("createDept", Operator.IN, deptCodes);
+					}else if(com.mxpioframework.security.Constants.DatascopeEnum.USER.getCode().equals(dataResource.getDataScope())) {
+						c.addCriterion("createBy", Operator.EQ, SecurityUtils.getLoginUsername());
+					}
 				}
 			}
 		}
@@ -68,7 +78,7 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 		return parameter.getParameterName().equals("criteria");
 	}
 	
-	private boolean decide(List<DataResource> dataResources, Criteria c) {
+	/*private boolean decide(List<DataResource> dataResources, Criteria c) {
 		for(DataResource dataResource : dataResources){
 			if (securityDecisionManager.decide(dataResource)) {
 				if(dataResource.getDataScope() != null){
@@ -83,6 +93,6 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 			}
 		}
 		return false;
-	}
+	}*/
 
 }

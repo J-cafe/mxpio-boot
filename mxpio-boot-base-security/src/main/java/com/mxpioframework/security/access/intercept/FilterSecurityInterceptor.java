@@ -7,6 +7,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+
 import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
 import org.springframework.security.access.intercept.InterceptorStatusToken;
@@ -16,10 +17,9 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 
 public class FilterSecurityInterceptor extends AbstractSecurityInterceptor implements Filter {
-	private static final String FILTER_APPLIED = "__spring_security_filterSecurityInterceptor_filterApplied";
 	private FilterInvocationSecurityMetadataSource securityMetadataSource;
+	private static final String FILTER_APPLIED = "__spring_security_filterSecurityInterceptor_filterApplied";
 	private boolean observeOncePerRequest = true;
-
 	public void init(FilterConfig arg0) {
 	}
 
@@ -82,4 +82,5 @@ public class FilterSecurityInterceptor extends AbstractSecurityInterceptor imple
 	public void setObserveOncePerRequest(boolean observeOncePerRequest) {
 		this.observeOncePerRequest = observeOncePerRequest;
 	}
+
 }
