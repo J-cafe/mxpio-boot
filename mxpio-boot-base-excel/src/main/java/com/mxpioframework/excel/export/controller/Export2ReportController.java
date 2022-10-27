@@ -242,7 +242,7 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 			return;
 		}
 		response.setCharacterEncoding("UTF-8");
-		response.setHeader("Server", "http://www.bstek.com");
+		response.setHeader("Server", "http://www.mxpio.com");
 		response.setContentType("application/octet-stream;charset=utf-8");
 		response.setHeader("Connection", "close");
 		response.setHeader("Accept-Ranges", "bytes");
