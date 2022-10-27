@@ -1,7 +1,9 @@
 package com.mxpioframework.security.controller;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -79,9 +81,11 @@ public class PermissionController {
 	
 	@GetMapping("data/list")
 	@Operation(summary = "加载已授权数据权限", description = "根据登录用户获取已授权的数据权限", method = "GET")
-	public Result<List<DataResource>> loadDataResource(){
-		List<DataResource> datas = dataResourceService.findByUsername(null);
-		return Result.OK(datas);
+	public Result<Map<String, List<DataResource>>> loadDataResource(){
+		Map<String, List<DataResource>> result = new HashMap<>();
+		result.put("datas", dataResourceService.findByUsername(null));
+		result.put("allDatas", dataResourceService.findAll());
+		return Result.OK(result);
 	}
 	
 }
