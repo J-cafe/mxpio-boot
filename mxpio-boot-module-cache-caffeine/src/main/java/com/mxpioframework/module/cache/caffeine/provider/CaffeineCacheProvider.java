@@ -3,7 +3,6 @@ package com.mxpioframework.module.cache.caffeine.provider;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.mxpioframework.cache.provider.CacheProvider;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -13,7 +12,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 
-@Slf4j
 @Component
 public class CaffeineCacheProvider implements CacheProvider {
 

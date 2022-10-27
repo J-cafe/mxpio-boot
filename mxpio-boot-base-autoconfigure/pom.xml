@@ -47,6 +47,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-boot-module-cache-caffeine</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-base-quartz</artifactId>
 			<optional>true</optional>
 		</dependency>

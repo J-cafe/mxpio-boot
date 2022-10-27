@@ -153,6 +153,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-module-cache-caffeine</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
 				<artifactId>mxpio-boot-base-excel</artifactId>
 				<version>${mxpio.version}</version>
 			</dependency>
