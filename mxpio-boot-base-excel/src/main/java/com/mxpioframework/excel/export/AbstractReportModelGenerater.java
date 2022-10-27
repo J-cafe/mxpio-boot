@@ -49,7 +49,7 @@ public abstract class AbstractReportModelGenerater {
 		int i = 0;
 		for(Parameter methodParam : methodParams){
 			String[] values = params.get(methodParam.getName());
-			Object value = ParamUtil.getParamValue(methodParam, values);
+			Object value = ParamUtil.getParamValue(methodParam, values, exportSolution.getApi());
 			paramsAry[i] = value;
 			i++;
 		}

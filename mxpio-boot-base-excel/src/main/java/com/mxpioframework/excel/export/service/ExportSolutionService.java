@@ -15,4 +15,6 @@ public interface ExportSolutionService extends BaseService<ExportSolution> {
 
 	ExportSolution getByCode(String solutionCode);
 
+	boolean createColumnsByCode(String solutionCode);
+
 }

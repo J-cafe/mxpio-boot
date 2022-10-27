@@ -21,6 +21,7 @@ import com.mxpioframework.excel.export.entity.ExportColumn;
 import com.mxpioframework.excel.export.entity.ExportSolution;
 import com.mxpioframework.excel.export.service.ExportColumnService;
 import com.mxpioframework.excel.export.service.ExportSolutionService;
+import com.mxpioframework.excel.importer.model.ImporterSolution;
 import com.mxpioframework.jpa.query.Criteria;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -80,6 +81,13 @@ public class ExportSolutionController {
 	public Result<ExportSolution> edit(@RequestBody ExportSolution exportSolution) throws Exception {
 		exportSolutionService.update(exportSolution);
 		return Result.OK("更新导出方案",exportSolution);
+	}
+	
+	@PostMapping("column/create/{solutionId}")
+	@Operation(summary = "生成字段", description = "生成字段", method = "POST")
+	public Result<ImporterSolution> autoCreateColumns(@PathVariable("solutionCode") String solutionCode) {
+		exportSolutionService.createColumnsByCode(solutionCode);
+		return Result.OK();
 	}
 	
 	@DeleteMapping("remove/{solutionIds}")
