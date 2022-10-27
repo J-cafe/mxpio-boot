@@ -34,6 +34,7 @@ public class ParamUtil {
 			List<DataResource> dataResources = dataResourceMap.get(path);
 			if(CollectionUtils.isEmpty(dataResources)){
 				dataResources = new ArrayList<>();
+				decide = true;
 			}
 			for(DataResource dataResource : dataResources){
 				if (securityDecisionManager.decide(dataResource)) {
