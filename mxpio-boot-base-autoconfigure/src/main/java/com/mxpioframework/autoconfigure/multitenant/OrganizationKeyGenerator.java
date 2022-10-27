@@ -9,8 +9,8 @@ import com.mxpioframework.multitenant.domain.Organization;
 import com.mxpioframework.security.entity.OrganizationSupport;
 
 /**
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
- * @since 2016年8月14日
+ * @author MxpIO (mailto:i@mxpio.com)
+ * @since 2021年8月14日
  */
 public class OrganizationKeyGenerator implements KeyGenerator {
 	

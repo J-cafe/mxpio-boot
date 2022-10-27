@@ -20,10 +20,10 @@ public class SpringFuncProvider implements ApplicationContextAware, FuncProvider
 		System.out.println("===========SpringAviatorFunction loading start ==========");
 		for(AbstractSpringAviatorFunction provider:providers){
 			if(provider.disabled() || provider.getName()==null){
-				System.out.println("[panda-expression]Function==>"+provider.getName()+"(disabled)");
+				System.out.println("[mxpio-expression]Function==>"+provider.getName()+"(disabled)");
 				continue;
 			}
-			System.out.println("[panda-expression]Function==>"+provider.getName()+"(enabled)");
+			System.out.println("[mxpio-expression]Function==>"+provider.getName()+"(enabled)");
 			AviatorEvaluator.addFunction(provider);
 		}
 		System.out.println("===========SpringAviatorFunction  loading end  ==========");

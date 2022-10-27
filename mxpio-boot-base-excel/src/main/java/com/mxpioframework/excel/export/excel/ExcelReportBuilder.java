@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 @Component(ExcelReportBuilder.BEAN_ID)
 public class ExcelReportBuilder extends AbstractExcelReportBuilder {
 
-	public static final String BEAN_ID = "panda.ExcelReportBuilder";
+	public static final String BEAN_ID = "mxpio.ExcelReportBuilder";
 
 	public int addTitleToSheet(ReportTitle reportTitle, Sheet sheet, int lastCol) {
 		return this.addTitleToSheet(reportTitle, sheet, 0, 0, lastCol);

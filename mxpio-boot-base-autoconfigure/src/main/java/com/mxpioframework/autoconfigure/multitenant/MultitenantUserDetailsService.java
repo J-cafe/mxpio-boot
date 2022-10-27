@@ -19,8 +19,8 @@ import com.mxpioframework.security.util.SecurityUtils;
 
 /**
  * Spring Security的{@link org.springframework.security.core.userdetails.UserDetailsService}接口的默认实现
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
- * @since 2016年2月27日
+ * @author MxpIO (mailto:i@mxpio.com)
+ * @since 2021年2月27日
  */
 @Transactional(readOnly = true)
 public class MultitenantUserDetailsService implements UserDetailsService {

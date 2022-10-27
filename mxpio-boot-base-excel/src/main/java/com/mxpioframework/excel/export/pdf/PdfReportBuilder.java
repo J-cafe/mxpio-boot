@@ -15,7 +15,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Component(PdfReportBuilder.BEAN_ID)
 public class PdfReportBuilder extends AbstractPdfReportBuilder {
 	
-	public static final String BEAN_ID="panda.PdfReportBuilder";
+	public static final String BEAN_ID="mxpio.PdfReportBuilder";
 
 
 	protected PdfReportBuilder() throws Exception {

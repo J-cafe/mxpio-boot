@@ -316,7 +316,7 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 			}
 		}
 		log.info("SwfFileHandler Parameter: " + parameterMap);
-		Assert.notNull(swfFileHandler, "没有找到com.bstek.bdf2.swfviewer.controller.ISwfFileHandler的实现类！");
+		Assert.notNull(swfFileHandler, "没有找到com.mxpioframework.excel.swfviewer.handler.ISwfFileHandler的实现类！");
 		File file = swfFileHandler.execute(parameterMap);
 		if (file == null || !file.exists()) {
 			String msg = swfFileHandler.getHandlerName()+"返回的SWF文件不存在！";
@@ -325,7 +325,7 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 			}
 			throw new RuntimeException(msg);
 		}
-		response.setHeader("Server", "http://www.bstek.com");
+		response.setHeader("Server", "http://www.mxpio.com");
 		response.setContentType("application/x-shockwave-flash");
 		response.setHeader("Content-Disposition", "attachment;filename=\"report.swf\"");
 		OutputStream output = response.getOutputStream();

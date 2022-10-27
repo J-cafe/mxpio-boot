@@ -14,8 +14,8 @@ import com.mxpioframework.autoconfigure.security.SecurityAutoConfiguration;
 import com.mxpioframework.multitenant.MultitenantConfiguration;
 
 /**
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
- * @since 2016年1月24日
+ * @author MxpIO (mailto:i@mxpio.com)
+ * @since 2021年1月24日
  */
 @Configuration
 @AutoConfigureBefore({JpaRepositoriesAutoConfiguration.class})

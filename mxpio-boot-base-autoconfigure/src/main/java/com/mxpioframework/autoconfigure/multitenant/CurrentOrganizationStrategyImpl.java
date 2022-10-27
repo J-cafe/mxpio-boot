@@ -6,8 +6,8 @@ import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.util.SecurityUtils;
 
 /**
- * @author Kevin Yang (mailto:kevin.yang@bstek.com)
- * @since 2017年12月14日
+ * @author MxpIO (mailto:i@mxpio.com)
+ * @since 2021年12月14日
  */
 public class CurrentOrganizationStrategyImpl implements CurrentOrganizationStrategy {
 

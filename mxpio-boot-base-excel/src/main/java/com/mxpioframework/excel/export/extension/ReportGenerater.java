@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component;
 @Component(ReportGenerater.BEAN_ID)
 public class ReportGenerater extends ExcelReportModelGenerater {
 
-	public static final String BEAN_ID = "panda.ReportGenerater";
+	public static final String BEAN_ID = "mxpio.ReportGenerater";
 
 }
