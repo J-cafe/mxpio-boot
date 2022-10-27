@@ -40,7 +40,6 @@ public class ParamUtil {
 							c.addCriterion("createBy", Operator.EQ, SecurityUtils.getLoginUsername());
 						}
 					}
-					value = c;
 					decide = true;
 					break;
 				}
@@ -48,7 +47,7 @@ public class ParamUtil {
 			if(!decide){
 				c.addCriterion("createTime", Operator.EQ, new Date());
 			}
-			
+			value = c;
 		}else if(Integer.class.equals(methodParam.getType())){
 			value = Integer.parseInt(values[0]);
 		}else{
