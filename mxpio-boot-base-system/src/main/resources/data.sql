@@ -13,3 +13,12 @@ INSERT INTO `mb_url` (`id_`, `create_by`, `create_time`, `update_by`, `update_ti
 
 -- 20220210 角色管理菜单
 INSERT INTO `mb_url` (`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `component_`, `description_`, `icon_`, `keep_alive_`, `name_`, `navigable_`, `order_`, `parent_id_`, `path_`, `title_`, `outside_`) VALUES ('4e672960-61ed-4c79-b895-52b3a3912bd5', NULL, NULL, NULL, NULL, 'system/RoleList', '角色管理', NULL, b'0', 'RoleList', b'1', '4', 'd7d6e2e4e2934f2c9385a623fd98c6f3', 'roleList', '角色管理', '\0');
+
+-- 20221025 导出管理菜单
+INSERT INTO `mb_url` (`id_`, `create_by`, `create_dept`, `create_time`, `update_by`, `update_time`, `component_`, `description_`, `icon_`, `keep_alive_`, `name_`, `navigable_`, `order_`, `outside_`, `parent_id_`, `path_`, `title_`, `rul_type_`) VALUES ('5788df61-f39e-4cd2-8fcf-7a1a4a6103b5', NULL, NULL, NULL, NULL, NULL, 'system/ExcelExportTemplateList', NULL, NULL, '\0', NULL, '', '9', '\0', 'd7d6e2e4e2934f2c9385a623fd98c6f3', 'excelExportTemplateList', '导出管理', 'C');
+
+-- 20220608 系统部门菜单、部门类型字典 xys
+INSERT INTO `mb_url` (`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `component_`, `description_`, `icon_`, `keep_alive_`, `name_`, `navigable_`, `order_`, `parent_id_`, `path_`, `title_`, `outside_`) VALUES ('56ba0c4d-2ed3-4c70-9121-b34e67f41e46', NULL, '2022-06-07 16:31:17.543000', NULL, NULL, 'system/DeptList', NULL, NULL,  b'0', 'deptList', '', '4', 'd7d6e2e4e2934f2c9385a623fd98c6f3', 'deptList', '部门管理', '\0');
+INSERT INTO `mb_dict` (`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `dict_code_`, `dict_default_value_`, `dict_desc_`, `dict_name_`, `dict_type_`) VALUES ('89d9d0f9-8e12-46cd-a1a7-1fbf8affa5f9', NULL, '2022-06-07 16:50:49.540000', NULL, NULL, 'MB_SYSTEM_DEPT_TYPE', '0:部门1:科室', NULL, '部门类型', '1');
+INSERT INTO `mb_dict_item` (`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `dict_id_`, `item_desc_`, `item_sort_`, `item_status_`, `item_text_`, `item_value_`) VALUES ('33d71747-92b3-414e-abfb-4361886d8d08', NULL, '2022-06-07 16:51:00.028000', NULL, NULL, '89d9d0f9-8e12-46cd-a1a7-1fbf8affa5f9', NULL, '1', '1', '部门', '0');
+INSERT INTO `mb_dict_item` (`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `dict_id_`, `item_desc_`, `item_sort_`, `item_status_`, `item_text_`, `item_value_`) VALUES ('603fdb37-535b-4685-bb28-47bde207de4e', NULL, '2022-06-07 16:51:10.385000', NULL, NULL, '89d9d0f9-8e12-46cd-a1a7-1fbf8affa5f9', NULL, '2', '1', '科室', '1');
