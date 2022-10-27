@@ -19,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.mxpioframework.security.decision.manager.SecurityDecisionManager;
 import com.mxpioframework.security.entity.Resource;
+import com.mxpioframework.security.entity.Url;
 import com.mxpioframework.security.entity.User;
 
 import lombok.extern.slf4j.Slf4j;
@@ -75,13 +76,13 @@ public class SecurityDecisionManagerImpl implements SecurityDecisionManager {
 	@Override
 	public Collection<ConfigAttribute> findConfigAttributes(Resource resource) {
 		Collection<ConfigAttribute> attributes = resource.getAttributes();
-		if (CollectionUtils.isEmpty(attributes)) {
+		if (CollectionUtils.isEmpty(attributes) && resource instanceof Url) {
 			for (SecurityMetadataSource securityMetadataSource : securityMetadataSources) {
 				if (securityMetadataSource.supports(resource.getClass())) {
 					attributes = securityMetadataSource.getAttributes(resource);
 				}
 			}
-		} 
+		}
 		return attributes;
 	}
 
