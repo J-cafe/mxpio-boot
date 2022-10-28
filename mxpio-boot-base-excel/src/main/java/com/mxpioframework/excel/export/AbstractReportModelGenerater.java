@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 
+import com.mxpioframework.common.CommonConstant;
 import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.common.util.SpringUtil;
 import com.mxpioframework.common.vo.Result;
@@ -19,6 +20,7 @@ import com.mxpioframework.excel.export.model.ReportTitle;
 import com.mxpioframework.excel.export.model.ReportTitleStyle;
 import com.mxpioframework.excel.util.ColorUtils;
 import com.mxpioframework.excel.util.ParamUtil;
+import com.mxpioframework.jpa.annotation.DictAble;
 
 public abstract class AbstractReportModelGenerater {
 
@@ -72,7 +74,15 @@ public abstract class AbstractReportModelGenerater {
 		for(Object o : resultList){
 			Map<String, Object> record = new HashMap<>();
 			for(ExportColumn column : exportSolution.getColumns()){
-				record.put(column.getColumnName(), BeanReflectionUtils.getPropertyValue(o, column.getColumnName()));
+				if(column.getColumnName().endsWith(CommonConstant.DICT_TEXT_SUFFIX) && o instanceof DictAble){
+					Map<String, String> textMap = ((DictAble) o).getTextMap();
+					if(textMap != null){
+						record.put(column.getColumnName(), textMap.get(column.getColumnName() + CommonConstant.DICT_TEXT_SUFFIX));
+					}
+				}else{
+					record.put(column.getColumnName(), BeanReflectionUtils.getPropertyValue(o, column.getColumnName()));
+				}
+				
 			}
 			dataList.add(record);
 		}

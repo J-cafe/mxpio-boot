@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.ConcurrentReferenceHashMap;
 
+import com.mxpioframework.common.CommonConstant;
 import com.mxpioframework.common.util.BeanReflectionUtils;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.annotation.DictAble;
@@ -34,7 +35,6 @@ import com.mxpioframework.security.annotation.Dict;
 import com.mxpioframework.security.annotation.Translatable;
 import com.mxpioframework.security.entity.BaseEntity;
 import com.mxpioframework.security.entity.DictItem;
-import com.mxpioframework.system.SystemConstant;
 import com.mxpioframework.system.service.DictCacheService;
 import com.mxpioframework.system.service.DictService;
 import com.mxpioframework.system.service.PojoDictParseService;
@@ -323,10 +323,10 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
           Objects.toString(value, null));
 
       log.debug(" 字典Text : " + text);
-      log.debug(" __翻译字典字段__ " + property + SystemConstant.DICT_TEXT_SUFFIX + "： " + text);
+      log.debug(" __翻译字典字段__ " + property + CommonConstant.DICT_TEXT_SUFFIX + "： " + text);
 
       if (pojo instanceof DictAble) {
-        ((DictAble) pojo).putText(property + SystemConstant.DICT_TEXT_SUFFIX, text);
+        ((DictAble) pojo).putText(property + CommonConstant.DICT_TEXT_SUFFIX, text);
       }
 
       String labelProp = dict.displayProp();
