@@ -77,7 +77,7 @@ public abstract class AbstractReportModelGenerater {
 				if(column.getColumnName().endsWith(CommonConstant.DICT_TEXT_SUFFIX) && o instanceof DictAble){
 					Map<String, String> textMap = ((DictAble) o).getTextMap();
 					if(textMap != null){
-						record.put(column.getColumnName(), textMap.get(column.getColumnName() + CommonConstant.DICT_TEXT_SUFFIX));
+						record.put(column.getColumnName(), textMap.get(column.getColumnName()));
 					}
 				}else{
 					record.put(column.getColumnName(), BeanReflectionUtils.getPropertyValue(o, column.getColumnName()));
