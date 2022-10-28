@@ -87,7 +87,7 @@ public class CaffeineCacheProvider implements CacheProvider {
                 simpleCache = Caffeine.newBuilder()
                         .initialCapacity(init)
                         .maximumSize(max)
-                        .expireAfterWrite(Long.MAX_VALUE, TimeUnit.MILLISECONDS)
+                        .expireAfterWrite(Long.MAX_VALUE, TimeUnit.SECONDS)
                         .build(k -> null);
                 cacheMap.put(SIMPLE_KEY,simpleCache);
             }
@@ -115,7 +115,7 @@ public class CaffeineCacheProvider implements CacheProvider {
                 simpleCache = Caffeine.newBuilder()
                         .initialCapacity(init)
                         .maximumSize(max)
-                        .expireAfterWrite(cacheMapKey, TimeUnit.MILLISECONDS)
+                        .expireAfterWrite(cacheMapKey, TimeUnit.SECONDS)
                         .build(k -> null);
                 cacheMap.put(cacheMapKey,simpleCache);
             }
