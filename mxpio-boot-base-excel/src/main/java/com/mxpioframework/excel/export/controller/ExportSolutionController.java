@@ -93,12 +93,15 @@ public class ExportSolutionController {
 	@DeleteMapping("remove/{solutionIds}")
 	@Operation(summary = "删除导出方案", description = "删除导出方案", method = "DELETE")
 	public Result<List<ExportSolution>> remove(@PathVariable(name = "solutionIds", required = true) String solutionIds) throws Exception {
-		String[] solutionId = solutionIds.split(",");
-		for(String key : solutionId){
-			exportSolutionService.delete(key, ExportSolution.class);
-		}
-		
+		exportSolutionService.deleteBatch(solutionIds);
 		return Result.OK("删除导出方案成功",null);
+	}
+	
+	@DeleteMapping("column/remove/{columnIds}")
+	@Operation(summary = "删除导出字段", description = "删除导出字段", method = "DELETE")
+	public Result<List<ExportSolution>> removeColumn(@PathVariable(name = "columnIds", required = true) String columnIds) throws Exception {
+		exportColumnService.deleteBatch(columnIds);
+		return Result.OK("删除导出字段成功",null);
 	}
 
 }

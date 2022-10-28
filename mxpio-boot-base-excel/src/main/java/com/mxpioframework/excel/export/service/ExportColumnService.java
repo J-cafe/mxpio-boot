@@ -9,4 +9,6 @@ public interface ExportColumnService extends BaseService<ExportColumn> {
 
 	List<ExportColumn> queryBySolutionId(String solutionId);
 
+	int deleteBatch(String columnIds);
+
 }

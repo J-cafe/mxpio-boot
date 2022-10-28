@@ -70,4 +70,12 @@ public class ExportSolutionServiceImpl extends BaseServiceImpl<ExportSolution> i
 		return true;
 	}
 
+	@Override
+	@Transactional(readOnly = false)
+	public int deleteBatch(String solutionIds) {
+		Object[] keys = solutionIds.split(",");
+		JpaUtil.lind(ExportColumn.class).in("solutionId", keys).delete();
+		return JpaUtil.lind(ExportSolution.class).in("id", keys).delete();
+	}
+
 }

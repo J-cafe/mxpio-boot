@@ -17,4 +17,6 @@ public interface ExportSolutionService extends BaseService<ExportSolution> {
 
 	boolean createColumnsByCode(String solutionCode);
 
+	int deleteBatch(String solutionIds);
+
 }

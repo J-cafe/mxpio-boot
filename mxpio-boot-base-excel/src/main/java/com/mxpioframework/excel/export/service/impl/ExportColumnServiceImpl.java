@@ -19,4 +19,11 @@ public class ExportColumnServiceImpl extends BaseServiceImpl<ExportColumn> imple
 		return JpaUtil.linq(ExportColumn.class).equal("solutionId", solutionId).list();
 	}
 
+	@Override
+	@Transactional(readOnly = false)
+	public int deleteBatch(String columnIds) {
+		Object[] keys = columnIds.split(",");
+		return JpaUtil.lind(ExportColumn.class).in("id", keys).delete();
+	}
+
 }
