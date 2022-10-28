@@ -35,6 +35,10 @@ public class ExportColumn extends BaseEntity {
 	@Schema(description = "字段名")
 	private String columnName;
 	
+	@Column(name = "SORT_")
+	@Schema(description = "顺序")
+	private Integer sort;
+	
 	@Column(name = "LEVEL_")
 	@Schema(description = "级别")
 	private Integer level;
