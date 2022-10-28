@@ -1,4 +1,4 @@
-# mxpio-boot（孵化中）
+# Mxpio-Boot（孵化中）
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/J-cafe/mxpio-boot?include_prereleases)
 ![GitHub](https://img.shields.io/github/license/J-cafe/mxpio-boot)
 ![GitHub top language](https://img.shields.io/github/languages/top/J-cafe/mxpio-boot)
@@ -17,7 +17,9 @@
 * Alibaba Druid
 * SpringDoc
 * Jwt
-* Lombok
+* Poi
+* Flowable
+* Quartz
 
 ### 2.1模块继承关系
 
@@ -38,7 +40,7 @@ mxpio-boot-parent
 ├─mxpio-boot-base-quartz // Job管理模块
 ├─mxpio-boot-base-ui // UI设计模块
 ├─mxpio-boot-module-cache-redis // 缓存Redis实现
-├─mxpio-boot-module-cache-caffeine // 缓存Caffeine实现
+├─mxpio-boot-module-cache-caffeine // 缓存Caffeine实现（与Redis二选一）
 ├─mxpio-boot-base-multitenant // 多租户
 └─mxpio-boot-webapp // 业务项目
 
@@ -160,21 +162,14 @@ java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.6.jar
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-module-cache-redis</artifactId>
 </dependency>
+<!-- 与mxpio-boot-module-cache-redis二选一 -->
+<!-- <dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-module-cache-caffeine</artifactId>
+</dependency> -->
 <dependency>
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-base-security</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-system</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-flowable</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-quartz</artifactId>
 </dependency>
 <dependency>
 	<groupId>com.mxpio</groupId>
@@ -182,7 +177,27 @@ java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.6.jar
 </dependency>
 <dependency>
 	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-base-quartz</artifactId>
+</dependency>
+<dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-base-flowable</artifactId>
+</dependency>
+<dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-base-filestorage</artifactId>
+</dependency>
+<dependency>
+	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-base-log</artifactId>
+</dependency>
+<dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-base-expression</artifactId>
+</dependency>
+<dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-base-system</artifactId>
 </dependency>
 ```
 
@@ -323,30 +338,30 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.6.jar
 ## 8.开发计划
 
 
-| 模块 | 功能 | 后端 | 前端 |
-|:-----:|:----:|:----:|:----:|
-| 权限管理 | 用户权限 | 已完成 | 已完成 |
-|       | 角色管理 | 已完成 | 已完成 |
-|       | 菜单管理 | 已完成 | 已完成 |
-|       | 部门管理 | 已完成 | 已完成 |
-|       | 数据权限 | 已完成 | 已完成 |
-|       | 组件权限 | 已完成 | 已完成 |
-|       | 字段权限 | 未开始 | 未开始 |
-| 表达式模块 |       | 已完成 | 不涉及 |
-| 系统监控 | 性能监控 | 已完成 | 已完成 |
-|       | 日志监控 | 进行中 | 未开始 |
-| 字典配置 | 字典管理 | 已完成 | 已完成 |
-|       | 字典翻译 | 已完成 | 已完成 |
-|       | 字典缓存 | 未开始 | 不涉及 |
-| JPA工具 | JPA工具 | 已完成 | 不涉及 |
-| Excel | 导入管理 | 已完成 | 已完成 |
-|       | 导出管理 | 已完成 | 已完成 |
-| 工作流 |       | 进行中 | 进行中 |
-| 任务调度 |       | 已完成 | 进行中 |
-| 报表模块 |       | 未开始 | 未开始 |
-| 图表模块 |       | 未开始 | 未开始 |
-| 多租户 |       | 进行中 | 未开始 |
-| 代码生成 |       | 进行中 | 未开始 |
+| 模块 | 功能 | 后端 | 前端 | 文档 |
+|:-----:|:----:|:----:|:----:|:----:|
+| 权限管理 | 用户权限 | 已完成 | 已完成 | 暂无 |
+|       | 角色管理 | 已完成 | 已完成 | [mxpio-boot-base-security](https://gitee.com/i_mxpio/mxpio-boot/blob/master/mxpio-boot-base-security/README.md) |
+|       | 菜单管理 | 已完成 | 已完成 | 暂无 |
+|       | 部门管理 | 已完成 | 已完成 | 暂无 |
+|       | 数据权限 | 已完成 | 已完成 | 暂无 |
+|       | 组件权限 | 已完成 | 已完成 | 暂无 |
+|       | 字段权限 | 未开始 | 未开始 | 暂无 |
+| 表达式模块 |       | 已完成 | 不涉及 | [mxpio-boot-base-expression(https://gitee.com/i_mxpio/mxpio-boot/blob/master/mxpio-boot-base-expression/README.md) |
+| 系统监控 | 性能监控 | 已完成 | 已完成 | 暂无 |
+|       | 日志监控 | 进行中 | 未开始 | 暂无 |
+| 字典配置 | 字典管理 | 已完成 | 已完成 | 暂无 |
+|       | 字典翻译 | 已完成 | 已完成 | 暂无 |
+|       | 字典缓存 | 未开始 | 不涉及 | 暂无 |
+| JPA工具 | JPA工具 | 已完成 | 不涉及 | [mxpio-boot-base-jpa](https://gitee.com/i_mxpio/mxpio-boot/tree/master/mxpio-boot-base-jpa/README.md) |
+| Excel | 导入管理 | 已完成 | 已完成 | 暂无 |
+|       | 导出管理 | 已完成 | 已完成 | 暂无 |
+| 工作流 |       | 进行中 | 进行中 | 暂无 |
+| 任务调度 |       | 已完成 | 进行中 | 暂无 |
+| 报表模块 |       | 未开始 | 未开始 | 暂无 |
+| 图表模块 |       | 未开始 | 未开始 | 暂无 |
+| 多租户 |       | 进行中 | 未开始 | 暂无 |
+| 代码生成 |       | 进行中 | 未开始 | 暂无 |
 
 ## 相关开源项目
 
