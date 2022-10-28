@@ -347,7 +347,7 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.6.jar
 |       | 数据权限 | 已完成 | 已完成 | 暂无 |
 |       | 组件权限 | 已完成 | 已完成 | 暂无 |
 |       | 字段权限 | 未开始 | 未开始 | 暂无 |
-| 表达式模块 |       | 已完成 | 不涉及 | [mxpio-boot-base-expression(https://gitee.com/i_mxpio/mxpio-boot/blob/master/mxpio-boot-base-expression/README.md) |
+| 表达式模块 |       | 已完成 | 不涉及 | [mxpio-boot-base-expression](https://gitee.com/i_mxpio/mxpio-boot/blob/master/mxpio-boot-base-expression/README.md) |
 | 系统监控 | 性能监控 | 已完成 | 已完成 | 暂无 |
 |       | 日志监控 | 进行中 | 未开始 | 暂无 |
 | 字典配置 | 字典管理 | 已完成 | 已完成 | 暂无 |
