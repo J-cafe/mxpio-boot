@@ -234,7 +234,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	        Result<String> result = new Result<>();
 	        result.setSuccess(false);
 	        result.setCode(CommonConstant.HTTP_NO_AUTHZ_403);
-	        result.setMessage("登陆失效，请重新登陆");
+	        result.setMessage("无权访问");
 	        response.getWriter().write(JSON.toJSONString(result));
 		}
 
