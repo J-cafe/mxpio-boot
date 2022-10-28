@@ -1,5 +1,7 @@
 package com.mxpioframework.excel.export.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,5 +20,7 @@ public interface ExportSolutionService extends BaseService<ExportSolution> {
 	boolean createColumnsByCode(String solutionCode);
 
 	int deleteBatch(String solutionIds);
+
+	List<ExportSolution> list(Criteria criteria);
 
 }

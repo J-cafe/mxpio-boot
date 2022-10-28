@@ -40,13 +40,20 @@ public class ExportSolutionController {
 	private ExportColumnService exportColumnService;
 	
 	@GetMapping("page")
-	@Operation(summary = "导出方案列表", description = "获取导出方案列表", method = "GET")
+	@Operation(summary = "导出方案列表(分页)", description = "获取导出方案列表(分页)", method = "GET")
 	public Result<Page<ExportSolution>> page(Criteria criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		Page<ExportSolution> page = exportSolutionService.queryByPage(criteria, pageAble);
 		return Result.OK(page);
+	}
+	
+	@GetMapping("list")
+	@Operation(summary = "导出方案列表", description = "获取导出方案列表", method = "GET")
+	public Result<List<ExportSolution>> list(Criteria criteria) throws Exception {
+		List<ExportSolution> list = exportSolutionService.list(criteria);
+		return Result.OK(list);
 	}
 	
 	@GetMapping("columns/{solutionId}")

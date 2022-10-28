@@ -17,10 +17,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mxpioframework.cache.provider.CacheProvider;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.initiator.JpaUtilAble;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.security.entity.User;
+import com.mxpioframework.security.service.OnlineUserService;
 import com.mxpioframework.security.service.UserService;
 
 @Service
@@ -28,6 +30,12 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	
 	@Autowired
 	protected PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private OnlineUserService onlineUserService;
+	
+	@Autowired
+	private CacheProvider cacheProvider;
 	
 	@Override
 	@Transactional(readOnly = false)
@@ -43,12 +51,16 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 		User temp = JpaUtil.getOne(User.class, user.getUsername());
 		user.setPassword(temp.getPassword());
 		JpaUtil.update(user);
+		onlineUserService.kickOutForUsername(user.getUsername(), cacheProvider);
 	}
 
 	@Override
 	@Transactional(readOnly = false)
 	public void delete(Set<String> usernames) {
 		JpaUtil.lind(User.class).in("username", usernames).delete();
+		for(String username : usernames){
+			onlineUserService.kickOutForUsername(username, cacheProvider);
+		}
 	}
 
 	@Override

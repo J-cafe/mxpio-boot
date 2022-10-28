@@ -43,6 +43,10 @@ public class ExportSolution extends BaseEntity {
 	@Column(name = "API_")
 	@Schema(description = "接口")
 	private String api;
+	
+	@Column(name = "ELEMENT_ID_", length = 255)
+	@Schema(description = "组件标识")
+	private String elementId;
 
 	@Column(name = "INTERCEPTOR_NAME_")
 	@Schema(description = "拦截器")
@@ -79,6 +83,22 @@ public class ExportSolution extends BaseEntity {
 	@Column(name = "FONT_SIZE_")
 	@Schema(description = "标题字体大小")
 	private int fontSize;
+	
+	@Column(name = "COLUMN_BG_COLOR_")
+	@Schema(description = "列头背景颜色（RGB）")
+	private String columnBgColor;
+	
+	@Column(name = "COLUMN_FONT_COLOR_")
+	@Schema(description = "列头字体颜色（RGB）")
+	private String columnFontColor;
+	
+	@Column(name = "COLUMN_FONT_SIZE_")
+	@Schema(description = "列头字体大小")
+	private Integer columnFontSize;
+	
+	@Column(name = "COLUMN_ALIGN_")
+	@Schema(description = "列头对齐方式")
+	private Integer columnAlign;
 	
 	@Column(name = "DATA_BG_COLOR_")
 	@Schema(description = "正文背景颜色（RGB）")

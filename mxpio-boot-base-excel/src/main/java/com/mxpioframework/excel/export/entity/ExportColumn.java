@@ -51,22 +51,6 @@ public class ExportColumn extends BaseEntity {
 	@Schema(description = "宽度")
 	private Integer width;
 	
-	@Column(name = "BG_COLOR_")
-	@Schema(description = "背景颜色（RGB）")
-	private String bgColor;
-	
-	@Column(name = "FONT_COLOR_")
-	@Schema(description = "字体颜色（RGB）")
-	private String fontColor;
-	
-	@Column(name = "FONT_SIZE_")
-	@Schema(description = "字体大小")
-	private Integer fontSize;
-	
-	@Column(name = "ALIGN_")
-	@Schema(description = "列头对齐方式")
-	private Integer align;
-	
 	@Column(name = "DATA_ALIGN_")
 	@Schema(description = "数据对齐方式")
 	private Integer dataAlign;

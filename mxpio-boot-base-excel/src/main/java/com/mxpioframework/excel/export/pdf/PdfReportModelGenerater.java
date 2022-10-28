@@ -32,7 +32,7 @@ public class PdfReportModelGenerater extends AbstractReportModelGenerater {
 		this.calculateColumnAlign(columnInfos, columDataAlignMap);
 
 		List<ColumnHeader> topColumnHeaders = new ArrayList<ColumnHeader>();
-		createGridColumnHeader(columnInfos, topColumnHeaders, null);
+		createGridColumnHeader(exportSolution, topColumnHeaders, null);
 
 		List<Map<String, Object>> dataMapList = getGridModelData(exportSolution, intercepterBean);
 		List<ReportData> reportDataList = createGridColumnData(dataMapList, topColumnHeaders, exportSolution, columDataAlignMap);
@@ -73,16 +73,20 @@ public class PdfReportModelGenerater extends AbstractReportModelGenerater {
 		return result;
 	}
 
-	private void createGridColumnHeader(List<ExportColumn> columnInfos, List<ColumnHeader> topColumnHeaders, ColumnHeader parentHeader) throws Exception {
+	private void createGridColumnHeader(ExportSolution exportSolution, List<ColumnHeader> topColumnHeaders, ColumnHeader parentHeader) throws Exception {
+		List<ExportColumn> columnInfos = exportSolution.getColumns();
+		if(columnInfos == null){
+			return;
+		}
 		for (ExportColumn column : columnInfos) {
 			String columnName = column.getColumnName();
 			int level = column.getLevel();
 			String label = column.getLabel();
 			int width = column.getWidth();
-			String bgColor = column.getBgColor();
-			String fontColor = column.getFontColor();
-			int align = column.getAlign();
-			int fontSize = column.getFontSize();
+			String bgColor = exportSolution.getColumnBgColor();
+			String fontColor = exportSolution.getColumnFontColor();
+			int align = exportSolution.getColumnAlign();
+			int fontSize = exportSolution.getColumnFontSize();
 
 			ColumnHeader header = new ColumnHeader(level);
 			header.setAlign(align);

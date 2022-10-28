@@ -29,6 +29,13 @@ public class ExportSolutionServiceImpl extends BaseServiceImpl<ExportSolution> i
 	public Page<ExportSolution> queryByPage(Criteria criteria, Pageable pageAble) {
 		return JpaUtil.linq(ExportSolution.class).where(criteria).paging(pageAble);
 	}
+	
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<ExportSolution> list(Criteria criteria) {
+		return JpaUtil.linq(ExportSolution.class).where(criteria).list();
+	}
 
 	@Override
 	@Transactional(readOnly = true)

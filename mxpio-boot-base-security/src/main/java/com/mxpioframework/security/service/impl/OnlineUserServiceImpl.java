@@ -44,7 +44,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
 	}
 
 	@Override
-	public void kickOutForUsername(String username, CacheProvider cacheProvider) throws Exception {
+	public void kickOutForUsername(String username, CacheProvider cacheProvider) {
 		// TODO Auto-generated method stub
 
 	}

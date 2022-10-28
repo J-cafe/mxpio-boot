@@ -23,13 +23,14 @@ public class ExcelReportModelGenerater extends AbstractReportModelGenerater {
 	public ReportGrid generateReportGridModel(ExportSolution exportSolution, String intercepterBean) throws Exception {
 		ReportGrid gridModel = new ReportGrid();
 		List<ReportGridHeader> gridHeaders = new ArrayList<ReportGridHeader>();
-		this.createGridColumnHeader(exportSolution.getColumns(), gridHeaders, null);
+		this.createGridColumnHeader(exportSolution, gridHeaders, null);
 		gridModel.setGridHeaderModelList(gridHeaders);
 		gridModel.setGridDataModel(this.createGridColumnData(exportSolution, intercepterBean));
 		return gridModel;
 	}
 
-	private void createGridColumnHeader(List<ExportColumn> columns, List<ReportGridHeader> headerList, ReportGridHeader parent) {
+	private void createGridColumnHeader(ExportSolution exportSolution, List<ReportGridHeader> headerList, ReportGridHeader parent) {
+		List<ExportColumn> columns = exportSolution.getColumns();
 		if (columns == null)
 			return;
 		for (ExportColumn column : columns) {
@@ -37,15 +38,15 @@ public class ExcelReportModelGenerater extends AbstractReportModelGenerater {
 			int level = column.getLevel();
 			String label = column.getLabel();
 			int width = column.getWidth();
-			String bgColor = column.getBgColor();
-			String fontColor = column.getFontColor();
+			String bgColor = exportSolution.getColumnBgColor();
+			String fontColor = exportSolution.getColumnFontColor();
 			int fontSize = 10;
-			if (column.getFontSize() != null) {
-				fontSize = column.getFontSize();
+			if (exportSolution.getColumnFontSize() != null) {
+				fontSize = exportSolution.getColumnFontSize();
 			}
 			int align = 1;
-			if (column.getAlign() != null) {
-				align = column.getAlign();
+			if (exportSolution.getColumnAlign() != null) {
+				align = exportSolution.getColumnAlign();
 			}
 			int dataAlign = 1;
 			if (column.getDataAlign() != null) {

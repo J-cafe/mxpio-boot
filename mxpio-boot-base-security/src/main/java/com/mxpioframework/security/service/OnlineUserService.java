@@ -53,7 +53,7 @@ public interface OnlineUserService {
      * @param cacheProvider
      */
     @Async
-    public void kickOutForUsername(String username, CacheProvider cacheProvider) throws Exception;
+    public void kickOutForUsername(String username, CacheProvider cacheProvider);
     
     /**
      * 检测用户是否在之前已经登录，已经登录踢下线

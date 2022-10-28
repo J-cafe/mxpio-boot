@@ -53,7 +53,6 @@ public class UrlSecurityMetadataSource  implements FilterInvocationSecurityMetad
 
 	public Collection<ConfigAttribute> getAttributes(Object object) {
 		final HttpServletRequest request = ((FilterInvocation) object).getRequest();
-		System.out.println(request.getHttpServletMapping().getPattern());
 		try {
 			for (Map.Entry<RequestMatcher, Collection<ConfigAttribute>> entry : getRequestMap()
 				.entrySet()) {
