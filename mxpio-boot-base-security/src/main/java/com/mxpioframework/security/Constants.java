@@ -26,7 +26,7 @@ public class Constants {
     };
     
     public enum DatascopeEnum {
-		DEPT("DEPT", "部门过滤"), USER("USER", "用户过滤"),DEPT_AND_CHILD("DEPT_AND_CHILD", "部门及子部门过滤");
+		DEPT("DEPT", "部门过滤"), USER("USER", "用户过滤"),DEPT_AND_CHILD("DEPT_AND_CHILD", "部门及子部门过滤"),SERVICE("SERVICE", "服务");
 
     	DatascopeEnum(String code, String name) {
 			this.code = code;

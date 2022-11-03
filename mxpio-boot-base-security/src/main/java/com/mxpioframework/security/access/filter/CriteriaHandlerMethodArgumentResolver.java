@@ -2,6 +2,7 @@ package com.mxpioframework.security.access.filter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -18,6 +19,8 @@ import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.jpa.query.Operator;
+import com.mxpioframework.jpa.query.SimpleCriterion;
+import com.mxpioframework.security.access.datascope.provider.DataScapeProvider;
 import com.mxpioframework.security.entity.DataResource;
 import com.mxpioframework.security.service.DataResourceService;
 import com.mxpioframework.security.service.DeptService;
@@ -34,6 +37,9 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 	
 	@Autowired
 	private DeptService deptService;
+	
+	@Autowired(required = false)
+	private Map<String, DataScapeProvider> dataScapeProviderMap;
 
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer container, NativeWebRequest request,
@@ -65,11 +71,22 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 						c.addCriterion("createDept", Operator.IN, deptCodes);
 					}else if(com.mxpioframework.security.Constants.DatascopeEnum.USER.getCode().equals(dataResource.getDataScope())) {
 						c.addCriterion("createBy", Operator.EQ, SecurityUtils.getLoginUsername());
+					}else if(com.mxpioframework.security.Constants.DatascopeEnum.DEPT_AND_CHILD.getCode().equals(dataResource.getDataScope())){
+						
+					}else if(com.mxpioframework.security.Constants.DatascopeEnum.SERVICE.getCode().equals(dataResource.getDataScope())&&dataScapeProviderMap!=null){
+						for(Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()){
+							if(entry.getKey().equals(dataResource.getService())){
+								List<SimpleCriterion> criterions = entry.getValue().provide();
+								for(SimpleCriterion criterion : criterions){
+									c.addCriterion(criterion);
+								}
+								break;
+							}
+						}
 					}
 				}
 			}
 		}
-		
 		return c;
 	}
 

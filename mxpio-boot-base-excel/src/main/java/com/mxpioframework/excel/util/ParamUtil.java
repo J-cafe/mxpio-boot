@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -13,6 +14,8 @@ import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.jpa.query.Operator;
+import com.mxpioframework.jpa.query.SimpleCriterion;
+import com.mxpioframework.security.access.datascope.provider.DataScapeProvider;
 import com.mxpioframework.security.decision.manager.SecurityDecisionManager;
 import com.mxpioframework.security.entity.DataResource;
 import com.mxpioframework.security.service.DataResourceService;
@@ -39,12 +42,25 @@ public class ParamUtil {
 			for(DataResource dataResource : dataResources){
 				if (securityDecisionManager.decide(dataResource)) {
 					if(dataResource.getDataScope() != null){
+						Map<String, DataScapeProvider> dataScapeProviderMap = ApplicationContextProvider.getApplicationContextSpring().getBeansOfType(DataScapeProvider.class);
 						if(com.mxpioframework.security.Constants.DatascopeEnum.DEPT.getCode().equals(dataResource.getDataScope())){
 							DeptService deptService = ApplicationContextProvider.getBean(DeptService.class);
 							Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(),"code");
 							c.addCriterion("createDept", Operator.IN, deptCodes);
 						}else if(com.mxpioframework.security.Constants.DatascopeEnum.USER.getCode().equals(dataResource.getDataScope())) {
 							c.addCriterion("createBy", Operator.EQ, SecurityUtils.getLoginUsername());
+						}else if(com.mxpioframework.security.Constants.DatascopeEnum.DEPT_AND_CHILD.getCode().equals(dataResource.getDataScope())){
+							
+						}else if(com.mxpioframework.security.Constants.DatascopeEnum.SERVICE.getCode().equals(dataResource.getDataScope())&&dataScapeProviderMap!=null){
+							for(Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()){
+								if(entry.getKey().equals(dataResource.getService())){
+									List<SimpleCriterion> criterions = entry.getValue().provide();
+									for(SimpleCriterion criterion : criterions){
+										c.addCriterion(criterion);
+									}
+									break;
+								}
+							}
 						}
 					}
 					decide = true;

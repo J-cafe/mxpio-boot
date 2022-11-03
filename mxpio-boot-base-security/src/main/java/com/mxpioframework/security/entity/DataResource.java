@@ -57,6 +57,10 @@ public class DataResource extends BaseEntity implements Resource {
 	@Schema(description = "权限范围")
 	private String dataScope;
 	
+	@Column(name = "SERVICE_", length = 512)
+	@Schema(description = "服务")
+	private String service;
+	
 	@Column(name = "PARENT_ID_", length = 64)
 	@Schema(description = "所属URL的ID")
 	private String parentId;
