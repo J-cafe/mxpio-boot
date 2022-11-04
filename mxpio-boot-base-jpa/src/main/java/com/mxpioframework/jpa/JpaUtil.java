@@ -954,14 +954,13 @@ public abstract class JpaUtil {
 
 		if (totals.size()>1){//查询sql有groupby的情况
 			for (Long element : totals) {
-				total = total+1;
+				total = total+1L;
 			}
 		}else{//没有groupby的情况
 			for (Long element : totals) {
 				total += element == null ? 0 : element;
 			}
 		}
-
 		return total;
 	}
 	@SuppressWarnings("unchecked")
