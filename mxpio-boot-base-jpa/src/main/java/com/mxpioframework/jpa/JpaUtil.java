@@ -952,9 +952,16 @@ public abstract class JpaUtil {
 		List<Long> totals = query.getResultList();
 		Long total = 0L;
 
-		for (Long element : totals) {
-			total = total+1;
+		if (totals.size()>1){//查询sql有groupby的情况
+			for (Long element : totals) {
+				total = total+1;
+			}
+		}else{//没有groupby的情况
+			for (Long element : totals) {
+				total += element == null ? 0 : element;
+			}
 		}
+
 		return total;
 	}
 	@SuppressWarnings("unchecked")
