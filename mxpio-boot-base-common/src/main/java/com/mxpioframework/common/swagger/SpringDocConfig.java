@@ -19,7 +19,7 @@ public class SpringDocConfig {
 	@Value("${mxpio.swagger.desc:MxpIO-Boot API}")
 	private String swaggerDesc;
 	
-	@Value("${mxpio.swagger.version:1.0.12-beta.6}")
+	@Value("${mxpio.swagger.version:1.0.12-beta.7}")
 	private String swaggerVersion;
 	
 	@Value("${mxpio.swagger.author:MxpIO}")

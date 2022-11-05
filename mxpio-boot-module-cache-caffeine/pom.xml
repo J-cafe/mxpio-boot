@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.mxpio</groupId>
         <artifactId>mxpio-boot-parent</artifactId>
-        <version>1.0.12-beta.6</version>
+        <version>1.0.12-beta.7</version>
     </parent>
     <artifactId>mxpio-boot-module-cache-caffeine</artifactId>
     <name>缓存模块caffeine实现</name>
