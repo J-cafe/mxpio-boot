@@ -883,7 +883,7 @@ public abstract class JpaUtil {
 	 * @return 纪录总数
 	 */
 	public static <T> Long count(CriteriaQuery<T> cq) {
-		return executeCountQuery(getCountQuery(cq));
+		return executeRowCountQuery(getCountQuery(cq));
 	}
 
 	/**
@@ -947,6 +947,22 @@ public abstract class JpaUtil {
 		return total;
 	}
 
+	public static Long executeRowCountQuery(TypedQuery<Long> query) {
+		Assert.notNull(query, "query can not be null.");
+		List<Long> totals = query.getResultList();
+		Long total = 0L;
+
+		if (totals.size()>1){//查询sql有groupby的情况
+			for (Long element : totals) {
+				total = total+1L;
+			}
+		}else{//没有groupby的情况
+			for (Long element : totals) {
+				total += element == null ? 0 : element;
+			}
+		}
+		return total;
+	}
 	@SuppressWarnings("unchecked")
 	public static <T> TypedQuery<Long> getCountQuery(CriteriaQuery<T> cq) {
 		Class<T> domainClass = cq.getResultType();
