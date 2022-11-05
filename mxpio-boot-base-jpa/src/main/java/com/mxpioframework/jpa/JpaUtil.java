@@ -953,7 +953,7 @@ public abstract class JpaUtil {
 		Long total = 0L;
 
 		if (totals.size()>1){//查询sql有groupby的情况
-			for (Long element : totals) {
+			for (int i = 0; i < totals.size(); i++) {
 				total = total+1L;
 			}
 		}else{//没有groupby的情况

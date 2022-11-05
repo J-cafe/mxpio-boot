@@ -25,9 +25,9 @@ public class ExportPdfToSwfHandler implements ISwfFileHandler {
 		return "导出的pdf报表生成swf文件在线预览";
 	}
 
-	public File execute(Map<String, Object> varMap) throws Exception {
-		String id = (String) varMap.get("id");
-		String name = (String) varMap.get("name");
+	public File execute(Map<String, String> varMap) throws Exception {
+		String id = varMap.get("id");
+		String name = varMap.get("name");
 		name = new String(name.getBytes("ISO-8859-1"), "UTF-8");
 		if (!StringUtils.isNotEmpty(id) || !id.matches("[a-z0-9-]+")) {
 			throw new IllegalArgumentException("illegal id");

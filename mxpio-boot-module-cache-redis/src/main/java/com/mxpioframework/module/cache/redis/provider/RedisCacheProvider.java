@@ -1,10 +1,9 @@
 package com.mxpioframework.module.cache.redis.provider;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import org.assertj.core.util.Lists;
-import org.assertj.core.util.Sets;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import com.mxpioframework.cache.provider.CacheProvider;

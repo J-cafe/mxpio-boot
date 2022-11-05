@@ -298,14 +298,14 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 		response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
 		response.addHeader("Cache-Control", "post-check=0, pre-check=0");
 		response.setHeader("Pragma", "no-cache");
-		Map<String, Object> parameterMap = new HashMap<String, Object>();
+		Map<String, String> parameterMap = new HashMap<String, String>();
 		Enumeration<String> parameters = request.getParameterNames();
 		while (parameters.hasMoreElements()) {
-			String parameter = (String) parameters.nextElement();
+			String parameter = parameters.nextElement();
 			String value = request.getParameter(parameter);
 			parameterMap.put(parameter, value);
 		}
-		String handler = (String) parameterMap.get("handler");
+		String handler = parameterMap.get("handler");
 		Assert.hasText(handler, "url请求必须包含handler参数!");
 		// Map<String, ISwfFileHandler> beanMap = DoradoContext.getAttachedWebApplicationContext().getBeansOfType(ISwfFileHandler.class);
 		ISwfFileHandler swfFileHandler = null;

@@ -9,5 +9,5 @@ public interface ISwfFileHandler {
 
 	public String getHandlerDesc();
 
-	public File execute(Map<String, Object> parameter) throws Exception;
+	public File execute(Map<String, String> parameter) throws Exception;
 }
