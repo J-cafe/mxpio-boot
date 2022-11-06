@@ -1,0 +1,2 @@
+-- 20220624 定时任务菜单
+INSERT INTO `mb_url` (`id_`, `create_by`, `create_time`, `update_by`, `update_time`, `component_`, `description_`, `icon_`, `keep_alive_`, `name_`, `navigable_`, `order_`, `parent_id_`, `path_`, `title_`, `outside_`) VALUES ('7abea950-20c3-4ca2-873d-1154fc7c3ae8', NULL, '2022-06-24 11:55:50.260000', NULL, NULL, 'system/QuartzJobList', NULL, NULL, b'0', 'quartzJobList', '', '8', 'd7d6e2e4e2934f2c9385a623fd98c6f3', 'quartzJobList', '定时任务', '\0');
