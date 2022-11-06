@@ -106,11 +106,11 @@ public class CriteriaUtils {
 		
 		// 添加日期处理
 		if(linq.root().get(property).getJavaType().equals(Date.class) && !(value instanceof Date)){
-			SimpleDateFormat sdf = new SimpleDateFormat(YMD);
+			SimpleDateFormat sdf = new SimpleDateFormat(YMD_HMS);
 			try{
 				value = sdf.parse(value.toString());
 			}catch (ParseException e) {
-				sdf = new SimpleDateFormat(YMD_HMS);
+				sdf = new SimpleDateFormat(YMD);
 				try {
 					value = sdf.parse(value.toString());
 				} catch (ParseException e1) {
