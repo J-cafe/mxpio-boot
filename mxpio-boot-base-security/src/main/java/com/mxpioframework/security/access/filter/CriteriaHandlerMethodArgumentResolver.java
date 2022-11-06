@@ -28,16 +28,13 @@ import com.mxpioframework.security.util.SecurityUtils;
 
 @Component
 public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
-	
-	/*@Autowired
-	private SecurityDecisionManager securityDecisionManager;*/
-	
+
 	@Autowired
 	private DataResourceService dataResourceService;
-	
+
 	@Autowired
 	private DeptService deptService;
-	
+
 	@Autowired(required = false)
 	private Map<String, DataScapeProvider> dataScapeProviderMap;
 
@@ -46,38 +43,34 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 			WebDataBinderFactory webDataBinderFactory) throws Exception {
 		String criteria = request.getParameter("criteria");
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
-		
-		// Map<String, DataResource> dataResourceMap = dataResourceService.findAllByCatch();
+
 		RequestMapping requestMapping = parameter.getMethodAnnotation(RequestMapping.class);
 		RequestMapping classRequestMapping = parameter.getContainingClass().getDeclaredAnnotation(RequestMapping.class);
-		
-		if(requestMapping != null){
+
+		if (requestMapping != null) {
 			List<DataResource> datas = dataResourceService.findAll();
 			Map<String, List<DataResource>> dataResourceMap = JpaUtil.classify(datas, "path");
-			// DataResource dataResource = null;
-			List<DataResource> dataResources = dataResourceMap.get(classRequestMapping.value()[0] + requestMapping.value()[0]);
-			if(CollectionUtils.isNotEmpty(dataResources)){
-				/*if(!decide(dataResources, c)){
-					throw new DataAuthenticationException("权限异常");
-				}*/
-				
-				/*for(DataResource dataResource : dataResources){
-					
-				}*/
+			List<DataResource> dataResources = dataResourceMap
+					.get(classRequestMapping.value()[0] + requestMapping.value()[0]);
+			if (CollectionUtils.isNotEmpty(dataResources)) {
 				DataResource dataResource = dataResources.get(0);
-				if(dataResource.getDataScope() != null){
-					if(com.mxpioframework.security.Constants.DatascopeEnum.DEPT.getCode().equals(dataResource.getDataScope())){
-						Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(),"code");
+				if (dataResource.getDataScope() != null) {
+					if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT.getCode()
+							.equals(dataResource.getDataScope())) {
+						Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
 						c.addCriterion("createDept", Operator.IN, deptCodes);
-					}else if(com.mxpioframework.security.Constants.DatascopeEnum.USER.getCode().equals(dataResource.getDataScope())) {
+					} else if (com.mxpioframework.security.Constants.DatascopeEnum.USER.getCode()
+							.equals(dataResource.getDataScope())) {
 						c.addCriterion("createBy", Operator.EQ, SecurityUtils.getLoginUsername());
-					}else if(com.mxpioframework.security.Constants.DatascopeEnum.DEPT_AND_CHILD.getCode().equals(dataResource.getDataScope())){
-						
-					}else if(com.mxpioframework.security.Constants.DatascopeEnum.SERVICE.getCode().equals(dataResource.getDataScope())&&dataScapeProviderMap!=null){
-						for(Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()){
-							if(entry.getKey().equals(dataResource.getService())){
+					} else if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT_AND_CHILD.getCode()
+							.equals(dataResource.getDataScope())) {
+						//TODO 过滤子部门权限
+					} else if (com.mxpioframework.security.Constants.DatascopeEnum.SERVICE.getCode()
+							.equals(dataResource.getDataScope()) && dataScapeProviderMap != null) {
+						for (Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()) {
+							if (entry.getKey().equals(dataResource.getService())) {
 								List<SimpleCriterion> criterions = entry.getValue().provide();
-								for(SimpleCriterion criterion : criterions){
+								for (SimpleCriterion criterion : criterions) {
 									c.addCriterion(criterion);
 								}
 								break;
@@ -94,22 +87,4 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 	public boolean supportsParameter(MethodParameter parameter) {
 		return parameter.getParameterName().equals("criteria");
 	}
-	
-	/*private boolean decide(List<DataResource> dataResources, Criteria c) {
-		for(DataResource dataResource : dataResources){
-			if (securityDecisionManager.decide(dataResource)) {
-				if(dataResource.getDataScope() != null){
-					if(com.mxpioframework.security.Constants.DatascopeEnum.DEPT.getCode().equals(dataResource.getDataScope())){
-						Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(),"code");
-						c.addCriterion("createDept", Operator.IN, deptCodes);
-					}else if(com.mxpioframework.security.Constants.DatascopeEnum.USER.getCode().equals(dataResource.getDataScope())) {
-						c.addCriterion("createBy", Operator.EQ, SecurityUtils.getLoginUsername());
-					}
-				}
-				return true;
-			}
-		}
-		return false;
-	}*/
-
 }
