@@ -1,7 +1,10 @@
 package com.mxpioframework.jpa.query;
 
 import java.net.URLDecoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -16,6 +19,10 @@ import com.mxpioframework.jpa.lin.Linq;
 public class CriteriaUtils {
 	
 	static ObjectMapper objectMapper = new ObjectMapper();
+	
+	private static String YMD_HMS = "yyyy-MM-dd HH:mm:ss";
+	
+	private static String YMD = "yyyy-MM-dd";
 	
 	/**
 	 * 以and形式添加多个条件
@@ -96,6 +103,21 @@ public class CriteriaUtils {
 
 		Object value = criterion.getValue();
 		Operator operator = criterion.getOperator();
+		
+		// 添加日期处理
+		if(linq.root().get(property).getJavaType().equals(Date.class) && !(value instanceof Date)){
+			SimpleDateFormat sdf = new SimpleDateFormat(YMD);
+			try{
+				value = sdf.parse(value.toString());
+			}catch (ParseException e) {
+				sdf = new SimpleDateFormat(YMD_HMS);
+				try {
+					value = sdf.parse(value.toString());
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
 		
 		if (Operator.LIKE_END.equals(operator)) {
 			linq.like(property, "%" + (String) value);
