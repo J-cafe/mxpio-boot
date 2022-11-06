@@ -363,6 +363,24 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.7.jar
 | 多租户 |       | 进行中 | 未开始 | 暂无 |
 | 代码生成 |       | 进行中 | 未开始 | 暂无 |
 
+## 截图
+
+![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E7%99%BB%E5%BD%95.png)
+
+![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E8%8F%9C%E5%8D%95.png)
+
+![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E8%A7%92%E8%89%B2.png)
+
+![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E9%83%A8%E9%97%A8.png)
+
+![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E5%AF%BC%E5%85%A5%E7%AE%A1%E7%90%86.png)
+
+![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E5%AF%BC%E5%87%BA%E7%AE%A1%E7%90%86.png)
+
+![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E5%AD%97%E5%85%B8.png)
+
+![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6.png)
+
 ## 相关开源项目
 
 - [Spring Boot](https://spring.io/projects/spring-boot)
