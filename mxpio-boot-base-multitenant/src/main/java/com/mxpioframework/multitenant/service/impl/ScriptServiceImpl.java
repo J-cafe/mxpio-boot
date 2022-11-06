@@ -53,7 +53,7 @@ public class ScriptServiceImpl implements ScriptService {
 	}
 
 	private List<Resource> getScripts(String locations, String fallback) {
-		if (StringUtils.isEmpty(locations)) {
+		if (StringUtils.hasLength(locations)) {
 			String platform = this.properties.getPlatform();
 			locations = "classpath*:" + fallback + "-" + platform + ".sql,";
 			locations += "classpath*:" + fallback + ".sql";

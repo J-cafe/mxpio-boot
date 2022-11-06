@@ -30,7 +30,7 @@ public class DatabaseResourceReleaser implements ResourceReleaser {
 	public void release(Organization organization) {
 		entityManagerFactoryService.removeEntityManagerFactory(organization);
 		EntityManager em = EntityManagerFactoryUtils.getTransactionalEntityManager(emf);
-		if (!EmbeddedDatabaseConnection.isEmbedded(properties.determineDriverClassName())) {
+		if (!EmbeddedDatabaseConnection.isEmbedded(properties.determineDriverClassName(),null)) {
 			em.createNativeQuery("drop database " + organization.getId()).executeUpdate();
 		}
 		
