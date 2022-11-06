@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Tag(name = "UserController", description = "用户管理")
 @RestController("mxpio.security.userController")
-@RequestMapping("/user")
+@RequestMapping("/user/")
 public class UserController {
 	
 	@Autowired
@@ -44,7 +44,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping("/list")
+	@GetMapping("list")
 	@Operation(summary = "用户列表", description = "根据过滤字段filter获取用户列表，过滤用户名和昵称", method = "GET")
 	public Result<Page<User>> list(Criteria criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
@@ -54,7 +54,7 @@ public class UserController {
 		return Result.OK(page);
 	}
 	
-	@GetMapping("/info")
+	@GetMapping("info")
 	@Operation(summary = "用户信息", description = "获取当前登录用户信息", method = "GET")
 	public Result<UserDetails> info() throws Exception {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -63,28 +63,28 @@ public class UserController {
 		return Result.OK(user);
 	}
 	
-	@PostMapping("/add")
+	@PostMapping("add")
 	@Operation(summary = "添加用户", description = "添加用户信息", method = "POST")
 	public Result<UserDetails> add(@RequestBody User user) throws Exception {
 		userService.create(user);
 		return Result.OK("添加成功",user);
 	}
 	
-	@PutMapping("/edit")
+	@PutMapping("edit")
 	@Operation(summary = "更新用户", description = "更新用户信息", method = "PUT")
 	public Result<User> edit(@RequestBody User user) throws Exception {
 		userService.update(user);
 		return Result.OK("编辑成功",null);
 	}
 	
-	@PutMapping("/updatepass")
+	@PutMapping("updatepass")
 	@Operation(summary = "修改密码", description = "修改密码", method = "PUT")
 	public Result<User> updatePass(@RequestBody UpatePassVo upatePassVo) throws Exception {
 		userService.updatePass(upatePassVo.getUsername(), upatePassVo.getNewPassword());
 		return Result.OK("修改成功",null);
 	}
 	
-	@DeleteMapping("/delete")
+	@DeleteMapping("delete")
 	@Operation(summary = "删除用户", description = "根据用户名username删除用户信息", method = "DELETE")
 	public Result<UserDetails> delete(String username) throws Exception {
 		userService.delete(new HashSet<String>() {
@@ -97,7 +97,7 @@ public class UserController {
 		return Result.OK("删除成功",null);
 	}
 	
-	@PostMapping("/logout")
+	@PostMapping("logout")
 	@Operation(summary = "强退用户", description = "根据用户名username强退用户", method = "POST")
 	public Result<User> logout(@RequestParam("username") String username) throws Exception {
 		onlineUserService.kickOutForUsername(username, cacheProvider);

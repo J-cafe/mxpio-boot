@@ -27,13 +27,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "RoleController", description = "角色管理")
 @RestController("mxpio.security.roleController")
-@RequestMapping("/role")
+@RequestMapping("/role/")
 public class RoleController {
 	
 	@Autowired
 	private RoleService roleService;
 	
-	@GetMapping("/page")
+	@GetMapping("page")
 	@Operation(summary = "角色列表(分页)", description = "获取角色列表(分页)", method = "GET")
 	public Result<Page<Role>> page(Criteria criteria,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
@@ -43,35 +43,35 @@ public class RoleController {
 		return Result.OK(page);
 	}
 	
-	@GetMapping("/list")
+	@GetMapping("list")
 	@Operation(summary = "角色列表", description = "获取角色列表", method = "GET")
 	public Result<List<Role>> page(Criteria criteria) throws Exception {
 		List<Role> roles = roleService.list(criteria);
 		return Result.OK(roles);
 	}
 	
-	@GetMapping("/list/{id}")
+	@GetMapping("list/{id}")
 	@Operation(summary = "获取角色", description = "根据ID获取角色", method = "GET")
 	public Result<Role> getById(@PathVariable(name = "id", required = true) String id) throws Exception {
 		Role role = roleService.getById(id);
 		return Result.OK(role);
 	}
 	
-	@PostMapping("/add")
+	@PostMapping("add")
 	@Operation(summary = "添加角色", description = "添加角色信息", method = "POST")
 	public Result<Role> add(@RequestBody Role role) throws Exception {
 		roleService.save(role);
 		return Result.OK("添加成功",role);
 	}
 	
-	@PutMapping("/edit")
+	@PutMapping("edit")
 	@Operation(summary = "更新角色", description = "更新角色信息", method = "PUT")
 	public Result<Role> edit(@RequestBody Role role) throws Exception {
 		roleService.update(role);
 		return Result.OK("编辑成功",role);
 	}
 	
-	@DeleteMapping("/remove/{id}")
+	@DeleteMapping("remove/{id}")
 	@Operation(summary = "删除角色", description = "根据角色名rolename删除角色信息", method = "DELETE")
 	public Result<Role> delete(@PathVariable(name = "id", required = true) String id) throws Exception {
 		String ids[] = id.split(",");
@@ -81,7 +81,7 @@ public class RoleController {
 		return Result.OK("删除成功",null);
 	}
 	
-	@GetMapping("/list/{id}/without")
+	@GetMapping("list/{id}/without")
 	@Operation(summary = "未绑定用户", description = "获取未绑定用户列表", method = "GET")
 	public Result<Page<User>> getUsersWithout(
 			@PathVariable(name = "id",required = true) String id,
@@ -93,7 +93,7 @@ public class RoleController {
 		return Result.OK(users);
 	}
 	
-	@GetMapping("/list/{id}/within")
+	@GetMapping("list/{id}/within")
 	@Operation(summary = "获取绑定用户", description = "获取绑定用户列表", method = "GET")
 	public Result<Page<User>> getUsersWithin(
 			@PathVariable(name = "id",required = true) String id,
@@ -105,7 +105,7 @@ public class RoleController {
 		return Result.OK(users);
 	}
 	
-	@PostMapping("/list/{id}/add/actors")
+	@PostMapping("list/{id}/add/actors")
 	@Operation(summary = "添加绑定权限演员", description = "获取绑定权限演员列表", method = "POST")
 	public Result<?> addActors(
 			@PathVariable(name = "id",required = true) String id,
@@ -114,7 +114,7 @@ public class RoleController {
 		return Result.OK();
 	}
 	
-	@PostMapping("/list/{id}/remove/actors")
+	@PostMapping("list/{id}/remove/actors")
 	@Operation(summary = "添加绑定权限演员", description = "获取绑定权限演员列表", method = "POST")
 	public Result<?> removeActors(
 			@PathVariable(name = "id",required = true) String id,
