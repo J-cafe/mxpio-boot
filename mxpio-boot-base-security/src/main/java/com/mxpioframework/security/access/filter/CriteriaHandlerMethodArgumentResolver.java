@@ -65,6 +65,13 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 					} else if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT_AND_CHILD.getCode()
 							.equals(dataResource.getDataScope())) {
 						//TODO 过滤子部门权限
+						Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
+						if(deptCodes.size()>0){
+							c.addCriterion("createDept", Operator.LIKE_START, deptCodes.toArray()[0]);
+						}else{
+							c.addCriterion("createDept", Operator.EQ, "");
+						}
+						
 					} else if (com.mxpioframework.security.Constants.DatascopeEnum.SERVICE.getCode()
 							.equals(dataResource.getDataScope()) && dataScapeProviderMap != null) {
 						for (Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()) {

@@ -50,7 +50,13 @@ public class ParamUtil {
 						}else if(com.mxpioframework.security.Constants.DatascopeEnum.USER.getCode().equals(dataResource.getDataScope())) {
 							c.addCriterion("createBy", Operator.EQ, SecurityUtils.getLoginUsername());
 						}else if(com.mxpioframework.security.Constants.DatascopeEnum.DEPT_AND_CHILD.getCode().equals(dataResource.getDataScope())){
-							
+							DeptService deptService = ApplicationContextProvider.getBean(DeptService.class);
+							Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
+							if(deptCodes.size()>0){
+								c.addCriterion("createDept", Operator.LIKE_START, deptCodes.toArray()[0]);
+							}else{
+								c.addCriterion("createDept", Operator.EQ, "");
+							}
 						}else if(com.mxpioframework.security.Constants.DatascopeEnum.SERVICE.getCode().equals(dataResource.getDataScope())&&dataScapeProviderMap!=null){
 							for(Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()){
 								if(entry.getKey().equals(dataResource.getService())){
