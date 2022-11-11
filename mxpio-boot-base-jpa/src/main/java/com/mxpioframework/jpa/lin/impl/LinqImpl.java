@@ -280,6 +280,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 			beforeExecute(sq);
 			return parent.count();
 		}
+		beforeExecute(criteria);
 		return executeCountQuery(getCountQuery());
 	}
 
