@@ -26,7 +26,7 @@ public class FileSystemStorageProvider implements FileStorageProvider {
 	  private String fileSystemStorageLocation;
 
 	  @Override
-	  public String put(InputStream inputStream) throws IOException {
+	  public String put(InputStream inputStream, String fileName,long fileSize,String contentType) throws IOException {
 	    String relativePath = getRelativPath();
 	    File targetFile = getTargetFile(fileSystemStorageLocation, relativePath);
 	    OutputStream os = new FileOutputStream(targetFile);

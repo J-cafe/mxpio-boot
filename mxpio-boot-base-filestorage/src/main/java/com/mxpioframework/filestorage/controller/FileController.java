@@ -95,7 +95,7 @@ public class FileController {
 		
 		if(file != null){
 			String fileName = file.getOriginalFilename();
-			MxpioFileInfo mxpioFileInfo = fileService.put(fileStorageType, file.getInputStream(), fileName);
+			MxpioFileInfo mxpioFileInfo = fileService.put(fileStorageType, file.getInputStream(), fileName,file.getSize(),file.getContentType());
 			return Result.OK(mxpioFileInfo);
 		}
 		return Result.error("上传失败");
