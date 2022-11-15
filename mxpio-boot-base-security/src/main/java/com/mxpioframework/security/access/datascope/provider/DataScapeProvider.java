@@ -2,10 +2,10 @@ package com.mxpioframework.security.access.datascope.provider;
 
 import java.util.List;
 
-import com.mxpioframework.jpa.query.SimpleCriterion;
+import com.mxpioframework.jpa.query.Criterion;
 
 public interface DataScapeProvider {
 	
-	List<SimpleCriterion> provide();
+	List<Criterion> provide();
 	
 }
