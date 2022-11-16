@@ -1,12 +1,16 @@
 package com.mxpioframework.security.service.impl;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.mxpioframework.common.vo.Result;
+import com.mxpioframework.security.vo.UpatePassVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
@@ -74,6 +78,7 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	public void updatePass(String username, String newPassword) {
 		User u = JpaUtil.getOne(User.class, username);
 		u.setPassword(passwordEncoder.encode(newPassword));
+		u.setPwdUpdateTime(new Date());
 	}
 
 	@Override
@@ -161,4 +166,25 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 		 */	
 	}
 
+	@Override
+	@Transactional(readOnly = false)
+	public Result<User> updatePassWithCheck(UpatePassVo upatePassVo) {
+		if (StringUtils.isBlank(upatePassVo.getUsername())
+				||StringUtils.isBlank(upatePassVo.getNewPassword())
+				||StringUtils.isBlank(upatePassVo.getOldPassword())){
+			return Result.error("提交数据不完整，请确认");
+		}
+		User u = JpaUtil.getOne(User.class, upatePassVo.getUsername());
+		if (u==null){
+			return Result.error("用户名不存在，请确认");
+		}
+		String dbpassword = u.getPassword();
+		if (!passwordEncoder.matches(upatePassVo.getOldPassword(),dbpassword)){
+			return Result.error("原密码不正确，请确认");
+		}
+		u.setPassword(passwordEncoder.encode(upatePassVo.getNewPassword()));
+		u.setPwdUpdateTime(new Date());
+		JpaUtil.update(u);
+		return Result.OK("修改成功",u);
+	}
 }

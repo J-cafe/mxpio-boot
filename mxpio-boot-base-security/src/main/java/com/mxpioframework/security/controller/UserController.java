@@ -83,7 +83,13 @@ public class UserController {
 		userService.updatePass(upatePassVo.getUsername(), upatePassVo.getNewPassword());
 		return Result.OK("修改成功",null);
 	}
-	
+
+	@PutMapping("updatepwdwithcheck")
+	@Operation(summary = "修改密码", description = "修改密码", method = "PUT")
+	public Result<User> updatepwdwithcheck(@RequestBody UpatePassVo upatePassVo) throws Exception {
+		return userService.updatePassWithCheck(upatePassVo);
+	}
+
 	@DeleteMapping("delete")
 	@Operation(summary = "删除用户", description = "根据用户名username删除用户信息", method = "DELETE")
 	public Result<UserDetails> delete(String username) throws Exception {
