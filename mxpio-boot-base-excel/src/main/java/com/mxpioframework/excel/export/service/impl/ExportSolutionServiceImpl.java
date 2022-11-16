@@ -42,7 +42,8 @@ public class ExportSolutionServiceImpl extends BaseServiceImpl<ExportSolution> i
 	public ExportSolution getById(String id) {
 		ExportSolution exportSolution = JpaUtil.getOne(ExportSolution.class, id);
 		if(exportSolution != null){
-			exportSolution.setColumns(JpaUtil.linq(ExportColumn.class).equal("solutionId", id).list());
+			List<ExportColumn> solutionId = JpaUtil.linq(ExportColumn.class).equal("solutionId", id).list();
+			exportSolution.setColumns(solutionId);
 		}
 		return exportSolution;
 	}
@@ -52,7 +53,8 @@ public class ExportSolutionServiceImpl extends BaseServiceImpl<ExportSolution> i
 	public ExportSolution getByCode(String solutionCode) {
 		ExportSolution exportSolution = JpaUtil.linq(ExportSolution.class).equal("code", solutionCode).findOne();
 		if(exportSolution != null){
-			exportSolution.setColumns(JpaUtil.linq(ExportColumn.class).equal("solutionId", exportSolution.getId()).asc("sort").list());
+			List<ExportColumn> list = JpaUtil.linq(ExportColumn.class).equal("solutionId", exportSolution.getId()).asc("sort").list();
+			exportSolution.setColumns(list);
 		}
 		return exportSolution;
 	}

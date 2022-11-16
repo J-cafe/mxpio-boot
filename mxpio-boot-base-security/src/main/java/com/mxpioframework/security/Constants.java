@@ -55,8 +55,8 @@ public class Constants {
 	}
 
 	public enum RegexEnum {//密码校验 正则表达式
-		DIGANDLETTER("/^(?=.*[0-9].*)(?=.*[A-Z].*)(?=.*[a-z].*)/", "包含数字、大小写字母"),
-		CONTINUOUS("/(?!.*(?<re1>[a-zA-Z0-9])\\k<re1>{3})(?<!.*(?<re2>[a-zA-Z0-9])\\k<re2>{3})/", "不能是连续的数字、字母"),
+		DIGANDLETTER("^(?=.*[0-9].*)(?=.*[A-Z].*)(?=.*[a-z].*)", "包含数字、大小写字母"),
+		CONTINUOUS("(?!.*(?<re1>[a-zA-Z0-9])\\k<re1>{3})(?<!.*(?<re2>[a-zA-Z0-9])\\k<re2>{3})", "不能是连续的数字、字母"),
 		MINLENGTH("12", "最短长度");
 
 		RegexEnum(String code, String name) {

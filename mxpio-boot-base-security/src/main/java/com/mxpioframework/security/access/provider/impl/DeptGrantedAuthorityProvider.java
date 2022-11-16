@@ -32,9 +32,10 @@ public class DeptGrantedAuthorityProvider implements GrantedAuthorityProvider  {
 			if(authorities == null){
 				authorities = new ArrayList<GrantedAuthority>();
 			}
-			authorities.addAll(JpaUtil.linq(RoleGrantedAuthority.class)
-							.equal("actorId", deptId)
-							.list());
+			List<RoleGrantedAuthority> actorId = JpaUtil.linq(RoleGrantedAuthority.class)
+					.equal("actorId", deptId)
+					.list();
+			authorities.addAll(actorId);
 		}
 		
 		return authorities;

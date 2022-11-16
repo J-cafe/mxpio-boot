@@ -34,6 +34,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			User user = JpaUtil.getOne(User.class, username);
 			user.setAuthorities(grantedAuthorityService.getGrantedAuthorities(user));
 			Date pwdEffectDate = user.getPwdUpdateTime()==null?user.getCreateTime(): user.getPwdUpdateTime();
+			if (pwdEffectDate==null){
+				throw new UsernameNotFoundException("获取用户创建时间失败，请检查数据");
+			}
 			int days = (int) ((new Date().getTime() - pwdEffectDate.getTime()) / (1000*3600*24));
 			if (days>=Integer.parseInt(expireddays)){
 				user.setPwdExpiredFlag(true);
