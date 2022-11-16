@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 public class ExportUtils {
 
 	public static String getFileStorePath() {
-		String fileLocation = "D://";
+		String fileLocation = "excel_export_temp";
 		if (StringUtils.isNotEmpty(fileLocation)) {
 			return fileLocation.endsWith(File.separator) ? fileLocation : fileLocation + File.separator;
 		} else {
