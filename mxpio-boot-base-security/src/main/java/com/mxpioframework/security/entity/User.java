@@ -1,6 +1,7 @@
 package com.mxpioframework.security.entity;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -78,6 +80,15 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 	@Column(name = "INTRODUCTION_")
 	@Schema(description = "简介")
 	private String introduction;
+
+	@Column(name = "PWD_UPDATE_TIME_")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	@Schema(description = "密码更新时间")
+	private Date pwdUpdateTime;
+
+	@Transient
+	@Schema(description = "密码是否过期")
+	private boolean pwdExpiredFlag = false;
 
 	@Transient
 	private Object organization;
@@ -217,5 +228,21 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
+	}
+
+	public Date getPwdUpdateTime() {
+		return pwdUpdateTime;
+	}
+
+	public void setPwdUpdateTime(Date pwdUpdateTime) {
+		this.pwdUpdateTime = pwdUpdateTime;
+	}
+
+	public boolean isPwdExpiredFlag() {
+		return pwdExpiredFlag;
+	}
+
+	public void setPwdExpiredFlag(boolean pwdExpiredFlag) {
+		this.pwdExpiredFlag = pwdExpiredFlag;
 	}
 }
