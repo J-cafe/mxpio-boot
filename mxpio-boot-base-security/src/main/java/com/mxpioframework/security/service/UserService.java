@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.mxpioframework.common.vo.Result;
+import com.mxpioframework.security.vo.UpatePassVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -110,4 +112,5 @@ public interface UserService {
 	 */
 	boolean isAdministrator(String username);
 
+    Result<User> updatePassWithCheck(UpatePassVo upatePassVo);
 }
