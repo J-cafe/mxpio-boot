@@ -89,9 +89,9 @@ public class SystemController {
 
 		if (StringUtils.isNotBlank(passwordStrategy)){
 			String[] split = passwordStrategy.split(",");
-			List<Map<String,String>> configRegexs = new ArrayList<>();
+			List<Map<String,Object>> configRegexs = new ArrayList<>();
 			for (String per:split){
-				Map<String,String> patternMap = new HashMap<>();
+				Map<String,Object> patternMap = new HashMap<>();
 				switch (per){
 					case "DIGANDLETTER":
 						patternMap.put("pattern",Constants.RegexEnum.DIGANDLETTER.getCode());
@@ -104,7 +104,7 @@ public class SystemController {
 						configRegexs.add(patternMap);
 						break;
 					case "MINLENGTH":
-						patternMap.put("min",Constants.RegexEnum.MINLENGTH.getCode());
+						patternMap.put("min",Integer.parseInt(Constants.RegexEnum.MINLENGTH.getCode()));
 						patternMap.put("message",Constants.RegexEnum.MINLENGTH.getName());
 						configRegexs.add(patternMap);
 						break;
