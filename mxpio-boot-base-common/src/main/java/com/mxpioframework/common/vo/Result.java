@@ -111,4 +111,11 @@ public class Result<T> implements Serializable {
 		return error(CommonConstant.HTTP_NO_AUTHZ_403, msg);
 	}
 
+	/**
+	 * 用户名、密码、验证码、用户状态异常
+	 */
+	public static<T> Result<T> noauth40101(String msg) {
+		return error(CommonConstant.HTTP_NO_AUTHZ_40101, msg);
+	}
+
 }
