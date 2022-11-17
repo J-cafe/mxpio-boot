@@ -12,6 +12,7 @@ public class CommonConstant {
 	public static final Integer HTTP_SERVER_ERROR = 500;
 	public static final Integer HTTP_NO_AUTHZ_401 = 401;
 	public static final Integer HTTP_NO_AUTHZ_403 = 403;
+	public static final Integer HTTP_NO_AUTHZ_40101 = 40101;
 	
 	public static final String DICT_TEXT_SUFFIX = "$DICT_TEXT_";
 	
