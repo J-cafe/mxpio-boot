@@ -20,7 +20,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
 	@Override
 	public void save(User user, String token, String refreshToken, CacheProvider cacheProvider) {
 		cacheProvider.set(Constants.JWT_ACCESS_TOKEN_REDIS_KEY + token, user, Constants.DEFAULT_ACCESS_TOKEN_TIME_MS / 1000L);
-		cacheProvider.set(Constants.JWT_REFRESH_TOKEN_REDIS_KEY + refreshToken, token, Constants.DEFAULT_REFRESH_TOKEN_TIME_MS / 1000L);
+		cacheProvider.set(Constants.JWT_REFRESH_TOKEN_REDIS_KEY + refreshToken, user, Constants.DEFAULT_REFRESH_TOKEN_TIME_MS / 1000L);
 	}
 	
 	@Override
@@ -57,10 +57,10 @@ public class OnlineUserServiceImpl implements OnlineUserService {
 
 	@Override
 	public TokenVo refreshToken(String refreshToken, CacheProvider cacheProvider) {
-		String token = (String) cacheProvider.get(Constants.JWT_REFRESH_TOKEN_REDIS_KEY + refreshToken);
-		if(token != null) {
+		User redisUser = (User) cacheProvider.get(Constants.JWT_REFRESH_TOKEN_REDIS_KEY + refreshToken);
+		if(redisUser != null) {
 			TokenVo tokenVo = new TokenVo();
-			String username = TokenUtil.getUser(token).getUsername();
+			String username = redisUser.getUsername();
 			User user = (User) userDetailsService.loadUserByUsername(username);
 			String newToken = TokenUtil.createAccessToken(user);
 			String newRefreshToken = TokenUtil.createRefreshToken(newToken);
