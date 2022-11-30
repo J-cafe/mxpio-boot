@@ -59,7 +59,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 					.end()
 					.list();
 			if (depts.size()>0){
-				user.setOrganization(depts.get(0));
+				user.setDept(depts.get(0));
 			}
 			return user;
 		} catch (Exception e) {

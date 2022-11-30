@@ -94,6 +94,9 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 	private Object organization;
 
 	@Transient
+	@Schema(description = "用户部门")
+	private Dept dept;
+	@Transient
 	private Collection<? extends GrantedAuthority> authorities;
 
 	@Override
@@ -244,5 +247,13 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 
 	public void setPwdExpiredFlag(boolean pwdExpiredFlag) {
 		this.pwdExpiredFlag = pwdExpiredFlag;
+	}
+
+	public Dept getDept() {
+		return dept;
+	}
+
+	public void setDept(Dept dept) {
+		this.dept = dept;
 	}
 }
