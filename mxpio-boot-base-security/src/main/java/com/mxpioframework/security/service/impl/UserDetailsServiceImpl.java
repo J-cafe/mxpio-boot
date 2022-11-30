@@ -1,5 +1,7 @@
 package com.mxpioframework.security.service.impl;
 
+import com.mxpioframework.security.entity.Dept;
+import com.mxpioframework.security.entity.UserDept;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +16,7 @@ import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.GrantedAuthorityService;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Spring Security的{@link org.springframework.security.core.userdetails.UserDetailsService}接口的默认实现
@@ -30,6 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Value("${mxpio.password.expiredswitch}")
 	private String expiredswitch;
 	@Override
+	@Transactional
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
 		try {
@@ -47,6 +51,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 						user.setPwdExpiredFlag(true);
 					}
 				}
+			}
+			List<Dept> depts = JpaUtil.linq(Dept.class)
+					.exists(UserDept.class)
+					.equalProperty("deptId", "id")
+					.equal("userId", user.getUsername())
+					.end()
+					.list();
+			if (depts.size()>0){
+				user.setDept(depts.get(0));
 			}
 			return user;
 		} catch (Exception e) {
