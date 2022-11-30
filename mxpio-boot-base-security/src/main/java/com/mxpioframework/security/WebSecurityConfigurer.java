@@ -28,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -102,6 +103,30 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		jwtLoginFilter.setAuthenticationManager(authenticationManagerBean());
         jwtLoginFilter.setAuthenticationSuccessHandler(new JwtLoginSuccessHandler());
         // jwtLoginFilter.setAuthenticationFailureHandler(new HttpStatusLoginFailureHandler());
+		jwtLoginFilter.setAuthenticationFailureHandler(new AuthenticationFailureHandler(){
+			@Override
+			public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+				exception.printStackTrace();
+				response.setContentType("application/json;charset=UTF-8");
+				if(exception instanceof UsernameNotFoundException){
+					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101(exception.getMessage())));
+				}else if(exception instanceof BadCredentialsException){
+					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101("密码错误")));
+				}else if(exception instanceof CaptchaAuthenticationException) {
+					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101(exception.getMessage())));
+				}else if(exception instanceof AccountStatusException){
+					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101("账号已锁定")));
+				}else if(exception instanceof InsufficientAuthenticationException){
+					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101("Token异常")));
+				}else if(exception instanceof NonceExpiredException){
+					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101("Nonce已过期")));
+				}else if(exception instanceof DataAuthenticationException){
+					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth403("无权访问")));
+				}else {
+					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("登录异常")));
+				}
+			}
+		});
         JwtTokenFilter jwtTokenFilter = new JwtTokenFilter();
         
         FilterSecurityInterceptor securityInterceptor = createFilterSecurityInterceptor();
