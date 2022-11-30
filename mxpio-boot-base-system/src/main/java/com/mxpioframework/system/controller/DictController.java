@@ -1,6 +1,7 @@
 package com.mxpioframework.system.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,7 @@ public class DictController {
 	public Result<Dict> getByCode(@PathVariable(name = "code", required = true) String code) {
 		try{
 			Dict dict = dictSerivce.getByCode(code);
+			Collections.sort(dict.getItems());
 			return Result.OK(dict);
 		}catch (Exception e) {
 			return Result.OK(null);

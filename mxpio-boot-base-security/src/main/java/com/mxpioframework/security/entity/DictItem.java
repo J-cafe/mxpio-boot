@@ -1,5 +1,7 @@
 package com.mxpioframework.security.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -18,7 +20,7 @@ import lombok.ToString;
 @Table(name = "MB_DICT_ITEM")
 @Schema(description="字典项")
 @ToString
-public class DictItem extends BaseEntity {
+public class DictItem extends BaseEntity implements Comparable<DictItem> {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -46,10 +48,23 @@ public class DictItem extends BaseEntity {
 	
 	@Column(name = "ITEM_SORT_")
 	@Schema(description = "排序")
-	private String itemSort;
+	private BigDecimal itemSort;
 	
 	@Column(name = "ITEM_STATUS_")
 	@Schema(description = "状态")
 	private String itemStatus;
+
+	@Override
+	public int compareTo(DictItem o) {
+		BigDecimal thisSort = BigDecimal.ZERO;
+		BigDecimal thatSort = BigDecimal.ZERO;
+		if(itemSort != null){
+			thisSort = itemSort;
+		}
+		if(o.getItemSort() != null){
+			thatSort = o.getItemSort();
+		}
+		return thisSort.compareTo(thatSort);
+	}
 
 }
