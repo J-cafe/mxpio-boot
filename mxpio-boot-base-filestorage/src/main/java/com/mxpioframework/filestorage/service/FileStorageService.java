@@ -12,11 +12,11 @@ public interface FileStorageService {
 	
 	public static final String BEAN_ID = "mxpio.fileStorageService";
 
-	MxpioFileInfo put(InputStream inputStream, String filename) throws IOException;
+	MxpioFileInfo put(InputStream inputStream, String filename,long fileSize,String contentType) throws IOException;
 
 	MxpioFileInfo put(MultipartFile file, String filename) throws IllegalStateException, IOException;
 
-	MxpioFileInfo put(String fileStroageType, InputStream inputStream, String filename) throws IOException;
+	MxpioFileInfo put(String fileStroageType, InputStream inputStream, String filename,long fileSize,String contentType) throws IOException;
 
 	MxpioFileInfo put(String fileStroageType, MultipartFile file, String filename)
 			throws IllegalStateException, IOException;

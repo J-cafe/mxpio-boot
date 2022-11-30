@@ -35,6 +35,7 @@
 		<flowable.version>6.7.2</flowable.version>
 		<liquibase.version>4.8.0</liquibase.version>
 		<caffeine.version>2.9.3</caffeine.version>
+		<minio.version>8.2.1</minio.version>
 	</properties>
 	<modules>
 		<module>mxpio-boot-base-autoconfigure</module>
@@ -352,6 +353,12 @@
 				<groupId>com.github.ben-manes.caffeine</groupId>
 				<artifactId>caffeine</artifactId>
 				<version>${caffeine.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.minio</groupId>
+				<artifactId>minio</artifactId>
+				<version>${minio.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

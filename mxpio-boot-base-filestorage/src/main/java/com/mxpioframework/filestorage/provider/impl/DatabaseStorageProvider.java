@@ -41,7 +41,7 @@ public class DatabaseStorageProvider implements FileStorageProvider {
 	  }
 
 	  @Override
-	  public String put(InputStream inputStream) throws IOException {
+	  public String put(InputStream inputStream,String fileName,long fileSize,String contentType) throws IOException {
 	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	    IOUtils.copy(inputStream, baos);
 	    MxpioBlob mxpioBlob = mxpioBlobService.put(baos.toByteArray());
@@ -50,7 +50,7 @@ public class DatabaseStorageProvider implements FileStorageProvider {
 
 	  @Override
 	  public String put(MultipartFile file) throws IllegalStateException, IOException {
-	    return put(file.getInputStream());
+	    return put(file.getInputStream(),file.getOriginalFilename(),file.getSize(),file.getContentType());
 	  }
 
 	  public String getAbsolutePath(String relativePath) throws FileNotFoundException {

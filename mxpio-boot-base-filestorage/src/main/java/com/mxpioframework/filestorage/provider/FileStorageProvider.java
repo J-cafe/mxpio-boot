@@ -10,7 +10,7 @@ public interface FileStorageProvider {
 
 	String getType();
 
-	String put(InputStream inputStream) throws IOException;
+	String put(InputStream inputStream,String fileName,long fileSize,String contentType) throws IOException;
 
 	String put(MultipartFile file) throws IllegalStateException, IOException;
 

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.mxpioframework.jpa.query.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -16,10 +17,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.mxpioframework.jpa.JpaUtil;
-import com.mxpioframework.jpa.query.Criteria;
-import com.mxpioframework.jpa.query.CriteriaUtils;
-import com.mxpioframework.jpa.query.Operator;
-import com.mxpioframework.jpa.query.SimpleCriterion;
 import com.mxpioframework.security.access.datascope.provider.DataScapeProvider;
 import com.mxpioframework.security.entity.DataResource;
 import com.mxpioframework.security.service.DataResourceService;
@@ -76,8 +73,8 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 							.equals(dataResource.getDataScope()) && dataScapeProviderMap != null) {
 						for (Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()) {
 							if (entry.getKey().equals(dataResource.getService())) {
-								List<SimpleCriterion> criterions = entry.getValue().provide();
-								for (SimpleCriterion criterion : criterions) {
+								List<Criterion> criterions = entry.getValue().provide();
+								for (Criterion criterion : criterions) {
 									c.addCriterion(criterion);
 								}
 								break;

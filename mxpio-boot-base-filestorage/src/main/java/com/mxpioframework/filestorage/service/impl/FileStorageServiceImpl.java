@@ -27,8 +27,8 @@ public class FileStorageServiceImpl implements FileStorageService {
 	private Map<String, FileStorageProvider> fileStorageProviderMap = new HashMap<String, FileStorageProvider>();
 
 	@Override
-	public MxpioFileInfo put(InputStream inputStream, String filename) throws IOException {
-		return put(defaultFileStorageProviderType, inputStream, filename);
+	public MxpioFileInfo put(InputStream inputStream, String filename,long fileSize,String contentType) throws IOException {
+		return put(defaultFileStorageProviderType, inputStream, filename, fileSize,contentType);
 
 	}
 
@@ -39,8 +39,8 @@ public class FileStorageServiceImpl implements FileStorageService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public MxpioFileInfo put(String fileStorageType, InputStream inputStream, String filename) throws IOException {
-		String relativePath = getFileStorageProvider(fileStorageType).put(inputStream);
+	public MxpioFileInfo put(String fileStorageType, InputStream inputStream, String filename,long fileSize,String contentType) throws IOException {
+		String relativePath = getFileStorageProvider(fileStorageType).put(inputStream,filename,fileSize,contentType);
 		return saveFile(fileStorageType, relativePath, filename);
 	}
 
