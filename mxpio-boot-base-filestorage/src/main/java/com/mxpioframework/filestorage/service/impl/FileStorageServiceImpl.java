@@ -134,4 +134,16 @@ public class FileStorageServiceImpl implements FileStorageService {
 		return mxpioFileInfo != null ? mxpioFileInfo.getAbsolutePath() : null;
 	}
 
+	@Override
+	@Transactional(readOnly = false)
+	public int remove(String fileNo) throws FileNotFoundException {
+		MxpioFileInfo mxpioFileInfo = get(fileNo);
+		
+		int count = getFileStorageProvider(defaultFileStorageProviderType).remove(mxpioFileInfo);
+		if(count > 0){
+			JpaUtil.delete(mxpioFileInfo);
+		}
+		return count;
+	}
+
 }

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,6 +50,16 @@ public class FileController {
 
 		for (FileStoragePolicy fileStoragePolicy : fileStoragePolicys) {
 			this.fileStoragePolicyMap.put(fileStoragePolicy.getName(), fileStoragePolicy);
+		}
+	}
+	
+	@DeleteMapping("remove/{fileNo}")
+	@Operation(summary = "删除文件", description = "根据fileNo删除文件", method = "DELETE")
+	public Result<Object> removeFile(@PathVariable("fileNo") String fileNo) throws FileNotFoundException{
+		if(fileService.remove(fileNo) >0 ){
+			return Result.OK("删除成功！");
+		}else{
+			return Result.OK("删除失败！");
 		}
 	}
 

@@ -1,5 +1,6 @@
 package com.mxpioframework.filestorage.provider.impl;
 
+import com.mxpioframework.filestorage.entity.MxpioFileInfo;
 import com.mxpioframework.filestorage.provider.FileStorageProvider;
 import io.minio.*;
 import org.apache.commons.lang3.StringUtils;
@@ -81,4 +82,10 @@ public class MinIOStorageProvider implements FileStorageProvider {
         String uuid = UUID.randomUUID().toString();
         return StringUtils.join(uuid.split("-"));
     }
+
+	@Override
+	public int remove(MxpioFileInfo mxpioFileInfo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

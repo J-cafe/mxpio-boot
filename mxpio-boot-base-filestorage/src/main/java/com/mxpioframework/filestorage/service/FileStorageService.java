@@ -30,4 +30,6 @@ public interface FileStorageService {
 	InputStream getInputStream(String fileNo) throws FileNotFoundException;
 
 	InputStream getInputStream(MxpioFileInfo cokeFileInfo) throws FileNotFoundException;
+
+	int remove(String fileNo) throws FileNotFoundException;
 }

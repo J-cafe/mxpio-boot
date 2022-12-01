@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class DatabaseNameServiceImpl implements DatabaseNameService {
 
-	@Value("${bdf3.multitenant.databaseNamePrefix:}")
+	@Value("${mxpio.multitenant.databaseNamePrefix:}")
 	private String databaseNamePrefix;
 	
-	@Value("${bdf3.multitenant.databaseNameSuffix:}")
+	@Value("${mxpio.multitenant.databaseNameSuffix:}")
 	private String databaseNameSuffix;
 	
-	@Value("${bdf3.multitenant.masterDatabaseName:}")
+	@Value("${mxpio.multitenant.masterDatabaseName:}")
 	private String masterDatabaseName;
 	
 	@Override

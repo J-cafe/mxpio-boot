@@ -6,6 +6,8 @@ import java.io.InputStream;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mxpioframework.filestorage.entity.MxpioFileInfo;
+
 public interface FileStorageProvider {
 
 	String getType();
@@ -17,4 +19,6 @@ public interface FileStorageProvider {
 	InputStream getInputStream(String relativePath) throws FileNotFoundException;
 
 	String getAbsolutePath(String relativePath) throws FileNotFoundException;
+
+	int remove(MxpioFileInfo mxpioFileInfo);
 }
