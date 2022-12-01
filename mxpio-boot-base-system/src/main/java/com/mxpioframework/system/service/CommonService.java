@@ -7,8 +7,9 @@ public interface CommonService {
 	 * @param tableName
 	 * @param column
 	 * @param key
+	 * @param exclude 
 	 * @return
 	 */
-	Long duplicate(String tableName, String column, String key);
+	Long duplicate(String tableName, String column, String key, String exclude);
 
 }

@@ -13,9 +13,12 @@ public class CommonServiceImpl implements CommonService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Long duplicate(String tableName, String column, String key) {
+	public Long duplicate(String tableName, String column, String key, String exclude) {
 		
 		String sql = "SELECT COUNT(1) FROM " + tableName + " WHERE "+ column + " = '" + key + "'";
+		if(exclude != null){
+			sql = sql + " AND "+ column + " <> '" + exclude + "'";
+		}
 		BigInteger count = (BigInteger) JpaUtil.nativeQuery(sql).getSingleResult();
 		return count.longValue();
 	}

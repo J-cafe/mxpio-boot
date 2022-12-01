@@ -20,13 +20,14 @@ public class CommonController {
 	@Autowired
 	private CommonService commonService;
 	
-	@GetMapping("duplicate/{tableName}/{column}/{key}")
+	@GetMapping("duplicate/{tableName}/{column}/{key}/{exclude}")
 	@Operation(summary = "重复校验", description = "重复校验", method = "GET")
 	public Result<Long> duplicate(@PathVariable(name = "tableName", required = true) String tableName,
 			@PathVariable(name = "column", required = true) String column,
-			@PathVariable(name = "key", required = true) String key) {
+			@PathVariable(name = "key", required = true) String key,
+			@PathVariable(name = "exclude", required = false) String exclude) {
 		
-		Long count = commonService.duplicate(tableName, column, key);
+		Long count = commonService.duplicate(tableName, column, key,exclude);
 		return Result.OK(count);
 	}
 }
