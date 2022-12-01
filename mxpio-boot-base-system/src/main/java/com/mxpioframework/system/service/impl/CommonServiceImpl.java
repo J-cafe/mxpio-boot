@@ -1,5 +1,7 @@
 package com.mxpioframework.system.service.impl;
 
+import java.math.BigInteger;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,8 +16,8 @@ public class CommonServiceImpl implements CommonService {
 	public Long duplicate(String tableName, String column, String key) {
 		
 		String sql = "SELECT COUNT(1) FROM " + tableName + " WHERE "+ column + " = '" + key + "'";
-		Long count = (Long) JpaUtil.nativeQuery(sql).getSingleResult();
-		return count;
+		BigInteger count = (BigInteger) JpaUtil.nativeQuery(sql).getSingleResult();
+		return count.longValue();
 	}
 
 }
