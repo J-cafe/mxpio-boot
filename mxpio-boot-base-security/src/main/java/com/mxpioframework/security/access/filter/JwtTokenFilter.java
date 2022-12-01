@@ -67,7 +67,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             		JwtLoginToken jwtLoginToken = new JwtLoginToken(user, "", user.getAuthorities());
                     jwtLoginToken.setDetails(new WebAuthenticationDetails(httpServletRequest));
                     SecurityContextHolder.getContext().setAuthentication(jwtLoginToken);
-                    onlineUserService.refresh(user, token, cacheProvider);
+                    // onlineUserService.refresh(user, token, cacheProvider);
                     filterChain.doFilter(httpServletRequest, httpServletResponse);
             	}
             }else {
