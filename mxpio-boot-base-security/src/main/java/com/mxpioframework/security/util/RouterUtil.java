@@ -14,7 +14,8 @@ public class RouterUtil {
 		List<RouterVo> routers = new ArrayList<>();
 		for (Url url : urls) {
 			RouterMetaVo meta = new RouterMetaVo();
-			meta.setHidden(url.isNavigable());
+			meta.setUrlType(url.getUrlType());
+			meta.setHidden(!url.isNavigable());
 			meta.setIcon(url.getIcon());
 			meta.setKeepAlive(url.isKeepAlive());
 			meta.setOutside(url.isOutside());

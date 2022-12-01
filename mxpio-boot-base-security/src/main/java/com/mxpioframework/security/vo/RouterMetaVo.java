@@ -10,6 +10,9 @@ public class RouterMetaVo {
 	@Schema(description = "标题")
 	private String title;
 	
+	@Schema(description = "目录/菜单")
+	private String urlType;
+	
 	@Schema(description = "是否隐藏")
 	private boolean isHidden;
 	
