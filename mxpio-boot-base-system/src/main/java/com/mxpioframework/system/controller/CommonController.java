@@ -21,7 +21,7 @@ public class CommonController {
 	@Autowired
 	private CommonService commonService;
 	
-	@GetMapping("duplicate/{tableName}/{column}/{key}/{exclude}")
+	@GetMapping("duplicate/{tableName}/{column}/{key}")
 	@Operation(summary = "重复校验", description = "重复校验", method = "GET")
 	public Result<Long> duplicate(@PathVariable(name = "tableName", required = true) String tableName,
 			@PathVariable(name = "column", required = true) String column,
