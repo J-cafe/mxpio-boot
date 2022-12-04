@@ -8,6 +8,6 @@ public final class Constants {
 	/**
 	 * 主库ID
 	 */
-	public final static String MASTER = "master";
+	public final static String MASTER = "mboot";
 	
 }
