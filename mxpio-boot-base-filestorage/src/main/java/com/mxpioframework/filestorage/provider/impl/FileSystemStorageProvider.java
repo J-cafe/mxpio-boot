@@ -47,8 +47,14 @@ public class FileSystemStorageProvider implements FileStorageProvider {
 	
 	@Override
 	public int remove(MxpioFileInfo mxpioFileInfo) {
-		// TODO Auto-generated method stub
-		return 0;
+		String relativePath = getRelativPath() + getFileSuffix(mxpioFileInfo.getFileName());
+		File targetFile = getTargetFile(fileSystemStorageLocation, relativePath);
+		
+		if(targetFile.delete()){
+			return 1;
+		}else{
+			return 0;
+		}
 	}
 
 	@Override
