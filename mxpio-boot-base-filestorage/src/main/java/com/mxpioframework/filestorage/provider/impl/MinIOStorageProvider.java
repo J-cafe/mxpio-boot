@@ -85,7 +85,16 @@ public class MinIOStorageProvider implements FileStorageProvider {
 
 	@Override
 	public int remove(MxpioFileInfo mxpioFileInfo) {
-		// TODO Auto-generated method stub
+        String bucketName = StringUtils.substring(mxpioFileInfo.getRelativePath(),0,StringUtils.indexOf(mxpioFileInfo.getRelativePath(),"/"));
+        String objectPath = StringUtils.substring(mxpioFileInfo.getRelativePath(),StringUtils.indexOf(mxpioFileInfo.getRelativePath(),"/")+1);
+        RemoveObjectArgs removeObjectArgs = RemoveObjectArgs.builder().bucket(bucketName).object(objectPath).build();
+        try{
+            minioClient.removeObject(removeObjectArgs);
+            return 1;
+        }
+        catch (Exception e){
+            logger.error(">>>>>>>>>删除失败:{}",e.getMessage(),e);
+        }
 		return 0;
 	}
 }
