@@ -13,18 +13,22 @@
 			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-base-autoconfigure</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-module-cache-redis</artifactId>
-		</dependency>
 		<!-- <dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-module-cache-caffeine</artifactId>
+			<artifactId>mxpio-boot-module-cache-redis</artifactId>
 		</dependency> -->
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-boot-module-cache-caffeine</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-base-security</artifactId>
 		</dependency>
+		<!-- <dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-boot-base-multitenant</artifactId>
+		</dependency> -->
 		<dependency>
 			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-base-excel</artifactId>
