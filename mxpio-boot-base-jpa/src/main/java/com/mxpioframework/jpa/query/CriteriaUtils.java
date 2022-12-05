@@ -161,9 +161,9 @@ public class CriteriaUtils {
 			}
 		} else if (Operator.NOT_IN.equals(operator)) {
 			if(value instanceof String) {
-				linq.in(property, (Object[]) ((String) value).split(","));
+				linq.notIn(property, (Object[]) ((String) value).split(","));
 			}else {
-				linq.in(property, value);
+				linq.notIn(property, value);
 			}
 		}
 
