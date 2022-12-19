@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.AbstractQuery;
@@ -193,7 +194,12 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		}
 		beforeExecute(criteria);
 		List<T> list = transform(em.createQuery(criteria), true);
-		return list.get(0);
+		if(list.size() > 0){
+			return list.get(0);
+		}else{
+			return null;
+		}
+		
 	}
 
 	@Override
@@ -348,7 +354,10 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 			List tuples;
 			if (single) {
 				tuples = new ArrayList(1);
-				tuples.add(query.getSingleResult());
+				try{
+					tuples.add(query.getSingleResult());
+				}catch (NoResultException e) {
+				}
 			} else {
 				tuples = query.getResultList();
 			}
@@ -366,7 +375,10 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		} else {
 			if (single) {
 				result = new ArrayList<T>(1);
-				result.add((T) query.getSingleResult());
+				try{
+					result.add((T) query.getSingleResult());
+				}catch (NoResultException e) {
+				}
 			} else {
 				result = (List<T>) query.getResultList();
 			}
