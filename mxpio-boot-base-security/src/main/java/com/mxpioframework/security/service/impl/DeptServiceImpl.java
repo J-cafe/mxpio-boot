@@ -234,12 +234,14 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 			.paging(pageable);
 	}
 
+	@SecurityCacheEvict
 	@Override
 	@Transactional(readOnly = false)
 	public void saveUserDepts(List<UserDept> userDepts) {
 		JpaUtil.save(userDepts);
 	}
 
+	@SecurityCacheEvict
 	@Override
 	@Transactional(readOnly = false)
 	public int deleteUserDepts(String deptId, String userIds) {
@@ -247,12 +249,14 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 		return JpaUtil.lind(UserDept.class).equal("deptId", deptId).in("userId",(Object[]) userId).delete();
 	}
 
+	@SecurityCacheEvict
 	@Override
 	@Transactional(readOnly = false)
 	public void saveRoleDepts(List<RoleGrantedAuthority> roleDepts) {
 		JpaUtil.save(roleDepts);
 	}
 
+	@SecurityCacheEvict
 	@Override
 	@Transactional(readOnly = false)
 	public int deleteRoleDepts(String roleId, String deptIds) {
