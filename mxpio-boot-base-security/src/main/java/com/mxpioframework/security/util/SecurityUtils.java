@@ -13,13 +13,18 @@ import com.mxpioframework.security.service.DeptService;
 public class SecurityUtils {
 	
 	public static User getLoginUser() {
+		if (SecurityContextHolder.getContext().getAuthentication()==null){
+			return null;
+		}
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return user;
 	}
 	
 	public static String getLoginUsername() {
-		String username = getLoginUser().getUsername();
-		return username;
+		if(getLoginUser()==null){
+			return null;
+		}
+		return getLoginUser().getUsername();
 	}
 	
 	public static Collection<? extends GrantedAuthority> getAuthorities() {
