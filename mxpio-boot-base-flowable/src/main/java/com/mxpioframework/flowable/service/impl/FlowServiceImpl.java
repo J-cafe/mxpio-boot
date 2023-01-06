@@ -12,7 +12,7 @@ import com.mxpioframework.flowable.service.FlowService;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
 
-@Service
+@Service("mxpio.flowable.flowService")
 public class FlowServiceImpl implements FlowService {
 
 	@Override

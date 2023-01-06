@@ -18,7 +18,7 @@ import com.mxpioframework.security.entity.ResourceType;
 import com.mxpioframework.security.entity.Url;
 import com.mxpioframework.security.service.UrlServiceCache;
 
-@Service
+@Service("mxpio.security.urlServiceCache")
 @Transactional(readOnly = true)
 public class UrlServiceCacheImpl implements UrlServiceCache {
 

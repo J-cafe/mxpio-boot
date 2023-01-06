@@ -15,7 +15,7 @@ import com.mxpioframework.security.entity.RoleGrantedAuthority;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.RoleService;
 
-@Service
+@Service("mxpio.security.roleService")
 public class RoleServiceImpl implements RoleService {
 
 	@Override

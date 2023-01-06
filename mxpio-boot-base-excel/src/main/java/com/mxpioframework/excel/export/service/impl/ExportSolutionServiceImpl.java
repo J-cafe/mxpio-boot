@@ -18,7 +18,7 @@ import com.mxpioframework.security.service.DataResourceService;
 import com.mxpioframework.security.service.impl.BaseServiceImpl;
 import com.mxpioframework.security.vo.DataVo;
 
-@Service
+@Service("mxpio.excel.exportSolutionService")
 public class ExportSolutionServiceImpl extends BaseServiceImpl<ExportSolution> implements ExportSolutionService {
 	
 	@Autowired

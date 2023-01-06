@@ -16,7 +16,7 @@ import org.springframework.util.Assert;
 import com.mxpioframework.security.access.provider.GrantedAuthorityProvider;
 import com.mxpioframework.security.service.GrantedAuthorityService;
 
-@Service
+@Service("mxpio.security.grantedAuthorityService")
 @Transactional(readOnly = true)
 public class GrantedAuthorityServiceImpl implements GrantedAuthorityService, InitializingBean {
 

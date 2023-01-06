@@ -23,7 +23,7 @@ import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-@Service
+@Service("mxpio.multitenant.scriptService")
 public class ScriptServiceImpl implements ScriptService {
 	
 	@Autowired

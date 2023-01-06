@@ -56,7 +56,7 @@ import com.mxpioframework.multitenant.service.DataSourceService;
 import com.mxpioframework.multitenant.service.EntityManagerFactoryService;
 import com.mxpioframework.multitenant.service.ScriptService;
 
-@Service
+@Service("mxpio.multitenant.entityManagerFactoryService")
 public class EntityManagerFactoryServiceImpl implements
 		EntityManagerFactoryService, BeanClassLoaderAware, BeanFactoryAware, BeanNameAware, ResourceLoaderAware, LoadTimeWeaverAware, InitializingBean {
 	

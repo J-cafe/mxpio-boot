@@ -15,7 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mxpioframework.system.entity.SerialNumber;
 import com.mxpioframework.system.service.SnRuleService;
 
-@Service
+@Service("mxpio.system.snRuleService")
 public class SnRuleServiceImpl extends BaseServiceImpl<SerialNumber> implements SnRuleService {
 
 	@Override

@@ -17,7 +17,7 @@ import com.mxpioframework.security.entity.RoleGrantedAuthority;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.RoleUrlService;
 
-@Service
+@Service("mxpio.security.roleUrlService")
 public class RoleUrlServiceImpl implements RoleUrlService {
 
 	@Override

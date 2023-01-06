@@ -10,7 +10,7 @@ import com.mxpioframework.system.websocket.vo.ResponseMessage;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Service
+@Service("mxpio.system.webSocketService")
 public class WebSocketServiceImpl implements WebSocketService {
 	
 	//使用SimpMessagingTemplate 向浏览器发送消息

@@ -15,7 +15,7 @@ import com.mxpioframework.security.entity.Permission;
 import com.mxpioframework.security.entity.ResourceType;
 import com.mxpioframework.security.service.PermissionService;
 
-@Service
+@Service("mxpio.security.permissionService")
 @Transactional(readOnly = true)
 public class PermissionServiceImpl implements PermissionService {
 

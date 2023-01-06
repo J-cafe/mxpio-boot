@@ -7,7 +7,7 @@ import com.mxpioframework.filestorage.entity.MxpioBlob;
 import com.mxpioframework.filestorage.service.MxpioBlobService;
 import com.mxpioframework.jpa.JpaUtil;
 
-@Service
+@Service("mxpio.filestorage.mxpioBlobService")
 @Transactional
 public class MxpioBlobServiceImpl implements MxpioBlobService {
 

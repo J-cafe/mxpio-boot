@@ -31,7 +31,7 @@ import com.mxpioframework.security.vo.DataVo;
 
 import io.swagger.v3.oas.annotations.Operation;
 
-@Service
+@Service("mxpio.security.dataResourceService")
 public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> implements DataResourceService {
 	
 	@Value("${mxpio.systemAnonymous}")

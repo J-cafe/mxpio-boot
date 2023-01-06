@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service
+@Service("mxpio.system.dictCacheService")
 public class DictThreadLocalCacheServiceImpl implements DictCacheService {
 	private ThreadLocal<Map<Object, Object>> threadLocalMap = new ThreadLocal<>();
 

@@ -30,7 +30,7 @@ import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("mxpio.multitenant.dataSourceService")
 public class DataSourceServiceImpl implements DataSourceService, InitializingBean, ApplicationContextAware {
 	
 	@Autowired

@@ -11,8 +11,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-
-@Component
+@Component("mxpio.caffenine.cacheProvider")
 public class CaffeineCacheProvider implements CacheProvider {
 
     private static final int init = 1;  //缓存容量初始大小

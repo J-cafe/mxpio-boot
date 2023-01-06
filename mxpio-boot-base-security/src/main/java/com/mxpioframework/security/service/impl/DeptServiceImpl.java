@@ -27,7 +27,7 @@ import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.entity.UserDept;
 import com.mxpioframework.security.service.DeptService;
 
-@Service
+@Service("mxpio.security.deptService")
 @Transactional(readOnly = true)
 public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptService {
 

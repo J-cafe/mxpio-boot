@@ -27,9 +27,17 @@ public class QuartzJob extends BaseEntity {
 	@Schema(description = "ID")
 	private String id;
 	
+	@Column(name = "JOB_TYPE_")
+	@Schema(description = "任务类型（Class或SpringBean）")
+	private String jobType;
+	
 	@Column(name = "JOB_CLASS_NAME_")
-	@Schema(description = "任务类名")
+	@Schema(description = "任务类名/BeanId")
 	private String jobClassName;
+	
+	@Column(name = "JOB_METHOD_NAME_")
+	@Schema(description = "方法名")
+	private String jobMethodName;
 	
 	@Column(name = "JOB_CRON_")
 	@Schema(description = "CRON表达式")

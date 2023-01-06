@@ -28,7 +28,7 @@ import com.mxpioframework.security.service.UrlService;
 import com.mxpioframework.security.service.UrlServiceCache;
 import com.mxpioframework.security.service.UserService;
 
-@Service
+@Service("mxpio.security.urlService")
 @Transactional(readOnly = true)
 public class UrlServiceImpl extends BaseServiceImpl<Url> implements UrlService {
 	@Autowired

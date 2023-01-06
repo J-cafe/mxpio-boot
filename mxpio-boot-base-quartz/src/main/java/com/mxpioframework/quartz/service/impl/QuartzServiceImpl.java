@@ -22,7 +22,7 @@ import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.quartz.entity.QuartzJob;
 import com.mxpioframework.quartz.service.QuartzService;
 
-@Service
+@Service("mxpio.quartz.quartzService")
 public class QuartzServiceImpl implements QuartzService {
 	
 	@Autowired

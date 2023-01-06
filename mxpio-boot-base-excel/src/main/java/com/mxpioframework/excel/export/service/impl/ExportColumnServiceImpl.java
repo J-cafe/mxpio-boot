@@ -10,7 +10,7 @@ import com.mxpioframework.excel.export.service.ExportColumnService;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.security.service.impl.BaseServiceImpl;
 
-@Service
+@Service("mxpio.excel.exportColumnService")
 public class ExportColumnServiceImpl extends BaseServiceImpl<ExportColumn> implements ExportColumnService {
 
 	@Override

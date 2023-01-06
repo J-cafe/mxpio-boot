@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Spring Security的{@link org.springframework.security.core.userdetails.UserDetailsService}接口的默认实现
  */
-@Service
+@Service("mxpio.security.userDetailsService")
 @Transactional(readOnly = true)
 public class UserDetailsServiceImpl implements UserDetailsService {
 	

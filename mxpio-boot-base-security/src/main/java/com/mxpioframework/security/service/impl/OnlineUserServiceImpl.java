@@ -11,7 +11,7 @@ import com.mxpioframework.security.service.OnlineUserService;
 import com.mxpioframework.security.util.TokenUtil;
 import com.mxpioframework.security.vo.TokenVo;
 
-@Service
+@Service("mxpio.security.onlineUserService")
 public class OnlineUserServiceImpl implements OnlineUserService {
 	
 	@Autowired

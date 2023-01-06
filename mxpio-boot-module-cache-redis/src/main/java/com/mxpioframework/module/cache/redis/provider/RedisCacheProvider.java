@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author /
  */
 @Slf4j
-@Component
+@Component("mxpio.redis.cacheProvider")
 public class RedisCacheProvider implements CacheProvider {
 	private RedisTemplate<Object, Object> redisTemplate;
 

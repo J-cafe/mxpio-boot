@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.system.service.CommonService;
 
-@Service
+@Service("mxpio.system.commonService")
 public class CommonServiceImpl implements CommonService {
 
 	@Override

@@ -41,7 +41,7 @@ import com.mxpioframework.system.service.PojoDictParseService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Component
+@Component("mxpio.system.pojoDictParseService")
 @Slf4j
 public class PojoDictParseServiceImpl implements PojoDictParseService {
 

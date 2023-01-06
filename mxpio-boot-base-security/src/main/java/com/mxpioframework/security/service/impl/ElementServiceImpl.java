@@ -14,7 +14,7 @@ import com.mxpioframework.security.entity.Permission;
 import com.mxpioframework.security.entity.ResourceType;
 import com.mxpioframework.security.service.ElementService;
 
-@Service
+@Service("mxpio.security.elementService")
 @Transactional(readOnly = true)
 public class ElementServiceImpl extends BaseServiceImpl<Element> implements ElementService {
 

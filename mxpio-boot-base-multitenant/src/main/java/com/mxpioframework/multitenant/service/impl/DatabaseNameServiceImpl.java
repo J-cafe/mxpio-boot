@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("mxpio.multitenant.databaseNameService")
 public class DatabaseNameServiceImpl implements DatabaseNameService {
 
 	@Value("${mxpio.multitenant.databaseNamePrefix:}")

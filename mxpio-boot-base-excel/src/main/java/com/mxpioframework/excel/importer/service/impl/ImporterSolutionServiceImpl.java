@@ -14,7 +14,7 @@ import com.mxpioframework.jpa.policy.CrudContext;
 import com.mxpioframework.jpa.policy.impl.SmartCrudPolicy;
 import com.mxpioframework.jpa.query.Criteria;
 
-@Service
+@Service("mxpio.excel.importerSolutionService")
 public class ImporterSolutionServiceImpl implements ImporterSolutionService {
 
 	@Override

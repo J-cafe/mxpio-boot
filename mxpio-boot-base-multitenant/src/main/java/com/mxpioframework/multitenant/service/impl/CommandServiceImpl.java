@@ -7,7 +7,7 @@ import com.mxpioframework.multitenant.service.CommandService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Service("mxpio.multitenant.commandService")
 @Transactional(readOnly = true)
 public class CommandServiceImpl implements CommandService {
 	

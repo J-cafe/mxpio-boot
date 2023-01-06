@@ -29,7 +29,7 @@ import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.OnlineUserService;
 import com.mxpioframework.security.service.UserService;
 
-@Service
+@Service("mxpio.security.userService")
 public class UserServiceImpl implements UserService, JpaUtilAble {
 	
 	@Autowired

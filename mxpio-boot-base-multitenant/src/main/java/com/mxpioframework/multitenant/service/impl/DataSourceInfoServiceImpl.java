@@ -12,7 +12,7 @@ import com.mxpioframework.multitenant.domain.DataSourceInfo;
 import com.mxpioframework.multitenant.domain.Organization;
 import com.mxpioframework.multitenant.service.DataSourceInfoService;
 
-@Service
+@Service("mxpio.multitenant.dataSourceInfoService")
 @Transactional(readOnly = true)
 public class DataSourceInfoServiceImpl implements DataSourceInfoService {
 
