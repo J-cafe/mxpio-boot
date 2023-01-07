@@ -1,6 +1,7 @@
 package com.mxpioframework.security.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.policy.CrudContext;
+import com.mxpioframework.jpa.policy.impl.CrudType;
 import com.mxpioframework.jpa.policy.impl.SmartCrudPolicyAdapter;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.Order;
@@ -25,11 +28,16 @@ import com.mxpioframework.security.entity.Dept;
 import com.mxpioframework.security.entity.RoleGrantedAuthority;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.entity.UserDept;
+import com.mxpioframework.security.processor.Context;
+import com.mxpioframework.security.processor.UserDeptProcessor;
 import com.mxpioframework.security.service.DeptService;
 
 @Service("mxpio.security.deptService")
 @Transactional(readOnly = true)
 public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptService {
+	
+	@Autowired(required = false)
+	private Collection<UserDeptProcessor> userDeptProcessors;
 
 	@Override
 	public List<Dept> getDeptTree(Criteria c) {
@@ -238,7 +246,19 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 	@Override
 	@Transactional(readOnly = false)
 	public void saveUserDepts(List<UserDept> userDepts) {
+		boolean process = CollectionUtils.isNotEmpty(userDeptProcessors);
+		Context<UserDept> context = new Context<>(userDepts, CrudType.SAVE_OR_UPDATE);
+		if(process){
+			for(UserDeptProcessor processor : userDeptProcessors){
+				processor.preProcess(context);
+			}
+		}
 		JpaUtil.save(userDepts);
+		if(process){
+			for(UserDeptProcessor processor : userDeptProcessors){
+				processor.postProcess(context);
+			}
+		}
 	}
 
 	@SecurityCacheEvict
@@ -246,7 +266,22 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 	@Transactional(readOnly = false)
 	public int deleteUserDepts(String deptId, String userIds) {
 		String[] userId = userIds.split(",");
-		return JpaUtil.lind(UserDept.class).equal("deptId", deptId).in("userId",(Object[]) userId).delete();
+		List<UserDept> userDepts = JpaUtil.linq(UserDept.class).equal("deptId", deptId).in("userId",(Object[]) userId).list();
+		boolean process = CollectionUtils.isNotEmpty(userDeptProcessors);
+		Context<UserDept> context = new Context<>(userDepts, CrudType.DELETE);
+		if(process){
+			for(UserDeptProcessor processor : userDeptProcessors){
+				processor.preProcess(context);
+			}
+		}
+		JpaUtil.delete(userDepts);
+		
+		if(process){
+			for(UserDeptProcessor processor : userDeptProcessors){
+				processor.postProcess(context);
+			}
+		}
+		return userDepts.size();
 	}
 
 	@SecurityCacheEvict
