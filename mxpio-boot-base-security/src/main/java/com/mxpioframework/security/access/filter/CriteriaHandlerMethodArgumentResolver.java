@@ -1,6 +1,6 @@
 package com.mxpioframework.security.access.filter;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -53,7 +53,7 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 			List<DataResource> dataResources = dataResourceMap
 					.get(classRequestMapping.value()[0] + requestMapping.value()[0]);*/
 			
-			Map<String, DataResource> dataResourceMap = Collections.emptyMap();
+			Map<String, DataResource> dataResourceMap = new HashMap<>();
 			for (DataResource obj : datas) {
 				String key = obj.getKey();
 				dataResourceMap.put(key, obj);

@@ -1,8 +1,8 @@
 package com.mxpioframework.excel.util;
 
 import java.lang.reflect.Parameter;
-import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -33,7 +33,7 @@ public class ParamUtil {
 			/*Map<String, List<DataResource>> dataResourceMap = JpaUtil.classify(datas, "path");
 			List<DataResource> dataResources = dataResourceMap.get(path);*/
 			
-			Map<String, DataResource> dataResourceMap = Collections.emptyMap();
+			Map<String, DataResource> dataResourceMap = new HashMap<>();
 			for (DataResource obj : datas) {
 				String key = obj.getKey();
 				dataResourceMap.put(key, obj);
