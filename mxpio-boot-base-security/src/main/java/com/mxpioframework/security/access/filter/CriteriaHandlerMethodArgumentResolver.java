@@ -20,6 +20,7 @@ import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.jpa.query.Criterion;
 import com.mxpioframework.jpa.query.Operator;
 import com.mxpioframework.security.access.datascope.provider.DataScapeProvider;
+import com.mxpioframework.security.access.provider.CriteriaFilterPreProcessor;
 import com.mxpioframework.security.entity.DataResource;
 import com.mxpioframework.security.service.DataResourceService;
 import com.mxpioframework.security.service.DeptService;
@@ -36,6 +37,9 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 
 	@Autowired(required = false)
 	private Map<String, DataScapeProvider> dataScapeProviderMap;
+	
+	@Autowired(required = false)
+	private Map<String, CriteriaFilterPreProcessor> criteriaFilterPreProcessors;
 
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer container, NativeWebRequest request,
@@ -65,35 +69,44 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 			if (/*CollectionUtils.isNotEmpty(dataResources)*/ dataResource != null) {
 				// DataResource dataResource = dataResources.get(0);
 				if (dataResource.getDataScope() != null) {
-					if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT.getCode()
-							.equals(dataResource.getDataScope())) {
-						Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
-						c.addCriterion("createDept", Operator.IN, deptCodes);
-					} else if (com.mxpioframework.security.Constants.DatascopeEnum.USER.getCode()
-							.equals(dataResource.getDataScope())) {
-						c.addCriterion("createBy", Operator.EQ, SecurityUtils.getLoginUsername());
-					} else if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT_AND_CHILD.getCode()
-							.equals(dataResource.getDataScope())) {
-						//TODO 过滤子部门权限
-						Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
-						if(deptCodes.size()>0){
-							c.addCriterion("createDept", Operator.LIKE_START, deptCodes.toArray()[0]);
-						}else{
-							c.addCriterion("createDept", Operator.EQ, "");
+					boolean filterAble = true;
+					if(criteriaFilterPreProcessors != null && dataResource.getPreProcess() != null){
+						CriteriaFilterPreProcessor processor = criteriaFilterPreProcessors.get(dataResource.getPreProcess());
+						if(processor != null){
+							filterAble = processor.process();
 						}
-						
-					} else if (com.mxpioframework.security.Constants.DatascopeEnum.SERVICE.getCode()
-							.equals(dataResource.getDataScope()) && dataScapeProviderMap != null) {
-						for (Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()) {
-							if (entry.getKey().equals(dataResource.getService())) {
-								List<Criterion> criterions = entry.getValue().provide();
-								for (Criterion criterion : criterions) {
-									c.addCriterion(criterion);
+					}
+					if(filterAble){
+						if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT.getCode()
+								.equals(dataResource.getDataScope())) {
+							Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
+							c.addCriterion("createDept", Operator.IN, deptCodes);
+						} else if (com.mxpioframework.security.Constants.DatascopeEnum.USER.getCode()
+								.equals(dataResource.getDataScope())) {
+							c.addCriterion("createBy", Operator.EQ, SecurityUtils.getLoginUsername());
+						} else if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT_AND_CHILD.getCode()
+								.equals(dataResource.getDataScope())) {
+							Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
+							if(deptCodes.size()>0){
+								c.addCriterion("createDept", Operator.LIKE_START, deptCodes.toArray()[0]);
+							}else{
+								c.addCriterion("createDept", Operator.EQ, "");
+							}
+							
+						} else if (com.mxpioframework.security.Constants.DatascopeEnum.SERVICE.getCode()
+								.equals(dataResource.getDataScope()) && dataScapeProviderMap != null) {
+							for (Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()) {
+								if (entry.getKey().equals(dataResource.getService())) {
+									List<Criterion> criterions = entry.getValue().provide();
+									for (Criterion criterion : criterions) {
+										c.addCriterion(criterion);
+									}
+									break;
 								}
-								break;
 							}
 						}
 					}
+					
 				}
 			}
 		}

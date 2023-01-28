@@ -1,5 +1,7 @@
 package com.mxpioframework.security.util;
 
+import java.util.Map;
+
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -21,6 +23,13 @@ public class ApplicationContextProvider implements ApplicationContextAware {
      */
     public static <T> T getBean(Class<T> clazz) {
         return applicationContextSpring.getBean(clazz);
+    }
+    
+    /**
+     * 通过class 获取Bean
+     */
+    public static <T> Map<String,T> getBeansOfType(Class<T> clazz) {
+        return applicationContextSpring.getBeansOfType(clazz);
     }
 
 	public static ApplicationContext getApplicationContextSpring() {

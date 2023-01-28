@@ -48,6 +48,7 @@ public class UrlRoleVoter implements AccessDecisionVoter<Object> {
 		}
 		
 		int result = ACCESS_ABSTAIN;
+		// 获取用户已有权限
 		Collection<? extends GrantedAuthority> authorities = extractAuthorities(authentication);
 
 		for (ConfigAttribute attribute : attributes) {

@@ -57,6 +57,10 @@ public class DataResource extends BaseEntity implements Resource {
 	@Schema(description = "权限范围")
 	private String dataScope;
 	
+	@Column(name = "PRE_PROCESS_")
+	@Schema(description = "前置处理器")
+	private String preProcess;
+	
 	@Column(name = "SERVICE_", length = 512)
 	@Schema(description = "服务")
 	private String service;
