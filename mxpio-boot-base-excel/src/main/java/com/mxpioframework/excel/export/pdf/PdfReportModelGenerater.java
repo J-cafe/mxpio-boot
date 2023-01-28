@@ -25,7 +25,7 @@ public class PdfReportModelGenerater extends AbstractReportModelGenerater {
 
 	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	public ReportDataModel generateReportGridModel(ExportSolution exportSolution, String intercepterBean) throws Exception {
+	public ReportDataModel generateReportGridModel(ExportSolution exportSolution, String intercepterBean, String key) throws Exception {
 		List<ExportColumn> columnInfos = exportSolution.getColumns();
 
 		Map<String, Integer> columDataAlignMap = new HashMap<String, Integer>();
@@ -34,7 +34,7 @@ public class PdfReportModelGenerater extends AbstractReportModelGenerater {
 		List<ColumnHeader> topColumnHeaders = new ArrayList<ColumnHeader>();
 		createGridColumnHeader(exportSolution, topColumnHeaders, null);
 
-		List<Map<String, Object>> dataMapList = getGridModelData(exportSolution, intercepterBean);
+		List<Map<String, Object>> dataMapList = getGridModelData(exportSolution, intercepterBean, key);
 		List<ReportData> reportDataList = createGridColumnData(dataMapList, topColumnHeaders, exportSolution, columDataAlignMap);
 		ReportDataModel dataModel = new ReportDataModel(topColumnHeaders, reportDataList);
 		

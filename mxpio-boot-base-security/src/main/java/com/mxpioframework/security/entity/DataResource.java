@@ -73,6 +73,10 @@ public class DataResource extends BaseEntity implements Resource {
 	@Schema(description = "顺序")
 	private Integer order;
 	
+	public String getKey(){
+		return parentId+"_"+path;
+	}
+	
 	@Transient
 	private List<ConfigAttribute> attributes = new ArrayList<ConfigAttribute>();
 

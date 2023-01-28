@@ -36,6 +36,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.itextpdf.text.Document;
@@ -112,7 +113,10 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 	
 	@GetMapping("download/{extension}/{solutionCode}")
 	@Operation(summary = "导出数据", description = "导出数据", method = "GET")
-	public void generateReportFile(@PathVariable("solutionCode") String solutionCode, @PathVariable("extension") String extension,HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public void generateReportFile(@PathVariable("solutionCode") String solutionCode,
+			@PathVariable("extension") String extension,
+			@RequestParam("_key") String key, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		ExportSolution exportSolution = exportSolutionService.getByCode(solutionCode);
 		exportSolution.setParams(request.getParameterMap());
 		List<DataVo> dataResourceVos = dataResourceService.findAllApi(true, exportSolution.getApi());
@@ -129,11 +133,11 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 		String location = ExportUtils.getFileStorePath() + id + "_" + fileName + "." + extension;
 		ReportTitle reportTitle = excelReportModelGenerater.generateReportTitleModel(exportSolution);
 		if (FileExtension.xls.equals(extension) || FileExtension.xlsx.equals(extension)) {
-			this.generateExcelFile(reportTitle, exportSolution, fileName, location, interceptorName);
+			this.generateExcelFile(reportTitle, exportSolution, fileName, location, interceptorName, key);
 		} else if (FileExtension.pdf.equals(extension)) {
-			this.generatePdfFile(reportTitle, exportSolution, location, interceptorName);
+			this.generatePdfFile(reportTitle, exportSolution, location, interceptorName, key);
 		} else {
-			this.generateOtherFile(extension, reportTitle, exportSolution, location, interceptorName);
+			this.generateOtherFile(extension, reportTitle, exportSolution, location, interceptorName, key);
 		}
 		Map<String, String> outParameter = new HashMap<String, String>();
 		outParameter.put("id", id);
@@ -141,18 +145,18 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 		doDownloadExcelReport(outParameter,request,response);
 	}
 
-	private void generatePdfFile(ReportTitle reportTitle, ExportSolution exportSolution, String fileName, String interceptorName) throws Exception {
+	private void generatePdfFile(ReportTitle reportTitle, ExportSolution exportSolution, String fileName, String interceptorName, String key) throws Exception {
 		FileOutputStream out = new FileOutputStream(fileName);
 		Document doc = pdfReportBuilder.createDocument(reportTitle, out);
 		try {
-			pdfReportBuilder.addGridToDocument(doc, reportTitle, pdfReportModelGenerater.generateReportGridModel(exportSolution, interceptorName));
+			pdfReportBuilder.addGridToDocument(doc, reportTitle, pdfReportModelGenerater.generateReportGridModel(exportSolution, interceptorName, key));
 		} finally {
 			doc.close();
 			out.close();
 		}
 	}
 
-	private void generateExcelFile(ReportTitle reportTitle, ExportSolution exportSolution, String fileName, String location, String interceptorName) throws Exception {
+	private void generateExcelFile(ReportTitle reportTitle, ExportSolution exportSolution, String fileName, String location, String interceptorName, String key) throws Exception {
 		Workbook workbook = null;
 		if (location.endsWith(FileExtension.xls)) {
 			workbook = excelReportBuilder.createWorkBook2003();
@@ -163,7 +167,7 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 		Sheet sheet = excelReportBuilder.createSheet(workbook, fileName);
 		int nextRow = 0;
 		
-		ReportGrid reportGridModel = excelReportModelGenerater.generateReportGridModel(exportSolution, interceptorName);
+		ReportGrid reportGridModel = excelReportModelGenerater.generateReportGridModel(exportSolution, interceptorName, key);
 		List<ReportGridHeader> bottomColumnHeaderModelList = new ArrayList<ReportGridHeader>();
 		excelReportBuilder.calculateBottomColumnHeader(reportGridModel.getGridHeaderModelList(), bottomColumnHeaderModelList);
 		int bottomColumnHeaderCount = bottomColumnHeaderModelList.size();
@@ -173,12 +177,12 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 		excelReportBuilder.writeFile(workbook, location);
 	}
 
-	private void generateOtherFile(String extension, ReportTitle reportTitle, ExportSolution exportSolution, String fileName, String interceptorName) throws Exception {
+	private void generateOtherFile(String extension, ReportTitle reportTitle, ExportSolution exportSolution, String fileName, String interceptorName, String key) throws Exception {
 		FileOutputStream out = new FileOutputStream(fileName);
 		try {
 			ReportBuilder builder = this.getReportBuilder(extension);
 			Assert.notNull(builder, "ReportBuilder is null.");
-			ReportGrid report = commonReportGenerater.generateReportGridModel(exportSolution, interceptorName);
+			ReportGrid report = commonReportGenerater.generateReportGridModel(exportSolution, interceptorName, key);
 			builder.execute(out, report);
 		} finally {
 			out.close();

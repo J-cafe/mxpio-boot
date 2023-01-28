@@ -1,12 +1,11 @@
 package com.mxpioframework.security.access.filter;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.mxpioframework.jpa.query.*;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -16,7 +15,10 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import com.mxpioframework.jpa.JpaUtil;
+import com.mxpioframework.jpa.query.Criteria;
+import com.mxpioframework.jpa.query.CriteriaUtils;
+import com.mxpioframework.jpa.query.Criterion;
+import com.mxpioframework.jpa.query.Operator;
 import com.mxpioframework.security.access.datascope.provider.DataScapeProvider;
 import com.mxpioframework.security.entity.DataResource;
 import com.mxpioframework.security.service.DataResourceService;
@@ -39,6 +41,7 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer container, NativeWebRequest request,
 			WebDataBinderFactory webDataBinderFactory) throws Exception {
 		String criteria = request.getParameter("criteria");
+		String urlKey = request.getParameter("_key");
 		Criteria c = CriteriaUtils.json2Criteria(criteria);
 
 		RequestMapping requestMapping = parameter.getMethodAnnotation(RequestMapping.class);
@@ -46,11 +49,21 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 
 		if (requestMapping != null) {
 			List<DataResource> datas = dataResourceService.findAll();
-			Map<String, List<DataResource>> dataResourceMap = JpaUtil.classify(datas, "path");
+			/*Map<String, List<DataResource>> dataResourceMap = JpaUtil.classify(datas, "path");
 			List<DataResource> dataResources = dataResourceMap
-					.get(classRequestMapping.value()[0] + requestMapping.value()[0]);
-			if (CollectionUtils.isNotEmpty(dataResources)) {
-				DataResource dataResource = dataResources.get(0);
+					.get(classRequestMapping.value()[0] + requestMapping.value()[0]);*/
+			
+			Map<String, DataResource> dataResourceMap = Collections.emptyMap();
+			for (DataResource obj : datas) {
+				String key = obj.getKey();
+				dataResourceMap.put(key, obj);
+			}
+			
+			DataResource dataResource = dataResourceMap.get(urlKey+"_"+classRequestMapping.value()[0] + requestMapping.value()[0]);
+			
+			
+			if (/*CollectionUtils.isNotEmpty(dataResources)*/ dataResource != null) {
+				// DataResource dataResource = dataResources.get(0);
 				if (dataResource.getDataScope() != null) {
 					if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT.getCode()
 							.equals(dataResource.getDataScope())) {

@@ -20,12 +20,12 @@ public class ExcelReportModelGenerater extends AbstractReportModelGenerater {
 	
 	public static final String BEAN_ID="mxpio.ExcelReportModelGenerater";
 
-	public ReportGrid generateReportGridModel(ExportSolution exportSolution, String intercepterBean) throws Exception {
+	public ReportGrid generateReportGridModel(ExportSolution exportSolution, String intercepterBean, String key) throws Exception {
 		ReportGrid gridModel = new ReportGrid();
 		List<ReportGridHeader> gridHeaders = new ArrayList<ReportGridHeader>();
 		this.createGridColumnHeader(exportSolution, gridHeaders, null);
 		gridModel.setGridHeaderModelList(gridHeaders);
-		gridModel.setGridDataModel(this.createGridColumnData(exportSolution, intercepterBean));
+		gridModel.setGridDataModel(this.createGridColumnData(exportSolution, intercepterBean, key));
 		return gridModel;
 	}
 
@@ -79,9 +79,9 @@ public class ExcelReportModelGenerater extends AbstractReportModelGenerater {
 		}
 	}
 
-	private ReportGridData createGridColumnData(ExportSolution exportSolution, String intercepterBean) throws Exception {
+	private ReportGridData createGridColumnData(ExportSolution exportSolution, String intercepterBean, String key) throws Exception {
 		// String treeColumn = (String) map.get("treeColumn");
-		List<Map<String, Object>> dataList = getGridModelData(exportSolution, intercepterBean);
+		List<Map<String, Object>> dataList = getGridModelData(exportSolution, intercepterBean, key);
 		ReportGridData gridData = new ReportGridData();
 		gridData.setDatas(dataList);
 		// gridData.setTreeColumn(treeColumn);

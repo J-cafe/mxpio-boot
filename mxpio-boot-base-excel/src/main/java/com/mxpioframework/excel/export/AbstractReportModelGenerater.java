@@ -41,7 +41,7 @@ public abstract class AbstractReportModelGenerater {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public List<Map<String, Object>> getGridModelData(ExportSolution exportSolution, String intercepterBean) throws Exception {
+	public List<Map<String, Object>> getGridModelData(ExportSolution exportSolution, String intercepterBean, String key) throws Exception {
 		List<Map<String, Object>> dataList = new ArrayList<>();
 		Map<String, String[]> params = exportSolution.getParams();
 		Class<?> beanType = exportSolution.getDataResource().getBeanClass();
@@ -51,7 +51,7 @@ public abstract class AbstractReportModelGenerater {
 		int i = 0;
 		for(Parameter methodParam : methodParams){
 			String[] values = params.get(methodParam.getName());
-			Object value = ParamUtil.getParamValue(methodParam, values, exportSolution.getApi());
+			Object value = ParamUtil.getParamValue(methodParam, values, exportSolution.getApi(), key);
 			paramsAry[i] = value;
 			i++;
 		}
