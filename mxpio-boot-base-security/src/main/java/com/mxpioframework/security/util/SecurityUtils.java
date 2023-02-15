@@ -16,6 +16,9 @@ public class SecurityUtils {
 		if (SecurityContextHolder.getContext().getAuthentication()==null){
 			return null;
 		}
+		if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())){//匿名用户直接返回null
+			return null;
+		}
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return user;
 	}
