@@ -1,50 +1,51 @@
 package com.mxpioframework.excel.importer.policy;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.mxpioframework.excel.importer.model.Cell;
 import com.mxpioframework.excel.importer.model.ImporterSolution;
 import com.mxpioframework.excel.importer.model.MappingRule;
 import com.mxpioframework.excel.importer.model.Record;
 import com.mxpioframework.jpa.JpaUtil;
-
 import net.sf.cglib.beans.BeanMap;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class Context {
 	private int startRow = 1;
 
 	private InputStream inpuStream;
-	
+
 	private String FileName;
-	
+
 	private long fileSize;
-	
+
 	// private String importerSolutionId;
-	
+
 	private String importerSolutionCode;
-	
+
     private Cell currentCell;
-    
+
     private Record currentRecord;
-    
+
     private List<Record> records = new ArrayList<>(30);
-    
+
     private ImporterSolution importerSolution;
-    
+
     private MappingRule currentMappingRule;
-    
+
     private Object currentEntity;
-    
+
     private List<MappingRule> mappingRules;
-    
+
     private Class<?> entityClass;
-    
+
     private Object value;
-    
+
     private Map<String, Object> params;
+
+	private List<Object> importedList = new ArrayList<>(30);
 
 	public Map<String, Object> getParams() {
 		return params;
@@ -85,7 +86,7 @@ public class Context {
 	public void setImporterSolutionCode(String importerSolutionCode) {
 		this.importerSolutionCode = importerSolutionCode;
 	}
-	
+
 	public List<Record> getRecords() {
 		return records;
 	}
@@ -93,7 +94,7 @@ public class Context {
 	public void setRecords(List<Record> records) {
 		this.records = records;
 	}
-	
+
 	public void addCell(Cell cell) {
 		if (currentRecord == null || !currentRecord.addCellIfNeed(cell)) {
 			currentRecord = new Record();
@@ -166,13 +167,13 @@ public class Context {
 	public void setValue(Object value) {
 		this.value = value;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <T> T getCurrentEntityId() {
 		String idProperty = JpaUtil.getIdName(entityClass);
 		BeanMap beanMap = BeanMap.create(currentEntity);
 		return (T) beanMap.get(idProperty);
-		
+
 	}
 
 	public int getStartRow() {
@@ -182,5 +183,14 @@ public class Context {
 	public void setStartRow(int startRow) {
 		this.startRow = startRow;
 	}
-	
+
+
+	public List<Object> getImportedList() {
+		return importedList;
+	}
+
+	public void setImportedList(List<Object> importedList) {
+		this.importedList = importedList;
+	}
+
 }
