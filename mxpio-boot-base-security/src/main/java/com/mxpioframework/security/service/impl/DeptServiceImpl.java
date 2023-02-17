@@ -70,6 +70,35 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 	}
 
 	@Override
+	public Dept getDeptWithBranchByCode(String deptCode) {
+		Map<String, List<Dept>> childrenMap = new HashMap<String, List<Dept>>();
+		List<Dept> depts = JpaUtil.linq(Dept.class).list();
+		Dept returnDept = null;
+		for (Dept dept : depts) {
+			if (childrenMap.containsKey(dept.getId())) {
+				dept.setChildren(childrenMap.get(dept.getId()));
+			} else {
+				dept.setChildren(new ArrayList<Dept>());
+				childrenMap.put(dept.getId(), dept.getChildren());
+			}
+
+			if (dept.getFaDeptId() != null) {
+				List<Dept> children;
+				if (childrenMap.containsKey(dept.getFaDeptId())) {
+					children = childrenMap.get(dept.getFaDeptId());
+				} else {
+					children = new ArrayList<Dept>();
+					childrenMap.put(dept.getFaDeptId(), children);
+				}
+				children.add(dept);
+			}
+			if (dept.getDeptCode().equals(deptCode)){
+				returnDept = dept;
+			}
+		}
+		return returnDept;
+	}
+	@Override
 	@SecurityCacheEvict
 	@Transactional(readOnly = false)
 	public void saveDepts(List<Dept> depts) {
