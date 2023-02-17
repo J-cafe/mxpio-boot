@@ -253,6 +253,7 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 		name = URLEncoder.encode(name, "UTF-8");
 		name = name.replaceAll("\\+", "%20");
 		response.setHeader("Content-Disposition", "attachment;filename=\"" + name + "\";filename*=utf-8''" + name + "");
+		response.setHeader("Content-Length", "" + file.length());
 		FileInputStream input = null;
 		OutputStream out = null;
 		try {
