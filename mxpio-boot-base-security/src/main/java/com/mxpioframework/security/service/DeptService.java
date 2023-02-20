@@ -21,7 +21,9 @@ public interface DeptService extends BaseService<Dept> {
 	 * @return 部门树
 	 */
 	List<Dept> getDeptTree(Criteria c);
-	
+
+	Dept getDeptWithBranchByCode(String deptCode);
+
 	/**
 	 * 新增部门信息
 	 * @param depts
