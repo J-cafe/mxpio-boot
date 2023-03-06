@@ -54,6 +54,7 @@
     	<module>mxpio-boot-base-filestorage</module>
     	<module>mxpio-boot-base-multitenant</module>
 		<module>mxpio-boot-module-cache-caffeine</module>
+		<module>mxpio-boot-module-datav</module>
 	</modules>
 	<dependencies>
 		<dependency>
@@ -195,6 +196,11 @@
 			<dependency>
 				<groupId>com.mxpio</groupId>
 				<artifactId>mxpio-boot-base-multitenant</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-module-datav</artifactId>
 				<version>${mxpio.version}</version>
 			</dependency>
 			<dependency>
