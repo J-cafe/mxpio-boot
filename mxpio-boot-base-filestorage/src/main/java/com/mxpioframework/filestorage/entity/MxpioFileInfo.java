@@ -47,5 +47,9 @@ public class MxpioFileInfo extends BaseEntity {
 	@Transient
 	@Schema(description = "绝对路径")
 	private String absolutePath;
+	
+	@Transient
+	@Schema(description = "文件大小")
+	private long length;
 
 }
