@@ -72,7 +72,7 @@ public class RoleController {
 	}
 	
 	@DeleteMapping("remove/{id}")
-	@Operation(summary = "删除角色", description = "根据角色名rolename删除角色信息", method = "DELETE")
+	@Operation(summary = "删除角色", description = "根据角色id删除角色信息", method = "DELETE")
 	public Result<Role> delete(@PathVariable(name = "id", required = true) String id) throws Exception {
 		String ids[] = id.split(",");
 		for(String key : ids){

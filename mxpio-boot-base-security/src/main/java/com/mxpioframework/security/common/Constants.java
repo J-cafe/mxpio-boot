@@ -37,6 +37,8 @@ public final class Constants {
 	 */
 	public final static String DATA_RESOURCE_CACHE_KEY = "DataResource";
 	
+	public final static String DATA_FILTER_ROLE_CACHE_KEY = "RoleDataFilter";
+	
 	/**
 
 	 *部门用户缓存关键字

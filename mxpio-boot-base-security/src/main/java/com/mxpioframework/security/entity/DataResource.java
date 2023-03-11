@@ -45,9 +45,13 @@ public class DataResource extends BaseEntity implements Resource {
 	@Schema(description = "路径")
 	private String path;
 	
-	@Column(name = "HAS_CRITERIA_")
+	@Column(name = "HAS_CRITERIA_", nullable = false)
 	@Schema(description = "数据资源类别")
 	private boolean hasCriteria;
+	
+	@Column(name = "HAS_FILTER_", nullable = false)
+	@Schema(description = "是否有过滤")
+	private boolean hasFilter = false;
 	
 	@Column(name = "ELEMENT_ID_", length = 255)
 	@Schema(description = "组件标识")
@@ -83,5 +87,11 @@ public class DataResource extends BaseEntity implements Resource {
 	
 	@Transient
 	private List<ConfigAttribute> attributes = new ArrayList<ConfigAttribute>();
+	
+	@Transient
+	private List<DataFilter> dataFilters;
+	
+	@Transient
+	private List<DataColumnFilter> dataColumnFilters;
 
 }

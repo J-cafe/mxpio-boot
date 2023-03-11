@@ -143,6 +143,13 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	@Transactional(readOnly = false)
 	public void afterPropertiesSet(ApplicationContext applicationContext) {
 		
+		List<User> users = JpaUtil.linq(User.class).aliasToBean().select("username", "nickname").list();
+		for(User user : users){
+			System.out.println(user.toString());
+		}
+		/*Linq linq = JpaUtil.linq(User.class);
+		linq.aliasToBean().select("username", linq.criteriaBuilder().sum(linq.root().get("quantity")).alias("quantity")).groupBy("username").list();*/
+		
 		/*
 		 * SimpleCriterion sc = new SimpleCriterion("resourceType", Operator.EQ,
 		 * ResourceType.ELEMENT); SimpleCriterion sc1 = new SimpleCriterion("roleId",
