@@ -43,7 +43,7 @@ public class DataFilterController {
 	}
 	
 	@GetMapping("res/list/{resId}")
-	@Operation(summary = "获取数据过滤", description = "根据ID获取数据过滤", method = "GET")
+	@Operation(summary = "获取数据过滤", description = "根据resId获取数据过滤", method = "GET")
 	public Result<List<DataFilter>> getByResourceId(@PathVariable(name = "resId", required = true) String resId) throws Exception {
 		List<DataFilter> dataFilters = dataFilterService.getByResourceId(resId);
 		return Result.OK(dataFilters);

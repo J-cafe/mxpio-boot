@@ -43,7 +43,7 @@ public class RoleDataFilterController {
 	}
 	
 	@GetMapping("within/{resId}/{roleId}")
-	@Operation(summary = "获取角色与数据过滤关系", description = "根据ID获取角色与数据过滤关系", method = "GET")
+	@Operation(summary = "获取角色与数据过滤关系", description = "根据resId和roleId获取角色与数据过滤关系", method = "GET")
 	public Result<List<RoleDataFilter>> getByRoleAndResId(@PathVariable(name = "resId", required = true) String resId,
 			@PathVariable(name = "roleId", required = true) String roleId) throws Exception {
 		List<RoleDataFilter> roleDataFilters = roleDataFilterService.getByRoleAndResId(resId, roleId);
