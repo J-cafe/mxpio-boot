@@ -11,6 +11,7 @@ import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.security.cache.SecurityCacheEvict;
 import com.mxpioframework.security.entity.Role;
+import com.mxpioframework.security.entity.RoleDataFilter;
 import com.mxpioframework.security.entity.RoleGrantedAuthority;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.RoleService;
@@ -56,6 +57,8 @@ public class RoleServiceImpl implements RoleService {
 	public void delete(String key) {
 		Role role = getById(key);
 		JpaUtil.remove(role);
+		JpaUtil.lind(RoleDataFilter.class).equal("roleId", role.getId()).delete();
+		JpaUtil.lind(RoleGrantedAuthority.class).equal("roleId", role.getId()).delete();
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.security.cache.SecurityCacheEvict;
 import com.mxpioframework.security.entity.DataFilter;
 import com.mxpioframework.security.entity.DataResource;
+import com.mxpioframework.security.entity.RoleDataFilter;
 import com.mxpioframework.security.service.DataFilterService;
 
 @Service("mxpio.security.dataFilterService")
@@ -57,6 +58,7 @@ public class DataFilterServiceImpl implements DataFilterService  {
 				if(count == 0){
 					JpaUtil.linu(DataResource.class).set("hasFilter", false).equal("id", dataFilter.getDataResourceId()).update();
 				}
+				JpaUtil.lind(RoleDataFilter.class).equal("dataFilterId", dataFilter.getId()).delete();
 				super.afterInsert(context);
 			}
 		});
