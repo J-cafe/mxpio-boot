@@ -1,24 +1,34 @@
 package com.mxpioframework.excel.util;
 
 import java.lang.reflect.Parameter;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import java.util.Set;
 
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.jpa.query.Criterion;
+import com.mxpioframework.jpa.query.Junction;
+import com.mxpioframework.jpa.query.JunctionType;
 import com.mxpioframework.jpa.query.Operator;
 import com.mxpioframework.security.access.datascope.provider.DataScapeProvider;
 import com.mxpioframework.security.access.provider.CriteriaFilterPreProcessor;
 import com.mxpioframework.security.decision.manager.SecurityDecisionManager;
+import com.mxpioframework.security.entity.DataFilter;
 import com.mxpioframework.security.entity.DataResource;
+import com.mxpioframework.security.entity.RoleGrantedAuthority;
 import com.mxpioframework.security.service.DataResourceService;
 import com.mxpioframework.security.service.DeptService;
+import com.mxpioframework.security.service.GrantedAuthorityService;
+import com.mxpioframework.security.service.RoleDataFilterService;
 import com.mxpioframework.security.util.ApplicationContextProvider;
 import com.mxpioframework.security.util.SecurityUtils;
 
@@ -31,8 +41,6 @@ public class ParamUtil {
 			DataResourceService dataResourceService = ApplicationContextProvider.getBean(DataResourceService.class);
 			SecurityDecisionManager securityDecisionManager = ApplicationContextProvider.getBean(SecurityDecisionManager.class);
 			List<DataResource> datas = dataResourceService.findAll();
-			/*Map<String, List<DataResource>> dataResourceMap = JpaUtil.classify(datas, "path");
-			List<DataResource> dataResources = dataResourceMap.get(path);*/
 			
 			Map<String, DataResource> dataResourceMap = new HashMap<>();
 			for (DataResource obj : datas) {
@@ -42,17 +50,80 @@ public class ParamUtil {
 			
 			DataResource dataResource = dataResourceMap.get(urlKey+"_"+path);
 			
-			/*if(CollectionUtils.isEmpty(dataResources)){
-				dataResources = new ArrayList<>();
-				decide = true;
-			}*/
 			if(dataResource != null){
 				decide = true;
 			}
 			
-			/*for(DataResource dataResource : dataResources){*/
 			if (securityDecisionManager.decide(dataResource)) {
-				if(dataResource.getDataScope() != null){
+				if (dataResource != null && dataResource.isHasFilter()) {
+					Map<String, CriteriaFilterPreProcessor> criteriaFilterPreProcessors = ApplicationContextProvider.getBeansOfType(CriteriaFilterPreProcessor.class);
+					Map<String, DataScapeProvider> dataScapeProviderMap = ApplicationContextProvider.getApplicationContextSpring().getBeansOfType(DataScapeProvider.class);
+					RoleDataFilterService roleDataFilterService = ApplicationContextProvider.getApplicationContextSpring().getBean(RoleDataFilterService.class);
+					GrantedAuthorityService grantedAuthorityService = ApplicationContextProvider.getApplicationContextSpring().getBean(GrantedAuthorityService.class);
+					Map<String, List<DataFilter>> roleDataFilterMap = roleDataFilterService.findAll();
+					Collection<? extends GrantedAuthority> roleGrantedAuthorities = grantedAuthorityService.getGrantedAuthorities(SecurityUtils.getLoginUser());
+					List<DataFilter> dataFilters = new ArrayList<>();
+					for(GrantedAuthority grantedAuthority : roleGrantedAuthorities){
+						if(grantedAuthority instanceof RoleGrantedAuthority){
+							List<DataFilter> filters = roleDataFilterMap.get(((RoleGrantedAuthority) grantedAuthority).getRoleId());
+							if(filters != null){
+								dataFilters.addAll(filters);
+							}
+						}
+					}
+					if(dataFilters.size() > 0){
+						Junction juntion = new Junction(JunctionType.OR);
+						for(DataFilter dataFilter : dataFilters){
+							if(!dataResource.getId().equals(dataFilter.getDataResourceId())){
+								continue;
+							}
+							boolean filterAble = true;
+							if(criteriaFilterPreProcessors != null && dataFilter.getPreProcess() != null){
+								CriteriaFilterPreProcessor processor = criteriaFilterPreProcessors.get(dataFilter.getPreProcess());
+								if(processor != null){
+									filterAble = processor.process();
+								}
+							}
+							
+							if(filterAble){
+								if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT.getCode()
+										.equals(dataFilter.getDataScope())) {
+									DeptService deptService = ApplicationContextProvider.getBean(DeptService.class);
+									Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
+									juntion.addCriterion("createDept", Operator.IN, deptCodes);
+								} else if (com.mxpioframework.security.Constants.DatascopeEnum.USER.getCode()
+										.equals(dataFilter.getDataScope())) {
+									juntion.addCriterion("createBy", Operator.EQ, SecurityUtils.getLoginUsername());
+								} else if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT_AND_CHILD.getCode()
+										.equals(dataFilter.getDataScope())) {
+									DeptService deptService = ApplicationContextProvider.getBean(DeptService.class);
+									Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
+									if(deptCodes.size()>0){
+										juntion.addCriterion("createDept", Operator.LIKE_START, deptCodes.toArray()[0]);
+									}else{
+										juntion.addCriterion("createDept", Operator.EQ, "");
+									}
+									
+								} else if (com.mxpioframework.security.Constants.DatascopeEnum.SERVICE.getCode()
+										.equals(dataFilter.getDataScope()) && dataScapeProviderMap != null) {
+									for (Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()) {
+										if (entry.getKey().equals(dataFilter.getService())) {
+											List<Criterion> criterions = entry.getValue().provide();
+											Junction subJunction = new Junction(JunctionType.AND);
+											for (Criterion criterion : criterions) {
+												subJunction.addCriterion(criterion);
+											}
+											juntion.add(subJunction);
+											break;
+										}
+									}
+								}
+							}
+						}
+						c.addCriterion(juntion);
+					}
+				}
+				/*if(dataResource.getDataScope() != null){
 					Map<String, CriteriaFilterPreProcessor> criteriaFilterPreProcessors = ApplicationContextProvider.getBeansOfType(CriteriaFilterPreProcessor.class);
 					Map<String, DataScapeProvider> dataScapeProviderMap = ApplicationContextProvider.getApplicationContextSpring().getBeansOfType(DataScapeProvider.class);
 					boolean filterAble = true;
@@ -90,10 +161,9 @@ public class ParamUtil {
 							}
 						}
 					}
-				}
+				}*/
 				decide = true;
 			}
-			/*}*/
 			if(!decide){
 				c.addCriterion("createTime", Operator.EQ, new Date());
 			}
