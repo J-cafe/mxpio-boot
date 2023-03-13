@@ -92,6 +92,9 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 				if(dataFilters.size() > 0){
 					Junction juntion = new Junction(JunctionType.OR);
 					for(DataFilter dataFilter : dataFilters){
+						if(!dataResource.getId().equals(dataFilter.getDataResourceId())){
+							continue;
+						}
 						boolean filterAble = true;
 						if(criteriaFilterPreProcessors != null && dataFilter.getPreProcess() != null){
 							CriteriaFilterPreProcessor processor = criteriaFilterPreProcessors.get(dataFilter.getPreProcess());
@@ -135,47 +138,6 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 					}
 					c.addCriterion(juntion);
 				}
-				
-				/*if (dataResource.getDataScope() != null) {
-					boolean filterAble = true;
-					if(criteriaFilterPreProcessors != null && dataResource.getPreProcess() != null){
-						CriteriaFilterPreProcessor processor = criteriaFilterPreProcessors.get(dataResource.getPreProcess());
-						if(processor != null){
-							filterAble = processor.process();
-						}
-					}
-					if(filterAble){
-						if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT.getCode()
-								.equals(dataResource.getDataScope())) {
-							Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
-							c.addCriterion("createDept", Operator.IN, deptCodes);
-						} else if (com.mxpioframework.security.Constants.DatascopeEnum.USER.getCode()
-								.equals(dataResource.getDataScope())) {
-							c.addCriterion("createBy", Operator.EQ, SecurityUtils.getLoginUsername());
-						} else if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT_AND_CHILD.getCode()
-								.equals(dataResource.getDataScope())) {
-							Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
-							if(deptCodes.size()>0){
-								c.addCriterion("createDept", Operator.LIKE_START, deptCodes.toArray()[0]);
-							}else{
-								c.addCriterion("createDept", Operator.EQ, "");
-							}
-							
-						} else if (com.mxpioframework.security.Constants.DatascopeEnum.SERVICE.getCode()
-								.equals(dataResource.getDataScope()) && dataScapeProviderMap != null) {
-							for (Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()) {
-								if (entry.getKey().equals(dataResource.getService())) {
-									List<Criterion> criterions = entry.getValue().provide();
-									for (Criterion criterion : criterions) {
-										c.addCriterion(criterion);
-									}
-									break;
-								}
-							}
-						}
-					}
-					
-				}*/
 			}
 		}
 		return c;
