@@ -21,4 +21,6 @@ public interface RoleDataFilterService {
 
 	public RoleDataFilter getById(String id);
 
+	public List<RoleDataFilter> getByRoleAndResId(String resId, String roleId);
+
 }

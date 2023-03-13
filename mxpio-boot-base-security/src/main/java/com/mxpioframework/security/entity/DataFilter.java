@@ -28,9 +28,9 @@ public class DataFilter extends BaseEntity {
 	@Schema(description = "ID")
 	private String id;
 	
-	@Column(name = "DATA_SOURCE_ID_")
+	@Column(name = "DATA_RESOURCE_ID_")
 	@Schema(description = "数据资源ID")
-	private String dataSourceId;
+	private String dataResourceId;
 	
 	@Column(name = "DATA_SCOPE_", length = 512)
 	@Schema(description = "权限范围")

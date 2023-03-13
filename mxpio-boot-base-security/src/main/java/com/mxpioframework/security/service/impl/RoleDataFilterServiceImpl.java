@@ -76,4 +76,10 @@ public class RoleDataFilterServiceImpl implements RoleDataFilterService {
 		return JpaUtil.linq(RoleDataFilter.class).idEqual(id).findOne();
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public List<RoleDataFilter> getByRoleAndResId(String resId, String roleId) {
+		return JpaUtil.linq(RoleDataFilter.class).equal("roleId", roleId).exists(DataFilter.class).equalProperty("id", "dataFilterId").equal("dataResourceId", resId).end().list();
+	}
+
 }

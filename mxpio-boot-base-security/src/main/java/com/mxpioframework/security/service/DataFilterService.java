@@ -17,4 +17,6 @@ public interface DataFilterService {
 
 	public List<DataFilter> list(Criteria criteria);
 
+	public List<DataFilter> getByResourceId(String resId);
+
 }

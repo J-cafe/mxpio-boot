@@ -25,7 +25,7 @@ public class DataFilterServiceImpl implements DataFilterService  {
 			@Override
 			public void afterInsert(CrudContext context) {
 				DataFilter dataFilter = context.getEntity();
-				JpaUtil.linu(DataResource.class).set("hasFilter", true).equal("id", dataFilter.getDataSourceId()).update();
+				JpaUtil.linu(DataResource.class).set("hasFilter", true).equal("id", dataFilter.getDataResourceId()).update();
 				super.afterInsert(context);
 			}
 		});
@@ -39,7 +39,7 @@ public class DataFilterServiceImpl implements DataFilterService  {
 			@Override
 			public void afterInsert(CrudContext context) {
 				DataFilter dataFilter = context.getEntity();
-				JpaUtil.linu(DataResource.class).set("hasFilter", true).equal("id", dataFilter.getDataSourceId()).update();
+				JpaUtil.linu(DataResource.class).set("hasFilter", true).equal("id", dataFilter.getDataResourceId()).update();
 				super.afterInsert(context);
 			}
 		});
@@ -53,9 +53,9 @@ public class DataFilterServiceImpl implements DataFilterService  {
 			@Override
 			public void afterDelete(CrudContext context) {
 				DataFilter dataFilter = context.getEntity();
-				Long count = JpaUtil.linq(DataFilter.class).equal("dataSourceId", dataFilter.getDataSourceId()).count();
+				Long count = JpaUtil.linq(DataFilter.class).equal("dataResourceId", dataFilter.getDataResourceId()).count();
 				if(count == 0){
-					JpaUtil.linu(DataResource.class).set("hasFilter", false).equal("id", dataFilter.getDataSourceId()).update();
+					JpaUtil.linu(DataResource.class).set("hasFilter", false).equal("id", dataFilter.getDataResourceId()).update();
 				}
 				super.afterInsert(context);
 			}
@@ -72,6 +72,12 @@ public class DataFilterServiceImpl implements DataFilterService  {
 	@Transactional(readOnly = false)
 	public List<DataFilter> list(Criteria criteria) {
 		return JpaUtil.linq(DataFilter.class).where(criteria).list();
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public List<DataFilter> getByResourceId(String resId) {
+		return JpaUtil.linq(DataFilter.class).equal("dataResourceId", resId).list();
 	}
 
 }

@@ -42,11 +42,26 @@ public class RoleDataFilterController {
 		return Result.OK(roleDataFilter);
 	}
 	
+	@GetMapping("within/{resId}/{roleId}")
+	@Operation(summary = "获取角色与数据过滤关系", description = "根据ID获取角色与数据过滤关系", method = "GET")
+	public Result<List<RoleDataFilter>> getByRoleAndResId(@PathVariable(name = "resId", required = true) String resId,
+			@PathVariable(name = "roleId", required = true) String roleId) throws Exception {
+		List<RoleDataFilter> roleDataFilters = roleDataFilterService.getByRoleAndResId(resId, roleId);
+		return Result.OK(roleDataFilters);
+	}
+	
 	@PostMapping("add")
 	@Operation(summary = "添加角色与数据过滤关系", description = "添加角色与数据过滤关系信息", method = "POST")
 	public Result<RoleDataFilter> add(@RequestBody RoleDataFilter roleDataFilter) throws Exception {
 		roleDataFilterService.save(roleDataFilter);
 		return Result.OK("添加成功",roleDataFilter);
+	}
+	
+	@PostMapping("add/batch")
+	@Operation(summary = "保存权限", description = "新增权限信息", method = "POST")
+	public Result<Object> saveBatch(@RequestBody List<RoleDataFilter> roleDataFilters) {
+		roleDataFilterService.save(roleDataFilters);
+		return Result.OK(roleDataFilters);
 	}
 	
 	@PutMapping("edit")
