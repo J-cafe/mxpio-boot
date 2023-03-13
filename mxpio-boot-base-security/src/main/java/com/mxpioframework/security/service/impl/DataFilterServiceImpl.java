@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mxpioframework.jpa.JpaUtil;
+import com.mxpioframework.jpa.policy.CrudContext;
+import com.mxpioframework.jpa.policy.impl.SmartCrudPolicyAdapter;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.security.cache.SecurityCacheEvict;
 import com.mxpioframework.security.entity.DataFilter;
-import com.mxpioframework.security.entity.Role;
+import com.mxpioframework.security.entity.DataResource;
 import com.mxpioframework.security.service.DataFilterService;
 
 @Service("mxpio.security.dataFilterService")
@@ -17,29 +19,53 @@ public class DataFilterServiceImpl implements DataFilterService  {
 	
 	@SecurityCacheEvict
 	@Override
-	@Transactional
+	@Transactional(readOnly = false)
 	public void save(DataFilter dataFilter) {
-		JpaUtil.save(dataFilter);
+		JpaUtil.save(dataFilter, new SmartCrudPolicyAdapter(){
+			@Override
+			public void afterInsert(CrudContext context) {
+				DataFilter dataFilter = context.getEntity();
+				JpaUtil.linu(DataResource.class).set("hasFilter", true).equal("id", dataFilter.getDataSourceId()).update();
+				super.afterInsert(context);
+			}
+		});
 	}
 	
 	@SecurityCacheEvict
 	@Override
 	@Transactional
 	public void save(List<DataFilter> dataFilters) {
-		JpaUtil.save(dataFilters);
+		JpaUtil.save(dataFilters, new SmartCrudPolicyAdapter(){
+			@Override
+			public void afterInsert(CrudContext context) {
+				DataFilter dataFilter = context.getEntity();
+				JpaUtil.linu(DataResource.class).set("hasFilter", true).equal("id", dataFilter.getDataSourceId()).update();
+				super.afterInsert(context);
+			}
+		});
 	}
 	
 	@SecurityCacheEvict
 	@Override
 	@Transactional(readOnly = false)
 	public void delete(DataFilter dataFilter) {
-		JpaUtil.delete(dataFilter);
+		JpaUtil.delete(dataFilter, new SmartCrudPolicyAdapter(){
+			@Override
+			public void afterDelete(CrudContext context) {
+				DataFilter dataFilter = context.getEntity();
+				Long count = JpaUtil.linq(DataFilter.class).equal("dataSourceId", dataFilter.getDataSourceId()).count();
+				if(count == 0){
+					JpaUtil.linu(DataResource.class).set("hasFilter", false).equal("id", dataFilter.getDataSourceId()).update();
+				}
+				super.afterInsert(context);
+			}
+		});
 	}
 
 	@Override
 	@Transactional(readOnly = false)
 	public DataFilter getById(String id) {
-		return JpaUtil.linq(Role.class).idEqual(id).findOne();
+		return JpaUtil.linq(DataFilter.class).idEqual(id).findOne();
 	}
 
 	@Override

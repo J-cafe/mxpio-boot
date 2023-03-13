@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "RoleDataFilterController", description = "角色与数据过滤关系管理")
 @RestController("mxpio.security.roleDataFilterController")
-@RequestMapping("/roleDataFilter/")
+@RequestMapping("/datafilter/role")
 public class RoleDataFilterController {
 	
 	@Autowired

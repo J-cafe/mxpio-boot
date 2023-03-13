@@ -25,7 +25,7 @@ public class RoleDataFilterServiceImpl implements RoleDataFilterService {
 	@Cacheable(cacheNames = Constants.DATA_FILTER_ROLE_CACHE_KEY, keyGenerator = Constants.KEY_GENERATOR_BEAN_NAME)
 	public Map<String, List<DataFilter>> findAll() {
 		List<RoleDataFilter> roleDataFilters = JpaUtil.linq(RoleDataFilter.class).list();
-		List<DataFilter> dataFilters = JpaUtil.linq(RoleDataFilter.class).list();
+		List<DataFilter> dataFilters = JpaUtil.linq(DataFilter.class).list();
 		Map<String, DataFilter> dataFilterMap = JpaUtil.index(dataFilters);
 		Map<String, List<DataFilter>> result = new HashMap<>();
 		roleDataFilters.forEach(roleDataFilter -> {

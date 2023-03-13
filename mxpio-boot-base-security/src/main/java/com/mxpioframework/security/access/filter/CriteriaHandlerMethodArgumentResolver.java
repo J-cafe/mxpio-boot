@@ -21,6 +21,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.CriteriaUtils;
 import com.mxpioframework.jpa.query.Criterion;
+import com.mxpioframework.jpa.query.Junction;
+import com.mxpioframework.jpa.query.JunctionType;
 import com.mxpioframework.jpa.query.Operator;
 import com.mxpioframework.security.access.datascope.provider.DataScapeProvider;
 import com.mxpioframework.security.access.provider.CriteriaFilterPreProcessor;
@@ -81,55 +83,59 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 				List<DataFilter> dataFilters = new ArrayList<>();
 				for(GrantedAuthority grantedAuthority : roleGrantedAuthorities){
 					if(grantedAuthority instanceof RoleGrantedAuthority){
-						dataFilters.addAll(roleDataFilterMap.get(((RoleGrantedAuthority) grantedAuthority).getRoleId()));
-					}
-				}
-				
-				Criteria filterCriteria = Criteria.create().or();
-				for(DataFilter dataFilter : dataFilters){
-					boolean filterAble = true;
-					if(criteriaFilterPreProcessors != null && dataFilter.getPreProcess() != null){
-						CriteriaFilterPreProcessor processor = criteriaFilterPreProcessors.get(dataFilter.getPreProcess());
-						if(processor != null){
-							filterAble = processor.process();
+						List<DataFilter> filters = roleDataFilterMap.get(((RoleGrantedAuthority) grantedAuthority).getRoleId());
+						if(filters != null){
+							dataFilters.addAll(filters);
 						}
 					}
-					
-					if(filterAble){
-						Criteria subCriteria = Criteria.create();
-						if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT.getCode()
-								.equals(dataFilter.getDataScope())) {
-							Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
-							subCriteria.addCriterion("createDept", Operator.IN, deptCodes);
-						} else if (com.mxpioframework.security.Constants.DatascopeEnum.USER.getCode()
-								.equals(dataFilter.getDataScope())) {
-							subCriteria.addCriterion("createBy", Operator.EQ, SecurityUtils.getLoginUsername());
-						} else if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT_AND_CHILD.getCode()
-								.equals(dataFilter.getDataScope())) {
-							Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
-							if(deptCodes.size()>0){
-								subCriteria.addCriterion("createDept", Operator.LIKE_START, deptCodes.toArray()[0]);
-							}else{
-								subCriteria.addCriterion("createDept", Operator.EQ, "");
+				}
+				if(dataFilters.size() > 0){
+					Junction juntion = new Junction(JunctionType.OR);
+					for(DataFilter dataFilter : dataFilters){
+						boolean filterAble = true;
+						if(criteriaFilterPreProcessors != null && dataFilter.getPreProcess() != null){
+							CriteriaFilterPreProcessor processor = criteriaFilterPreProcessors.get(dataFilter.getPreProcess());
+							if(processor != null){
+								filterAble = processor.process();
 							}
-							
-						} else if (com.mxpioframework.security.Constants.DatascopeEnum.SERVICE.getCode()
-								.equals(dataFilter.getDataScope()) && dataScapeProviderMap != null) {
-							for (Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()) {
-								if (entry.getKey().equals(dataFilter.getService())) {
-									List<Criterion> criterions = entry.getValue().provide();
-									for (Criterion criterion : criterions) {
-										subCriteria.addCriterion(criterion);
+						}
+						
+						if(filterAble){
+							if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT.getCode()
+									.equals(dataFilter.getDataScope())) {
+								Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
+								juntion.addCriterion("createDept", Operator.IN, deptCodes);
+							} else if (com.mxpioframework.security.Constants.DatascopeEnum.USER.getCode()
+									.equals(dataFilter.getDataScope())) {
+								juntion.addCriterion("createBy", Operator.EQ, SecurityUtils.getLoginUsername());
+							} else if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT_AND_CHILD.getCode()
+									.equals(dataFilter.getDataScope())) {
+								Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
+								if(deptCodes.size()>0){
+									juntion.addCriterion("createDept", Operator.LIKE_START, deptCodes.toArray()[0]);
+								}else{
+									juntion.addCriterion("createDept", Operator.EQ, "");
+								}
+								
+							} else if (com.mxpioframework.security.Constants.DatascopeEnum.SERVICE.getCode()
+									.equals(dataFilter.getDataScope()) && dataScapeProviderMap != null) {
+								for (Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()) {
+									if (entry.getKey().equals(dataFilter.getService())) {
+										List<Criterion> criterions = entry.getValue().provide();
+										Junction subJunction = new Junction(JunctionType.AND);
+										for (Criterion criterion : criterions) {
+											subJunction.addCriterion(criterion);
+										}
+										juntion.add(subJunction);
+										break;
 									}
-									break;
 								}
 							}
 						}
-						filterCriteria.addCriterion(subCriteria);
 					}
+					c.addCriterion(juntion);
 				}
-				filterCriteria.end();
-				c.addCriterion(filterCriteria);
+				
 				/*if (dataResource.getDataScope() != null) {
 					boolean filterAble = true;
 					if(criteriaFilterPreProcessors != null && dataResource.getPreProcess() != null){

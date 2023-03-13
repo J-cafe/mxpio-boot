@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "DataFilterController", description = "数据过滤管理")
 @RestController("mxpio.security.dataFilterController")
-@RequestMapping("/dataFilter/")
+@RequestMapping("/datafilter/")
 public class DataFilterController {
 	
 	@Autowired
