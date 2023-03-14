@@ -26,4 +26,5 @@ com.mxpioframework.autoconfigure.filestorage.FilestorageAutoConfiguration,\
 com.mxpioframework.autoconfigure.excel.ExcelAutoConfiguration,\
 com.mxpioframework.autoconfigure.system.SystemAutoConfiguration,\
 com.mxpioframework.autoconfigure.multitenant.MultitenantAutoConfiguration,\
+com.mxpioframework.autoconfigure.dbconsole.DbconsoleAutoConfiguration,\
 com.mxpioframework.autoconfigure.module.datav.DatavAutoConfiguration
