@@ -64,6 +64,7 @@ public class DbService extends DbCommonServiceImpl {
 			dbInfo.setUsername(metaData.getUserName());
 			dbInfo.setProductName(metaData.getDatabaseProductName());
 			dbInfo.setProductVersion(metaData.getDatabaseProductVersion());
+			dbInfo.setDriverClass(metaData.getDriverName());
 		} finally {
 			JdbcUtils.closeConnection(conn);
 		}
