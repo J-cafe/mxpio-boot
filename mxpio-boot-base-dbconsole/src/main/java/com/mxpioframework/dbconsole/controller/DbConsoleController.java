@@ -110,8 +110,8 @@ public class DbConsoleController {
 	 */
 	@PostMapping("db/test")
 	@Operation(summary = "测试连接", description = "测试连接(url\\class\\username\\password必填)", method = "POST")
-	public String testConnection(@RequestBody DbInfo dbInfo) {
-		return dbService.checkDbConnection(dbInfo);
+	public Result<Object> testConnection(@RequestBody DbInfo dbInfo) {
+		return Result.OK(dbService.checkDbConnection(dbInfo));
 	}
 	
 	@PostMapping("column/add/{dbInfoId}/{tableName}")
