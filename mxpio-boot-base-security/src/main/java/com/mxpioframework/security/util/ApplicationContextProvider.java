@@ -5,12 +5,13 @@ import java.util.Map;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 
 @Component
 public class ApplicationContextProvider implements ApplicationContextAware {
-
+	
 	private static ApplicationContext applicationContextSpring;
 	 
     @Override
@@ -40,4 +41,8 @@ public class ApplicationContextProvider implements ApplicationContextAware {
 		ApplicationContextProvider.applicationContextSpring = applicationContextSpring;
 	}
 
+	public static Environment getEnvironment() {
+		return applicationContextSpring.getEnvironment();
+	}
+	
 }

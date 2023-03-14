@@ -1,5 +1,7 @@
 package com.mxpioframework.security.anthentication;
 
+import java.util.List;
+
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -11,6 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.mxpioframework.security.access.policy.PasswordCheckPolicy;
+import com.mxpioframework.security.util.ApplicationContextProvider;
+
 /**
  * 用户角色校验具体实现
  */
@@ -19,10 +24,13 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 	private UserDetailsService userDetailsService;
 
 	private PasswordEncoder passwordEncoder;
+	
+	private List<PasswordCheckPolicy> passwordCheckPolicies;
 
-	public JwtAuthenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+	public JwtAuthenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, List<PasswordCheckPolicy> passwordCheckPolicies) {
 		this.userDetailsService = userDetailsService;
 		this.passwordEncoder = passwordEncoder;
+		this.passwordCheckPolicies = passwordCheckPolicies;
 	}
 
 	/**
@@ -85,13 +93,25 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 	 */
 	private void additionalAuthenticationChecks(UserDetails userDetails, JwtLoginToken authentication)
 			throws AuthenticationException {
-		if (authentication.getCredentials() == null) {
+		String passwordCheckPolicyName = ApplicationContextProvider.getEnvironment().getProperty("mxpio.passwordCheckPolicy");
+		boolean result = false;
+		for(PasswordCheckPolicy passwordCheckPolicy : passwordCheckPolicies){
+			if(passwordCheckPolicy.support(passwordCheckPolicyName)){
+				result = passwordCheckPolicy.apply(userDetails, authentication, passwordEncoder);
+				break;
+			}
+		}
+		if(!result){
+			throw new BadCredentialsException("Bad credentials");
+		}
+		
+		/*if (authentication.getCredentials() == null) {
 			throw new BadCredentialsException("Bad credentials");
 		}
 		String presentedPassword = authentication.getCredentials().toString();
 		if (!passwordEncoder.matches(presentedPassword, userDetails.getPassword())) {
 			throw new BadCredentialsException("Bad credentials");
-		}
+		}*/
 	}
 
 }
