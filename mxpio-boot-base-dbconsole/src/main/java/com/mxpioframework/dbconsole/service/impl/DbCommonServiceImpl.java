@@ -64,7 +64,7 @@ public class DbCommonServiceImpl implements IDbCommonService {
 			String url = metaData.getURL();
 			String schema = null;
 			if (url.toLowerCase().contains("oracle")) {
-				String value = null;//Configure.getString("bdf2.default.schema");
+				String value = null;//Configure.getString("mxpio.default.schema");
 				if (StringUtils.hasText(value)) {
 					schema = value;
 				} else {

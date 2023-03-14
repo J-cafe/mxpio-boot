@@ -113,6 +113,34 @@ public class DbConsoleController {
 	public String testConnection(@RequestBody DbInfo dbInfo) {
 		return dbService.checkDbConnection(dbInfo);
 	}
+	
+	@PostMapping("column/add/{dbInfoId}/{tableName}")
+	@Operation(summary = "新增表字段", description = "新增表字段", method = "POST")
+	public Result<ColumnInfo> addColumn(@PathVariable("dbInfoId") String dbInfoId,
+			@PathVariable("tableName") String tableName,
+			@RequestBody ColumnInfo columnInfo)throws Exception {
+		columnInfo.setTableName(tableName);
+		dbService.insertColumn(dbInfoId, columnInfo);
+		return Result.OK();
+	}
+	
+	@PutMapping("column/edit/{dbInfoId}/{tableName}")
+	@Operation(summary = "编辑表字段", description = "编辑表字段", method = "PUT")
+	public Result<ColumnInfo> editColumn(@PathVariable("dbInfoId") String dbInfoId,
+			@PathVariable("tableName") String tableName,
+			@RequestBody ColumnInfo columnInfo)throws Exception {
+		columnInfo.setTableName(tableName);
+		return Result.OK();
+	}
+	
+	@DeleteMapping("column/remove/{dbInfoId}/{tableName}/{columnName}")
+	@Operation(summary = "删除表字段", description = "删除表字段", method = "DELETE")
+	public Result<DbInfo> removeColumn(@PathVariable("dbInfoId") String dbInfoId,
+			@PathVariable("tableName") String tableName,
+			@PathVariable("columnName") String columnName) throws Exception {
+		dbService.deleteColumn(dbInfoId, tableName, columnName);
+		return Result.OK();
+	}
 
 	/*@SuppressWarnings("unchecked")
 	@DataResolver
