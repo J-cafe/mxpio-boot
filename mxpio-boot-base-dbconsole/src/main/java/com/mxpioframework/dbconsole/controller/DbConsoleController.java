@@ -291,7 +291,7 @@ public class DbConsoleController {
 	}
 
 	@PostMapping("table/create/{dbInfoId}/{tableName}")
-	@Operation(summary = "删除表", description = "根据数据库ID和表名删除表", method = "POST")
+	@Operation(summary = "创建表", description = "根据数据库ID和表名创建表", method = "POST")
 	public void createTable(String dbInfoId, String tableName) throws Exception {
 		dbService.createTable(dbInfoId, tableName);
 	}

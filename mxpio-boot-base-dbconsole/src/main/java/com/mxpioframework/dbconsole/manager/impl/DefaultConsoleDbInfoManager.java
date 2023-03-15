@@ -19,6 +19,7 @@ import com.mxpioframework.security.util.SecurityUtils;
 public class DefaultConsoleDbInfoManager implements IConsoleDbInfoManager, InitializingBean, DisposableBean {
 	private Vector<DbInfo> listDbInfo = new Vector<DbInfo>();
 
+	@Override
 	public List<DbInfo> findDbInfosByUser(String username) throws Exception {
 		List<DbInfo> userDbInfo = new ArrayList<DbInfo>();
 		if (StringUtils.hasText(username)) {
@@ -35,6 +36,7 @@ public class DefaultConsoleDbInfoManager implements IConsoleDbInfoManager, Initi
 		return userDbInfo;
 	}
 
+	@Override
 	public DbInfo findDbInfosById(String id) throws Exception {
 		if (StringUtils.hasText(id)) {
 			for (DbInfo dbInfo : listDbInfo) {
@@ -46,6 +48,7 @@ public class DefaultConsoleDbInfoManager implements IConsoleDbInfoManager, Initi
 		return null;
 	}
 
+	@Override
 	public void insertDbInfo(DbInfo dbInfo) throws Exception {
 		String username = SecurityUtils.getLoginUsername();
 		if (!StringUtils.hasText(dbInfo.getId())) {
@@ -56,6 +59,7 @@ public class DefaultConsoleDbInfoManager implements IConsoleDbInfoManager, Initi
 		listDbInfo.add(dbInfo);
 	}
 
+	@Override
 	public void updateDbInfo(DbInfo dbInfo) throws Exception {
 		this.deleteDbInfoById(dbInfo.getId());
 		String username = SecurityUtils.getLoginUsername();
@@ -63,6 +67,7 @@ public class DefaultConsoleDbInfoManager implements IConsoleDbInfoManager, Initi
 		listDbInfo.add(dbInfo);
 	}
 
+	@Override
 	public void deleteDbInfoById(String id) throws Exception {
 		if (StringUtils.hasText(id)) {
 			DbInfo info = null;
@@ -78,11 +83,14 @@ public class DefaultConsoleDbInfoManager implements IConsoleDbInfoManager, Initi
 		}
 	}
 
+	@Override
 	public void afterPropertiesSet() throws Exception {
 		listDbInfo = DbInfoConfig.readConfig();
 	}
 
+	@Override
 	public void destroy() {
+		System.out.println("--------------------------------------------");
 		DbInfoConfig.writeConfig(listDbInfo);
 	}
 }
