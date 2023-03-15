@@ -8,6 +8,7 @@ import com.mxpioframework.dbconsole.jdbc.dialect.IDialect;
 import com.mxpioframework.dbconsole.model.ColumnInfo;
 import com.mxpioframework.dbconsole.model.DataGridWrapper;
 import com.mxpioframework.dbconsole.model.DbInfo;
+import com.mxpioframework.dbconsole.model.ProcInfo;
 import com.mxpioframework.dbconsole.model.TableInfo;
 
 public interface IDbCommonService {
@@ -22,6 +23,14 @@ public interface IDbCommonService {
 	 * @throws Exception
 	 */
 	public List<TableInfo> findTableInfos(String dbInfoId) throws Exception;
+	
+	/**
+	 * 查询所有的存储过程信息
+	 * @param dbInfoId
+	 * @return 返回ProcInfo的集合
+	 * @throws Exception
+	 */
+	public List<ProcInfo> findProcInfos(String dbInfoId) throws Exception;
 
 	/**
 	 * 查询表的所有列信息

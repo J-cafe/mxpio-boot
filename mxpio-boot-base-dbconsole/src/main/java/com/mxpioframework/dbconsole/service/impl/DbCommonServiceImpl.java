@@ -32,6 +32,7 @@ import com.mxpioframework.dbconsole.manager.IConsoleDbInfoManager;
 import com.mxpioframework.dbconsole.model.ColumnInfo;
 import com.mxpioframework.dbconsole.model.DataGridWrapper;
 import com.mxpioframework.dbconsole.model.DbInfo;
+import com.mxpioframework.dbconsole.model.ProcInfo;
 import com.mxpioframework.dbconsole.model.TableInfo;
 import com.mxpioframework.dbconsole.service.IDbCommonService;
 
@@ -80,6 +81,40 @@ public class DbCommonServiceImpl implements IDbCommonService {
 				tablesList.add(tableInfo);
 			}
 			return tablesList;
+		} finally {
+			JdbcUtils.closeResultSet(rs);
+			JdbcUtils.closeConnection(conn);
+		}
+	}
+	
+	@Override
+	public List<ProcInfo> findProcInfos(String dbInfoId) throws Exception {
+		List<ProcInfo> procsList = new ArrayList<ProcInfo>();
+		DataSource ds = this.getDataSourceByDbInfoId(dbInfoId);
+		Connection conn = null;
+		ResultSet rs = null;
+		try {
+			conn = DataSourceUtils.getConnection(ds);
+			DatabaseMetaData metaData = conn.getMetaData();
+			String url = metaData.getURL();
+			String schema = null;
+			if (url.toLowerCase().contains("oracle")) {
+				String value = null;//Configure.getString("mxpio.default.schema");
+				if (StringUtils.hasText(value)) {
+					schema = value;
+				} else {
+					schema = metaData.getUserName();
+				}
+			}
+			rs = metaData.getProcedures(null, schema, "%");
+			ProcInfo procInfo = null;
+			while (rs.next()) {
+				procInfo = new ProcInfo();
+				procInfo.setProcName(rs.getString("PROCEDURE_NAME"));
+				procInfo.setDbInfoId(dbInfoId);
+				procsList.add(procInfo);
+			}
+			return procsList;
 		} finally {
 			JdbcUtils.closeResultSet(rs);
 			JdbcUtils.closeConnection(conn);

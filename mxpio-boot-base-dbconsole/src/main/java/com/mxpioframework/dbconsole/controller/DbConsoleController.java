@@ -28,6 +28,7 @@ import com.mxpioframework.dbconsole.manager.IConsoleDbInfoManager;
 import com.mxpioframework.dbconsole.model.ColumnInfo;
 import com.mxpioframework.dbconsole.model.DataGridWrapper;
 import com.mxpioframework.dbconsole.model.DbInfo;
+import com.mxpioframework.dbconsole.model.ProcInfo;
 import com.mxpioframework.dbconsole.model.TableInfo;
 import com.mxpioframework.dbconsole.service.DbService;
 import com.mxpioframework.dbconsole.service.ISqlWrapperService;
@@ -61,6 +62,12 @@ public class DbConsoleController {
 	@Operation(summary = "查询数据库表信息", description = "根据数据库ID查询表信息", method = "GET")
 	public Result<Collection<TableInfo>> loadTableInfos(@PathVariable("dbInfoId") String dbInfoId) throws Exception {
 		return Result.OK(dbService.findTableInfos(dbInfoId));
+	}
+	
+	@GetMapping("proc/list/{dbInfoId}")
+	@Operation(summary = "查询数据库存储过程信息", description = "根据数据库ID查询存储过程信息", method = "GET")
+	public Result<Collection<ProcInfo>> loadProcInfos(@PathVariable("dbInfoId") String dbInfoId) throws Exception {
+		return Result.OK(dbService.findProcInfos(dbInfoId));
 	}
 
 	@GetMapping("column/list/{dbInfoId}/{tableName}")
