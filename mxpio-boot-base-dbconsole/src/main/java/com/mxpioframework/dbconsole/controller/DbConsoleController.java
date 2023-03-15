@@ -54,26 +54,46 @@ public class DbConsoleController {
 
 	@GetMapping("db/list")
 	@Operation(summary = "查询数据库连接信息", description = "根据登录用户查询数据库连接信息", method = "GET")
-	public Result<Collection<DbInfo>> loadDbInfos() throws Exception {
-		return Result.OK(dbService.findDbInfos());
+	public Result<Collection<DbInfo>> loadDbInfos() {
+		try {
+			return Result.OK(dbService.findDbInfos());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error("查询失败：" + e.getMessage());
+		}
 	}
 
 	@GetMapping("table/list/{dbInfoId}")
 	@Operation(summary = "查询数据库表信息", description = "根据数据库ID查询表信息", method = "GET")
-	public Result<Collection<TableInfo>> loadTableInfos(@PathVariable("dbInfoId") String dbInfoId) throws Exception {
-		return Result.OK(dbService.findTableInfos(dbInfoId));
+	public Result<Collection<TableInfo>> loadTableInfos(@PathVariable("dbInfoId") String dbInfoId) {
+		try {
+			return Result.OK(dbService.findTableInfos(dbInfoId));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error("查询失败：" + e.getMessage());
+		}
 	}
 	
 	@GetMapping("proc/list/{dbInfoId}")
 	@Operation(summary = "查询数据库存储过程信息", description = "根据数据库ID查询存储过程信息", method = "GET")
-	public Result<Collection<ProcInfo>> loadProcInfos(@PathVariable("dbInfoId") String dbInfoId) throws Exception {
-		return Result.OK(dbService.findProcInfos(dbInfoId));
+	public Result<Collection<ProcInfo>> loadProcInfos(@PathVariable("dbInfoId") String dbInfoId) {
+		try {
+			return Result.OK(dbService.findProcInfos(dbInfoId));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error("查询失败：" + e.getMessage());
+		}
 	}
 
 	@GetMapping("column/list/{dbInfoId}/{tableName}")
 	@Operation(summary = "查询字段信息", description = "根据数据库ID和表名查询字段信息", method = "GET")
-	public Result<Collection<ColumnInfo>> loadColumnInfos(@PathVariable("dbInfoId") String dbInfoId, @PathVariable("tableName") String tableName) throws Exception {
-		return Result.OK(dbService.findColumnInfos(dbInfoId, tableName));
+	public Result<Collection<ColumnInfo>> loadColumnInfos(@PathVariable("dbInfoId") String dbInfoId, @PathVariable("tableName") String tableName) {
+		try {
+			return Result.OK(dbService.findColumnInfos(dbInfoId, tableName));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error("查询失败：" + e.getMessage());
+		}
 	}
 
 	@GetMapping("data/page/{dbInfoId}/{tableName}")
@@ -82,31 +102,52 @@ public class DbConsoleController {
 			@PathVariable("dbInfoId") String dbInfoId,
 			@PathVariable("tableName") String tableName,
 			@RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
-			@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo) throws Exception {
+			@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo) {
 		Pageable pageAble = PageRequest.of(pageNo - 1, pageSize);
-		DataGridWrapper tableData = dbService.queryTableData(dbInfoId, tableName, sql, pageAble.getPageSize(),
-				pageAble.getPageNumber());
+		DataGridWrapper tableData;
+		try {
+			tableData = dbService.queryTableData(dbInfoId, tableName, sql, pageAble.getPageSize(),
+					pageAble.getPageNumber());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error("查询失败：" + e.getMessage());
+		}
 		return Result.OK(new PageImpl<Map<String, Object>>(tableData.getTableData(), pageAble, tableData.getTotalCount()));
 	}
 
 	@PostMapping("db/add")
 	@Operation(summary = "新增数据库连接信息", description = "新增数据库连接信息", method = "POST")
-	public Result<DbInfo> add(@RequestBody DbInfo dbInfo)throws Exception {
-		consoleDbInfoManager.insertDbInfo(dbInfo);
+	public Result<DbInfo> add(@RequestBody DbInfo dbInfo) {
+		try {
+			consoleDbInfoManager.insertDbInfo(dbInfo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error("新增失败：" + e.getMessage());
+		}
 		return Result.OK(dbInfo);
 	}
 	
 	@PutMapping("db/edit")
 	@Operation(summary = "编辑数据库连接信息", description = "编辑数据库连接信息", method = "PUT")
-	public Result<DbInfo> edit(@RequestBody DbInfo dbInfo)throws Exception {
-		consoleDbInfoManager.updateDbInfo(dbInfo);
+	public Result<DbInfo> edit(@RequestBody DbInfo dbInfo) {
+		try {
+			consoleDbInfoManager.updateDbInfo(dbInfo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error("编辑失败：" + e.getMessage());
+		}
 		return Result.OK(dbInfo);
 	}
 	
 	@DeleteMapping("db/remove/{id}")
 	@Operation(summary = "删除数据库连接信息", description = "删除数据库连接信息", method = "DELETE")
-	public Result<DbInfo> remove(@PathVariable(name = "id", required = true) String id) throws Exception {
-		consoleDbInfoManager.deleteDbInfoById(id);
+	public Result<DbInfo> remove(@PathVariable(name = "id", required = true) String id) {
+		try {
+			consoleDbInfoManager.deleteDbInfoById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error("删除失败：" + e.getMessage());
+		}
 		return Result.OK();
 	}
 	
@@ -131,9 +172,14 @@ public class DbConsoleController {
 	@Operation(summary = "新增表字段", description = "新增表字段", method = "POST")
 	public Result<ColumnInfo> addColumn(@PathVariable("dbInfoId") String dbInfoId,
 			@PathVariable("tableName") String tableName,
-			@RequestBody ColumnInfo columnInfo)throws Exception {
+			@RequestBody ColumnInfo columnInfo) {
 		columnInfo.setTableName(tableName);
-		dbService.insertColumn(dbInfoId, columnInfo);
+		try {
+			dbService.insertColumn(dbInfoId, columnInfo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error("新增失败：" + e.getMessage());
+		}
 		return Result.OK();
 	}
 	
@@ -141,7 +187,7 @@ public class DbConsoleController {
 	@Operation(summary = "编辑表字段", description = "编辑表字段", method = "PUT")
 	public Result<ColumnInfo> editColumn(@PathVariable("dbInfoId") String dbInfoId,
 			@PathVariable("tableName") String tableName,
-			@RequestBody ColumnInfo columnInfo)throws Exception {
+			@RequestBody ColumnInfo columnInfo) {
 		columnInfo.setTableName(tableName);
 		return Result.OK();
 	}
@@ -150,8 +196,13 @@ public class DbConsoleController {
 	@Operation(summary = "删除表字段", description = "删除表字段", method = "DELETE")
 	public Result<DbInfo> removeColumn(@PathVariable("dbInfoId") String dbInfoId,
 			@PathVariable("tableName") String tableName,
-			@PathVariable("columnName") String columnName) throws Exception {
-		dbService.deleteColumn(dbInfoId, tableName, columnName);
+			@PathVariable("columnName") String columnName) {
+		try {
+			dbService.deleteColumn(dbInfoId, tableName, columnName);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error("删除失败：" + e.getMessage());
+		}
 		return Result.OK();
 	}
 
@@ -234,7 +285,7 @@ public class DbConsoleController {
 
 	@GetMapping("db/types")
 	@Operation(summary = "查询全部数据库类型", description = "查询全部数据库类型", method = "GET")
-	public Result<Collection<DbInfo>> loadDbTypes() throws Exception {
+	public Result<Collection<DbInfo>> loadDbTypes() {
 		List<String> list = dbService.loadDbTypes();
 		Collection<DbInfo> dbInfoList = new ArrayList<DbInfo>();
 		DbInfo dbInfo = null;
@@ -248,7 +299,7 @@ public class DbConsoleController {
 
 	@PostMapping("data/update/{dbInfoId}")
 	@Operation(summary = "执行更新SQL", description = "执行更新SQL", method = "POST")
-	public Result<Object> executeUpdateSql(@PathVariable("dbInfoId") String dbInfoId, @RequestBody String sql) throws Exception {
+	public Result<Object> executeUpdateSql(@PathVariable("dbInfoId") String dbInfoId, @RequestBody String sql) {
 		String[] sqls = sql.split(";");
 		int[] ints;
 		try {
@@ -263,11 +314,17 @@ public class DbConsoleController {
 
 	@GetMapping("column/type/{dbInfoId}")
 	@Operation(summary = "查询全部字段类型", description = "根据数据库ID查询全部字段类型", method = "GET")
-	public Result<List<ColumnInfo>> findColumnType(@PathVariable("dbInfoId") String dbInfoId) throws Exception {
+	public Result<List<ColumnInfo>> findColumnType(@PathVariable("dbInfoId") String dbInfoId) {
 		if (StringUtils.hasText(dbInfoId)) {
 			List<ColumnInfo> list = new ArrayList<ColumnInfo>();
 			ColumnInfo info = null;
-			List<String> types = dbService.findDefaultColumnType(dbInfoId);
+			List<String> types = null;
+			try {
+				types = dbService.findDefaultColumnType(dbInfoId);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return Result.error("查询失败：" + e.getMessage());
+			}
 			for (String s : types) {
 				info = new ColumnInfo();
 				info.setColumnType(s);
