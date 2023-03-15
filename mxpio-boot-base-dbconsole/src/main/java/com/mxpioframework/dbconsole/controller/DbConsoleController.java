@@ -337,7 +337,7 @@ public class DbConsoleController {
 
 	@DeleteMapping("table/remove/{dbInfoId}/{tableName}")
 	@Operation(summary = "删除表", description = "根据数据库ID和表名删除表", method = "DELETE")
-	public Result<Object> deleteTable(String dbInfoId, String tableName) {
+	public Result<Object> deleteTable(@PathVariable("dbInfoId") String dbInfoId,@PathVariable("tableName") String tableName) {
 		try {
 			dbService.deleteTable(dbInfoId, tableName);
 			return Result.OK();
@@ -349,7 +349,7 @@ public class DbConsoleController {
 
 	@PutMapping("table/alert/{dbInfoId}/{tableName}/{newTableName}")
 	@Operation(summary = "修改表名", description = "根据数据库ID和表名修改表名", method = "PUT")
-	public Result<Object> alertTableName(String dbInfoId, String tableName, String newTableName) {
+	public Result<Object> alertTableName(@PathVariable("dbInfoId") String dbInfoId, @PathVariable("tableName") String tableName, @PathVariable("newTableName") String newTableName) {
 		try {
 			dbService.alertTableName(dbInfoId, tableName, newTableName);
 			return Result.OK();
@@ -361,7 +361,7 @@ public class DbConsoleController {
 
 	@PostMapping("table/create/{dbInfoId}/{tableName}")
 	@Operation(summary = "创建表", description = "根据数据库ID和表名创建表", method = "POST")
-	public Result<Object> createTable(String dbInfoId, String tableName) {
+	public Result<Object> createTable(@PathVariable("dbInfoId") String dbInfoId, @PathVariable("tableName") String tableName) {
 		try {
 			dbService.createTable(dbInfoId, tableName);
 			return Result.OK();
@@ -373,7 +373,7 @@ public class DbConsoleController {
 
 	@DeleteMapping("data/remove/{dbInfoId}/{tableName}")
 	@Operation(summary = "删除表数据", description = "根据数据库ID和表名删除表数据", method = "DELETE")
-	public Result<Object> deleteTableData(String dbInfoId, String tableName) {
+	public Result<Object> deleteTableData(@PathVariable("dbInfoId") String dbInfoId, @PathVariable("tableName") String tableName) {
 		try {
 			dbService.deleteTableData(dbInfoId, tableName);
 			return Result.OK();
