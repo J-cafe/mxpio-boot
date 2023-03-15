@@ -96,11 +96,11 @@ public class DbConsoleController {
 		}
 	}
 
-	@GetMapping("data/page/{dbInfoId}/{tableName}")
+	@GetMapping("data/page/{dbInfoId}")
 	@Operation(summary = "查询数据", description = "查询数据", method = "GET")
-	public Result<Page<Map<String, Object>>> loadQueryTableData(@RequestParam(value = "sql") String sql, 
-			@PathVariable("dbInfoId") String dbInfoId,
-			@PathVariable("tableName") String tableName,
+	public Result<Page<Map<String, Object>>> loadQueryTableData(@PathVariable("dbInfoId") String dbInfoId,
+			@RequestParam(value = "sql", required = false) String sql, 
+			@RequestParam(value = "tableName", required = false) String tableName,
 			@RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo) {
 		Pageable pageAble = PageRequest.of(pageNo - 1, pageSize);
