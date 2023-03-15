@@ -239,8 +239,8 @@ public class DbConsoleController {
 		return Result.OK(dbInfoList);
 	}
 
-	@PostMapping("data/query/{dbInfoId}")
-	@Operation(summary = "新增数据库连接信息", description = "新增数据库连接信息", method = "POST")
+	@PostMapping("data/update/{dbInfoId}")
+	@Operation(summary = "执行更新SQL", description = "执行更新SQL", method = "POST")
 	public Result<Object> executeUpdateSql(@PathVariable("dbInfoId") String dbInfoId, @RequestBody String sql) throws Exception {
 		String[] sqls = sql.split(";");
 		int[] ints;

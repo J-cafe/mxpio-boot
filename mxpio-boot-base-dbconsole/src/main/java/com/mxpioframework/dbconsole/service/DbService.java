@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service(DbService.BEAN_ID)
 public class DbService extends DbCommonServiceImpl {
 
-	public static final String BEAN_ID = "panda.dbconsole.dbService";
+	public static final String BEAN_ID = "mxpio.dbconsole.dbService";
 
 	
 	@Autowired
