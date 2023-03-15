@@ -263,7 +263,7 @@ public class DbConsoleController {
 
 	@GetMapping("column/type/{dbInfoId}")
 	@Operation(summary = "查询全部字段类型", description = "根据数据库ID查询全部字段类型", method = "GET")
-	public List<ColumnInfo> findColumnType(@PathVariable("dbInfoId") String dbInfoId) throws Exception {
+	public Result<List<ColumnInfo>> findColumnType(@PathVariable("dbInfoId") String dbInfoId) throws Exception {
 		if (StringUtils.hasText(dbInfoId)) {
 			List<ColumnInfo> list = new ArrayList<ColumnInfo>();
 			ColumnInfo info = null;
@@ -273,33 +273,57 @@ public class DbConsoleController {
 				info.setColumnType(s);
 				list.add(info);
 			}
-			return list;
+			return Result.OK(list);
 		}
-		return null;
+		return Result.error("数据库ID为空！");
 	}
 
 	@DeleteMapping("table/remove/{dbInfoId}/{tableName}")
 	@Operation(summary = "删除表", description = "根据数据库ID和表名删除表", method = "DELETE")
-	public void deleteTable(String dbInfoId, String tableName) throws Exception {
-		dbService.deleteTable(dbInfoId, tableName);
+	public Result<Object> deleteTable(String dbInfoId, String tableName) {
+		try {
+			dbService.deleteTable(dbInfoId, tableName);
+			return Result.OK();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error("删除失败："+e.getMessage());
+		}
 	}
 
 	@PutMapping("table/alert/{dbInfoId}/{tableName}/{newTableName}")
 	@Operation(summary = "修改表名", description = "根据数据库ID和表名修改表名", method = "PUT")
-	public void alertTableName(String dbInfoId, String tableName, String newTableName) throws Exception {
-		dbService.alertTableName(dbInfoId, tableName, newTableName);
+	public Result<Object> alertTableName(String dbInfoId, String tableName, String newTableName) {
+		try {
+			dbService.alertTableName(dbInfoId, tableName, newTableName);
+			return Result.OK();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error("修改失败："+e.getMessage());
+		}
 	}
 
 	@PostMapping("table/create/{dbInfoId}/{tableName}")
 	@Operation(summary = "创建表", description = "根据数据库ID和表名创建表", method = "POST")
-	public void createTable(String dbInfoId, String tableName) throws Exception {
-		dbService.createTable(dbInfoId, tableName);
+	public Result<Object> createTable(String dbInfoId, String tableName) {
+		try {
+			dbService.createTable(dbInfoId, tableName);
+			return Result.OK();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error("创建失败："+e.getMessage());
+		}
 	}
 
 	@DeleteMapping("data/remove/{dbInfoId}/{tableName}")
 	@Operation(summary = "删除表数据", description = "根据数据库ID和表名删除表数据", method = "DELETE")
-	public void deleteTableData(String dbInfoId, String tableName) throws Exception {
-		dbService.deleteTableData(dbInfoId, tableName);
+	public Result<Object> deleteTableData(String dbInfoId, String tableName) {
+		try {
+			dbService.deleteTableData(dbInfoId, tableName);
+			return Result.OK();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error("删除失败："+e.getMessage());
+		}
 	}
 
 }
