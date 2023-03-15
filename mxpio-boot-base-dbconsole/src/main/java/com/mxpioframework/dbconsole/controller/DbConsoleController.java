@@ -107,7 +107,7 @@ public class DbConsoleController {
 		DataGridWrapper tableData;
 		try {
 			tableData = dbService.queryTableData(dbInfoId, tableName, sql, pageAble.getPageSize(),
-					pageAble.getPageNumber());
+					pageNo);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Result.error("查询失败：" + e.getMessage());
