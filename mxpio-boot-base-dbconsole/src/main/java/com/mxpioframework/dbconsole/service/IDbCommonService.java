@@ -19,15 +19,25 @@ public interface IDbCommonService {
 	 * 查询所有的表信息
 	 * 
 	 * @param dbInfoId
-	 * @return 返回TableInfo的集合
+	 * @return
 	 * @throws Exception
 	 */
 	public List<TableInfo> findTableInfos(String dbInfoId) throws Exception;
 	
 	/**
-	 * 查询所有的存储过程信息
+	 * 查询所有的视图信息
+	 * 
 	 * @param dbInfoId
-	 * @return 返回ProcInfo的集合
+	 * @return
+	 * @throws Exception
+	 */
+	public List<TableInfo> findViewInfos(String dbInfoId) throws Exception;
+	
+	/**
+	 * 查询所有的存储过程信息
+	 * 
+	 * @param dbInfoId
+	 * @return
 	 * @throws Exception
 	 */
 	public List<ProcInfo> findProcInfos(String dbInfoId) throws Exception;
@@ -37,7 +47,7 @@ public interface IDbCommonService {
 	 * 
 	 * @param dbInfoId
 	 * @param tableName
-	 * @return 返回ColumnInfo的集合
+	 * @return
 	 * @throws Exception
 	 */
 	public List<ColumnInfo> findColumnInfos(String dbInfoId, String tableName) throws Exception;
@@ -47,7 +57,7 @@ public interface IDbCommonService {
 	 * 
 	 * @param dbInfoId
 	 * @param sql
-	 * @return 返回ColumnInfo的集合
+	 * @return
 	 * @throws Exception
 	 */
 	public List<ColumnInfo> findMultiColumnInfos(String dbInfoId, String sql) throws Exception;;
@@ -57,7 +67,7 @@ public interface IDbCommonService {
 	 * 
 	 * @param dbInfoId
 	 * @param tableName
-	 * @return 返回表所有主键的集合
+	 * @return
 	 * @throws Exception
 	 */
 	public List<String> findTablePrimaryKeys(String dbInfoId, String tableName) throws Exception;
@@ -70,7 +80,7 @@ public interface IDbCommonService {
 	 * @param sql
 	 * @param pageSize
 	 * @param pageNo
-	 * @return 返回表的所有列和数据
+	 * @return
 	 * @throws Exception
 	 */
 	public DataGridWrapper queryTableData(String dbInfoId, String tableName, String sql, int pageSize, int pageNo) throws Exception;
@@ -82,7 +92,7 @@ public interface IDbCommonService {
 	 * @param driverClassName
 	 * @param username
 	 * @param password
-	 * @return 返回创建的数据库连接池对象
+	 * @return
 	 */
 	public DataSource createDataSource(String url, String driverClassName, String username, String password);
 
@@ -90,7 +100,7 @@ public interface IDbCommonService {
 	 * 根据数据库id获取对应的datasource
 	 * 
 	 * @param dbInfoId
-	 * @return 返回datasource对象
+	 * @return
 	 * @throws Exception
 	 */
 	public DataSource getDataSourceByDbInfoId(String dbInfoId) throws Exception;

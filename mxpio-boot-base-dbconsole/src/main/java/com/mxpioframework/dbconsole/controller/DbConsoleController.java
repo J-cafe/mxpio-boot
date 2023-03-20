@@ -32,6 +32,7 @@ import com.mxpioframework.dbconsole.model.ProcInfo;
 import com.mxpioframework.dbconsole.model.TableInfo;
 import com.mxpioframework.dbconsole.service.DbService;
 import com.mxpioframework.dbconsole.service.ISqlWrapperService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -68,6 +69,17 @@ public class DbConsoleController {
 	public Result<Collection<TableInfo>> loadTableInfos(@PathVariable("dbInfoId") String dbInfoId) {
 		try {
 			return Result.OK(dbService.findTableInfos(dbInfoId));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error("查询失败：" + e.getMessage());
+		}
+	}
+	
+	@GetMapping("view/list/{dbInfoId}")
+	@Operation(summary = "查询数据库视图信息", description = "根据数据库ID查询视图信息", method = "GET")
+	public Result<Collection<TableInfo>> loadViewInfos(@PathVariable("dbInfoId") String dbInfoId) {
+		try {
+			return Result.OK(dbService.findViewInfos(dbInfoId));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Result.error("查询失败：" + e.getMessage());

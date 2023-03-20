@@ -1,85 +1,50 @@
 package com.mxpioframework.dbconsole.manager.impl;
 
-import java.rmi.dgc.VMID;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mxpioframework.dbconsole.entity.DbInfo;
 import com.mxpioframework.dbconsole.manager.IConsoleDbInfoManager;
-import com.mxpioframework.security.util.SecurityUtils;
+import com.mxpioframework.jpa.JpaUtil;
 
 @Component(IConsoleDbInfoManager.BEAN_ID)
 public class DefaultConsoleDbInfoManager implements IConsoleDbInfoManager, InitializingBean, DisposableBean {
 	private Vector<DbInfo> listDbInfo = new Vector<DbInfo>();
 
 	@Override
-	public List<DbInfo> findDbInfosByUser(String username) throws Exception {
-		List<DbInfo> userDbInfo = new ArrayList<DbInfo>();
-		if (StringUtils.hasText(username)) {
-			for (DbInfo dbInfo : listDbInfo) {
-				String user = dbInfo.getCreateBy();
-				if (user != null) {
-					if (user.equals(username)) {
-						userDbInfo.add(dbInfo);
-					}
-				}
-			}
-		}
-		return userDbInfo;
+	@Transactional(readOnly = true)
+	public List<DbInfo> findDbInfos() throws Exception {
+		
+		return JpaUtil.linq(DbInfo.class).list();
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public DbInfo findDbInfosById(String id) throws Exception {
-		if (StringUtils.hasText(id)) {
-			for (DbInfo dbInfo : listDbInfo) {
-				if (dbInfo.getId().equals(id)) {
-					return dbInfo;
-				}
-			}
-		}
-		return null;
+		return JpaUtil.linq(DbInfo.class).idEqual(id).findOne();
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public void insertDbInfo(DbInfo dbInfo) throws Exception {
-		String username = SecurityUtils.getLoginUsername();
-		if (!StringUtils.hasText(dbInfo.getId())) {
-			dbInfo.setId(new VMID().toString());
-		}
-		dbInfo.setCreateTime(new Date());
-		dbInfo.setCreateBy(username);
-		listDbInfo.add(dbInfo);
+		JpaUtil.save(dbInfo);
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public void updateDbInfo(DbInfo dbInfo) throws Exception {
-		this.deleteDbInfoById(dbInfo.getId());
-		String username = SecurityUtils.getLoginUsername();
-		dbInfo.setCreateBy(username);
-		listDbInfo.add(dbInfo);
+		JpaUtil.update(dbInfo);
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public void deleteDbInfoById(String id) throws Exception {
-		if (StringUtils.hasText(id)) {
-			DbInfo info = null;
-			for (DbInfo dbInfo : listDbInfo) {
-				if (dbInfo.getId().equals(id)) {
-					info = dbInfo;
-					break;
-				}
-			}
-			if (info != null) {
-				listDbInfo.remove(info);
-			}
-		}
+		JpaUtil.lind(DbInfo.class).idEqual(id).delete();
 	}
 
 	@Override
@@ -89,7 +54,6 @@ public class DefaultConsoleDbInfoManager implements IConsoleDbInfoManager, Initi
 
 	@Override
 	public void destroy() {
-		System.out.println("--------------------------------------------");
 		DbInfoConfig.writeConfig(listDbInfo);
 	}
 }

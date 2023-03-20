@@ -35,6 +35,7 @@ import com.mxpioframework.dbconsole.model.DataGridWrapper;
 import com.mxpioframework.dbconsole.model.ProcInfo;
 import com.mxpioframework.dbconsole.model.TableInfo;
 import com.mxpioframework.dbconsole.service.IDbCommonService;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -72,6 +73,40 @@ public class DbCommonServiceImpl implements IDbCommonService {
 				}
 			}
 			rs = metaData.getTables(null, schema, "%", new String[] { "TABLE" });
+			TableInfo tableInfo = null;
+			while (rs.next()) {
+				tableInfo = new TableInfo();
+				tableInfo.setTableName(rs.getString("TABLE_NAME"));
+				tableInfo.setDbInfoId(dbInfoId);
+				tablesList.add(tableInfo);
+			}
+			return tablesList;
+		} finally {
+			JdbcUtils.closeResultSet(rs);
+			JdbcUtils.closeConnection(conn);
+		}
+	}
+	
+	@Override
+	public List<TableInfo> findViewInfos(String dbInfoId) throws Exception {
+		List<TableInfo> tablesList = new ArrayList<TableInfo>();
+		DataSource ds = this.getDataSourceByDbInfoId(dbInfoId);
+		Connection conn = null;
+		ResultSet rs = null;
+		try {
+			conn = DataSourceUtils.getConnection(ds);
+			DatabaseMetaData metaData = conn.getMetaData();
+			String url = metaData.getURL();
+			String schema = null;
+			if (url.toLowerCase().contains("oracle")) {
+				String value = null;//Configure.getString("mxpio.default.schema");
+				if (StringUtils.hasText(value)) {
+					schema = value;
+				} else {
+					schema = metaData.getUserName();
+				}
+			}
+			rs = metaData.getTables(null, schema, "%", new String[] { "VIEW" });
 			TableInfo tableInfo = null;
 			while (rs.next()) {
 				tableInfo = new TableInfo();

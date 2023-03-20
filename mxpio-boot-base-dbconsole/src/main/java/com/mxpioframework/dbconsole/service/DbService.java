@@ -31,7 +31,6 @@ import com.mxpioframework.dbconsole.model.ColumnInfo;
 import com.mxpioframework.dbconsole.model.SqlWrapper;
 import com.mxpioframework.dbconsole.service.impl.DbCommonServiceImpl;
 import com.mxpioframework.dbconsole.utils.SpringJdbcUtils;
-import com.mxpioframework.security.util.SecurityUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -80,8 +79,7 @@ public class DbService extends DbCommonServiceImpl {
 	 */
 	public List<DbInfo> findDbInfos() throws Exception {
 		List<DbInfo> list = new ArrayList<DbInfo>();
-		String userName = SecurityUtils.getLoginUsername();
-		list = this.getConsoleDbInfoManager().findDbInfosByUser(userName);
+		list = this.getConsoleDbInfoManager().findDbInfos();
 		list.add(this.initDefaultDbInfo());
 		return list;
 	}

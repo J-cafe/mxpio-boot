@@ -14,11 +14,10 @@ public interface IConsoleDbInfoManager {
 	/**
 	 * 根据用户名查找数据库连接配置文件
 	 * 
-	 * @param userName
-	 * @return 返回DbInfo的List
+	 * @return
 	 * @throws Exception
 	 */
-	public List<DbInfo> findDbInfosByUser(String userName) throws Exception;
+	public List<DbInfo> findDbInfos() throws Exception;
 
 	/**
 	 * 根据id查找数据库连接配置

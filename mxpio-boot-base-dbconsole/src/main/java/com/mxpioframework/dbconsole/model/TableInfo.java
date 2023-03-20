@@ -5,6 +5,7 @@ import com.mxpioframework.dbconsole.entity.DbInfo;
 public class TableInfo {
 	private DbInfo dbInfo;
 	private String dbInfoId;
+	private String tableName;
 	
 	public String getDbInfoId() {
 		return dbInfoId;
@@ -18,7 +19,6 @@ public class TableInfo {
 	public void setDbInfo(DbInfo dbInfo) {
 		this.dbInfo = dbInfo;
 	}
-	private String tableName;
 	public String getTableName() {
 		return tableName;
 	}
