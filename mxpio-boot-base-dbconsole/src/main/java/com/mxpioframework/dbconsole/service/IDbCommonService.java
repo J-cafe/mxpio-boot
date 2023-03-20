@@ -4,10 +4,10 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import com.mxpioframework.dbconsole.entity.DbInfo;
 import com.mxpioframework.dbconsole.jdbc.dialect.IDialect;
 import com.mxpioframework.dbconsole.model.ColumnInfo;
 import com.mxpioframework.dbconsole.model.DataGridWrapper;
-import com.mxpioframework.dbconsole.model.DbInfo;
 import com.mxpioframework.dbconsole.model.ProcInfo;
 import com.mxpioframework.dbconsole.model.TableInfo;
 

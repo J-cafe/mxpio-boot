@@ -1,5 +1,6 @@
 package com.mxpioframework.dbconsole.model;
 
+import com.mxpioframework.dbconsole.entity.DbInfo;
 
 public class ProcInfo {
 	private DbInfo dbInfo;

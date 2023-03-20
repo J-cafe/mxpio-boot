@@ -15,7 +15,7 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-import com.mxpioframework.dbconsole.model.DbInfo;
+import com.mxpioframework.dbconsole.entity.DbInfo;
 import com.mxpioframework.dbconsole.utils.TempFileUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -64,7 +64,7 @@ public class DbInfoConfig {
 				String dbInfoId = element.attributeValue("id");
 				dbInfo.setId(dbInfoId);
 				dbInfo.setName(element.elementText("name"));
-				dbInfo.setCreateUser(element.elementText("createUser"));
+				dbInfo.setCreateBy(element.elementText("createUser"));
 				dbInfo.setDbType(element.elementText("dbType"));
 				dbInfo.setDriverClass(element.elementText("driverClass"));
 				dbInfo.setUrl(element.elementText("url"));
@@ -97,7 +97,7 @@ public class DbInfoConfig {
 			Element name = dbinfo.addElement("name");
 			name.setText(dbInfo.getName());
 			Element createUser = dbinfo.addElement("createUser");
-			createUser.setText(dbInfo.getCreateUser());
+			createUser.setText(dbInfo.getCreateBy());
 			Element dbType = dbinfo.addElement("dbType");
 			dbType.setText(dbInfo.getDbType());
 			Element driverClass = dbinfo.addElement("driverClass");

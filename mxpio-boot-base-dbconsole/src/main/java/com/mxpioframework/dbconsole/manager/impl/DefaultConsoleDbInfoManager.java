@@ -11,8 +11,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import com.mxpioframework.dbconsole.entity.DbInfo;
 import com.mxpioframework.dbconsole.manager.IConsoleDbInfoManager;
-import com.mxpioframework.dbconsole.model.DbInfo;
 import com.mxpioframework.security.util.SecurityUtils;
 
 @Component(IConsoleDbInfoManager.BEAN_ID)
@@ -24,13 +24,12 @@ public class DefaultConsoleDbInfoManager implements IConsoleDbInfoManager, Initi
 		List<DbInfo> userDbInfo = new ArrayList<DbInfo>();
 		if (StringUtils.hasText(username)) {
 			for (DbInfo dbInfo : listDbInfo) {
-				String user = dbInfo.getCreateUser();
+				String user = dbInfo.getCreateBy();
 				if (user != null) {
 					if (user.equals(username)) {
 						userDbInfo.add(dbInfo);
 					}
 				}
-
 			}
 		}
 		return userDbInfo;
@@ -54,8 +53,8 @@ public class DefaultConsoleDbInfoManager implements IConsoleDbInfoManager, Initi
 		if (!StringUtils.hasText(dbInfo.getId())) {
 			dbInfo.setId(new VMID().toString());
 		}
-		dbInfo.setCreateDate(new Date());
-		dbInfo.setCreateUser(username);
+		dbInfo.setCreateTime(new Date());
+		dbInfo.setCreateBy(username);
 		listDbInfo.add(dbInfo);
 	}
 
@@ -63,7 +62,7 @@ public class DefaultConsoleDbInfoManager implements IConsoleDbInfoManager, Initi
 	public void updateDbInfo(DbInfo dbInfo) throws Exception {
 		this.deleteDbInfoById(dbInfo.getId());
 		String username = SecurityUtils.getLoginUsername();
-		dbInfo.setCreateUser(username);
+		dbInfo.setCreateBy(username);
 		listDbInfo.add(dbInfo);
 	}
 

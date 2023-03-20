@@ -25,9 +25,9 @@ import org.springframework.util.StringUtils;
 
 import com.mxpioframework.dbconsole.DbConstants;
 import com.mxpioframework.dbconsole.DbType;
+import com.mxpioframework.dbconsole.entity.DbInfo;
 import com.mxpioframework.dbconsole.jdbc.dialect.IDialect;
 import com.mxpioframework.dbconsole.model.ColumnInfo;
-import com.mxpioframework.dbconsole.model.DbInfo;
 import com.mxpioframework.dbconsole.model.SqlWrapper;
 import com.mxpioframework.dbconsole.service.impl.DbCommonServiceImpl;
 import com.mxpioframework.dbconsole.utils.SpringJdbcUtils;

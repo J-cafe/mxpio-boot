@@ -27,15 +27,14 @@ import org.springframework.util.StringUtils;
 
 import com.mxpioframework.dbconsole.DbConstants;
 import com.mxpioframework.dbconsole.datasource.SerializableBasicDataSource;
+import com.mxpioframework.dbconsole.entity.DbInfo;
 import com.mxpioframework.dbconsole.jdbc.dialect.IDialect;
 import com.mxpioframework.dbconsole.manager.IConsoleDbInfoManager;
 import com.mxpioframework.dbconsole.model.ColumnInfo;
 import com.mxpioframework.dbconsole.model.DataGridWrapper;
-import com.mxpioframework.dbconsole.model.DbInfo;
 import com.mxpioframework.dbconsole.model.ProcInfo;
 import com.mxpioframework.dbconsole.model.TableInfo;
 import com.mxpioframework.dbconsole.service.IDbCommonService;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -93,6 +92,7 @@ public class DbCommonServiceImpl implements IDbCommonService {
 		DataSource ds = this.getDataSourceByDbInfoId(dbInfoId);
 		Connection conn = null;
 		ResultSet rs = null;
+		ResultSet rs1 = null;
 		try {
 			conn = DataSourceUtils.getConnection(ds);
 			DatabaseMetaData metaData = conn.getMetaData();
@@ -110,13 +110,33 @@ public class DbCommonServiceImpl implements IDbCommonService {
 			ProcInfo procInfo = null;
 			while (rs.next()) {
 				procInfo = new ProcInfo();
+		        System.out.println("PROCEDURE_CAT=>" + rs.getString("PROCEDURE_CAT"));
+		        System.out.println("PROCEDURE_SCHEM=>" + rs.getString("PROCEDURE_SCHEM"));
+		        System.out.println("PROCEDURE_NAME=>" + rs.getString("PROCEDURE_NAME"));
+		        System.out.println("reserved1=>" + rs.getString("reserved1"));
+		        System.out.println("reserved2=>" + rs.getString("reserved2"));
+		        System.out.println("reserved3=>" + rs.getString("reserved3"));
+		        System.out.println("REMARKS=>" + rs.getString("REMARKS"));
+		        System.out.println("PROCEDURE_TYPE=>" + rs.getByte("PROCEDURE_TYPE"));
+		        System.out.println("SPECIFIC_NAME=>" + rs.getString("SPECIFIC_NAME"));
+		        System.out.println("==================================================");
 				procInfo.setProcName(rs.getString("PROCEDURE_NAME"));
 				procInfo.setDbInfoId(dbInfoId);
 				procsList.add(procInfo);
 			}
+			rs1 = metaData.getProcedureColumns(null, schema, "test111", "%");
+			ResultSetMetaData rsmd1 = rs1.getMetaData();
+			int count = rsmd1.getColumnCount();
+			
+			while (rs1.next()) {
+				for(int i=1; i<=count; i++){
+					System.out.println(rsmd1.getColumnLabel(i)+":"+rs1.getString(i));
+				}
+			}
 			return procsList;
 		} finally {
 			JdbcUtils.closeResultSet(rs);
+			JdbcUtils.closeResultSet(rs1);
 			JdbcUtils.closeConnection(conn);
 		}
 	}

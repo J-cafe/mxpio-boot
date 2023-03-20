@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mxpioframework.common.vo.Result;
+import com.mxpioframework.dbconsole.entity.DbInfo;
 import com.mxpioframework.dbconsole.manager.IConsoleDbInfoManager;
 import com.mxpioframework.dbconsole.model.ColumnInfo;
 import com.mxpioframework.dbconsole.model.DataGridWrapper;
-import com.mxpioframework.dbconsole.model.DbInfo;
 import com.mxpioframework.dbconsole.model.ProcInfo;
 import com.mxpioframework.dbconsole.model.TableInfo;
 import com.mxpioframework.dbconsole.service.DbService;

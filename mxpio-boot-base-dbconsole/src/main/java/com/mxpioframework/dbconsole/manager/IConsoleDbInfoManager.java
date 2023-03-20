@@ -2,7 +2,7 @@ package com.mxpioframework.dbconsole.manager;
 
 import java.util.List;
 
-import com.mxpioframework.dbconsole.model.DbInfo;
+import com.mxpioframework.dbconsole.entity.DbInfo;
 
 /**
  * 数据库连接配置信息维护

@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "M_DATA_SOURCE_INFO")
+@Table(name = "MB_DATA_SOURCE_INFO")
 public class DataSourceInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
