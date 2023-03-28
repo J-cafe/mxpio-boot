@@ -92,8 +92,13 @@
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-module-datav</artifactId>
+			<artifactId>mxpio-boot-base-message</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<!--<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-boot-module-datav</artifactId>
+			<optional>true</optional>
+		</dependency>-->
 	</dependencies>
 </project>
