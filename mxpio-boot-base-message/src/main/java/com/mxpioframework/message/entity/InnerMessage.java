@@ -51,10 +51,8 @@ public class InnerMessage extends BaseEntity {
     @Schema(description = "消息内容")
     private String messageContent;
 
-    @Column(name = "READ_STATUS_")
+    @Column(name = "READ_STATUS_",length = 1)
     @Schema(description = "阅读状态")
-    private Boolean readStatus = false;
-
-
+    private String readStatus = "0";
 
 }
