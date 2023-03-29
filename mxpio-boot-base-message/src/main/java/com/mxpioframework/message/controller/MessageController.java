@@ -62,7 +62,7 @@ public class MessageController {
     }
 
     @GetMapping("readAll")
-    @Operation(summary = "一键已读所有", description = "一键已读所有", method = "GET")
+    @Operation(summary = "一键已读所有站内信", description = "一键已读所有站内信", method = "GET")
     public Result<String> readAll(){
         messageService.readAll();
         return Result.OK();
