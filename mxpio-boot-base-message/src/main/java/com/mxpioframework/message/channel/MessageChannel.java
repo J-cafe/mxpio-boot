@@ -10,4 +10,11 @@ public interface MessageChannel {
     boolean support(String channelCode);
 
     void send(String from,String [] to,String title,String msg);
+
+    void doSend(String from,String [] to,String title,String msg);
+
+    boolean beforeSend(String from,String [] to,String title,String msg);
+
+    void afterSend(String from,String [] to,String title,String msg);
+
 }
