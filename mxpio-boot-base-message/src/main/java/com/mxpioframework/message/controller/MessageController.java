@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Tag(name = "MessageController", description = "消息管理")
-@RestController("mxpio.security.deptController")
+@RestController
 @RequestMapping("/message/")
 public class MessageController {
 
