@@ -44,7 +44,6 @@
 		<module>mxpio-boot-base-security</module>
 		<module>mxpio-boot-base-cache</module>
 		<module>mxpio-boot-module-cache-redis</module>
-		<module>mxpio-boot-base-ui</module>
 		<module>mxpio-boot-base-system</module>
 		<module>mxpio-boot-base-quartz</module>
 		<module>mxpio-boot-base-excel</module>

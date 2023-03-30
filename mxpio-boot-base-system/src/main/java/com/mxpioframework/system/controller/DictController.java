@@ -25,7 +25,7 @@ import com.mxpioframework.jpa.policy.impl.SmartCrudPolicyAdapter;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.security.entity.Dict;
 import com.mxpioframework.security.entity.DictItem;
-import com.mxpioframework.system.service.impl.DictServiceImpl;
+import com.mxpioframework.system.service.DictService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,7 +36,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class DictController {
 	
 	@Autowired
-	private DictServiceImpl dictSerivce;
+	private DictService dictSerivce;
 
 	@GetMapping("tree/list")
 	@Operation(summary = "字典树列表", description = "获取字典树列表", method = "GET")
