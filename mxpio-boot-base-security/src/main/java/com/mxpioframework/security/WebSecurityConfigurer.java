@@ -230,20 +230,28 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 			response.setContentType("application/json;charset=UTF-8");
 			exception.printStackTrace();
 			if(exception instanceof CaptchaAuthenticationException) {
+				response.setStatus(401);
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401(exception.getMessage())));
 			}else if(exception instanceof BadCredentialsException){
+				response.setStatus(401);
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("账号或密码错误")));
 			}else if(exception instanceof AccountStatusException){
+				response.setStatus(401);
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("账号已锁定")));
 			}else if(exception instanceof InsufficientAuthenticationException){
+				response.setStatus(401);
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("Token异常")));
 			}else if(exception instanceof NonceExpiredException){
+				response.setStatus(401);
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("Nonce已过期")));
 			}else if(exception instanceof UsernameNotFoundException){
+				response.setStatus(401);
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("用户未找到")));
 			}else if(exception instanceof DataAuthenticationException){
+				response.setStatus(403);
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth403("无权访问")));
 			}else {
+				response.setStatus(401);
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("登录异常")));
 			}
 		}
@@ -260,6 +268,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	        result.setSuccess(false);
 	        result.setCode(CommonConstant.HTTP_NO_AUTHZ_403);
 	        result.setMessage("无权访问");
+	        response.setStatus(403);
 	        response.getWriter().write(JSON.toJSONString(result));
 		}
 
