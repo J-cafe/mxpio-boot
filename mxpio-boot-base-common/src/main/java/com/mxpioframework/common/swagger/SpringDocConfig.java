@@ -56,10 +56,23 @@ public class SpringDocConfig {
 	}
 	
 	@Bean
+	public GroupedOpenApi flowableOpenApi() {
+	    return GroupedOpenApi.builder()
+	            .group("Flowable")
+	            .packagesToScan("org.flowable")
+	            .addOpenApiCustomiser(openApi -> {
+	                Info info = new Info().title("Flowable API").version("6.7.2");
+	                openApi.info(info);
+	            })
+	            .build();
+	}
+	
+	@Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
-                .group("boot")
+                .group("Boot")
                 .packagesToScan("com.mxpioframework")
                 .build();
     }
+	
 }

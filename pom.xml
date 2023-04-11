@@ -298,6 +298,12 @@
 				<artifactId>flowable-spring-boot-starter</artifactId>
 				<version>${flowable.version}</version>
 			</dependency>
+			
+			<dependency>
+			    <groupId>org.flowable</groupId>
+			    <artifactId>flowable-spring-boot-starter-rest</artifactId>
+			    <version>${flowable.version}</version>
+			</dependency>
 
 			<!-- poi -->
 			<dependency>
