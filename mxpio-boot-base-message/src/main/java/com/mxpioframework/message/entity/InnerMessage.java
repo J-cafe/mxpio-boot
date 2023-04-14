@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Schema(description="站内信")
 @Table(name = "MB_INNER_MESSAGE")
 @EqualsAndHashCode(callSuper=false)
-public class InnerMessage extends BaseEntity {
+public class InnerMessage extends BaseEntity implements Message{
 
     private static final long serialVersionUID = 1L;
 

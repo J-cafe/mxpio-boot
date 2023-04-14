@@ -1,6 +1,6 @@
 package com.mxpioframework.message.service;
 
-import com.mxpioframework.message.entity.InnerMessage;
+import com.mxpioframework.message.entity.Message;
 import com.mxpioframework.message.pojo.MessageChannelVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,9 +13,9 @@ public interface MessageService {
 
     void sendMessage(String [] channelCodes,String from, String[] to, String title, String content);
 
-    Page<InnerMessage> myMessage(Pageable pageable);
+    Page<Message> myMessage(String channelCode, Pageable pageable);
 
-    void read(String msgId);
+    void read(String channelCode, String msgId);
 
-    void readAll();
+    void readAll(String channelCode);
 }

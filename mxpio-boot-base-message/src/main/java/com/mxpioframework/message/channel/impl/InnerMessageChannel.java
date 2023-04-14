@@ -2,8 +2,12 @@ package com.mxpioframework.message.channel.impl;
 
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.message.entity.InnerMessage;
+import com.mxpioframework.message.entity.Message;
 import com.mxpioframework.security.entity.User;
+import com.mxpioframework.security.util.SecurityUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -47,5 +51,26 @@ public class InnerMessageChannel extends AbstractMessageChannel {
             innerMessage.setMessageContent(content);
             JpaUtil.save(innerMessage);
         }
+    }
+
+    @Override
+    public void read(String msgId) {
+        InnerMessage message = JpaUtil.getOne(InnerMessage.class,msgId);
+        message.setReadStatus("1");
+        JpaUtil.update(message);
+    }
+
+    @Override
+    public void readAll() {
+        List<InnerMessage> messages =JpaUtil.linq(InnerMessage.class).equal("fromUserName", SecurityUtils.getLoginUsername()).equal("readStatus","0").list();
+        for(InnerMessage message:messages){
+            message.setReadStatus("1");
+            JpaUtil.update(message);
+        }
+    }
+
+    @Override
+    public Page<Message> myMessage(Pageable pageable){
+        return JpaUtil.linq(InnerMessage.class).equal("fromUserName", SecurityUtils.getLoginUsername()).desc("readStatus","createTime").paging(pageable);
     }
 }

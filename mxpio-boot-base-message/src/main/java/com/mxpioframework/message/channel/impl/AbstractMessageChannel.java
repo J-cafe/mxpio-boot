@@ -22,6 +22,6 @@ public abstract class AbstractMessageChannel implements MessageChannel {
 
     @Override
     public void afterSend(String from,String [] to,String title,String msg){
-
     }
+
 }

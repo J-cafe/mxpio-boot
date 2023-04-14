@@ -3,10 +3,10 @@ package com.mxpioframework.message.service.impl;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.message.channel.MessageChannel;
 import com.mxpioframework.message.entity.InnerMessage;
+import com.mxpioframework.message.entity.Message;
 import com.mxpioframework.message.service.MessageService;
 import com.mxpioframework.message.pojo.MessageChannelVo;
 import com.mxpioframework.security.util.SecurityUtils;
-import javassist.runtime.Inner;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
@@ -54,28 +54,34 @@ public class MessageServiceImpl implements MessageService, ApplicationContextAwa
 
     @Override
     @Transactional
-    public void read(String msgId){
-        InnerMessage message = JpaUtil.getOne(InnerMessage.class,msgId);
-        message.setReadStatus("1");
-        JpaUtil.update(message);
+    public void read(String channelCode, String msgId){
+        for(MessageChannel channel:channels){
+            if(channel.support(channelCode)){
+                channel.read(msgId);
+            }
+        }
     }
 
     @Override
     @Transactional
-    public void readAll(){
-        List<InnerMessage> messages =JpaUtil.linq(InnerMessage.class).equal("fromUserName", SecurityUtils.getLoginUsername()).equal("readStatus","0").list();
-        for(InnerMessage message:messages){
-            message.setReadStatus("1");
-            JpaUtil.update(message);
+    public void readAll(String channelCode){
+        for(MessageChannel channel:channels){
+            if(channel.support(channelCode)){
+                channel.readAll();
+            }
         }
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<InnerMessage> myMessage(Pageable pageable){
-        return JpaUtil.linq(InnerMessage.class).equal("fromUserName", SecurityUtils.getLoginUsername()).desc("readStatus","createTime").paging(pageable);
+    public Page<Message> myMessage(String channelCode, Pageable pageable){
+        for(MessageChannel channel:channels){
+            if(channel.support(channelCode)){
+                return channel.myMessage(pageable);
+            }
+        }
+        return Page.empty();
     }
-
 
 
     @Override

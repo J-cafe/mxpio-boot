@@ -2,7 +2,7 @@ package com.mxpioframework.message.controller;
 
 
 import com.mxpioframework.common.vo.Result;
-import com.mxpioframework.message.entity.InnerMessage;
+import com.mxpioframework.message.entity.Message;
 import com.mxpioframework.message.pojo.SendDto;
 import com.mxpioframework.message.service.MessageService;
 import com.mxpioframework.message.pojo.MessageChannelVo;
@@ -26,12 +26,13 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
-    @GetMapping("myMessage")
-    @Operation(summary = "我的站内信", description = "我的站内信", method = "GET")
-    public Result<Page<InnerMessage>> myMessage(@RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
-                                                @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo){
+    @GetMapping("myMessage/{channelCode}")
+    @Operation(summary = "我的消息", description = "我的消息", method = "GET")
+    public Result<Page<Message>> myMessage(@Parameter(description="channelCode") @PathVariable(name = "channelCode", required = true) String channelCode,
+                                           @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+                                           @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo){
         Pageable pageAble = PageRequest.of(pageNo - 1, pageSize);
-        return Result.OK(messageService.myMessage(pageAble));
+        return Result.OK(messageService.myMessage(channelCode,pageAble));
     }
 
     @GetMapping("channel/list")
@@ -54,17 +55,18 @@ public class MessageController {
 
     }
 
-    @GetMapping("read/{id}")
-    @Operation(summary = "站内信已读", description = "站内信已读", method = "GET")
-    public Result<String> read(@Parameter(description="ID") @PathVariable(name = "id", required = true) String id){
-        messageService.read(id);
+    @GetMapping("read/{channelCode}/{id}")
+    @Operation(summary = "消息已读", description = "消息已读", method = "GET")
+    public Result<String> read(@Parameter(description="channelCode") @PathVariable(name = "channelCode", required = true) String channelCode,
+                               @Parameter(description="ID") @PathVariable(name = "id", required = true) String id){
+        messageService.read(channelCode,id);
         return Result.OK();
     }
 
-    @GetMapping("readAll")
-    @Operation(summary = "一键已读所有站内信", description = "一键已读所有站内信", method = "GET")
-    public Result<String> readAll(){
-        messageService.readAll();
+    @GetMapping("readAll/{channelCode}")
+    @Operation(summary = "一键已读", description = "一键已读", method = "GET")
+    public Result<String> readAll(@Parameter(description="channelCode") @PathVariable(name = "channelCode", required = true) String channelCode){
+        messageService.readAll(channelCode);
         return Result.OK();
     }
 
