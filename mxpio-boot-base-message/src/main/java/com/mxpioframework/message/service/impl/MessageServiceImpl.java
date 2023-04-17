@@ -1,12 +1,9 @@
 package com.mxpioframework.message.service.impl;
 
-import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.message.channel.MessageChannel;
-import com.mxpioframework.message.entity.InnerMessage;
 import com.mxpioframework.message.entity.Message;
 import com.mxpioframework.message.service.MessageService;
 import com.mxpioframework.message.pojo.MessageChannelVo;
-import com.mxpioframework.security.util.SecurityUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
@@ -77,7 +74,18 @@ public class MessageServiceImpl implements MessageService, ApplicationContextAwa
     public Page<Message> myMessage(String channelCode, Pageable pageable){
         for(MessageChannel channel:channels){
             if(channel.support(channelCode)){
-                return channel.myMessage(pageable);
+                return channel.myMessagePaged(pageable);
+            }
+        }
+        return Page.empty();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Message> myUnread(String channelCode, Pageable pageable){
+        for(MessageChannel channel:channels){
+            if(channel.support(channelCode)){
+                return channel.myUnreadPaged(pageable);
             }
         }
         return Page.empty();

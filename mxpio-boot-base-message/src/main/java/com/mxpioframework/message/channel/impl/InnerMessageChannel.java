@@ -70,7 +70,22 @@ public class InnerMessageChannel extends AbstractMessageChannel {
     }
 
     @Override
-    public Page<Message> myMessage(Pageable pageable){
+    public Page<Message> myMessagePaged(Pageable pageable){
         return JpaUtil.linq(InnerMessage.class).equal("fromUserName", SecurityUtils.getLoginUsername()).desc("readStatus","createTime").paging(pageable);
+    }
+
+    @Override
+    public List<Message> myMessage(){
+        return JpaUtil.linq(InnerMessage.class).equal("fromUserName", SecurityUtils.getLoginUsername()).desc("readStatus","createTime").list();
+    }
+
+    @Override
+    public Page<Message> myUnreadPaged(Pageable pageable){
+        return JpaUtil.linq(InnerMessage.class).equal("fromUserName", SecurityUtils.getLoginUsername()).equal("readStatus","0").desc("createTime").paging(pageable);
+    }
+
+    @Override
+    public List<Message> myUnread(){
+        return JpaUtil.linq(InnerMessage.class).equal("fromUserName", SecurityUtils.getLoginUsername()).equal("readStatus","0").desc("createTime").list();
     }
 }

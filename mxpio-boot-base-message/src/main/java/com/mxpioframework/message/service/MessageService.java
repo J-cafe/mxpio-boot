@@ -15,6 +15,8 @@ public interface MessageService {
 
     Page<Message> myMessage(String channelCode, Pageable pageable);
 
+    Page<Message> myUnread(String channelCode, Pageable pageable);
+
     void read(String channelCode, String msgId);
 
     void readAll(String channelCode);
