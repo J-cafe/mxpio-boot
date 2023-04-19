@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Import;
 import com.mxpioframework.autoconfigure.security.SecurityAutoConfiguration;
 import com.mxpioframework.common.CommonConstant;
 import com.mxpioframework.common.vo.ModuleVO;
-import com.mxpioframework.module.datav.DatavConfiguration;
+//import com.mxpioframework.module.datav.DatavConfiguration;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author MxpIO
  *
  */
-@Configuration
+/*@Configuration
 @ConditionalOnClass(DatavConfiguration.class)
 @AutoConfigureAfter(SecurityAutoConfiguration.class)
 @Import(DatavConfiguration.class)
@@ -29,4 +29,4 @@ public class DatavAutoConfiguration {
 		//CommonConstant.addModule(new ModuleVO("Datav","大屏模块"));
 	}
 
-}
+}*/

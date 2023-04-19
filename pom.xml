@@ -53,9 +53,11 @@
     	<module>mxpio-boot-base-filestorage</module>
     	<module>mxpio-boot-base-multitenant</module>
 		<module>mxpio-boot-module-cache-caffeine</module>
-		<module>mxpio-boot-module-datav</module>
+		<!--<module>mxpio-boot-module-datav</module>-->
 		<module>mxpio-boot-base-dbconsole</module>
         <module>mxpio-boot-base-message</module>
+        <module>mxpio-boot-base-websocket</module>
+		<module>mxpio-boot-webapp</module>
     </modules>
 	<dependencies>
 		<dependency>
@@ -212,6 +214,11 @@
 			<dependency>
 				<groupId>com.mxpio</groupId>
 				<artifactId>mxpio-boot-base-message</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-base-websocket</artifactId>
 				<version>${mxpio.version}</version>
 			</dependency>
 			<dependency>
