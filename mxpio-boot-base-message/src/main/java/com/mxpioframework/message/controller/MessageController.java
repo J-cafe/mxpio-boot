@@ -69,6 +69,4 @@ public class MessageController {
         messageService.readAll(channelCode);
         return Result.OK();
     }
-
-
 }

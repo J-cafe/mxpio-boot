@@ -20,7 +20,6 @@ public class MessageWebSocketConfig implements WebSocketConfigurer {
     private static final Logger logger = LoggerFactory.getLogger(MessageWebSocketConfig.class);
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        logger.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>MessageWebSocketConfig");
-        registry.addHandler(messageWebSocketHandler,"/message").setAllowedOrigins("*");
+        registry.addHandler(messageWebSocketHandler, messageWebSocketHandler.getEndpointName()).setAllowedOrigins("*");
     }
 }
