@@ -53,11 +53,11 @@
     	<module>mxpio-boot-base-filestorage</module>
     	<module>mxpio-boot-base-multitenant</module>
 		<module>mxpio-boot-module-cache-caffeine</module>
-		<!--<module>mxpio-boot-module-datav</module>-->
+		<module>mxpio-boot-module-datav</module>
 		<module>mxpio-boot-base-dbconsole</module>
         <module>mxpio-boot-base-message</module>
         <module>mxpio-boot-base-websocket</module>
-		<module>mxpio-boot-webapp</module>
+		<!--<module>mxpio-boot-webapp</module>-->
     </modules>
 	<dependencies>
 		<dependency>
@@ -311,7 +311,7 @@
 				<artifactId>flowable-spring-boot-starter</artifactId>
 				<version>${flowable.version}</version>
 			</dependency>
-			
+
 			<dependency>
 			    <groupId>org.flowable</groupId>
 			    <artifactId>flowable-spring-boot-starter-rest</artifactId>

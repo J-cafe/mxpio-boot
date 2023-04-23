@@ -100,10 +100,10 @@
 			<artifactId>mxpio-boot-base-websocket</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<!--<dependency>
+		<dependency>
 			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-module-datav</artifactId>
 			<optional>true</optional>
-		</dependency>-->
+		</dependency>
 	</dependencies>
 </project>
