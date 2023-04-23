@@ -1,7 +1,7 @@
 package com.mxpioframework.common.swagger;
 
 import org.springdoc.core.GroupedOpenApi;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,29 +13,8 @@ import io.swagger.v3.oas.models.info.License;
 @Configuration
 public class SpringDocConfig {
 
-	@Value("${mxpio.swagger.title:MxpIO-Boot}")
-	private String swaggerTitle;
-	
-	@Value("${mxpio.swagger.desc:MxpIO-Boot API}")
-	private String swaggerDesc;
-	
-	@Value("${mxpio.swagger.version:1.0.12-beta.9}")
-	private String swaggerVersion;
-	
-	@Value("${mxpio.swagger.author:MxpIO}")
-	private String swaggerAuthor;
-	
-	@Value("${mxpio.swagger.email:i@mxpio.com}")
-	private String swaggerEmail;
-	
-	@Value("${mxpio.swagger.homepage:www.mxpio.com}")
-	private String swaggerHomepage;
-	
-	@Value("${mxpio.swagger.license:MIT License}")
-	private String swaggerLicense;
-	
-	@Value("${mxpio.swagger.license.url:https://gitee.com/i_mxpio/mxpio-boot/blob/master/LICENSE}")
-	private String swaggerLicenseUrl;
+	@Autowired
+	private SwaggerProperties swaggerProperties;
 	
 	@Bean
 	public OpenAPI openApi() {
@@ -43,23 +22,36 @@ public class SpringDocConfig {
 	}
 
 	private License license() {
-		return new License().name(swaggerLicense).url(swaggerLicenseUrl);
+		return new License().name(swaggerProperties.getLicense()).url(swaggerProperties.getLicenseUrl());
 	}
 
 	private Contact contact() {
-		return new Contact().name(swaggerAuthor).email(swaggerEmail).url(swaggerHomepage);
+		return new Contact().name(swaggerProperties.getAuthor()).email(swaggerProperties.getEmail()).url(swaggerProperties.getHomepage());
 	}
 
 	private Info info() {
-		return new Info().title(swaggerTitle).description(swaggerDesc).version(swaggerVersion).license(license())
+		return new Info().title(swaggerProperties.getTitle()).description(swaggerProperties.getDesc()).version(swaggerProperties.getVersion()).license(license())
 				.contact(contact());
+	}
+	
+	@Bean
+	public GroupedOpenApi flowableOpenApi() {
+	    return GroupedOpenApi.builder()
+	            .group("Flowable")
+	            .packagesToScan("org.flowable")
+	            .addOpenApiCustomiser(openApi -> {
+	                Info info = new Info().title("Flowable API").version("6.7.2");
+	                openApi.info(info);
+	            })
+	            .build();
 	}
 	
 	@Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
-                .group("boot")
+                .group("Boot")
                 .packagesToScan("com.mxpioframework")
                 .build();
     }
+
 }

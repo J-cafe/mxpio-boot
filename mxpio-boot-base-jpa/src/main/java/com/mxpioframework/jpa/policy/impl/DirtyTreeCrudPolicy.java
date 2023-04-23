@@ -45,6 +45,7 @@ public class DirtyTreeCrudPolicy implements CrudPolicy {
 					}else {
 						context.setCrudType(crudType);
 					}
+					context.setSaveTransient(((MxpioEntity) entity).isSaveTransient());
 				}
 				context.setEntity(entity);
 				if (fields == null) {

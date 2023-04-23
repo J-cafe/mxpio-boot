@@ -11,7 +11,7 @@ import com.mxpioframework.security.entity.BaseEntity;
 import com.mxpioframework.security.entity.Dict;
 import com.mxpioframework.security.entity.DictItem;
 
-public interface DictService {
+public interface DictService extends BaseService<Dict> {
 
 	/**
 	 * 根据code获取字典
