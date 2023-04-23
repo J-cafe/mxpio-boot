@@ -17,7 +17,7 @@ public abstract class AbstractMessageChannel implements MessageChannel {
     }
     @Override
     public boolean beforeSend(String from, String[] to, String title, String content){
-        return StringUtils.isBlank(from) || ArrayUtils.isEmpty(to) || StringUtils.isBlank(title) || StringUtils.isBlank(content);
+        return StringUtils.isNotBlank(from) && ArrayUtils.isNotEmpty(to) && StringUtils.isNotBlank(title) && StringUtils.isNotBlank(content);
     }
 
     @Override

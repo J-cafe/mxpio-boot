@@ -1,11 +1,14 @@
 package com.mxpioframework.message.channel.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.message.entity.InnerMessage;
 import com.mxpioframework.message.entity.Message;
+import com.mxpioframework.message.handler.MessageWebSocketHandler;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.util.SecurityUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -22,6 +25,9 @@ public class InnerMessageChannel extends AbstractMessageChannel {
     private static final String CHANNEL_CODE = "innerMsg";
 
     private static final String CHANNEL_NAME = "站内信";
+
+    @Autowired
+    private MessageWebSocketHandler messageWebSocketHandler;
 
     @Override
     public String getChannelCode() {
@@ -50,6 +56,7 @@ public class InnerMessageChannel extends AbstractMessageChannel {
             innerMessage.setMessageTitle(title);
             innerMessage.setMessageContent(content);
             JpaUtil.save(innerMessage);
+            messageWebSocketHandler.send(toUser.getUsername(), JSON.toJSONString(innerMessage));
         }
     }
 
