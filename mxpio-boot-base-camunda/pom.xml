@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -7,7 +6,7 @@
 		<artifactId>mxpio-boot-parent</artifactId>
 		<version>1.0.12-beta.9</version>
 	</parent>
-	<artifactId>mxpio-boot-base-flowable</artifactId>
+	<artifactId>mxpio-boot-base-camunda</artifactId>
 	<name>工作流模块</name>
 	<description>工作流模块</description>
 	<dependencies>
@@ -15,13 +14,15 @@
 			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-base-security</artifactId>
 		</dependency>
+
 		<dependency>
-			<groupId>org.flowable</groupId>
-			<artifactId>flowable-spring-boot-starter</artifactId>
+			<groupId>org.camunda.bpm.springboot</groupId>
+			<artifactId>camunda-bpm-spring-boot-starter</artifactId>
 		</dependency>
+
 		<dependency>
-		    <groupId>org.flowable</groupId>
-		    <artifactId>flowable-spring-boot-starter-rest</artifactId>
+			<groupId>org.camunda.bpm.springboot</groupId>
+			<artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
 		</dependency>
 	</dependencies>
 </project>
