@@ -222,6 +222,16 @@
 				<version>${mxpio.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-base-message</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-base-websocket</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-core</artifactId>
 				<version>${liquibase.version}</version>
@@ -315,6 +325,22 @@
 				<groupId>commons-codec</groupId>
 				<artifactId>commons-codec</artifactId>
 				<version>1.15</version>
+<<<<<<< HEAD
+=======
+			</dependency>
+
+			<!-- Flowable -->
+			<dependency>
+				<groupId>org.flowable</groupId>
+				<artifactId>flowable-spring-boot-starter</artifactId>
+				<version>${flowable.version}</version>
+			</dependency>
+
+			<dependency>
+			    <groupId>org.flowable</groupId>
+			    <artifactId>flowable-spring-boot-starter-rest</artifactId>
+			    <version>${flowable.version}</version>
+>>>>>>> branch 'master' of https://gitee.com/i_mxpio/mxpio-boot.git
 			</dependency>
 
 			<!-- poi -->
@@ -365,7 +391,7 @@
 				<artifactId>assertj-core</artifactId>
 				<version>3.23.1</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
