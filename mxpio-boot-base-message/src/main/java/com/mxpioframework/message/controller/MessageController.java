@@ -26,7 +26,7 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
-    @GetMapping("myMessage/{channelCode}")
+    @GetMapping("my/{channelCode}")
     @Operation(summary = "我的消息", description = "我的消息", method = "GET")
     public Result<Page<Message>> myMessage(@Parameter(description="channelCode") @PathVariable(name = "channelCode", required = true) String channelCode,
                                            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
@@ -63,7 +63,7 @@ public class MessageController {
         return Result.OK();
     }
 
-    @GetMapping("readAll/{channelCode}")
+    @GetMapping("read/{channelCode}")
     @Operation(summary = "一键已读", description = "一键已读", method = "GET")
     public Result<String> readAll(@Parameter(description="channelCode") @PathVariable(name = "channelCode", required = true) String channelCode){
         messageService.readAll(channelCode);
