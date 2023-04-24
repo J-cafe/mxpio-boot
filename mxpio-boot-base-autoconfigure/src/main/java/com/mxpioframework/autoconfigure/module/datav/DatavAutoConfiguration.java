@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Import(DatavConfiguration.class)
 @Slf4j
 public class DatavAutoConfiguration {
-	
+
 	public DatavAutoConfiguration() {
 		log.info("[AutoConfiguration==>]:Datav Module Loading");
 		CommonConstant.addModule(new ModuleVO("Datav","大屏模块"));

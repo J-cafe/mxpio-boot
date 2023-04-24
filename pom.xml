@@ -55,7 +55,10 @@
 		<module>mxpio-boot-module-cache-caffeine</module>
 		<module>mxpio-boot-module-datav</module>
 		<module>mxpio-boot-base-dbconsole</module>
-	</modules>
+        <module>mxpio-boot-base-message</module>
+        <module>mxpio-boot-base-websocket</module>
+		<!--<module>mxpio-boot-webapp</module>-->
+    </modules>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -209,6 +212,16 @@
 				<version>${mxpio.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-base-message</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-base-websocket</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-core</artifactId>
 				<version>${liquibase.version}</version>
@@ -250,7 +263,7 @@
 			   <groupId>org.springdoc</groupId>
 			   <artifactId>springdoc-openapi-ui</artifactId>
 			   <version>${swagger.version}</version>
-			</dependency> 
+			</dependency>
 			<dependency>
 				<groupId>org.springdoc</groupId>
 				<artifactId>springdoc-openapi-webmvc-core</artifactId>
@@ -298,7 +311,7 @@
 				<artifactId>flowable-spring-boot-starter</artifactId>
 				<version>${flowable.version}</version>
 			</dependency>
-			
+
 			<dependency>
 			    <groupId>org.flowable</groupId>
 			    <artifactId>flowable-spring-boot-starter-rest</artifactId>
@@ -353,7 +366,7 @@
 				<artifactId>assertj-core</artifactId>
 				<version>3.23.1</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
@@ -418,7 +431,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
-					<additionalparam>-Xdoclint:none</additionalparam>
+					<additionalJOption>-Xdoclint:none</additionalJOption>
 				</configuration>
 				<executions>
 					<execution>
