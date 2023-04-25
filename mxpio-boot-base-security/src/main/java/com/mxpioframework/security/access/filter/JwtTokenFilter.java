@@ -31,27 +31,36 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class JwtTokenFilter extends OncePerRequestFilter {
-	
+
 	private RequestMatcher requiresAuthenticationRequestMatcher;
-	
+    private RequestMatcher websocketAuthenticationRequestMatcher;
+
 	public JwtTokenFilter() {
 		this.requiresAuthenticationRequestMatcher = new RequestHeaderRequestMatcher("Access-Token");
+        this.websocketAuthenticationRequestMatcher = new RequestHeaderRequestMatcher("Sec-WebSocket-Protocol");
 	}
-	
-	protected String getJwtToken(HttpServletRequest request) {
+
+	protected String getJwtToken(HttpServletRequest request,HttpServletResponse httpServletResponse) {
 		String authInfo = request.getHeader("Access-Token");
+        if(StringUtils.isNotBlank(authInfo)){
+            return authInfo;
+        }
+        //尝试websocket
+        authInfo = request.getHeader("Sec-WebSocket-Protocol");
+        if(StringUtils.isNotBlank(authInfo)){
+            httpServletResponse.setHeader("Sec-WebSocket-Protocol",authInfo);
+        }
 		return authInfo;
 	}
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-    	
-    	if (!requiresAuthentication(httpServletRequest, httpServletResponse)) {
+        if (!requiresAuthentication(httpServletRequest, httpServletResponse)) {
 			filterChain.doFilter(httpServletRequest, httpServletResponse);
 			return;
 		}
         try {
-        	String token = getJwtToken(httpServletRequest);
+        	String token = getJwtToken(httpServletRequest,httpServletResponse);
             if (StringUtils.isEmpty(token)) {
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
                 return;
@@ -73,7 +82,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             }else {
             	DecodedJWT jwt = TokenUtil.verifyToken(token);
                 Date date = jwt.getExpiresAt();
-                
+
                 if(date.before(new Date())) {
                     filterChain.doFilter(httpServletRequest, httpServletResponse);
                     return;
@@ -90,9 +99,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         	e.printStackTrace();
         }
     }
-    
+
     protected boolean requiresAuthentication(HttpServletRequest request,
 			HttpServletResponse response) {
-		return requiresAuthenticationRequestMatcher.matches(request);
+		return requiresAuthenticationRequestMatcher.matches(request)||websocketAuthenticationRequestMatcher.matches(request);
 	}
 }
