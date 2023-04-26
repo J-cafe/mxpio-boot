@@ -2,6 +2,7 @@ package com.mxpioframework.message.controller;
 
 
 import com.mxpioframework.common.vo.Result;
+import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.message.entity.Message;
 import com.mxpioframework.message.pojo.SendDto;
 import com.mxpioframework.message.service.MessageService;
@@ -29,10 +30,11 @@ public class MessageController {
     @GetMapping("myMessage/{channelCode}")
     @Operation(summary = "我的消息", description = "我的消息", method = "GET")
     public Result<Page<Message>> myMessage(@Parameter(description="channelCode") @PathVariable(name = "channelCode", required = true) String channelCode,
+                                           @Parameter(description = "查询参数") Criteria criteria,
                                            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
                                            @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo){
         Pageable pageAble = PageRequest.of(pageNo - 1, pageSize);
-        return Result.OK(messageService.myMessage(channelCode,pageAble));
+        return Result.OK(messageService.myMessage(channelCode,criteria,pageAble));
     }
 
     @GetMapping("channel/list")

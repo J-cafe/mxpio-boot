@@ -1,5 +1,6 @@
 package com.mxpioframework.message.service.impl;
 
+import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.message.channel.MessageChannel;
 import com.mxpioframework.message.entity.Message;
 import com.mxpioframework.message.service.MessageService;
@@ -71,10 +72,10 @@ public class MessageServiceImpl implements MessageService, ApplicationContextAwa
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Message> myMessage(String channelCode, Pageable pageable){
+    public Page<Message> myMessage(String channelCode, Criteria criteria, Pageable pageable){
         for(MessageChannel channel:channels){
             if(channel.support(channelCode)){
-                return channel.myMessagePaged(pageable);
+                return channel.myMessagePaged(criteria,pageable);
             }
         }
         return Page.empty();
@@ -82,10 +83,10 @@ public class MessageServiceImpl implements MessageService, ApplicationContextAwa
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Message> myUnread(String channelCode, Pageable pageable){
+    public Page<Message> myUnread(String channelCode, Criteria criteria, Pageable pageable){
         for(MessageChannel channel:channels){
             if(channel.support(channelCode)){
-                return channel.myUnreadPaged(pageable);
+                return channel.myUnreadPaged(criteria,pageable);
             }
         }
         return Page.empty();

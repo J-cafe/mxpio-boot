@@ -2,6 +2,9 @@ package com.mxpioframework.message.channel.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.mxpioframework.jpa.JpaUtil;
+import com.mxpioframework.jpa.query.Criteria;
+import com.mxpioframework.jpa.query.Operator;
+import com.mxpioframework.jpa.query.Order;
 import com.mxpioframework.message.entity.InnerMessage;
 import com.mxpioframework.message.entity.Message;
 import com.mxpioframework.message.handler.MessageWebSocketHandler;
@@ -14,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -85,22 +89,46 @@ public class InnerMessageChannel extends AbstractMessageChannel {
     }
 
     @Override
-    public Page<Message> myMessagePaged(Pageable pageable){
-        return JpaUtil.linq(InnerMessage.class).equal("toUserName", SecurityUtils.getLoginUsername()).desc("readStatus","createTime").paging(pageable);
+    public Page<Message> myMessagePaged(Criteria criteria, Pageable pageable){
+        getMyMessageCriteria(criteria);
+        return JpaUtil.linq(InnerMessage.class).where(criteria).paging(pageable);
     }
 
     @Override
-    public List<Message> myMessage(){
-        return JpaUtil.linq(InnerMessage.class).equal("toUserName", SecurityUtils.getLoginUsername()).desc("readStatus","createTime").list();
+    public List<Message> myMessage(Criteria criteria){
+        getMyMessageCriteria(criteria);
+        return JpaUtil.linq(InnerMessage.class).where(criteria).list();
     }
 
     @Override
-    public Page<Message> myUnreadPaged(Pageable pageable){
-        return JpaUtil.linq(InnerMessage.class).equal("toUserName", SecurityUtils.getLoginUsername()).equal("readStatus","0").desc("createTime").paging(pageable);
+    public Page<Message> myUnreadPaged(Criteria criteria, Pageable pageable){
+        getMyUnreadCriteria(criteria);
+        return JpaUtil.linq(InnerMessage.class).where(criteria).paging(pageable);
     }
 
     @Override
-    public List<Message> myUnread(){
-        return JpaUtil.linq(InnerMessage.class).equal("toUserName", SecurityUtils.getLoginUsername()).equal("readStatus","0").desc("createTime").list();
+    public List<Message> myUnread(Criteria criteria){
+        getMyUnreadCriteria(criteria);
+        return JpaUtil.linq(InnerMessage.class).where(criteria).list();
+    }
+
+    private void getMyMessageCriteria(Criteria criteria){
+        if(criteria==null){
+            criteria = Criteria.create();
+        }
+        criteria.addCriterion("toUserName", Operator.EQ,SecurityUtils.getLoginUsername());
+        criteria.setOrders(new ArrayList<>());
+        criteria.addOrder(new Order("readStatus",false));
+        criteria.addOrder(new Order("createTime",true));
+    }
+
+    private void getMyUnreadCriteria(Criteria criteria){
+        if(criteria==null){
+            criteria = Criteria.create();
+        }
+        criteria.addCriterion("toUserName", Operator.EQ,SecurityUtils.getLoginUsername());
+        criteria.addCriterion("readStatus", Operator.EQ,"0");
+        criteria.setOrders(new ArrayList<>());
+        criteria.addOrder(new Order("createTime",true));
     }
 }

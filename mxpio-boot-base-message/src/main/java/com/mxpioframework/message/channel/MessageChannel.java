@@ -1,6 +1,7 @@
 package com.mxpioframework.message.channel;
 
 
+import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.message.entity.Message;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -81,26 +82,26 @@ public interface MessageChannel {
      * @param pageable
      * @return
      */
-    Page<Message> myMessagePaged(Pageable pageable);
+    Page<Message> myMessagePaged(Criteria criteria, Pageable pageable);
 
     /**
      * 我的所有消息
      * @param pageable
      * @return
      */
-    List<Message> myMessage();
+    List<Message> myMessage(Criteria criteria);
     /**
      * 我的未读消息
      * @param pageable
      * @return
      */
-    Page<Message> myUnreadPaged(Pageable pageable);
+    Page<Message> myUnreadPaged(Criteria criteria,Pageable pageable);
 
     /**
      * 我的未读消息
      * @param pageable
      * @return
      */
-    List<Message> myUnread();
+    List<Message> myUnread(Criteria criteria);
 
 }
