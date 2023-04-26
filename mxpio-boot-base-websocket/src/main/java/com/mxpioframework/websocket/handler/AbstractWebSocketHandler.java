@@ -35,6 +35,7 @@ public abstract class AbstractWebSocketHandler implements MxpioWebSocketHandler 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         logger.info("收到消息:{}",message.getPayload());
+        session.sendMessage(message);
     }
 
     @Override
