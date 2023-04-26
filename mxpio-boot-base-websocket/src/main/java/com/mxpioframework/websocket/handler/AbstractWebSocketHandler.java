@@ -19,6 +19,7 @@ public abstract class AbstractWebSocketHandler implements MxpioWebSocketHandler 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         if(session==null||session.getPrincipal()==null){
+            logger.info(":websocket建立连接，未获得用户信息");
             return;
         }
         String username = session.getPrincipal().getName();
