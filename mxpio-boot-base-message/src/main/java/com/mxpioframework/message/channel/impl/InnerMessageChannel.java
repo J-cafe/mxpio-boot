@@ -7,6 +7,7 @@ import com.mxpioframework.message.entity.Message;
 import com.mxpioframework.message.handler.MessageWebSocketHandler;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.util.SecurityUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import java.util.List;
  * 站内信
  */
 @Component
+@Slf4j
 public class InnerMessageChannel extends AbstractMessageChannel {
 
     private static final String CHANNEL_CODE = "innerMsg";
@@ -56,7 +58,13 @@ public class InnerMessageChannel extends AbstractMessageChannel {
             innerMessage.setMessageTitle(title);
             innerMessage.setMessageContent(content);
             JpaUtil.save(innerMessage);
-            messageWebSocketHandler.send(toUser.getUsername(), JSON.toJSONString(innerMessage));
+            try{
+                messageWebSocketHandler.send(toUser.getUsername(), JSON.toJSONString(innerMessage));
+            }
+            catch (Exception e){
+                log.error("websocket发送信息错误:{}",e.getMessage());
+            }
+
         }
     }
 
