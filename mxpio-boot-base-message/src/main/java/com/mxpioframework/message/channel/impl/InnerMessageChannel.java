@@ -77,7 +77,7 @@ public class InnerMessageChannel extends AbstractMessageChannel {
 
     @Override
     public void readAll() {
-        List<InnerMessage> messages =JpaUtil.linq(InnerMessage.class).equal("fromUserName", SecurityUtils.getLoginUsername()).equal("readStatus","0").list();
+        List<InnerMessage> messages =JpaUtil.linq(InnerMessage.class).equal("toUserName", SecurityUtils.getLoginUsername()).equal("readStatus","0").list();
         for(InnerMessage message:messages){
             message.setReadStatus("1");
             JpaUtil.update(message);
@@ -86,21 +86,21 @@ public class InnerMessageChannel extends AbstractMessageChannel {
 
     @Override
     public Page<Message> myMessagePaged(Pageable pageable){
-        return JpaUtil.linq(InnerMessage.class).equal("fromUserName", SecurityUtils.getLoginUsername()).desc("readStatus","createTime").paging(pageable);
+        return JpaUtil.linq(InnerMessage.class).equal("toUserName", SecurityUtils.getLoginUsername()).desc("readStatus","createTime").paging(pageable);
     }
 
     @Override
     public List<Message> myMessage(){
-        return JpaUtil.linq(InnerMessage.class).equal("fromUserName", SecurityUtils.getLoginUsername()).desc("readStatus","createTime").list();
+        return JpaUtil.linq(InnerMessage.class).equal("toUserName", SecurityUtils.getLoginUsername()).desc("readStatus","createTime").list();
     }
 
     @Override
     public Page<Message> myUnreadPaged(Pageable pageable){
-        return JpaUtil.linq(InnerMessage.class).equal("fromUserName", SecurityUtils.getLoginUsername()).equal("readStatus","0").desc("createTime").paging(pageable);
+        return JpaUtil.linq(InnerMessage.class).equal("toUserName", SecurityUtils.getLoginUsername()).equal("readStatus","0").desc("createTime").paging(pageable);
     }
 
     @Override
     public List<Message> myUnread(){
-        return JpaUtil.linq(InnerMessage.class).equal("fromUserName", SecurityUtils.getLoginUsername()).equal("readStatus","0").desc("createTime").list();
+        return JpaUtil.linq(InnerMessage.class).equal("toUserName", SecurityUtils.getLoginUsername()).equal("readStatus","0").desc("createTime").list();
     }
 }
