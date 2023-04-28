@@ -30,7 +30,7 @@ public class MessageController {
     @GetMapping("myMessage/{channelCode}")
     @Operation(summary = "我的消息", description = "我的消息", method = "GET")
     public Result<Page<Message>> myMessage(@Parameter(description="channelCode") @PathVariable(name = "channelCode", required = true) String channelCode,
-                                           @Parameter(description="查询参数") @RequestBody  Criteria criteria,
+                                           @Parameter(description="查询参数") Criteria criteria,
                                            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
                                            @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo){
         Pageable pageAble = PageRequest.of(pageNo - 1, pageSize);
@@ -40,7 +40,7 @@ public class MessageController {
     @GetMapping("myUnread/{channelCode}")
     @Operation(summary = "我的未读消息", description = "我的未读消息", method = "GET")
     public Result<Page<Message>> myUnread(@Parameter(description="channelCode") @PathVariable(name = "channelCode", required = true) String channelCode,
-                                           @Parameter(description="查询参数") @RequestBody  Criteria criteria,
+                                           @Parameter(description="查询参数") Criteria criteria,
                                            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
                                            @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo){
         Pageable pageAble = PageRequest.of(pageNo - 1, pageSize);
