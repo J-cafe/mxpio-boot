@@ -94,9 +94,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
             }
         } catch (Exception e) {
-        	log.info(httpServletRequest.getRequestURI());
+        	//log.info(httpServletRequest.getRequestURI());
         	log.error("错误信息：" + e.getMessage());
-        	e.printStackTrace();
+        	//e.printStackTrace();
         }
     }
 
