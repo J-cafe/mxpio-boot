@@ -19,9 +19,11 @@ public abstract class AbstractWebSocketHandler implements MxpioWebSocketHandler 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         if(session==null||session.getPrincipal()==null){
+            logger.info(":websocket建立连接，未获得用户信息");
             return;
         }
         String username = session.getPrincipal().getName();
+        logger.info(":websocket建立连接，{}",username);
         if(StringUtils.isNotBlank(username)){
             WebSocketConnection connection = new WebSocketConnection();
             connection.setId(username);
@@ -33,6 +35,7 @@ public abstract class AbstractWebSocketHandler implements MxpioWebSocketHandler 
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         logger.info("收到消息:{}",message.getPayload());
+        session.sendMessage(message);
     }
 
     @Override
@@ -43,6 +46,7 @@ public abstract class AbstractWebSocketHandler implements MxpioWebSocketHandler 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
         String username = session.getPrincipal().getName();
+        logger.info(":websocket断开连接，{}",username);
         if(StringUtils.isNotBlank(username)){
             mxpioWebSocketManager.remove(getEndpointName(),username);
         }

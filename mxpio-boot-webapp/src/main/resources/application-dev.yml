@@ -35,7 +35,7 @@ spring:
   quartz:
     #持久化到数据库方式
     job-store-type: jdbc
-    jdbc: 
+    jdbc:
       initialize-schema: always
     properties:
       org:

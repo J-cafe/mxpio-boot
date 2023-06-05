@@ -48,19 +48,16 @@ public class InMemoryMxpioWebSocketManager implements MxpioWebSocketManager {
     public void send(String endpoint, String id, String text) {
         Map<String, WebSocketConnection> endpointWebSocket = webSocketPool.get(endpoint);
         if(endpointWebSocket==null){
-            logger.error("send>>>>>>endpoint:{}的连接不存在",endpoint);
             throw new RuntimeException("endpoint为"+endpoint+"的连接不存在");
         }
         WebSocketConnection connection = endpointWebSocket.get(id);
         if(connection==null){
-            logger.error("send>>>>>>endpoint:{} id:{}的连接不存在",endpoint,id);
             throw new RuntimeException("endpoint为"+endpoint+" id为"+id+"的连接不存在");
         }
         try {
             WebSocketMessage<String> message = new TextMessage(text);
             connection.getSession().sendMessage(message);
         } catch (IOException e) {
-            logger.error("send>>>>>>向endpoint:{},id:{}的连接发送信息出现异常",endpoint,id,e);
             throw new RuntimeException("发送异常");
         }
     }
