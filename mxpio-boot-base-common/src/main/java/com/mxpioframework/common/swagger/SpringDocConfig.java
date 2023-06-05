@@ -35,12 +35,12 @@ public class SpringDocConfig {
 	}
 	
 	@Bean
-	public GroupedOpenApi flowableOpenApi() {
+	public GroupedOpenApi camundaOpenApi() {
 	    return GroupedOpenApi.builder()
-	            .group("Flowable")
-	            .packagesToScan("org.flowable")
+	            .group("Camunda")
+	            .packagesToScan("org.camunda.bpm.engine.rest")
 	            .addOpenApiCustomiser(openApi -> {
-	                Info info = new Info().title("Flowable API").version("6.7.2");
+	                Info info = new Info().title("Camunda API").version("7.16.0");
 	                openApi.info(info);
 	            })
 	            .build();

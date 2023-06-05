@@ -43,7 +43,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-flowable</artifactId>
+			<artifactId>mxpio-boot-base-camunda</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>

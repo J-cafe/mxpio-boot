@@ -125,7 +125,7 @@ public class EntityManagerFactoryServiceImpl implements
 	@Value("${mxpio.multitenant.packagesToScan:"
 			+ "com.mxpioframework.excel.importer.model,"
 			+ "com.mxpioframework.filestorage.entity,"
-			+ "com.mxpioframework.flowable.entity,"
+			+ "com.mxpioframework.camunda.entity,"
 			+ "com.mxpioframework.log.entity,"
 			+ "com.mxpioframework.quartz.entity,"
 			+ "com.mxpioframework.system.entity,"

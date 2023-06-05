@@ -32,10 +32,10 @@
 		<druid.version>1.2.6</druid.version>
 		<jackson.version>2.11.4</jackson.version>
 		<poi.version>5.2.0</poi.version>
-		<flowable.version>6.7.2</flowable.version>
 		<liquibase.version>4.8.0</liquibase.version>
 		<caffeine.version>2.9.3</caffeine.version>
 		<minio.version>8.2.1</minio.version>
+		<camunda.version>7.16.0</camunda.version>
 	</properties>
 	<modules>
 		<module>mxpio-boot-base-autoconfigure</module>
@@ -47,7 +47,7 @@
 		<module>mxpio-boot-base-system</module>
 		<module>mxpio-boot-base-quartz</module>
 		<module>mxpio-boot-base-excel</module>
-		<module>mxpio-boot-base-flowable</module>
+		<module>mxpio-boot-base-camunda</module>
 		<module>mxpio-boot-base-log</module>
 		<module>mxpio-boot-base-expression</module>
     	<module>mxpio-boot-base-filestorage</module>
@@ -178,7 +178,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.mxpio</groupId>
-				<artifactId>mxpio-boot-base-flowable</artifactId>
+				<artifactId>mxpio-boot-base-camunda</artifactId>
 				<version>${mxpio.version}</version>
 			</dependency>
 			<dependency>
@@ -209,6 +209,16 @@
 			<dependency>
 				<groupId>com.mxpio</groupId>
 				<artifactId>mxpio-boot-module-datav</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-base-message</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-base-websocket</artifactId>
 				<version>${mxpio.version}</version>
 			</dependency>
 			<dependency>
@@ -274,6 +284,18 @@
 		        <artifactId>knife4j-springdoc-ui</artifactId>
 		        <version>3.0.3</version>
 		    </dependency>
+		    
+		    <dependency>
+			    <groupId>org.camunda.bpm.springboot</groupId>
+			    <artifactId>camunda-bpm-spring-boot-starter</artifactId>
+			    <version>${camunda.version}</version>
+			</dependency>
+			
+			<dependency>
+			    <groupId>org.camunda.bpm.springboot</groupId>
+			    <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
+			    <version>${camunda.version}</version>
+			</dependency>
 
 			<!-- druid数据源驱动 -->
 			<dependency>
@@ -303,19 +325,6 @@
 				<groupId>commons-codec</groupId>
 				<artifactId>commons-codec</artifactId>
 				<version>1.15</version>
-			</dependency>
-
-			<!-- Flowable -->
-			<dependency>
-				<groupId>org.flowable</groupId>
-				<artifactId>flowable-spring-boot-starter</artifactId>
-				<version>${flowable.version}</version>
-			</dependency>
-
-			<dependency>
-			    <groupId>org.flowable</groupId>
-			    <artifactId>flowable-spring-boot-starter-rest</artifactId>
-			    <version>${flowable.version}</version>
 			</dependency>
 
 			<!-- poi -->
@@ -349,12 +358,12 @@
 				<artifactId>itext-asian</artifactId>
 				<version>5.2.0</version>
 			</dependency>
-	<!-- Aviator -->
-	<dependency>
-		<groupId>com.googlecode.aviator</groupId>
-		<artifactId>aviator</artifactId>
-		<version>4.2.7</version>
-	</dependency>
+			<!-- Aviator -->
+			<dependency>
+				<groupId>com.googlecode.aviator</groupId>
+				<artifactId>aviator</artifactId>
+				<version>4.2.7</version>
+			</dependency>
 
 			<dependency>
 				<groupId>org.liquibase</groupId>

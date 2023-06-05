@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Service
+@Service("mxpio.message.messageService")
 public class MessageServiceImpl implements MessageService, ApplicationContextAware, InitializingBean {
 
     private ApplicationContext applicationContext;
