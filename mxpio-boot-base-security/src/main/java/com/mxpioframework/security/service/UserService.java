@@ -113,4 +113,6 @@ public interface UserService {
 	boolean isAdministrator(String username);
 
     Result<User> updatePassWithCheck(UpatePassVo upatePassVo);
+
+	long count();
 }

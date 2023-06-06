@@ -194,4 +194,10 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 		JpaUtil.update(u);
 		return Result.OK("修改成功",u);
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public long count() {
+		return JpaUtil.count(User.class);
+	}
 }

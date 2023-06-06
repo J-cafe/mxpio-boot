@@ -36,12 +36,13 @@ mxpio-boot-parent
 ├─mxpio-boot-base-security // 权鉴模块
 ├─mxpio-boot-base-system // 系统管理模块
 ├─mxpio-boot-base-excel // Excel模块
-├─mxpio-boot-base-flowable // 工作流模块
+├─mxpio-boot-base-camunda // 工作流模块
 ├─mxpio-boot-base-quartz // Job管理模块
-├─mxpio-boot-base-ui // UI设计模块
+├─mxpio-boot-base-message // 消息通知模块
+├─mxpio-boot-base-multitenant // 多租户
+├─mxpio-boot-base-dbconsole // 云数据库
 ├─mxpio-boot-module-cache-redis // 缓存Redis实现
 ├─mxpio-boot-module-cache-caffeine // 缓存Caffeine实现（与Redis二选一）
-├─mxpio-boot-base-multitenant // 多租户
 └─mxpio-boot-webapp // 业务项目
 
 
@@ -158,19 +159,22 @@ java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.9.jar
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-base-autoconfigure</artifactId>
 </dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-module-cache-redis</artifactId>
-</dependency>
-<!-- 与mxpio-boot-module-cache-redis二选一 -->
 <!-- <dependency>
 	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-module-cache-caffeine</artifactId>
+	<artifactId>mxpio-boot-module-cache-redis</artifactId>
 </dependency> -->
+<dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-module-cache-caffeine</artifactId>
+</dependency>
 <dependency>
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-base-security</artifactId>
 </dependency>
+<!-- <dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-base-multitenant</artifactId>
+</dependency> -->
 <dependency>
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-base-excel</artifactId>
@@ -181,7 +185,7 @@ java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.9.jar
 </dependency>
 <dependency>
 	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-flowable</artifactId>
+	<artifactId>mxpio-boot-base-camunda</artifactId>
 </dependency>
 <dependency>
 	<groupId>com.mxpio</groupId>
@@ -198,6 +202,10 @@ java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.9.jar
 <dependency>
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-base-system</artifactId>
+</dependency>
+<dependency>
+	<groupId>com.mxpio</groupId>
+	<artifactId>mxpio-boot-base-dbconsole</artifactId>
 </dependency>
 ```
 
@@ -357,7 +365,7 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.9.jar
 | Excel | 导入管理 | 已完成 | 已完成 | 暂无 |
 |       | 导出管理 | 已完成 | 已完成 | 暂无 |
 | 工作流 |       | 进行中 | 进行中 | 暂无 |
-| 任务调度 |       | 已完成 | 进行中 | 暂无 |
+| 任务调度 |       | 已完成 | 已完成 | 暂无 |
 | 报表模块 |       | 未开始 | 未开始 | 暂无 |
 | 图表模块 |       | 未开始 | 未开始 | 暂无 |
 | 多租户 |       | 进行中 | 未开始 | 暂无 |
