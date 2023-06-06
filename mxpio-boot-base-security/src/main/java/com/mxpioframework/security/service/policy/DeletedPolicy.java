@@ -12,7 +12,7 @@ public class DeletedPolicy extends AbstractGeneratorPolicy {
 
 	@Override
 	protected Object getValue(Object entity, String name) {
-		return false;
+		return null;
 	}
 
 }

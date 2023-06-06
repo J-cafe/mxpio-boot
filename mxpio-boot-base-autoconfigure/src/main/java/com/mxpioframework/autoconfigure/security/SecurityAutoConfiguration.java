@@ -36,7 +36,7 @@ public class SecurityAutoConfiguration {
 
 	@ConditionalOnClass(SimpleKeyGenerator.class)
 	@ConditionalOnMissingBean(name = KEY_GENERATOR_BEAN_NAME)
-	protected static class cacheConfiguration {
+	protected static class CacheConfiguration {
 		
 		@Bean
 		public SecurityKeyGenerator securityKeyGenerator() {

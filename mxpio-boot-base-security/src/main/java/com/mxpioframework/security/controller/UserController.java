@@ -58,8 +58,6 @@ public class UserController {
 	@Operation(summary = "用户信息", description = "获取当前登录用户信息", method = "GET")
 	public Result<UserDetails> info() throws Exception {
 		UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		log.info("user==>" + user);
-		log.info("Authorities==>" + user.getAuthorities());
 		return Result.OK(user);
 	}
 	
