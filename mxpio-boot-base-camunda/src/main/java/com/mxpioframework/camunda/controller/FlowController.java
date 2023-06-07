@@ -41,7 +41,7 @@ public class FlowController {
 	@Operation(summary = "部署流程", description = "部署流程", method = "GET")
 	public Result<Deployment> deploy(@PathVariable(name = "code", required = true) String code){
 		BpmnFlow bpmnFlow = bpmnFlowService.findByID(code);
-		Deployment deployment = repositoryService.createDeployment().addString(bpmnFlow.getCode(), bpmnFlow.getXml()).deploy();
+		Deployment deployment = repositoryService.createDeployment().addString(bpmnFlow.getCode() + ".bpmn20.xml", bpmnFlow.getXml()).deploy();
 		return Result.OK(deployment);
 	}
 	

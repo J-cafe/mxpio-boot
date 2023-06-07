@@ -12,7 +12,7 @@ import com.mxpioframework.camunda.service.BpmnFlowService;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
 
-@Service
+@Service("mxpio.camunda.bpmnFlowService")
 public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Override
