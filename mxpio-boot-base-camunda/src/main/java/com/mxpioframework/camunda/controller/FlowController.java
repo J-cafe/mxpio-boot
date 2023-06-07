@@ -26,10 +26,10 @@ import com.mxpioframework.jpa.query.Criteria;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name = "BpmnController", description = "流程管理")
-@RestController("mxpio.camunda.BpmnController")
+@Tag(name = "FlowController", description = "流程管理")
+@RestController("mxpio.camunda.FlowController")
 @RequestMapping("/camunda/flow/")
-public class BpmnController {
+public class FlowController {
 	
 	@Autowired
 	private RepositoryService repositoryService;
@@ -41,7 +41,7 @@ public class BpmnController {
 	@Operation(summary = "部署流程", description = "部署流程", method = "GET")
 	public Result<Deployment> deploy(@PathVariable(name = "code", required = true) String code){
 		BpmnFlow bpmnFlow = bpmnFlowService.findByID(code);
-		Deployment deployment = repositoryService.createDeployment().addString(bpmnFlow.getCode(), bpmnFlow.getXml()).deploy();
+		Deployment deployment = repositoryService.createDeployment().addString(bpmnFlow.getCode() + ".bpmn20.xml", bpmnFlow.getXml()).deploy();
 		return Result.OK(deployment);
 	}
 	
