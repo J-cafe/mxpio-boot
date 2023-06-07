@@ -26,10 +26,10 @@ import com.mxpioframework.jpa.query.Criteria;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name = "BpmnController", description = "流程管理")
-@RestController("mxpio.camunda.BpmnController")
+@Tag(name = "FlowController", description = "流程管理")
+@RestController("mxpio.camunda.FlowController")
 @RequestMapping("/camunda/flow/")
-public class BpmnController {
+public class FlowController {
 	
 	@Autowired
 	private RepositoryService repositoryService;
