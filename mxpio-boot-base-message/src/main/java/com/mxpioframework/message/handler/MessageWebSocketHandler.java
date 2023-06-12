@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 public class MessageWebSocketHandler extends AbstractWebSocketHandler {
     @Override
     public String getEndpointName() {
-        return "message";
+        return "ws/message";
     }
 }
