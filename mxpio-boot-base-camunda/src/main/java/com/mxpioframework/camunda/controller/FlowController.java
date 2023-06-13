@@ -3,8 +3,6 @@ package com.mxpioframework.camunda.controller;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.repository.Deployment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,19 +31,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class FlowController {
 	
 	@Autowired
-	private RepositoryService repositoryService;
-	
-	@Autowired
 	private BpmnFlowService bpmnFlowService;
 
 	@GetMapping("deploy/{code}")
 	@Operation(summary = "部署流程", description = "部署流程", method = "GET")
 	public Result<?> deploy(@PathVariable(name = "code", required = true) String code){
-		BpmnFlow bpmnFlow = bpmnFlowService.findByID(code);
-		Deployment deployment = repositoryService.createDeployment().addString(bpmnFlow.getCode() + ".bpmn", bpmnFlow.getXml()).deploy();
-		bpmnFlow.setStatus(BpmnEnums.DeployStatusEnums.DEPLOY.getCode());
-		bpmnFlow.setLastDeployId(deployment.getId());
-		bpmnFlowService.update(bpmnFlow);
+		
+		BpmnFlow bpmnFlow = bpmnFlowService.deploy(code);
 		return Result.OK("部署成功！", bpmnFlow);
 	}
 	

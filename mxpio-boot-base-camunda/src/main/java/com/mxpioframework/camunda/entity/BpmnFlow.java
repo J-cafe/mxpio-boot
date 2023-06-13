@@ -46,8 +46,12 @@ public class BpmnFlow extends BaseEntity {
 	@Schema(description = "表单定义")
 	private String formModel;
 	
-	@Column(name = "LAST_DEPLOY_ID_")
-	@Schema(description = "当前部署ID")
-	private String lastDeployId;
+	@Column(name = "LAST_DEF_ID_")
+	@Schema(description = "当前定义ID")
+	private String lastDefId;
+	
+	@Column(name = "LAST_DEF_VERSION_")
+	@Schema(description = "当前定义版本")
+	private Integer lastDefVersion;
 
 }

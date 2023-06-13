@@ -22,4 +22,6 @@ public interface BpmnFlowService {
 
 	BpmnFlow findByID(String code);
 
+	BpmnFlow deploy(String code);
+
 }
