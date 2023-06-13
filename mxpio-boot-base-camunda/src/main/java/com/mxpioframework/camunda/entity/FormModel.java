@@ -16,30 +16,30 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Entity
-@Table(name = "MB_BPMN_FLOW")
-@Schema(description="流程信息")
+@Table(name = "MB_BPMN_FORM_MODEL")
+@Schema(description="流程表单信息")
 @ToString
-public class BpmnFlow extends BaseEntity {
-	
-	private static final long serialVersionUID = 1L;
+public class FormModel extends BaseEntity {
 
+	private static final long serialVersionUID = 1L;
+	
 	@Id
-	@Column(name = "CODE_")
-	@Schema(description = "流程编码")
-	private String code;
+	@Column(name = "KEY_")
+	@Schema(description = "表单Key")
+	private String key;
 	
 	@Column(name = "NAME_")
-	@Schema(description = "流程名称")
+	@Schema(description = "表单名称")
 	private String name;
 	
-	@Column(name = "STATUS_")
-	@Schema(description = "发布状态")
-	private String status;
+	@Column(name = "DESC_")
+	@Schema(description = "表单描述")
+	private String desc;
 	
 	@Lob
-	@Column(name = "XML_")
-	@Schema(description = "流程定义")
-	private String xml;
+	@Column(name = "MODEL_")
+	@Schema(description = "表单内容")
+	private String model;
 	
 	@Column(name = "LAST_DEF_ID_")
 	@Schema(description = "当前定义ID")

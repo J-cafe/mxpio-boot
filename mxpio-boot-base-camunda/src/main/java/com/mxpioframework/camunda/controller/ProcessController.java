@@ -1,8 +1,9 @@
 package com.mxpioframework.camunda.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
@@ -13,10 +14,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mxpioframework.camunda.dto.ProcessInstanceDto;
+import com.mxpioframework.camunda.service.BpmnFlowService;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.util.SecurityUtils;
 
@@ -32,39 +37,57 @@ public class ProcessController {
 	private RuntimeService runtimeService;
 
 	@Autowired
-	private IdentityService identityService;
+	private BpmnFlowService bpmnFlowService;
 
 	@GetMapping("list")
 	@Operation(summary = "流程列表", description = "流程列表", method = "GET")
-	public Result<List<ProcessInstance>> list() {
+	public Result<List<ProcessInstanceDto>> list() {
+		List<ProcessInstanceDto> list = new ArrayList<>();
 		ProcessInstanceQuery processInstanceQuery = runtimeService.createProcessInstanceQuery();
-		List<ProcessInstance> list = processInstanceQuery.orderByProcessInstanceId().desc().list();
+		List<ProcessInstance> procInsts = processInstanceQuery.orderByProcessInstanceId().desc().list();
+		for(ProcessInstance procInst : procInsts){
+			list.add(new ProcessInstanceDto(procInst));
+		}
 		return Result.OK(list);
 	}
 
 	@GetMapping("page")
 	@Operation(summary = "流程列表(分页)", description = "流程列表(分页)", method = "GET")
-	public Result<Page<ProcessInstance>> page(@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
+	public Result<Page<ProcessInstanceDto>> page(@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
+		List<ProcessInstanceDto> list = new ArrayList<>();
 		ProcessInstanceQuery processInstanceQuery = runtimeService.createProcessInstanceQuery();
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		long total = processInstanceQuery.count();
-		List<ProcessInstance> list = processInstanceQuery.orderByProcessInstanceId().desc().listPage((pageNo-1) * pageSize, pageNo * pageSize - 1);
-		Page<ProcessInstance> page = new PageImpl<ProcessInstance>(list, pageAble, total);
+		List<ProcessInstance> procInsts = processInstanceQuery.orderByProcessInstanceId().desc().listPage((pageNo-1) * pageSize, pageNo * pageSize - 1);
+		for(ProcessInstance procInst : procInsts){
+			list.add(new ProcessInstanceDto(procInst));
+		}
+		Page<ProcessInstanceDto> page = new PageImpl<ProcessInstanceDto>(list, pageAble, total);
 		return Result.OK(page);
 	}
-
-	@GetMapping("start/{key}")
-	@Operation(summary = "启动流程", description = "启动流程", method = "GET")
-	public Result<?> start(@PathVariable(name = "key", required = true) String key) {
-		identityService.setAuthenticatedUserId(SecurityUtils.getLoginUsername());
-		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(key);
-		return Result.OK("启动成功！", processInstance.getId());
+	
+	@GetMapping("form/{key}")
+	@Operation(summary = "获取流程开始表单Key", description = "获取流程开始表单Key", method = "GET")
+	public Result<?> form(@PathVariable(name = "key", required = true) String key) {
+		
+		String formKey = bpmnFlowService.getStartFormKeyByProcessDefinitionId(key);
+		return Result.OK("查询成功！",formKey);
 	}
 
+	@PostMapping("start/{key}")
+	@Operation(summary = "启动流程", description = "启动流程", method = "GET")
+	public Result<?> start(@PathVariable(name = "key", required = true) String key,
+			@RequestBody Map<String, Object> properties) {
+		
+		ProcessInstance processInstance = bpmnFlowService.startWithFormByKey(key, SecurityUtils.getLoginUsername(), properties);
+		return Result.OK("启动成功！", processInstance.getId());
+	}
+	
 	@GetMapping("suspend/{instanceId}")
 	@Operation(summary = "暂停流程", description = "暂停流程", method = "GET")
 	public Result<?> suspend(@PathVariable(name = "instanceId", required = true) String instanceId) {
+		
 		runtimeService.suspendProcessInstanceById(instanceId);
 		return Result.OK();
 	}
@@ -73,6 +96,7 @@ public class ProcessController {
 	@Operation(summary = "重启流程", description = "重启流程", method = "GET")
 	public Result<?> restart(@PathVariable(name = "processDefinitionId", required = true) String processDefinitionId,
 			@PathVariable(name = "instanceId", required = true) String instanceId) {
+		
 		runtimeService.restartProcessInstances(processDefinitionId).processInstanceIds(instanceId).execute();
 		return Result.OK();
 	}
