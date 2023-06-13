@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mxpioframework.camunda.entity.BpmnFlow;
+import com.mxpioframework.camunda.enums.BpmnEnums;
 import com.mxpioframework.camunda.service.BpmnFlowService;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.query.Criteria;
@@ -39,10 +40,13 @@ public class FlowController {
 
 	@GetMapping("deploy/{code}")
 	@Operation(summary = "部署流程", description = "部署流程", method = "GET")
-	public Result<Deployment> deploy(@PathVariable(name = "code", required = true) String code){
+	public Result<?> deploy(@PathVariable(name = "code", required = true) String code){
 		BpmnFlow bpmnFlow = bpmnFlowService.findByID(code);
 		Deployment deployment = repositoryService.createDeployment().addString(bpmnFlow.getCode() + ".bpmn", bpmnFlow.getXml()).deploy();
-		return Result.OK(deployment);
+		bpmnFlow.setStatus(BpmnEnums.DeployStatusEnums.DEPLOY.getCode());
+		bpmnFlow.setLastDeployId(deployment.getId());
+		bpmnFlowService.update(bpmnFlow);
+		return Result.OK("部署成功！", bpmnFlow);
 	}
 	
 	@GetMapping("list")
@@ -63,6 +67,7 @@ public class FlowController {
 	@PostMapping("add")
 	@Operation(summary = "新增流程", description = "新增流程", method = "POST")
 	public Result<BpmnFlow> add(@RequestBody BpmnFlow bpmnFlow) {
+		bpmnFlow.setStatus(BpmnEnums.DeployStatusEnums.NEW.getCode());
 		bpmnFlowService.save(bpmnFlow);
 		return Result.OK(bpmnFlow);
 	}
@@ -70,6 +75,7 @@ public class FlowController {
 	@PutMapping("edit")
 	@Operation(summary = "编辑流程", description = "编辑流程（全量）", method = "PUT")
 	public Result<BpmnFlow> edit(@RequestBody BpmnFlow bpmnFlow) {
+		bpmnFlow.setStatus(BpmnEnums.DeployStatusEnums.UPDATE.getCode());
 		bpmnFlowService.update(bpmnFlow);
 		return Result.OK(bpmnFlow);
 	}

@@ -56,10 +56,10 @@ public class ProcessController {
 
 	@GetMapping("start/{key}")
 	@Operation(summary = "启动流程", description = "启动流程", method = "GET")
-	public Result<ProcessInstance> start(@PathVariable(name = "key", required = true) String key) {
+	public Result<?> start(@PathVariable(name = "key", required = true) String key) {
 		identityService.setAuthenticatedUserId(SecurityUtils.getLoginUsername());
 		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(key);
-		return Result.OK(processInstance);
+		return Result.OK("启动成功！", processInstance.getId());
 	}
 
 	@GetMapping("suspend/{instanceId}")
