@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,8 +62,8 @@ public class TaskController {
 		return Result.OK(page);
 	}
 	
-	@GetMapping("complete/{taskId}")
-	@Operation(summary = "节点签核", description = "节点签核", method = "GET")
+	@PostMapping("complete/{taskId}")
+	@Operation(summary = "节点签核", description = "节点签核", method = "POST")
 	public Result<ProcessInstance> complete(@PathVariable(name = "taskId", required = true) String taskId,
 			@RequestBody Map<String, Object> properties){
 		boolean b = bpmnFlowService.complete(taskId, properties, SecurityUtils.getLoginUsername());

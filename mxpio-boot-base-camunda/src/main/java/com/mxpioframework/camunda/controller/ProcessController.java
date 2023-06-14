@@ -76,7 +76,7 @@ public class ProcessController {
 	}
 
 	@PostMapping("start/{key}")
-	@Operation(summary = "启动流程", description = "启动流程", method = "GET")
+	@Operation(summary = "启动流程", description = "启动流程", method = "POST")
 	public Result<?> start(@PathVariable(name = "key", required = true) String key,
 			@RequestBody Map<String, Object> properties) {
 		

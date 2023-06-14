@@ -24,13 +24,17 @@ public class FormModel extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@Column(name = "KEY_")
-	@Schema(description = "表单Key")
-	private String key;
+	@Column(name = "CODE_")
+	@Schema(description = "表单编码")
+	private String code;
 	
 	@Column(name = "NAME_")
 	@Schema(description = "表单名称")
 	private String name;
+	
+	@Column(name = "STATUS_")
+	@Schema(description = "发布状态")
+	private String status;
 	
 	@Column(name = "DESC_")
 	@Schema(description = "表单描述")
@@ -41,9 +45,9 @@ public class FormModel extends BaseEntity {
 	@Schema(description = "表单内容")
 	private String model;
 	
-	@Column(name = "LAST_DEF_ID_")
-	@Schema(description = "当前定义ID")
-	private String lastDefId;
+	@Column(name = "LAST_DEF_KEY_")
+	@Schema(description = "当前定义KEY")
+	private String lastDefKey;
 	
 	@Column(name = "LAST_DEF_VERSION_")
 	@Schema(description = "当前定义版本")

@@ -24,13 +24,13 @@ public class FormModelDef extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@Column(name = "ID_")
-	@Schema(description = "ID")
-	private String id;
-	
 	@Column(name = "KEY_")
-	@Schema(description = "表单Key")
+	@Schema(description = "KEY")
 	private String key;
+	
+	@Column(name = "CODE_")
+	@Schema(description = "表单编码")
+	private String code;
 	
 	@Column(name = "NAME_")
 	@Schema(description = "表单名称")
