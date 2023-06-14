@@ -67,7 +67,9 @@ public class FlowController {
 	@PutMapping("edit")
 	@Operation(summary = "编辑流程", description = "编辑流程（全量）", method = "PUT")
 	public Result<BpmnFlow> edit(@RequestBody BpmnFlow bpmnFlow) {
-		bpmnFlow.setStatus(BpmnEnums.DeployStatusEnums.UPDATE.getCode());
+		if(BpmnEnums.DeployStatusEnums.DEPLOY.getCode().equals(bpmnFlow.getStatus())){
+			bpmnFlow.setStatus(BpmnEnums.DeployStatusEnums.UPDATE.getCode());
+		}
 		bpmnFlowService.update(bpmnFlow);
 		return Result.OK(bpmnFlow);
 	}
