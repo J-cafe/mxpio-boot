@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
+import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mxpioframework.camunda.dto.HistoricTaskDto;
+import com.mxpioframework.camunda.dto.TaskDetailDto;
 import com.mxpioframework.camunda.dto.TaskDto;
 import com.mxpioframework.camunda.service.BpmnFlowService;
 import com.mxpioframework.common.vo.Result;
@@ -57,7 +61,8 @@ public class TaskController {
 		List<HistoricTaskInstance> tasks = bpmnFlowService.pagingHistoricTaskListPageByUser(username, pageSize, pageNo);
 		long total = bpmnFlowService.countHistoricTaskListByUser(username);
 		for(HistoricTaskInstance task : tasks){
-			list.add(new TaskDto(task));
+			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
+			list.add(new TaskDto(task, historicProcessInstance));
 		}
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
@@ -83,6 +88,32 @@ public class TaskController {
 		
 		String formKey = bpmnFlowService.getTaskFormKeyByTaskId(taskId);
 		return Result.OK("查询成功！",formKey);
+	}
+	
+	@GetMapping("details/{processInstanceId}/{taskId}")
+	@Operation(summary = "获取节点详情", description = "获取节点详情", method = "GET")
+	public Result<TaskDetailDto> detail(@PathVariable(name = "processInstanceId", required = true) String processInstanceId,
+			@PathVariable(name = "taskId", required = true) String taskId) {
+		TaskDetailDto taskDetail = new TaskDetailDto(taskId);
+		//获取流程信息
+		ProcessDefinition procDef = bpmnFlowService.getProcDefByProcessInstanceId(processInstanceId);
+		if(procDef.hasStartFormKey()){
+			bpmnFlowService.handleFormInfo(procDef, taskDetail);
+		}
+		bpmnFlowService.handleBpmnFile(procDef, taskDetail);
+		bpmnFlowService.handleVariables(processInstanceId, taskDetail);
+		return Result.OK("查询成功！",taskDetail);
+	}
+	
+	@GetMapping("historics/{processInstanceId}")
+	@Operation(summary = "获取历史节点信息", description = "获取历史节点信息", method = "GET")
+	public Result<List<HistoricTaskDto>> historics(@PathVariable(name = "processInstanceId", required = true) String processInstanceId) {
+		List<HistoricTaskDto> list = new ArrayList<>();
+		List<HistoricTaskInstance> tasks = bpmnFlowService.getHistoricTaskByProcessInstanceId(processInstanceId);
+		for(HistoricTaskInstance task : tasks){
+			list.add(new HistoricTaskDto(task));
+		}
+		return Result.OK("查询成功！",list);
 	}
 	
 	@GetMapping("form/data/{taskId}")

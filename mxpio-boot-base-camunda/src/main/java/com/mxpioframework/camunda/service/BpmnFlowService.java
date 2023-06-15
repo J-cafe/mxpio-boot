@@ -12,7 +12,8 @@ import org.camunda.bpm.engine.variable.VariableMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.mxpioframework.camunda.dto.ProcessDefDto;
+import com.mxpioframework.camunda.dto.BpmnResource;
+import com.mxpioframework.camunda.dto.TaskDetailDto;
 import com.mxpioframework.camunda.entity.BpmnFlow;
 import com.mxpioframework.jpa.query.Criteria;
 
@@ -52,9 +53,9 @@ public interface BpmnFlowService {
 	
 	ProcessDefinition getProcDefByProcessDefinitionId(String id);
 
-	void handleFormInfo(ProcessDefinition procDef, ProcessDefDto procDefDto);
+	void handleFormInfo(ProcessDefinition procDef, BpmnResource bpmnResource);
 
-	void handleBpmnFile(ProcessDefinition procDef, ProcessDefDto procDefDto);
+	void handleBpmnFile(ProcessDefinition procDef, BpmnResource bpmnResource);
 
 	List<HistoricProcessInstance> getHistoricProcessInstances();
 
@@ -67,5 +68,15 @@ public interface BpmnFlowService {
 	List<HistoricTaskInstance> pagingHistoricTaskListPageByUser(String username, Integer pageSize, Integer pageNo);
 
 	long countHistoricTaskListByUser(String username);
+
+	List<HistoricTaskInstance> getHistoricTaskByProcessInstanceId(String processInstanceId);
+
+	HistoricProcessInstance getHistoricProcessInstanceById(String processInstanceId);
+
+	HistoricTaskInstance getHistoricTaskById(String startActivityId);
+
+	ProcessDefinition getProcDefByProcessInstanceId(String processInstanceId);
+
+	void handleVariables(String processInstanceId, TaskDetailDto taskDetail);
 
 }

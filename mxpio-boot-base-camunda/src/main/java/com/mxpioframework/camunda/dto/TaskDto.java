@@ -3,6 +3,7 @@ package com.mxpioframework.camunda.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -40,6 +41,16 @@ public class TaskDto implements Serializable {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date createTime;
 	
+	@Schema(description = "流程发起时间")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private Date procStartTime;
+	
+	@Schema(description = "发起人")
+	private String procStartUserId;
+	
+	@Schema(description = "流程定义名称")
+	private String processDefinitionName;
+	
 	public TaskDto(HistoricTaskInstance task) {
 		this.id = task.getId();
 		this.assignee = task.getAssignee();
@@ -48,6 +59,13 @@ public class TaskDto implements Serializable {
 		this.processInstanceId = task.getProcessInstanceId();
 		this.processDefinitionKey = task.getProcessDefinitionKey();
 		this.createTime = task.getStartTime();
+	}
+
+	public TaskDto(HistoricTaskInstance task, HistoricProcessInstance historicProcessInstance) {
+		this(task);
+		this.procStartTime = historicProcessInstance.getStartTime();
+		this.procStartUserId = historicProcessInstance.getStartUserId();
+		this.processDefinitionName = historicProcessInstance.getProcessDefinitionName();
 	}
 
 }

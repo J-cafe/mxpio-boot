@@ -24,7 +24,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mxpioframework.camunda.dto.ProcessDefDto;
+import com.mxpioframework.camunda.dto.BpmnResource;
+import com.mxpioframework.camunda.dto.TaskDetailDto;
 import com.mxpioframework.camunda.entity.BpmnFlow;
 import com.mxpioframework.camunda.enums.BpmnEnums;
 import com.mxpioframework.camunda.service.BpmnFlowService;
@@ -187,21 +188,21 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public void handleFormInfo(ProcessDefinition procDef, ProcessDefDto procDefDto) {
+	public void handleFormInfo(ProcessDefinition procDef, BpmnResource bpmnResource) {
 		String formKey = formService.getStartFormKey(procDef.getId());
-		procDefDto.setFormModelDef(formModelService.getFormModelDefByKey(formKey));
+		bpmnResource.setStartFormModelDef(formModelService.getFormModelDefByKey(formKey));
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public void handleBpmnFile(ProcessDefinition procDef, ProcessDefDto procDefDto) {
+	public void handleBpmnFile(ProcessDefinition procDef, BpmnResource bpmnResource) {
 		String source = null;
 		try {
 			source = IOUtils.toString(repositoryService.getProcessModel(procDef.getId()), "UTF-8");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		procDefDto.setSource(source);
+		bpmnResource.setSource(source);
 	}
 
 	@Override
@@ -239,6 +240,38 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Transactional(readOnly = true)
 	public long countHistoricTaskListByUser(String username) {
 		return historyService.createHistoricTaskInstanceQuery().unfinished().taskAssignee(username).count();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<HistoricTaskInstance> getHistoricTaskByProcessInstanceId(String processInstanceId) {
+		List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().finished().processInstanceId(processInstanceId).orderByTaskId().asc().list();
+		return list;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public HistoricProcessInstance getHistoricProcessInstanceById(String processInstanceId) {
+		return historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public HistoricTaskInstance getHistoricTaskById(String startActivityId) {
+		return historyService.createHistoricTaskInstanceQuery().taskId(startActivityId).singleResult();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ProcessDefinition getProcDefByProcessInstanceId(String processInstanceId) {
+		HistoricProcessInstance historicProcessInstance = getHistoricProcessInstanceById(processInstanceId);
+		return getProcDefByProcessDefinitionId(historicProcessInstance.getProcessDefinitionId());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public void handleVariables(String processInstanceId, TaskDetailDto taskDetail) {
+		taskDetail.setStartDatas(runtimeService.getVariables(processInstanceId));
 	}
 
 }

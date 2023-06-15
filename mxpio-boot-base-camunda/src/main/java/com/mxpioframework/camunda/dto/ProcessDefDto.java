@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class ProcessDefDto implements Serializable {
+public class ProcessDefDto implements Serializable, BpmnResource {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -41,7 +41,7 @@ public class ProcessDefDto implements Serializable {
 	@Schema(description = "是否有启动表单")
 	private boolean startFormKey;
 	
-	private FormModelDef formModelDef;
+	private FormModelDef startFormModelDef;
 	
 	public ProcessDefDto(ProcessDefinition procDef) {
 		this.id = procDef.getId();
