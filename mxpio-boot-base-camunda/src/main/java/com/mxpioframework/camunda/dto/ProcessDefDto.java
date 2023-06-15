@@ -29,6 +29,9 @@ public class ProcessDefDto implements Serializable {
 	@Schema(description = "版本")
 	private Integer version;
 	
+	@Schema(description = "bpmn文件")
+	private String source;
+	
 	@Schema(description = "是否有启动表单")
 	private boolean startFormKey;
 	

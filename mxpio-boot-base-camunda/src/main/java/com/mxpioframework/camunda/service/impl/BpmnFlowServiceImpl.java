@@ -178,4 +178,11 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		procDefDto.setFormModelDef(formModelService.getFormModelDefByKey(formKey));
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public void handleBpmnFile(ProcessDefinition procDef, ProcessDefDto procDefDto) {
+		Deployment deployment = repositoryService.createDeploymentQuery().deploymentId(procDef.getDeploymentId()).singleResult();
+		procDefDto.setSource(deployment.getSource());
+	}
+
 }

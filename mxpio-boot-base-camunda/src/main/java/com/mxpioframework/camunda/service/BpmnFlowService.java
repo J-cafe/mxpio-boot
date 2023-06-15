@@ -50,4 +50,6 @@ public interface BpmnFlowService {
 
 	void handleFormInfo(ProcessDefinition procDef, ProcessDefDto procDefDto);
 
+	void handleBpmnFile(ProcessDefinition procDef, ProcessDefDto procDefDto);
+
 }
