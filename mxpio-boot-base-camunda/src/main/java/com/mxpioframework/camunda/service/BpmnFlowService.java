@@ -47,6 +47,8 @@ public interface BpmnFlowService {
 	boolean complete(String taskId, Map<String, Object> properties, String loginUsername);
 
 	ProcessDefinition getProcDefByProcessDefinitionKey(String key);
+	
+	ProcessDefinition getProcDefByProcessDefinitionId(String id);
 
 	void handleFormInfo(ProcessDefinition procDef, ProcessDefDto procDefDto);
 

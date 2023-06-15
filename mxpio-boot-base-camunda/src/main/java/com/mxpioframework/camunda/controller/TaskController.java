@@ -3,6 +3,8 @@ package com.mxpioframework.camunda.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.variable.VariableMap;
@@ -35,7 +37,7 @@ public class TaskController {
 	@Autowired
 	private BpmnFlowService bpmnFlowService;
 	
-	@GetMapping("list")
+/*	@GetMapping("list")
 	@Operation(summary = "待办任务列表", description = "待办任务列表", method = "GET")
 	public Result<List<TaskDto>> list() {
 		List<TaskDto> list = new ArrayList<>();
@@ -44,7 +46,7 @@ public class TaskController {
 			list.add(new TaskDto(task));
 		}
 		return Result.OK(list);
-	}
+	}*/
 
 	@GetMapping("page")
 	@Operation(summary = "流程列表(分页)", description = "流程列表(分页)", method = "GET")
@@ -55,7 +57,8 @@ public class TaskController {
 		List<Task> tasks = bpmnFlowService.getTaskListPageByUser(username, pageSize, pageNo);
 		long total = bpmnFlowService.countTaskListByUser(username);
 		for(Task task : tasks){
-			list.add(new TaskDto(task));
+			ProcessDefinition procDef = bpmnFlowService.getProcDefByProcessDefinitionId(task.getProcessDefinitionId());
+			list.add(new TaskDto(task, procDef));
 		}
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);

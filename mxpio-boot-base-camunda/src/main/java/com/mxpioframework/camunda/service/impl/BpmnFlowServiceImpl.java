@@ -170,6 +170,12 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	public ProcessDefinition getProcDefByProcessDefinitionKey(String key) {
 		return repositoryService.createProcessDefinitionQuery().processDefinitionKey(key).latestVersion().singleResult();
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public ProcessDefinition getProcDefByProcessDefinitionId(String id) {
+		return repositoryService.createProcessDefinitionQuery().processDefinitionId(id).singleResult();
+	}
 
 	@Override
 	@Transactional(readOnly = true)
