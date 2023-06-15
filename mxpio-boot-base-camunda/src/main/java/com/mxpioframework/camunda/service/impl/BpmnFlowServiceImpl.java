@@ -19,9 +19,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mxpioframework.camunda.dto.ProcessDefDto;
 import com.mxpioframework.camunda.entity.BpmnFlow;
 import com.mxpioframework.camunda.enums.BpmnEnums;
 import com.mxpioframework.camunda.service.BpmnFlowService;
+import com.mxpioframework.camunda.service.FormModelService;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
 
@@ -42,6 +44,9 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	
 	@Autowired
 	private TaskService taskService;
+	
+	@Autowired
+	private FormModelService formModelService;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -108,7 +113,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public String getStartFormKeyByProcessDefinitionId(String key) {
+	public String getStartFormKeyByProcessDefinitionKey(String key) {
 		String formKey = "";
 		ProcessDefinition procDef = repositoryService.createProcessDefinitionQuery().processDefinitionKey(key).latestVersion().singleResult();
 		if(procDef.hasStartFormKey()){
@@ -158,6 +163,19 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			result = true;
 		}
 		return result;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ProcessDefinition getProcDefByProcessDefinitionKey(String key) {
+		return repositoryService.createProcessDefinitionQuery().processDefinitionKey(key).latestVersion().singleResult();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public void handleFormInfo(ProcessDefinition procDef, ProcessDefDto procDefDto) {
+		String formKey = formService.getStartFormKey(procDef.getId());
+		procDefDto.setFormModelDef(formModelService.getFormModelDefByKey(formKey));
 	}
 
 }

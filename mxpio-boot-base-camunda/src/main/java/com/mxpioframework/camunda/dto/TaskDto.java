@@ -21,11 +21,14 @@ public class TaskDto implements Serializable {
 	@Schema(description = "当前审批人")
 	private String assignee;
 	
-	@Schema(description = "表单key")
-	private String formKey;
-	
 	@Schema(description = "节点名称")
 	private String name;
+	
+	@Schema(description = "节点定义Key")
+	private String taskDefinitionKey;
+	
+	@Schema(description = "流程实例ID")
+	private String processInstanceId;
 	
 	@Schema(description = "创建时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -35,6 +38,8 @@ public class TaskDto implements Serializable {
 		this.id = task.getId();
 		this.assignee = task.getAssignee();
 		this.name = task.getName();
+		this.taskDefinitionKey = task.getTaskDefinitionKey();
+		this.processInstanceId = task.getProcessInstanceId();
 		this.createTime = task.getCreateTime();
 	}
 

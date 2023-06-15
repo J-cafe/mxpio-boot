@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mxpioframework.camunda.dto.ProcessDefDto;
 import com.mxpioframework.camunda.dto.ProcessInstanceDto;
 import com.mxpioframework.camunda.service.BpmnFlowService;
 import com.mxpioframework.common.vo.Result;
@@ -71,8 +73,20 @@ public class ProcessController {
 	@Operation(summary = "获取流程开始表单Key", description = "获取流程开始表单Key", method = "GET")
 	public Result<?> form(@PathVariable(name = "key", required = true) String key) {
 		
-		String formKey = bpmnFlowService.getStartFormKeyByProcessDefinitionId(key);
+		String formKey = bpmnFlowService.getStartFormKeyByProcessDefinitionKey(key);
 		return Result.OK("查询成功！",formKey);
+	}
+	
+	@GetMapping("def/{key}")
+	@Operation(summary = "获取流程定义", description = "根据key获取最新流程定义", method = "GET")
+	public Result<ProcessDefDto> def(@PathVariable(name = "key", required = true) String key) {
+		
+		ProcessDefinition procDef = bpmnFlowService.getProcDefByProcessDefinitionKey(key);
+		ProcessDefDto procDefDto = new ProcessDefDto(procDef);
+		if(procDef.hasStartFormKey()){
+			bpmnFlowService.handleFormInfo(procDef, procDefDto);
+		}
+		return Result.OK("查询成功！",procDefDto);
 	}
 
 	@PostMapping("start/{key}")

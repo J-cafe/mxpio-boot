@@ -3,12 +3,14 @@ package com.mxpioframework.camunda.service;
 import java.util.List;
 import java.util.Map;
 
+import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.mxpioframework.camunda.dto.ProcessDefDto;
 import com.mxpioframework.camunda.entity.BpmnFlow;
 import com.mxpioframework.jpa.query.Criteria;
 
@@ -30,7 +32,7 @@ public interface BpmnFlowService {
 
 	ProcessInstance startWithFormByKey(String key, String loginUsername, Map<String, Object> properties);
 
-	String getStartFormKeyByProcessDefinitionId(String key);
+	String getStartFormKeyByProcessDefinitionKey(String key);
 
 	String getTaskFormKeyByTaskId(String taskId);
 
@@ -43,5 +45,9 @@ public interface BpmnFlowService {
 	VariableMap getTaskFormDataByTaskId(String taskId);
 
 	boolean complete(String taskId, Map<String, Object> properties, String loginUsername);
+
+	ProcessDefinition getProcDefByProcessDefinitionKey(String key);
+
+	void handleFormInfo(ProcessDefinition procDef, ProcessDefDto procDefDto);
 
 }
