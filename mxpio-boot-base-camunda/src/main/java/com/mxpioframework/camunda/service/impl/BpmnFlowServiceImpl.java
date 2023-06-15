@@ -127,13 +127,13 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<Task> getTaskListByUser(String loginUsername) {
-		return taskService.createTaskQuery().taskAssignee(loginUsername).active().desc().list();
+		return taskService.createTaskQuery().taskAssignee(loginUsername).active().orderByTaskCreateTime().desc().list();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public List<Task> getTaskListPageByUser(String username, Integer pageSize, Integer pageNo) {
-		return taskService.createTaskQuery().taskAssignee(username).active().desc().listPage((pageNo-1) * pageSize, pageNo * pageSize - 1);
+		return taskService.createTaskQuery().taskAssignee(username).active().orderByTaskCreateTime().desc().listPage((pageNo-1) * pageSize, pageNo * pageSize - 1);
 	}
 
 	@Override

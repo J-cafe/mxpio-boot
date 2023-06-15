@@ -57,6 +57,7 @@ public class TaskController {
 		for(Task task : tasks){
 			list.add(new TaskDto(task));
 		}
+		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		Page<TaskDto> page = new PageImpl<TaskDto>(list, pageAble, total);
 		return Result.OK(page);
