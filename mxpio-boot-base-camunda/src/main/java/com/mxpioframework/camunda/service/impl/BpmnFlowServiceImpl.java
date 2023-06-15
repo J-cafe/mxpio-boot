@@ -1,8 +1,10 @@
 package com.mxpioframework.camunda.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.IdentityService;
@@ -193,8 +195,13 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Override
 	@Transactional(readOnly = true)
 	public void handleBpmnFile(ProcessDefinition procDef, ProcessDefDto procDefDto) {
-		Deployment deployment = repositoryService.createDeploymentQuery().deploymentId(procDef.getDeploymentId()).singleResult();
-		procDefDto.setSource(deployment.getSource());
+		String source = null;
+		try {
+			source = IOUtils.toString(repositoryService.getProcessModel(procDef.getId()), "UTF-8");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		procDefDto.setSource(source);
 	}
 
 	@Override

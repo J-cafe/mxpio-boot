@@ -32,6 +32,12 @@ public class ProcessDefDto implements Serializable {
 	@Schema(description = "bpmn文件")
 	private String source;
 	
+	@Schema(description = "部署ID")
+	private String deploymentId;
+	
+	@Schema(description = "资源文件名")
+	private String resourceName;
+	
 	@Schema(description = "是否有启动表单")
 	private boolean startFormKey;
 	
@@ -44,6 +50,8 @@ public class ProcessDefDto implements Serializable {
 		this.description = procDef.getDescription();
 		this.version = procDef.getVersion();
 		this.startFormKey = procDef.hasStartFormKey();
+		this.deploymentId = procDef.getDeploymentId();
+		this.resourceName = procDef.getResourceName();
 	}
 
 }

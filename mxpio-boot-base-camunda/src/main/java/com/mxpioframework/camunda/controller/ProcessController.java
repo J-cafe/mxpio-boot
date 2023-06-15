@@ -86,8 +86,8 @@ public class ProcessController {
 		ProcessDefDto procDefDto = new ProcessDefDto(procDef);
 		if(procDef.hasStartFormKey()){
 			bpmnFlowService.handleFormInfo(procDef, procDefDto);
-			bpmnFlowService.handleBpmnFile(procDef, procDefDto);
 		}
+		bpmnFlowService.handleBpmnFile(procDef, procDefDto);
 		return Result.OK("查询成功！",procDefDto);
 	}
 
