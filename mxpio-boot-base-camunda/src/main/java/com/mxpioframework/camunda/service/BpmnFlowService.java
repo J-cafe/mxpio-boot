@@ -3,6 +3,8 @@ package com.mxpioframework.camunda.service;
 import java.util.List;
 import java.util.Map;
 
+import org.camunda.bpm.engine.history.HistoricProcessInstance;
+import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
@@ -38,7 +40,7 @@ public interface BpmnFlowService {
 
 	List<Task> getTaskListByUser(String loginUsername);
 
-	List<Task> getTaskListPageByUser(String username, Integer pageSize, Integer pageNo);
+	List<Task> pagingTaskListPageByUser(String username, Integer pageSize, Integer pageNo);
 
 	long countTaskListByUser(String username);
 
@@ -53,5 +55,17 @@ public interface BpmnFlowService {
 	void handleFormInfo(ProcessDefinition procDef, ProcessDefDto procDefDto);
 
 	void handleBpmnFile(ProcessDefinition procDef, ProcessDefDto procDefDto);
+
+	List<HistoricProcessInstance> getHistoricProcessInstances();
+
+	List<HistoricProcessInstance> pagingHistoricProcessInstances(int firstResult, int maxResults);
+
+	long countHistoricProcessInstances();
+
+	List<HistoricTaskInstance> getHistoricTaskListByUser(String loginUsername);
+
+	List<HistoricTaskInstance> pagingHistoricTaskListPageByUser(String username, Integer pageSize, Integer pageNo);
+
+	long countHistoricTaskListByUser(String username);
 
 }

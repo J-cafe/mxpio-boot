@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.camunda.bpm.engine.repository.ProcessDefinition;
+import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,16 +36,17 @@ public class TaskController {
 	@Autowired
 	private BpmnFlowService bpmnFlowService;
 	
-/*	@GetMapping("list")
+	@GetMapping("list")
 	@Operation(summary = "待办任务列表", description = "待办任务列表", method = "GET")
 	public Result<List<TaskDto>> list() {
 		List<TaskDto> list = new ArrayList<>();
-		List<Task> tasks = bpmnFlowService.getTaskListByUser(SecurityUtils.getLoginUsername());
-		for(Task task : tasks){
+		
+		List<HistoricTaskInstance> tasks = bpmnFlowService.getHistoricTaskListByUser(SecurityUtils.getLoginUsername());
+		for(HistoricTaskInstance task : tasks){
 			list.add(new TaskDto(task));
 		}
 		return Result.OK(list);
-	}*/
+	}
 
 	@GetMapping("page")
 	@Operation(summary = "流程列表(分页)", description = "流程列表(分页)", method = "GET")
@@ -54,11 +54,10 @@ public class TaskController {
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
 		List<TaskDto> list = new ArrayList<>();
 		String username = SecurityUtils.getLoginUsername();
-		List<Task> tasks = bpmnFlowService.getTaskListPageByUser(username, pageSize, pageNo);
-		long total = bpmnFlowService.countTaskListByUser(username);
-		for(Task task : tasks){
-			ProcessDefinition procDef = bpmnFlowService.getProcDefByProcessDefinitionId(task.getProcessDefinitionId());
-			list.add(new TaskDto(task, procDef));
+		List<HistoricTaskInstance> tasks = bpmnFlowService.pagingHistoricTaskListPageByUser(username, pageSize, pageNo);
+		long total = bpmnFlowService.countHistoricTaskListByUser(username);
+		for(HistoricTaskInstance task : tasks){
+			list.add(new TaskDto(task));
 		}
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);

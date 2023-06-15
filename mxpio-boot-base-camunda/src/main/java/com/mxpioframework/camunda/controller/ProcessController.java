@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
-import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -44,10 +44,10 @@ public class ProcessController {
 	@GetMapping("list")
 	@Operation(summary = "流程列表", description = "流程列表", method = "GET")
 	public Result<List<ProcessInstanceDto>> list() {
+		
 		List<ProcessInstanceDto> list = new ArrayList<>();
-		ProcessInstanceQuery processInstanceQuery = runtimeService.createProcessInstanceQuery();
-		List<ProcessInstance> procInsts = processInstanceQuery.orderByProcessInstanceId().desc().list();
-		for(ProcessInstance procInst : procInsts){
+		List<HistoricProcessInstance> procInsts = bpmnFlowService.getHistoricProcessInstances();
+		for(HistoricProcessInstance procInst : procInsts){
 			list.add(new ProcessInstanceDto(procInst));
 		}
 		return Result.OK(list);
@@ -58,11 +58,12 @@ public class ProcessController {
 	public Result<Page<ProcessInstanceDto>> page(@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
 		List<ProcessInstanceDto> list = new ArrayList<>();
-		ProcessInstanceQuery processInstanceQuery = runtimeService.createProcessInstanceQuery();
+		
+		List<HistoricProcessInstance> procInsts = bpmnFlowService.pagingHistoricProcessInstances((pageNo-1) * pageSize, pageNo * pageSize - 1);
+		long total = bpmnFlowService.countHistoricProcessInstances();
+		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		long total = processInstanceQuery.count();
-		List<ProcessInstance> procInsts = processInstanceQuery.orderByProcessInstanceId().desc().listPage((pageNo-1) * pageSize, pageNo * pageSize - 1);
-		for(ProcessInstance procInst : procInsts){
+		for(HistoricProcessInstance procInst : procInsts){
 			list.add(new ProcessInstanceDto(procInst));
 		}
 		Page<ProcessInstanceDto> page = new PageImpl<ProcessInstanceDto>(list, pageAble, total);

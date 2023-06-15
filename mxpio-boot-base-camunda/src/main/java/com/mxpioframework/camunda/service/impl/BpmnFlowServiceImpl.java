@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.camunda.bpm.engine.FormService;
+import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.history.HistoricProcessInstance;
+import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
@@ -47,6 +50,9 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	
 	@Autowired
 	private FormModelService formModelService;
+	
+	@Autowired
+	private HistoryService historyService;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -137,7 +143,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Task> getTaskListPageByUser(String username, Integer pageSize, Integer pageNo) {
+	public List<Task> pagingTaskListPageByUser(String username, Integer pageSize, Integer pageNo) {
 		return taskService.createTaskQuery().taskAssignee(username).active().orderByTaskCreateTime().desc().listPage((pageNo-1) * pageSize, pageNo * pageSize - 1);
 	}
 
@@ -189,6 +195,43 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	public void handleBpmnFile(ProcessDefinition procDef, ProcessDefDto procDefDto) {
 		Deployment deployment = repositoryService.createDeploymentQuery().deploymentId(procDef.getDeploymentId()).singleResult();
 		procDefDto.setSource(deployment.getSource());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<HistoricProcessInstance> getHistoricProcessInstances() {
+		return historyService.createHistoricProcessInstanceQuery().active().orderByProcessInstanceStartTime().desc().list();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<HistoricProcessInstance> pagingHistoricProcessInstances(int firstResult, int maxResults) {
+		return historyService.createHistoricProcessInstanceQuery().active().orderByProcessInstanceStartTime().desc().listPage(firstResult, maxResults);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public long countHistoricProcessInstances() {
+		return historyService.createHistoricProcessInstanceQuery().active().count();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<HistoricTaskInstance> getHistoricTaskListByUser(String loginUsername) {
+		return historyService.createHistoricTaskInstanceQuery().unfinished().taskAssignee(loginUsername).orderByProcessInstanceId().desc().list();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<HistoricTaskInstance> pagingHistoricTaskListPageByUser(String username, Integer pageSize,
+			Integer pageNo) {
+		return historyService.createHistoricTaskInstanceQuery().unfinished().taskAssignee(username).orderByProcessInstanceId().desc().listPage((pageNo-1) * pageSize, pageNo * pageSize - 1);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public long countHistoricTaskListByUser(String username) {
+		return historyService.createHistoricTaskInstanceQuery().unfinished().taskAssignee(username).count();
 	}
 
 }
