@@ -110,14 +110,6 @@ public class TaskController {
 		}
 	}
 	
-	@GetMapping("form/{taskId}")
-	@Operation(summary = "获取节点表单Key", description = "获取节点表单Key", method = "GET")
-	public Result<?> form(@PathVariable(name = "taskId", required = true) String taskId) {
-		
-		String formKey = bpmnFlowService.getTaskFormKeyByTaskId(taskId);
-		return Result.OK("查询成功！",formKey);
-	}
-	
 	@GetMapping("details/{processInstanceId}/{taskId}")
 	@Operation(summary = "获取节点详情", description = "获取节点详情", method = "GET")
 	public Result<TaskDetailDto> detail(@PathVariable(name = "processInstanceId", required = true) String processInstanceId,
@@ -154,8 +146,16 @@ public class TaskController {
 		return Result.OK("查询成功！",list);
 	}
 	
+	@GetMapping("form/{taskId}")
+	@Operation(summary = "获取节点表单Key", description = "获取节点表单Key", method = "GET")
+	public Result<?> form(@PathVariable(name = "taskId", required = true) String taskId) {
+		
+		String formKey = bpmnFlowService.getTaskFormKeyByTaskId(taskId);
+		return Result.OK("查询成功！",formKey);
+	}
+	
 	@GetMapping("form/data/{taskId}")
-	@Operation(summary = "获取节点表单数据", description = "获取节点表单数据", method = "GET")
+	@Operation(summary = "获取节点表单模型及数据", description = "获取节点表单模型及数据", method = "GET")
 	public Result<TaskFormDto> formData(@PathVariable(name = "taskId", required = true) String taskId) {
 		VariableMap formData = bpmnFlowService.getTaskFormDataByTaskId(taskId);
 		FormModelDef formModelDef = bpmnFlowService.getTaskFormModelByTaskId(taskId);
