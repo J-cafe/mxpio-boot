@@ -3,10 +3,12 @@ package com.mxpioframework.camunda.service;
 import java.util.List;
 import java.util.Map;
 
+import org.camunda.bpm.engine.history.HistoricActivityInstance;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.task.Comment;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.springframework.data.domain.Page;
@@ -70,6 +72,8 @@ public interface BpmnFlowService {
 	long countHistoricTaskListByUser(String username);
 
 	List<HistoricTaskInstance> getHistoricTaskByProcessInstanceId(String processInstanceId);
+	
+	List<HistoricActivityInstance> getHistoricActivityByProcessInstanceId(String processInstanceId);
 
 	HistoricProcessInstance getHistoricProcessInstanceById(String processInstanceId);
 
@@ -78,5 +82,11 @@ public interface BpmnFlowService {
 	ProcessDefinition getProcDefByProcessInstanceId(String processInstanceId);
 
 	void handleVariables(String processInstanceId, TaskDetailDto taskDetail);
+
+	boolean rejectToLast(String taskId, Map<String, Object> properties, String loginUsername);
+	
+	boolean rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername);
+
+	List<Comment> getCommentsByActivityId(String activityId);
 
 }

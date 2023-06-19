@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.camunda.bpm.engine.history.HistoricActivityInstance;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.task.Comment;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -82,6 +84,30 @@ public class TaskController {
 		}
 	}
 	
+	@PostMapping("reject/first/{taskId}")
+	@Operation(summary = "节点驳回开始节点", description = "节点驳回开始节点", method = "POST")
+	public Result<ProcessInstance> rejectToFirst(@PathVariable(name = "taskId", required = true) String taskId,
+			@RequestBody Map<String, Object> properties){
+		boolean b = bpmnFlowService.rejectToFirst(taskId, properties, SecurityUtils.getLoginUsername());
+		if(b){
+			return Result.OK("签核完成！", null);
+		}else{
+			return Result.error("签核失败！");
+		}
+	}
+	
+	@PostMapping("reject/last/{taskId}")
+	@Operation(summary = "节点驳回上一节点", description = "节点上一节点", method = "POST")
+	public Result<ProcessInstance> rejectToLast(@PathVariable(name = "taskId", required = true) String taskId,
+			@RequestBody Map<String, Object> properties){
+		boolean b = bpmnFlowService.rejectToLast(taskId, properties, SecurityUtils.getLoginUsername());
+		if(b){
+			return Result.OK("签核完成！", null);
+		}else{
+			return Result.error("签核失败！");
+		}
+	}
+	
 	@GetMapping("form/{taskId}")
 	@Operation(summary = "获取节点表单Key", description = "获取节点表单Key", method = "GET")
 	public Result<?> form(@PathVariable(name = "taskId", required = true) String taskId) {
@@ -109,9 +135,19 @@ public class TaskController {
 	@Operation(summary = "获取历史节点信息", description = "获取历史节点信息", method = "GET")
 	public Result<List<HistoricTaskDto>> historics(@PathVariable(name = "processInstanceId", required = true) String processInstanceId) {
 		List<HistoricTaskDto> list = new ArrayList<>();
-		List<HistoricTaskInstance> tasks = bpmnFlowService.getHistoricTaskByProcessInstanceId(processInstanceId);
-		for(HistoricTaskInstance task : tasks){
-			list.add(new HistoricTaskDto(task));
+		List<HistoricActivityInstance> activitis = bpmnFlowService.getHistoricActivityByProcessInstanceId(processInstanceId);
+		for(HistoricActivityInstance activity : activitis){
+			if(activity.getTaskId() == null){
+				continue;
+			}
+			HistoricTaskDto historicTaskDto = new HistoricTaskDto(activity);
+			List<Comment> comments = bpmnFlowService.getCommentsByActivityId(activity.getTaskId());
+			StringBuffer sb = new StringBuffer("");
+			for(Comment comment : comments){
+				sb.append(comment.getFullMessage() + ";");
+			}
+			historicTaskDto.setComment(sb.toString());
+			list.add(historicTaskDto);
 		}
 		return Result.OK("查询成功！",list);
 	}
