@@ -35,6 +35,7 @@ import com.mxpioframework.camunda.CamundaConstant;
 import com.mxpioframework.camunda.dto.BpmnResource;
 import com.mxpioframework.camunda.dto.TaskDetailDto;
 import com.mxpioframework.camunda.entity.BpmnFlow;
+import com.mxpioframework.camunda.entity.FormModelDef;
 import com.mxpioframework.camunda.enums.BpmnEnums;
 import com.mxpioframework.camunda.service.BpmnFlowService;
 import com.mxpioframework.camunda.service.FormModelService;
@@ -456,6 +457,13 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Transactional(readOnly = true)
 	public List<Comment> getCommentsByTaskId(String taskId) {
 		return taskService.getTaskComments(taskId);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public FormModelDef getTaskFormModelByTaskId(String taskId) {
+		String formKey = getTaskFormKeyByTaskId(taskId);
+		return JpaUtil.linq(FormModelDef.class).idEqual(formKey).findOne();
 	}
 
 }

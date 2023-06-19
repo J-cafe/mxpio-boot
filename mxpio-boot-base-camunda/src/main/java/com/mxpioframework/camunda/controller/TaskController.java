@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mxpioframework.camunda.dto.HistoricTaskDto;
 import com.mxpioframework.camunda.dto.TaskDetailDto;
 import com.mxpioframework.camunda.dto.TaskDto;
+import com.mxpioframework.camunda.dto.TaskFormDto;
+import com.mxpioframework.camunda.entity.FormModelDef;
 import com.mxpioframework.camunda.service.BpmnFlowService;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.util.SecurityUtils;
@@ -154,9 +156,11 @@ public class TaskController {
 	
 	@GetMapping("form/data/{taskId}")
 	@Operation(summary = "获取节点表单数据", description = "获取节点表单数据", method = "GET")
-	public Result<Map<String, Object>> formData(@PathVariable(name = "taskId", required = true) String taskId) {
+	public Result<TaskFormDto> formData(@PathVariable(name = "taskId", required = true) String taskId) {
 		VariableMap formData = bpmnFlowService.getTaskFormDataByTaskId(taskId);
-		return Result.OK("查询成功！",formData);
+		FormModelDef formModelDef = bpmnFlowService.getTaskFormModelByTaskId(taskId);
+		TaskFormDto dto = new TaskFormDto(formData, formModelDef);
+		return Result.OK("查询成功！",dto);
 	}
 
 }

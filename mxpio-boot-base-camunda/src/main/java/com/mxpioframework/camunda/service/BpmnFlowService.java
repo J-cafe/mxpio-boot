@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import com.mxpioframework.camunda.dto.BpmnResource;
 import com.mxpioframework.camunda.dto.TaskDetailDto;
 import com.mxpioframework.camunda.entity.BpmnFlow;
+import com.mxpioframework.camunda.entity.FormModelDef;
 import com.mxpioframework.jpa.query.Criteria;
 
 public interface BpmnFlowService {
@@ -88,5 +89,7 @@ public interface BpmnFlowService {
 	boolean rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername);
 
 	List<Comment> getCommentsByTaskId(String taskId);
+
+	FormModelDef getTaskFormModelByTaskId(String taskId);
 
 }
