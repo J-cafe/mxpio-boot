@@ -1,6 +1,7 @@
 package com.mxpioframework.camunda.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.camunda.bpm.engine.history.HistoricActivityInstance;
 
@@ -13,6 +14,8 @@ public class HistoricTaskDto implements Serializable  {
 	public HistoricTaskDto(HistoricActivityInstance activity) {
 		this.id = activity.getTaskId();
 		this.name = activity.getActivityName();
+		this.endTime = activity.getEndTime();
+		this.assignee = activity.getAssignee();
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -22,6 +25,12 @@ public class HistoricTaskDto implements Serializable  {
 	
 	@Schema(description = "名称")
 	private String name;
+	
+	@Schema(description = "操作人")
+	private String assignee;
+	
+	@Schema(description = "结束时间")
+	private Date endTime;
 	
 	@Schema(description = "签核意见")
 	private String comment;
