@@ -16,6 +16,7 @@ public class HistoricTaskDto implements Serializable  {
 		this.name = activity.getActivityName();
 		this.endTime = activity.getEndTime();
 		this.assignee = activity.getAssignee();
+		this.canceled = activity.isCanceled();
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -34,5 +35,8 @@ public class HistoricTaskDto implements Serializable  {
 	
 	@Schema(description = "签核意见")
 	private String comment;
+	
+	@Schema(description = "是否撤销")
+	private boolean canceled;
 
 }
