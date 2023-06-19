@@ -141,7 +141,7 @@ public class TaskController {
 				continue;
 			}
 			HistoricTaskDto historicTaskDto = new HistoricTaskDto(activity);
-			List<Comment> comments = bpmnFlowService.getCommentsByActivityId(activity.getTaskId());
+			List<Comment> comments = bpmnFlowService.getCommentsByTaskId(activity.getTaskId());
 			StringBuffer sb = new StringBuffer("");
 			for(Comment comment : comments){
 				sb.append(comment.getFullMessage() + ";");

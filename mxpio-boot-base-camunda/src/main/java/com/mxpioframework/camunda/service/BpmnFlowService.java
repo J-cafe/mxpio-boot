@@ -87,6 +87,6 @@ public interface BpmnFlowService {
 	
 	boolean rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername);
 
-	List<Comment> getCommentsByActivityId(String activityId);
+	List<Comment> getCommentsByTaskId(String taskId);
 
 }

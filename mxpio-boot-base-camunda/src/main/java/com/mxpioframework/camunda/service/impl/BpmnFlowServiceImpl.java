@@ -453,8 +453,9 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
     }
 
 	@Override
-	public List<Comment> getCommentsByActivityId(String activityId) {
-		return null;
+	@Transactional(readOnly = true)
+	public List<Comment> getCommentsByTaskId(String taskId) {
+		return taskService.getTaskComments(taskId);
 	}
 
 }
