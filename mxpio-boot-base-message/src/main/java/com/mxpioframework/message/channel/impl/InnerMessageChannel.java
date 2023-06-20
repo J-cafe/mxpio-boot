@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.Operator;
-import com.mxpioframework.jpa.query.Order;
 import com.mxpioframework.jpa.query.SimpleCriterion;
 import com.mxpioframework.message.entity.InnerMessage;
 import com.mxpioframework.message.entity.Message;
@@ -18,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
