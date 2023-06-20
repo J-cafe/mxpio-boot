@@ -1,4 +1,4 @@
-package com.mxpioframework.camunda.dto;
+package com.mxpioframework.camunda.vo;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class TaskDto implements Serializable {
+public class TaskVO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -51,7 +51,7 @@ public class TaskDto implements Serializable {
 	@Schema(description = "流程定义名称")
 	private String processDefinitionName;
 	
-	public TaskDto(HistoricTaskInstance task) {
+	public TaskVO(HistoricTaskInstance task) {
 		this.id = task.getId();
 		this.assignee = task.getAssignee();
 		this.name = task.getName();
@@ -61,7 +61,7 @@ public class TaskDto implements Serializable {
 		this.createTime = task.getStartTime();
 	}
 
-	public TaskDto(HistoricTaskInstance task, HistoricProcessInstance historicProcessInstance) {
+	public TaskVO(HistoricTaskInstance task, HistoricProcessInstance historicProcessInstance) {
 		this(task);
 		this.procStartTime = historicProcessInstance.getStartTime();
 		this.procStartUserId = historicProcessInstance.getStartUserId();

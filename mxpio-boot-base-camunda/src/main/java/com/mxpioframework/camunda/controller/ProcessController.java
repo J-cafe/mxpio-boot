@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mxpioframework.camunda.dto.ProcessDefDto;
-import com.mxpioframework.camunda.dto.ProcessInstanceDto;
 import com.mxpioframework.camunda.service.BpmnFlowService;
+import com.mxpioframework.camunda.vo.ProcessDefVO;
+import com.mxpioframework.camunda.vo.ProcessInstanceVO;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.util.SecurityUtils;
 
@@ -43,30 +43,30 @@ public class ProcessController {
 
 	@GetMapping("list")
 	@Operation(summary = "流程列表", description = "流程列表", method = "GET")
-	public Result<List<ProcessInstanceDto>> list() {
+	public Result<List<ProcessInstanceVO>> list() {
 		
-		List<ProcessInstanceDto> list = new ArrayList<>();
+		List<ProcessInstanceVO> list = new ArrayList<>();
 		List<HistoricProcessInstance> procInsts = bpmnFlowService.getHistoricProcessInstances();
 		for(HistoricProcessInstance procInst : procInsts){
-			list.add(new ProcessInstanceDto(procInst));
+			list.add(new ProcessInstanceVO(procInst));
 		}
 		return Result.OK(list);
 	}
 
 	@GetMapping("page")
 	@Operation(summary = "流程列表(分页)", description = "流程列表(分页)", method = "GET")
-	public Result<Page<ProcessInstanceDto>> page(@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
+	public Result<Page<ProcessInstanceVO>> page(@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
-		List<ProcessInstanceDto> list = new ArrayList<>();
+		List<ProcessInstanceVO> list = new ArrayList<>();
 		
 		List<HistoricProcessInstance> procInsts = bpmnFlowService.pagingHistoricProcessInstances((pageNo-1) * pageSize, pageNo * pageSize - 1);
 		long total = bpmnFlowService.countHistoricProcessInstances();
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		for(HistoricProcessInstance procInst : procInsts){
-			list.add(new ProcessInstanceDto(procInst));
+			list.add(new ProcessInstanceVO(procInst));
 		}
-		Page<ProcessInstanceDto> page = new PageImpl<ProcessInstanceDto>(list, pageAble, total);
+		Page<ProcessInstanceVO> page = new PageImpl<ProcessInstanceVO>(list, pageAble, total);
 		return Result.OK(page);
 	}
 	
@@ -80,10 +80,10 @@ public class ProcessController {
 	
 	@GetMapping("def/{key}")
 	@Operation(summary = "获取流程定义", description = "根据key获取最新流程定义", method = "GET")
-	public Result<ProcessDefDto> def(@PathVariable(name = "key", required = true) String key) {
+	public Result<ProcessDefVO> def(@PathVariable(name = "key", required = true) String key) {
 		
 		ProcessDefinition procDef = bpmnFlowService.getProcDefByProcessDefinitionKey(key);
-		ProcessDefDto procDefDto = new ProcessDefDto(procDef);
+		ProcessDefVO procDefDto = new ProcessDefVO(procDef);
 		if(procDef.hasStartFormKey()){
 			bpmnFlowService.handleFormInfo(procDef, procDefDto);
 		}

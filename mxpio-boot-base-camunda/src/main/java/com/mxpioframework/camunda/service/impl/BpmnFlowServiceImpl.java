@@ -32,13 +32,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mxpioframework.camunda.CamundaConstant;
-import com.mxpioframework.camunda.dto.BpmnResource;
-import com.mxpioframework.camunda.dto.TaskDetailDto;
+import com.mxpioframework.camunda.dto.ResultMessage;
 import com.mxpioframework.camunda.entity.BpmnFlow;
 import com.mxpioframework.camunda.entity.FormModelDef;
 import com.mxpioframework.camunda.enums.BpmnEnums;
 import com.mxpioframework.camunda.service.BpmnFlowService;
 import com.mxpioframework.camunda.service.FormModelService;
+import com.mxpioframework.camunda.vo.BpmnResource;
+import com.mxpioframework.camunda.vo.TaskDetailVO;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
 
@@ -181,30 +182,36 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Override
 	@Transactional(readOnly = false)
-	public boolean complete(String taskId, Map<String, Object> properties, String loginUsername) {
-		boolean result = false;
+	public ResultMessage complete(String taskId, Map<String, Object> properties, String loginUsername) {
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		if(task == null){
+			return ResultMessage.error("任务不存在！");
+		}
 		if (task.getAssignee().equals(loginUsername)) {
 			if(properties.get(CamundaConstant.BPMN_COMMENT) != null){
 				taskService.createComment(taskId, task.getProcessInstanceId(), properties.get(CamundaConstant.BPMN_COMMENT)+"");
 			}
 			taskService.complete(taskId, properties);
-			result = true;
+			return ResultMessage.success("审批成功！");
+		}else{
+			return ResultMessage.error("无权审批！");
 		}
-		return result;
 	}
 	
 	@Override
 	@Transactional(readOnly = false)
-	public boolean rejectToLast(String taskId, Map<String, Object> properties, String loginUsername) {
+	public ResultMessage rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername) {
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
 		String processInstanceId = task.getProcessInstanceId();
 		ActivityInstance tree = runtimeService.getActivityInstance(processInstanceId);
 		List<HistoricActivityInstance> resultList = getHistoricActivityByProcessInstanceId(processInstanceId);
-		if(null == resultList || resultList.size()<2 || task.getAssignee().equals(loginUsername)){
+		if(null == resultList || resultList.size()<1){
 			log.error("第一个用户节点无法驳回！");
-            return false;
+            return ResultMessage.error("第一个用户节点无法驳回！");
         }
+		if(!task.getAssignee().equals(loginUsername)){
+			return ResultMessage.error("非当前审批人！");
+		}
 		
 		//得到第一个任务节点的id
         HistoricActivityInstance historicActivityInstance = resultList.get(0);
@@ -219,26 +226,30 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
                 .startBeforeActivity(toActId)//启动目标活动节点
                 .execute();
 		
-		return true;
+		return ResultMessage.success("进行了驳回到第一个任务节点操作");
 	}
 	
 	@Override
 	@Transactional(readOnly = false)
-	public boolean rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername) {
+	public ResultMessage rejectToLast(String taskId, Map<String, Object> properties, String loginUsername) {
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
 		String processInstanceId = task.getProcessInstanceId();
 		ActivityInstance tree = runtimeService.getActivityInstance(processInstanceId);
 		List<HistoricActivityInstance> resultList = getHistoricActivityByProcessInstanceId(processInstanceId);
-		if(null == resultList || resultList.size()<2 || task.getAssignee().equals(loginUsername)){
+		if(null == resultList || resultList.size()<1){
 			log.error("第一个用户节点无法驳回！");
-            return false;
+            return ResultMessage.error("第一个用户节点无法驳回！");
         }
+		
+		if(!task.getAssignee().equals(loginUsername)){
+			return ResultMessage.error("非当前审批人！");
+		}
 		
 		//得到上一个任务节点的ActivityId和待办人
         Map<String,String> lastNode = getLastNode(resultList,task.getTaskDefinitionKey());
         if(null == lastNode){
         	log.error("回退节点异常！");
-            return false;
+            return ResultMessage.error("回退节点异常！");
         }
         String toActId = lastNode.get("toActId");
         taskService.createComment(task.getId(), processInstanceId, "驳回原因:" + properties.get(CamundaConstant.BPMN_COMMENT));
@@ -248,7 +259,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
                 .startBeforeActivity(toActId)//启动目标活动节点
                 .execute();
 		
-		return true;
+		return ResultMessage.success("进行了驳回到上一个任务节点操作");
 	}
 
 	@Override
@@ -367,7 +378,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public void handleVariables(String processInstanceId, TaskDetailDto taskDetail) {
+	public void handleVariables(String processInstanceId, TaskDetailVO taskDetail) {
 		taskDetail.setStartDatas(runtimeService.getVariables(processInstanceId));
 	}
 	

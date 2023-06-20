@@ -1,4 +1,4 @@
-package com.mxpioframework.camunda.dto;
+package com.mxpioframework.camunda.vo;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class ProcessDefDto implements Serializable, BpmnResource {
+public class ProcessDefVO implements Serializable, BpmnResource {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -43,7 +43,7 @@ public class ProcessDefDto implements Serializable, BpmnResource {
 	
 	private FormModelDef startFormModelDef;
 	
-	public ProcessDefDto(ProcessDefinition procDef) {
+	public ProcessDefVO(ProcessDefinition procDef) {
 		this.id = procDef.getId();
 		this.key = procDef.getKey();
 		this.name = procDef.getName();

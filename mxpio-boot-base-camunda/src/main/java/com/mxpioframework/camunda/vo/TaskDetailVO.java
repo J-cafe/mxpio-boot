@@ -1,4 +1,4 @@
-package com.mxpioframework.camunda.dto;
+package com.mxpioframework.camunda.vo;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -9,9 +9,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class TaskDetailDto implements Serializable, BpmnResource {
+public class TaskDetailVO implements Serializable, BpmnResource {
 	
-	public TaskDetailDto(String taskId) {
+	public TaskDetailVO(String taskId) {
 		this.id = taskId;
 	}
 

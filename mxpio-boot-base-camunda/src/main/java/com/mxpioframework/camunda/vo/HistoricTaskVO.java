@@ -1,4 +1,4 @@
-package com.mxpioframework.camunda.dto;
+package com.mxpioframework.camunda.vo;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,9 +9,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class HistoricTaskDto implements Serializable  {
+public class HistoricTaskVO implements Serializable  {
 
-	public HistoricTaskDto(HistoricActivityInstance activity) {
+	public HistoricTaskVO(HistoricActivityInstance activity) {
 		this.id = activity.getTaskId();
 		this.name = activity.getActivityName();
 		this.endTime = activity.getEndTime();

@@ -1,4 +1,4 @@
-package com.mxpioframework.camunda.dto;
+package com.mxpioframework.camunda.vo;
 
 import com.mxpioframework.camunda.entity.FormModelDef;
 

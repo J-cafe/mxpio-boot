@@ -8,7 +8,6 @@ import org.camunda.bpm.engine.history.HistoricActivityInstance;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Comment;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +23,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mxpioframework.camunda.dto.HistoricTaskDto;
-import com.mxpioframework.camunda.dto.TaskDetailDto;
-import com.mxpioframework.camunda.dto.TaskDto;
-import com.mxpioframework.camunda.dto.TaskFormDto;
+import com.mxpioframework.camunda.dto.ResultMessage;
 import com.mxpioframework.camunda.entity.FormModelDef;
 import com.mxpioframework.camunda.service.BpmnFlowService;
+import com.mxpioframework.camunda.vo.HistoricTaskVO;
+import com.mxpioframework.camunda.vo.TaskDetailVO;
+import com.mxpioframework.camunda.vo.TaskVO;
+import com.mxpioframework.camunda.vo.TaskFormDto;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.util.SecurityUtils;
 
@@ -46,75 +46,75 @@ public class TaskController {
 	
 	@GetMapping("list")
 	@Operation(summary = "待办任务列表", description = "待办任务列表", method = "GET")
-	public Result<List<TaskDto>> list() {
-		List<TaskDto> list = new ArrayList<>();
+	public Result<List<TaskVO>> list() {
+		List<TaskVO> list = new ArrayList<>();
 		
 		List<HistoricTaskInstance> tasks = bpmnFlowService.getHistoricTaskListByUser(SecurityUtils.getLoginUsername());
 		for(HistoricTaskInstance task : tasks){
-			list.add(new TaskDto(task));
+			list.add(new TaskVO(task));
 		}
 		return Result.OK(list);
 	}
 
 	@GetMapping("page")
 	@Operation(summary = "流程列表(分页)", description = "流程列表(分页)", method = "GET")
-	public Result<Page<TaskDto>> page(@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
+	public Result<Page<TaskVO>> page(@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
-		List<TaskDto> list = new ArrayList<>();
+		List<TaskVO> list = new ArrayList<>();
 		String username = SecurityUtils.getLoginUsername();
 		List<HistoricTaskInstance> tasks = bpmnFlowService.pagingHistoricTaskListPageByUser(username, pageSize, pageNo);
 		long total = bpmnFlowService.countHistoricTaskListByUser(username);
 		for(HistoricTaskInstance task : tasks){
 			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
-			list.add(new TaskDto(task, historicProcessInstance));
+			list.add(new TaskVO(task, historicProcessInstance));
 		}
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Page<TaskDto> page = new PageImpl<TaskDto>(list, pageAble, total);
+		Page<TaskVO> page = new PageImpl<TaskVO>(list, pageAble, total);
 		return Result.OK(page);
 	}
 	
 	@PostMapping("complete/{taskId}")
 	@Operation(summary = "节点签核", description = "节点签核", method = "POST")
-	public Result<ProcessInstance> complete(@PathVariable(name = "taskId", required = true) String taskId,
+	public Result<?> complete(@PathVariable(name = "taskId", required = true) String taskId,
 			@RequestBody Map<String, Object> properties){
-		boolean b = bpmnFlowService.complete(taskId, properties, SecurityUtils.getLoginUsername());
-		if(b){
-			return Result.OK("签核完成！", null);
+		ResultMessage msg = bpmnFlowService.complete(taskId, properties, SecurityUtils.getLoginUsername());
+		if(msg.isSuccess()){
+			return Result.OK(msg.getMsg(), null);
 		}else{
-			return Result.error("签核失败！");
+			return Result.error(msg.getMsg());
 		}
 	}
 	
 	@PostMapping("reject/first/{taskId}")
 	@Operation(summary = "节点驳回开始节点", description = "节点驳回开始节点", method = "POST")
-	public Result<ProcessInstance> rejectToFirst(@PathVariable(name = "taskId", required = true) String taskId,
+	public Result<?> rejectToFirst(@PathVariable(name = "taskId", required = true) String taskId,
 			@RequestBody Map<String, Object> properties){
-		boolean b = bpmnFlowService.rejectToFirst(taskId, properties, SecurityUtils.getLoginUsername());
-		if(b){
-			return Result.OK("签核完成！", null);
+		ResultMessage msg = bpmnFlowService.rejectToFirst(taskId, properties, SecurityUtils.getLoginUsername());
+		if(msg.isSuccess()){
+			return Result.OK(msg.getMsg(), null);
 		}else{
-			return Result.error("签核失败！");
+			return Result.error(msg.getMsg());
 		}
 	}
 	
 	@PostMapping("reject/last/{taskId}")
 	@Operation(summary = "节点驳回上一节点", description = "节点上一节点", method = "POST")
-	public Result<ProcessInstance> rejectToLast(@PathVariable(name = "taskId", required = true) String taskId,
+	public Result<?> rejectToLast(@PathVariable(name = "taskId", required = true) String taskId,
 			@RequestBody Map<String, Object> properties){
-		boolean b = bpmnFlowService.rejectToLast(taskId, properties, SecurityUtils.getLoginUsername());
-		if(b){
-			return Result.OK("签核完成！", null);
+		ResultMessage msg = bpmnFlowService.rejectToLast(taskId, properties, SecurityUtils.getLoginUsername());
+		if(msg.isSuccess()){
+			return Result.OK(msg.getMsg(), null);
 		}else{
-			return Result.error("签核失败！");
+			return Result.error(msg.getMsg());
 		}
 	}
 	
 	@GetMapping("details/{processInstanceId}/{taskId}")
 	@Operation(summary = "获取节点详情", description = "获取节点详情", method = "GET")
-	public Result<TaskDetailDto> detail(@PathVariable(name = "processInstanceId", required = true) String processInstanceId,
+	public Result<TaskDetailVO> detail(@PathVariable(name = "processInstanceId", required = true) String processInstanceId,
 			@PathVariable(name = "taskId", required = true) String taskId) {
-		TaskDetailDto taskDetail = new TaskDetailDto(taskId);
+		TaskDetailVO taskDetail = new TaskDetailVO(taskId);
 		//获取流程信息
 		ProcessDefinition procDef = bpmnFlowService.getProcDefByProcessInstanceId(processInstanceId);
 		if(procDef.hasStartFormKey()){
@@ -127,14 +127,14 @@ public class TaskController {
 	
 	@GetMapping("historics/{processInstanceId}")
 	@Operation(summary = "获取历史节点信息", description = "获取历史节点信息", method = "GET")
-	public Result<List<HistoricTaskDto>> historics(@PathVariable(name = "processInstanceId", required = true) String processInstanceId) {
-		List<HistoricTaskDto> list = new ArrayList<>();
+	public Result<List<HistoricTaskVO>> historics(@PathVariable(name = "processInstanceId", required = true) String processInstanceId) {
+		List<HistoricTaskVO> list = new ArrayList<>();
 		List<HistoricActivityInstance> activitis = bpmnFlowService.getHistoricActivityByProcessInstanceId(processInstanceId);
 		for(HistoricActivityInstance activity : activitis){
 			if(activity.getTaskId() == null){
 				continue;
 			}
-			HistoricTaskDto historicTaskDto = new HistoricTaskDto(activity);
+			HistoricTaskVO historicTaskDto = new HistoricTaskVO(activity);
 			List<Comment> comments = bpmnFlowService.getCommentsByTaskId(activity.getTaskId());
 			StringBuffer sb = new StringBuffer("");
 			for(Comment comment : comments){

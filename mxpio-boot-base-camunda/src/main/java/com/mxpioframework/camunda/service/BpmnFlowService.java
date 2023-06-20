@@ -14,10 +14,11 @@ import org.camunda.bpm.engine.variable.VariableMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.mxpioframework.camunda.dto.BpmnResource;
-import com.mxpioframework.camunda.dto.TaskDetailDto;
+import com.mxpioframework.camunda.dto.ResultMessage;
 import com.mxpioframework.camunda.entity.BpmnFlow;
 import com.mxpioframework.camunda.entity.FormModelDef;
+import com.mxpioframework.camunda.vo.BpmnResource;
+import com.mxpioframework.camunda.vo.TaskDetailVO;
 import com.mxpioframework.jpa.query.Criteria;
 
 public interface BpmnFlowService {
@@ -50,7 +51,7 @@ public interface BpmnFlowService {
 
 	VariableMap getTaskFormDataByTaskId(String taskId);
 
-	boolean complete(String taskId, Map<String, Object> properties, String loginUsername);
+	ResultMessage complete(String taskId, Map<String, Object> properties, String loginUsername);
 
 	ProcessDefinition getProcDefByProcessDefinitionKey(String key);
 	
@@ -82,11 +83,11 @@ public interface BpmnFlowService {
 
 	ProcessDefinition getProcDefByProcessInstanceId(String processInstanceId);
 
-	void handleVariables(String processInstanceId, TaskDetailDto taskDetail);
+	void handleVariables(String processInstanceId, TaskDetailVO taskDetail);
 
-	boolean rejectToLast(String taskId, Map<String, Object> properties, String loginUsername);
+	ResultMessage rejectToLast(String taskId, Map<String, Object> properties, String loginUsername);
 	
-	boolean rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername);
+	ResultMessage rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername);
 
 	List<Comment> getCommentsByTaskId(String taskId);
 

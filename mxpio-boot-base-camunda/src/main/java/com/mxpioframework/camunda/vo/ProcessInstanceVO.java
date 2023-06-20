@@ -1,4 +1,4 @@
-package com.mxpioframework.camunda.dto;
+package com.mxpioframework.camunda.vo;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class ProcessInstanceDto implements Serializable {
+public class ProcessInstanceVO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -40,7 +40,7 @@ public class ProcessInstanceDto implements Serializable {
 	@Schema(description = "申请人")
 	private String startUserId;
 
-	public ProcessInstanceDto(HistoricProcessInstance procInst) {
+	public ProcessInstanceVO(HistoricProcessInstance procInst) {
 		this.id = procInst.getId();
 		this.businessKey = procInst.getBusinessKey();
 		this.processDefinitionName = procInst.getProcessDefinitionName();
