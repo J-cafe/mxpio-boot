@@ -151,8 +151,13 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Override
 	@Transactional(readOnly = true)
 	public String getTaskFormKeyByTaskId(String taskId) {
-		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-		return task.getFormKey();
+		try {
+			Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+			return formService.getTaskFormKey(task.getProcessDefinitionId(), task.getTaskDefinitionKey());
+		} catch (Exception e) {
+			return null;
+		}
+		
 	}
 
 	@Override
@@ -474,6 +479,9 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Transactional(readOnly = true)
 	public FormModelDef getTaskFormModelByTaskId(String taskId) {
 		String formKey = getTaskFormKeyByTaskId(taskId);
+		if(formKey == null){
+			return null;
+		}
 		return JpaUtil.linq(FormModelDef.class).idEqual(formKey).findOne();
 	}
 
