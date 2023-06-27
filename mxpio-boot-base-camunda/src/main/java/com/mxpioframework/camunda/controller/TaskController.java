@@ -57,7 +57,7 @@ public class TaskController {
 	}
 
 	@GetMapping("page")
-	@Operation(summary = "流程列表(分页)", description = "流程列表(分页)", method = "GET")
+	@Operation(summary = "待办任务列表(分页)", description = "待办任务列表(分页)", method = "GET")
 	public Result<Page<TaskVO>> page(@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
 		List<TaskVO> list = new ArrayList<>();
@@ -161,6 +161,13 @@ public class TaskController {
 		FormModelDef formModelDef = bpmnFlowService.getTaskFormModelByTaskId(taskId);
 		TaskFormDto dto = new TaskFormDto(formData, formModelDef);
 		return Result.OK("查询成功！",dto);
+	}
+	
+	@GetMapping("form/model/{taskId}")
+	@Operation(summary = "获取表单模型", description = "获取表单模型", method = "GET")
+	public Result<FormModelDef> formHistoric(@PathVariable(name = "taskId", required = true) String taskId) {
+		FormModelDef formModelDef = bpmnFlowService.getTaskFormModelByTaskId(taskId);
+		return Result.OK("查询成功！",formModelDef);
 	}
 
 }
