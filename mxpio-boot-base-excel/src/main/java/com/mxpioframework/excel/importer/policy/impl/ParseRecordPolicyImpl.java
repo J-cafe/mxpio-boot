@@ -63,16 +63,15 @@ public class ParseRecordPolicyImpl implements ParseRecordPolicy, ApplicationCont
 			}
 			context.getImportedList().add(entity);
 
-			for(AfterPersistProcessor afterPersistProcessor:afterPersistProcessors){
-				if(afterPersistProcessor.support(context)){
-					afterPersistProcessor.process(context);
-				}
-			}
-
 			JpaUtil.persist(entity);
 			if (i % 100 == 0) {
 				JpaUtil.persistAndFlush(entity);
 				JpaUtil.getEntityManager(entity).clear();
+			}
+			for(AfterPersistProcessor afterPersistProcessor:afterPersistProcessors){
+				if(afterPersistProcessor.support(context)){
+					afterPersistProcessor.process(context);
+				}
 			}
 		}
 
