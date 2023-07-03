@@ -106,7 +106,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		jwtLoginFilter.setAuthenticationFailureHandler(new AuthenticationFailureHandler(){
 			@Override
 			public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-				exception.printStackTrace();
+				//exception.printStackTrace();
 				response.setContentType("application/json;charset=UTF-8");
 				if(exception instanceof UsernameNotFoundException){
 					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101(exception.getMessage())));
@@ -228,7 +228,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
 				throws IOException, ServletException {
 			response.setContentType("application/json;charset=UTF-8");
-			exception.printStackTrace();
+			//exception.printStackTrace();
 			if(exception instanceof CaptchaAuthenticationException) {
 				response.setStatus(401);
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401(exception.getMessage())));

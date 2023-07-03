@@ -48,7 +48,18 @@ public class BaseServiceImpl<T> implements BaseService<T> {
 	@Override
 	@Transactional(readOnly = false)
 	public int delete(Object key, Class<T> clazz) {
-		return JpaUtil.lind(clazz).idEqual(key).delete();
+		Object[] ids;
+		if(key instanceof String){
+			ids = ((String) key).split(",");
+		}else{
+			ids = new Object[1];
+			ids[0] = key;
+		}
+		int result = 0;
+		for(Object id : ids){
+			result += JpaUtil.lind(clazz).idEqual(id).delete();
+		}
+		return result;
 	}
 
 }
