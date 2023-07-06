@@ -1,6 +1,7 @@
 package com.mxpioframework.common.util;
 
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Map;
 
 import freemarker.template.Configuration;
@@ -28,9 +29,24 @@ public class FreemarkerHelper {
     public static String process(String templatePath, Map<String, Object> data) {
         return process(templatePath, "utf-8", data);
     }
+    
+    public static void process(String templatePath, String encode, Map<String, Object> data, Writer write) {
+        try {
+        	configuration.setDefaultEncoding(encode);
+            Template template = null;
+            template = configuration.getTemplate(templatePath, encode);
+            template.process(data, write);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+    
+    public static void process(String templatePath, Map<String, Object> data, Writer write) {
+        process(templatePath, "utf-8", data, write);
+    }
 
     static {
     	configuration.setNumberFormat("0.#####################");
-    	configuration.setClassForTemplateLoading(FreemarkerHelper.class, "/");
+    	configuration.setClassForTemplateLoading(FreemarkerHelper.class, "/template");
     }
 }

@@ -30,10 +30,6 @@ public class GenModel extends BaseEntity {
 	@Schema(description = "ID")
 	private String id;
 	
-	@Column(name = "SYSTEM_ID_")
-	@Schema(description = "系统ID")
-	private String systemId;
-	
 	@Column(name = "TABLE_NAME_")
 	@Schema(description = "数据库表名")
 	private String tableName;
@@ -50,13 +46,13 @@ public class GenModel extends BaseEntity {
 	@Schema(description = "模型类型")
 	private String modelType;
 	
-	@Column(name = "MODEL_VERSION_")
-	@Schema(description = "版本")
-	private String modelVersion;
+	@Column(name = "MODEL_PATH_")
+	@Schema(description = "访问路径")
+	private String modelPath;
 	
-	@Column(name = "MODEL_STATUS_")
-	@Schema(description = "状态")
-	private String modelStatus;
+	@Column(name = "ROOT_PACKAGE_")
+	@Schema(description = "包名")
+	private String rootPackage;
 	
 	@Column(name = "PACKAGE_NAME_")
 	@Schema(description = "子包名")
