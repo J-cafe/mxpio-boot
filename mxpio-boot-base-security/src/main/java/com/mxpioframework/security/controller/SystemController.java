@@ -34,10 +34,10 @@ public class SystemController {
 
 	@Autowired
 	private CacheProvider cacheProvider;
-	
+
 	@Autowired
 	private DefaultCaptcha defaultCaptcha;
-	
+
 	@Autowired
 	private OnlineUserService onlineUserService;
 
@@ -45,26 +45,35 @@ public class SystemController {
 	private String captchaOpenFlag;
 	@Value("${mxpio.password.strategy}")
 	private String passwordStrategy;
+
+	@Value("${app_name}")
+	private String appName;
+	@Value("${app_system_desc}")
+	private String appSystemDesc;
+	@Value("${app_system_abbr}")
+	private String appSystemAbbr;
+	@Value("${app_user_company}")
+	private String appUserCompany;
 	@GetMapping("captcha")
 	@Operation(summary = "加载验证码", description = "获取登录验证码", method = "GET")
 	public Result<CaptchaDTO> captcha() throws IOException {
 		CaptchaDTO captcha = new CaptchaDTO();;
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        
-        String createText = defaultCaptcha.createText();
-        String uuid = UUID.randomUUID().toString();
-        cacheProvider.set(Constants.CAPTCHA_REDIS_KEY + uuid, createText, 180);
-        
-        BufferedImage bi = defaultCaptcha.createImage(createText);
-        ImageIO.write(bi, "jpg", out);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        Base64.Encoder encoder = Base64.getEncoder();
-        
-        captcha.setCode(uuid);
-        captcha.setImage(encoder.encodeToString(out.toByteArray()));
+		String createText = defaultCaptcha.createText();
+		String uuid = UUID.randomUUID().toString();
+		cacheProvider.set(Constants.CAPTCHA_REDIS_KEY + uuid, createText, 180);
+
+		BufferedImage bi = defaultCaptcha.createImage(createText);
+		ImageIO.write(bi, "jpg", out);
+
+		Base64.Encoder encoder = Base64.getEncoder();
+
+		captcha.setCode(uuid);
+		captcha.setImage(encoder.encodeToString(out.toByteArray()));
 		return Result.OK(captcha);
 	}
-	
+
 	@PostMapping("token/refresh")
 	@Operation(summary = "刷新token", description = "双token机制下通过refreshToken刷新权限token", method = "POST")
 	public Result<Object> refreshToken(@RequestBody TokenVo tokenVo) throws IOException {
@@ -86,7 +95,10 @@ public class SystemController {
 		}else{
 			returnMap.put("captchaOpenFlag",Boolean.FALSE);
 		}
-
+		returnMap.put("appName",appName);
+		returnMap.put("appSystemDesc",appSystemDesc);
+		returnMap.put("appSystemAbbr",appSystemAbbr);
+		returnMap.put("appUserCompany",appUserCompany);
 		if (StringUtils.isNotBlank(passwordStrategy)){
 			String[] split = passwordStrategy.split(",");
 			List<Map<String,Object>> configRegexs = new ArrayList<>();
