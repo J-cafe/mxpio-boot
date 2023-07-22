@@ -405,11 +405,14 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	public List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateGroup(Set<String> authorities,
 			Criteria criteria, Integer pageSize, Integer pageNo) {
 		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().unfinished();
-		query.or();
-		for(String authority : authorities){
-			query.taskHadCandidateGroup(authority);
+		if(authorities != null && authorities.size()>0 ){
+			query.or();
+			for(String authority : authorities){
+				query.taskHadCandidateGroup(authority);
+			}
+			query.taskHadCandidateGroup("any");
+			query.endOr();
 		}
-		query.endOr();
 		if(criteria != null){
 			for(Object criterion : criteria.getCriterions()){
 				if(criterion instanceof SimpleCriterion){
