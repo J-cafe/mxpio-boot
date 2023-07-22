@@ -187,17 +187,17 @@ public class TaskController {
 		List<HistoricTaskVO> list = new ArrayList<>();
 		List<HistoricActivityInstance> activitis = bpmnFlowService.getHistoricActivityByProcessInstanceId(processInstanceId);
 		for(HistoricActivityInstance activity : activitis){
-			if(activity.getTaskId() == null){
-				continue;
-			}
 			HistoricTaskVO historicTaskDto = new HistoricTaskVO(activity);
-			List<Comment> comments = bpmnFlowService.getCommentsByTaskId(activity.getTaskId());
-			StringBuffer sb = new StringBuffer("");
-			for(Comment comment : comments){
-				sb.append(comment.getFullMessage() + ";");
+			if("userTask".equals(activity.getActivityType())){
+				List<Comment> comments = bpmnFlowService.getCommentsByTaskId(activity.getTaskId());
+				StringBuffer sb = new StringBuffer("");
+				for(Comment comment : comments){
+					sb.append(comment.getFullMessage() + ";");
+				}
+				historicTaskDto.setComment(sb.toString());
 			}
-			historicTaskDto.setComment(sb.toString());
 			list.add(historicTaskDto);
+			
 		}
 		return Result.OK("查询成功！",list);
 	}

@@ -17,6 +17,7 @@ public class HistoricTaskVO implements Serializable  {
 		this.endTime = activity.getEndTime();
 		this.assignee = activity.getAssignee();
 		this.canceled = activity.isCanceled();
+		this.activityType = activity.getActivityType();
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -38,5 +39,8 @@ public class HistoricTaskVO implements Serializable  {
 	
 	@Schema(description = "是否撤销")
 	private boolean canceled;
+	
+	@Schema(description = "节点类型")
+	private String activityType;
 
 }
