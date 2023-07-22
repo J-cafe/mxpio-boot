@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mxpioframework.camunda.service.BpmnFlowService;
 import com.mxpioframework.camunda.vo.ProcessDefVO;
 import com.mxpioframework.camunda.vo.ProcessInstanceVO;
+import com.mxpioframework.camunda.vo.TaskDetailVO;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.util.SecurityUtils;
 
@@ -89,6 +90,20 @@ public class ProcessController {
 		}
 		bpmnFlowService.handleBpmnFile(procDef, procDefDto);
 		return Result.OK("查询成功！",procDefDto);
+	}
+	
+	@GetMapping("details/{processInstanceId}")
+	@Operation(summary = "获取流程详情", description = "获取流程详情", method = "GET")
+	public Result<TaskDetailVO> detail(@PathVariable(name = "processInstanceId", required = true) String processInstanceId) {
+		TaskDetailVO taskDetail = new TaskDetailVO();
+		//获取流程信息
+		ProcessDefinition procDef = bpmnFlowService.getProcDefByProcessInstanceId(processInstanceId);
+		if(procDef.hasStartFormKey()){
+			bpmnFlowService.handleFormInfo(procDef, taskDetail);
+		}
+		bpmnFlowService.handleBpmnFile(procDef, taskDetail);
+		bpmnFlowService.handleVariables(processInstanceId, taskDetail);
+		return Result.OK("查询成功！",taskDetail);
 	}
 
 	@PostMapping("start/{key}")

@@ -10,16 +10,9 @@ import lombok.Data;
 
 @Data
 public class TaskDetailVO implements Serializable, BpmnResource {
-	
-	public TaskDetailVO(String taskId) {
-		this.id = taskId;
-	}
 
 	private static final long serialVersionUID = 1L;
 
-	@Schema(description = "ID")
-	private String id;
-	
 	@Schema(description = "bpmn文件")
 	private String source;
 	

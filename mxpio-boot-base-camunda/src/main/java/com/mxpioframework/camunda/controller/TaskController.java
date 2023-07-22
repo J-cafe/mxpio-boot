@@ -8,7 +8,6 @@ import java.util.Set;
 import org.camunda.bpm.engine.history.HistoricActivityInstance;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
-import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.task.Comment;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,6 @@ import com.mxpioframework.camunda.dto.ResultMessage;
 import com.mxpioframework.camunda.entity.FormModelDef;
 import com.mxpioframework.camunda.service.BpmnFlowService;
 import com.mxpioframework.camunda.vo.HistoricTaskVO;
-import com.mxpioframework.camunda.vo.TaskDetailVO;
 import com.mxpioframework.camunda.vo.TaskVO;
 import com.mxpioframework.camunda.vo.TaskFormDto;
 import com.mxpioframework.common.vo.Result;
@@ -162,21 +160,6 @@ public class TaskController {
 		}else{
 			return Result.error(msg.getMsg());
 		}
-	}
-	
-	@GetMapping("details/{processInstanceId}/{taskId}")
-	@Operation(summary = "获取节点详情", description = "获取节点详情", method = "GET")
-	public Result<TaskDetailVO> detail(@PathVariable(name = "processInstanceId", required = true) String processInstanceId,
-			@PathVariable(name = "taskId", required = true) String taskId) {
-		TaskDetailVO taskDetail = new TaskDetailVO(taskId);
-		//获取流程信息
-		ProcessDefinition procDef = bpmnFlowService.getProcDefByProcessInstanceId(processInstanceId);
-		if(procDef.hasStartFormKey()){
-			bpmnFlowService.handleFormInfo(procDef, taskDetail);
-		}
-		bpmnFlowService.handleBpmnFile(procDef, taskDetail);
-		bpmnFlowService.handleVariables(processInstanceId, taskDetail);
-		return Result.OK("查询成功！",taskDetail);
 	}
 	
 	@GetMapping("historics/{processInstanceId}")
