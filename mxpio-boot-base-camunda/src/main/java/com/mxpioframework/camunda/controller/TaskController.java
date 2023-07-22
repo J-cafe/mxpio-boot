@@ -63,7 +63,26 @@ public class TaskController {
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
 		List<TaskVO> list = new ArrayList<>();
 		String username = SecurityUtils.getLoginUsername();
-		List<HistoricTaskInstance> tasks = bpmnFlowService.pagingHistoricTaskListPageByUser(username, criteria, pageSize, pageNo);
+		List<HistoricTaskInstance> tasks = bpmnFlowService.pagingHistoricTaskListPageByUser(username, criteria, pageSize, pageNo, false);
+		long total = bpmnFlowService.countHistoricTaskListByUser(username);
+		for(HistoricTaskInstance task : tasks){
+			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
+			list.add(new TaskVO(task, historicProcessInstance));
+		}
+		
+		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
+		Page<TaskVO> page = new PageImpl<TaskVO>(list, pageAble, total);
+		return Result.OK(page);
+	}
+	
+	@GetMapping("finished/page")
+	@Operation(summary = "已办任务列表(分页)", description = "已办任务列表(分页)", method = "GET")
+	public Result<Page<TaskVO>> finishPage(Criteria criteria,
+			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
+		List<TaskVO> list = new ArrayList<>();
+		String username = SecurityUtils.getLoginUsername();
+		List<HistoricTaskInstance> tasks = bpmnFlowService.pagingHistoricTaskListPageByUser(username, criteria, pageSize, pageNo, true);
 		long total = bpmnFlowService.countHistoricTaskListByUser(username);
 		for(HistoricTaskInstance task : tasks){
 			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());

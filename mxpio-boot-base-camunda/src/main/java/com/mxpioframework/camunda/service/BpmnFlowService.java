@@ -70,7 +70,7 @@ public interface BpmnFlowService {
 
 	List<HistoricTaskInstance> getHistoricTaskListByUser(String loginUsername);
 
-	List<HistoricTaskInstance> pagingHistoricTaskListPageByUser(String username, Criteria criteria, Integer pageSize, Integer pageNo);
+	List<HistoricTaskInstance> pagingHistoricTaskListPageByUser(String username, Criteria criteria, Integer pageSize, Integer pageNo, boolean finished);
 	
 	List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateUser(String username, Criteria criteria,
 			Integer pageSize, Integer pageNo);

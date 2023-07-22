@@ -333,8 +333,13 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<HistoricTaskInstance> pagingHistoricTaskListPageByUser(String username, Criteria criteria, Integer pageSize,
-			Integer pageNo) {
-		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().unfinished().taskAssignee(username);
+			Integer pageNo, boolean finished) {
+		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().taskAssignee(username);
+		if(finished){
+			query.finished();
+		}else{
+			query.unfinished();
+		}
 		if(criteria != null){
 			for(Object criterion : criteria.getCriterions()){
 				if(criterion instanceof SimpleCriterion){
