@@ -7,6 +7,8 @@ import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.mxpioframework.security.annotation.Dict;
+import com.mxpioframework.security.entity.User;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -19,6 +21,7 @@ public class TaskVO implements Serializable {
 	@Schema(description = "ID")
 	private String id;
 	
+	@Dict(dicCode="username", dicEntity = User.class, dicText = "nickname")
 	@Schema(description = "当前审批人")
 	private String assignee;
 	
@@ -46,6 +49,7 @@ public class TaskVO implements Serializable {
 	private Date procStartTime;
 	
 	@Schema(description = "发起人")
+	@Dict(dicCode="username", dicEntity = User.class, dicText = "nickname")
 	private String procStartUserId;
 	
 	@Schema(description = "流程定义名称")
