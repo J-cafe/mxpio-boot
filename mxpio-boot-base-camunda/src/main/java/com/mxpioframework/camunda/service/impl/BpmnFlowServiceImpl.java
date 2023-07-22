@@ -404,7 +404,8 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Override
 	public List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateGroup(Set<String> authorities,
 			Criteria criteria, Integer pageSize, Integer pageNo) {
-		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().unfinished().or();
+		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().unfinished();
+		query.or();
 		for(String authority : authorities){
 			query.taskHadCandidateGroup(authority);
 		}
@@ -431,7 +432,6 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 							}else{
 								query.processVariableValueLike(((SimpleCriterion) criterion).getFieldName(), "%" + ((SimpleCriterion) criterion).getValue() + "%");
 							}
-							
 							break;
 					}
 				}
