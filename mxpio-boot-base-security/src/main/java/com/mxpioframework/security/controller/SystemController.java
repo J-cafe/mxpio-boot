@@ -46,13 +46,13 @@ public class SystemController {
 	@Value("${mxpio.password.strategy}")
 	private String passwordStrategy;
 
-	@Value("${app_name}")
+	@Value("${app.name}")
 	private String appName;
-	@Value("${app_system_desc}")
+	@Value("${app.system.desc}")
 	private String appSystemDesc;
-	@Value("${app_system_abbr}")
+	@Value("${app.system.abbr}")
 	private String appSystemAbbr;
-	@Value("${app_user_company}")
+	@Value("${app.user.company}")
 	private String appUserCompany;
 	@GetMapping("captcha")
 	@Operation(summary = "加载验证码", description = "获取登录验证码", method = "GET")
