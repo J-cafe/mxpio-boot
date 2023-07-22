@@ -66,4 +66,4 @@ camunda:
       type: mysql
       schema-update: true
     auto-deployment-enabled: false # 自动部署 resources 下的 bpmn文件
-    history-level: full
+    enable-history-by-default: true
