@@ -3,6 +3,7 @@ package com.mxpioframework.camunda.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.camunda.bpm.engine.history.HistoricActivityInstance;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
@@ -31,6 +32,7 @@ import com.mxpioframework.camunda.vo.TaskDetailVO;
 import com.mxpioframework.camunda.vo.TaskVO;
 import com.mxpioframework.camunda.vo.TaskFormDto;
 import com.mxpioframework.common.vo.Result;
+import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.security.util.SecurityUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,11 +60,12 @@ public class TaskController {
 
 	@GetMapping("page")
 	@Operation(summary = "待办任务列表(分页)", description = "待办任务列表(分页)", method = "GET")
-	public Result<Page<TaskVO>> page(@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
+	public Result<Page<TaskVO>> page(Criteria criteria,
+			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
 		List<TaskVO> list = new ArrayList<>();
 		String username = SecurityUtils.getLoginUsername();
-		List<HistoricTaskInstance> tasks = bpmnFlowService.pagingHistoricTaskListPageByUser(username, pageSize, pageNo);
+		List<HistoricTaskInstance> tasks = bpmnFlowService.pagingHistoricTaskListPageByUser(username, criteria, pageSize, pageNo);
 		long total = bpmnFlowService.countHistoricTaskListByUser(username);
 		for(HistoricTaskInstance task : tasks){
 			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
@@ -72,6 +75,57 @@ public class TaskController {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		Page<TaskVO> page = new PageImpl<TaskVO>(list, pageAble, total);
 		return Result.OK(page);
+	}
+	
+	@GetMapping("candidate/page")
+	@Operation(summary = "候选任务列表(分页)", description = "候选任务列表(分页)", method = "GET")
+	public Result<Page<TaskVO>> candidatePage(Criteria criteria,
+			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
+		List<TaskVO> list = new ArrayList<>();
+		String username = SecurityUtils.getLoginUsername();
+		List<HistoricTaskInstance> tasks = bpmnFlowService.pagingHistoricTaskListPageByCandidateUser(username, criteria, pageSize, pageNo);
+		long total = bpmnFlowService.countHistoricTaskListByUser(username);
+		for(HistoricTaskInstance task : tasks){
+			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
+			list.add(new TaskVO(task, historicProcessInstance));
+		}
+		
+		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
+		Page<TaskVO> page = new PageImpl<TaskVO>(list, pageAble, total);
+		return Result.OK(page);
+	}
+	
+	@GetMapping("group/page")
+	@Operation(summary = "组任务列表(分页)", description = "组任务列表(分页)", method = "GET")
+	public Result<Page<TaskVO>> groupPage(Criteria criteria,
+			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
+		List<TaskVO> list = new ArrayList<>();
+		String username = SecurityUtils.getLoginUsername();
+		Set<String> authorities = SecurityUtils.getAuthorityKeys();
+		List<HistoricTaskInstance> tasks = bpmnFlowService.pagingHistoricTaskListPageByCandidateGroup(authorities, criteria, pageSize, pageNo);
+		long total = bpmnFlowService.countHistoricTaskListByUser(username);
+		for(HistoricTaskInstance task : tasks){
+			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
+			list.add(new TaskVO(task, historicProcessInstance));
+		}
+		
+		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
+		Page<TaskVO> page = new PageImpl<TaskVO>(list, pageAble, total);
+		return Result.OK(page);
+	}
+	
+	@PostMapping("claim/{taskId}")
+	@Operation(summary = "任务领取", description = "任务领取", method = "POST")
+	public Result<?> claim(@PathVariable(name = "taskId", required = true) String taskId){
+		
+		ResultMessage msg = bpmnFlowService.claim(taskId, SecurityUtils.getLoginUsername());
+		if(msg.isSuccess()){
+			return Result.OK(msg.getMsg(), null);
+		}else{
+			return Result.error(msg.getMsg());
+		}
 	}
 	
 	@PostMapping("complete/{taskId}")

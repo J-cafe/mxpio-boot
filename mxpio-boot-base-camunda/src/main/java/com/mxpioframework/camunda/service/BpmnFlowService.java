@@ -2,6 +2,7 @@ package com.mxpioframework.camunda.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.camunda.bpm.engine.history.HistoricActivityInstance;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
@@ -69,7 +70,13 @@ public interface BpmnFlowService {
 
 	List<HistoricTaskInstance> getHistoricTaskListByUser(String loginUsername);
 
-	List<HistoricTaskInstance> pagingHistoricTaskListPageByUser(String username, Integer pageSize, Integer pageNo);
+	List<HistoricTaskInstance> pagingHistoricTaskListPageByUser(String username, Criteria criteria, Integer pageSize, Integer pageNo);
+	
+	List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateUser(String username, Criteria criteria,
+			Integer pageSize, Integer pageNo);
+	
+	List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateGroup(Set<String> authorities, Criteria criteria,
+			Integer pageSize, Integer pageNo);
 
 	long countHistoricTaskListByUser(String username);
 
@@ -92,5 +99,7 @@ public interface BpmnFlowService {
 	List<Comment> getCommentsByTaskId(String taskId);
 
 	FormModelDef getTaskFormModelByTaskId(String taskId);
+
+	ResultMessage claim(String taskId, String loginUsername);
 
 }

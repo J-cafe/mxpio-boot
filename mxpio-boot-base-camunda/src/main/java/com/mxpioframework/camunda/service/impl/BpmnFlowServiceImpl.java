@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.camunda.bpm.engine.FormService;
@@ -18,6 +19,7 @@ import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.history.HistoricActivityInstance;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
+import org.camunda.bpm.engine.history.HistoricTaskInstanceQuery;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ActivityInstance;
@@ -42,6 +44,8 @@ import com.mxpioframework.camunda.vo.BpmnResource;
 import com.mxpioframework.camunda.vo.TaskDetailVO;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
+import com.mxpioframework.jpa.query.Operator;
+import com.mxpioframework.jpa.query.SimpleCriterion;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -328,10 +332,115 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<HistoricTaskInstance> pagingHistoricTaskListPageByUser(String username, Integer pageSize,
+	public List<HistoricTaskInstance> pagingHistoricTaskListPageByUser(String username, Criteria criteria, Integer pageSize,
 			Integer pageNo) {
-		return historyService.createHistoricTaskInstanceQuery().unfinished().taskAssignee(username)
-				.orderByProcessInstanceId().desc().listPage((pageNo - 1) * pageSize, pageNo * pageSize - 1);
+		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().unfinished().taskAssignee(username);
+		if(criteria != null){
+			for(Object criterion : criteria.getCriterions()){
+				if(criterion instanceof SimpleCriterion){
+					switch(((SimpleCriterion) criterion).getFieldName()){
+						case "name":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.taskName(((SimpleCriterion) criterion).getValue() + "");
+							}else{
+								query.taskNameLike("%" + ((SimpleCriterion) criterion).getValue() + "%");
+							}
+							break;
+						case "processDefinitionName":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processDefinitionName(((SimpleCriterion) criterion).getValue() + "");
+							}
+							break;
+						default:
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processVariableValueEquals(((SimpleCriterion) criterion).getFieldName(), ((SimpleCriterion) criterion).getValue());
+							}else{
+								query.processVariableValueLike(((SimpleCriterion) criterion).getFieldName(), "%" + ((SimpleCriterion) criterion).getValue() + "%");
+							}
+							
+							break;
+					}
+				}
+			}
+		}
+		return query.orderByHistoricActivityInstanceStartTime().desc().listPage((pageNo - 1) * pageSize, pageNo * pageSize - 1);
+	}
+	
+	@Override
+	public List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateUser(String username, Criteria criteria,
+			Integer pageSize, Integer pageNo) {
+		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().unfinished().taskHadCandidateUser(username);
+		if(criteria != null){
+			for(Object criterion : criteria.getCriterions()){
+				if(criterion instanceof SimpleCriterion){
+					switch(((SimpleCriterion) criterion).getFieldName()){
+						case "name":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.taskName(((SimpleCriterion) criterion).getValue() + "");
+							}else{
+								query.taskNameLike("%" + ((SimpleCriterion) criterion).getValue() + "%");
+							}
+							break;
+						case "processDefinitionName":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processDefinitionName(((SimpleCriterion) criterion).getValue() + "");
+							}
+							break;
+						default:
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processVariableValueEquals(((SimpleCriterion) criterion).getFieldName(), ((SimpleCriterion) criterion).getValue());
+							}else{
+								query.processVariableValueLike(((SimpleCriterion) criterion).getFieldName(), "%" + ((SimpleCriterion) criterion).getValue() + "%");
+							}
+							
+							break;
+					}
+				}
+			}
+		}
+		return query.orderByHistoricActivityInstanceStartTime().desc().listPage((pageNo - 1) * pageSize, pageNo * pageSize - 1);
+	}
+	
+	@Override
+	public List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateGroup(Set<String> authorities,
+			Criteria criteria, Integer pageSize, Integer pageNo) {
+		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().unfinished();
+		if(authorities != null && authorities.size()>0 ){
+			query.or();
+			for(String authority : authorities){
+				query.taskHadCandidateGroup(authority);
+			}
+			query.taskHadCandidateGroup("any");
+			query.endOr();
+		}
+		if(criteria != null){
+			for(Object criterion : criteria.getCriterions()){
+				if(criterion instanceof SimpleCriterion){
+					switch(((SimpleCriterion) criterion).getFieldName()){
+						case "name":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.taskName(((SimpleCriterion) criterion).getValue() + "");
+							}else{
+								query.taskNameLike("%" + ((SimpleCriterion) criterion).getValue() + "%");
+							}
+							break;
+						case "processDefinitionName":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processDefinitionName(((SimpleCriterion) criterion).getValue() + "");
+							}
+							break;
+						default:
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processVariableValueEquals(((SimpleCriterion) criterion).getFieldName(), ((SimpleCriterion) criterion).getValue());
+							}else{
+								query.processVariableValueLike(((SimpleCriterion) criterion).getFieldName(), "%" + ((SimpleCriterion) criterion).getValue() + "%");
+							}
+							break;
+					}
+				}
+			}
+		}
+		return query.orderByHistoricActivityInstanceStartTime().desc().listPage((pageNo - 1) * pageSize, pageNo * pageSize - 1);
 	}
 
 	@Override
@@ -483,6 +592,17 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			return null;
 		}
 		return JpaUtil.linq(FormModelDef.class).idEqual(formKey).findOne();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ResultMessage claim(String taskId, String loginUsername) {
+		try{
+			taskService.claim(taskId, loginUsername);
+		}catch (Exception e) {
+			return ResultMessage.error("领取失败！");
+		}
+		return ResultMessage.success("领取成功！");
 	}
 
 }

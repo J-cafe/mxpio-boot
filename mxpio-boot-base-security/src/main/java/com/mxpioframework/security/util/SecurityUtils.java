@@ -3,6 +3,7 @@ package com.mxpioframework.security.util;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,5 +40,10 @@ public class SecurityUtils {
 		DeptService deptService = ApplicationContextProvider.getBean(DeptService.class);
 		Map<String,Set<String>> deptMap = deptService.getAllDeptCodeGroupByUser();
 		return deptMap.get(getLoginUsername());
+	}
+	
+	public static Set<String> getAuthorityKeys(){
+		return getAuthorities().stream()
+			     .map(r -> r.getAuthority()).collect(Collectors.toSet());
 	}
 }
