@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mxpioframework.common.util.BeanReflectionUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,11 +34,17 @@ public class RoleDataFilterServiceImpl implements RoleDataFilterService {
 				result.put(roleDataFilter.getRoleId(), new ArrayList<DataFilter>() {
 					private static final long serialVersionUID = 1L;
 					{
-						add(dataFilterMap.get(roleDataFilter.getDataFilterId()));
+						DataFilter dataFilter = new DataFilter();
+						//拷贝对象，解决同一个DataFilter被多个角色引用时，redis缓存存放对象变为对象引用，导致取值时为空的问题
+						//"$ref":"$.68bd82da\\-0575\\-4143\\-b82c\\-1a0fb5bcce2a[1]"
+						BeanReflectionUtils.copyProperties(dataFilter,dataFilterMap.get(roleDataFilter.getDataFilterId()));
+						add(dataFilter);
 					}
 				});
 			} else {
-				result.get(roleDataFilter.getRoleId()).add(dataFilterMap.get(roleDataFilter.getDataFilterId()));
+				DataFilter dataFilter = new DataFilter();
+				BeanReflectionUtils.copyProperties(dataFilter,dataFilterMap.get(roleDataFilter.getDataFilterId()));
+				result.get(roleDataFilter.getRoleId()).add(dataFilter);
 			}
 		});
 		return result;
