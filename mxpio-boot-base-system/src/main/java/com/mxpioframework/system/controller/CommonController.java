@@ -1,13 +1,9 @@
 package com.mxpioframework.system.controller;
 
+import com.mxpioframework.system.entity.SNExpression;
 import com.mxpioframework.system.service.SnRuleService;
-import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.system.service.CommonService;
@@ -35,10 +31,11 @@ public class CommonController {
 		return Result.OK(count);
 	}
 
-	@GetMapping("sngenerate/{snExpression}")
-	@Operation(summary = "序列号生成器", description = "序列号生成器", method = "GET")
-	public Result<Object> snGenerate(@Parameter(description="样例：SN${YYYY}${MM}${DD}####，生成结果：SN202308080001") @PathVariable(name = "snExpression", required = true) String snExpression) {
-		Object sn = snRuleService.execute(snExpression, null);
+	//@GetMapping("sngenerate/{snExpression}")
+	@RequestMapping("sngenerate")
+	@Operation(summary = "序列号生成器", description = "序列号生成器", method = "POST")
+	public Result<Object> snGenerate(@RequestBody SNExpression snExpression) {
+		Object sn = snRuleService.execute(snExpression.getSnExpression(), null);
 		return Result.OK(sn);
 	}
 }
