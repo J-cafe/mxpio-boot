@@ -31,7 +31,6 @@ public class CommonController {
 		return Result.OK(count);
 	}
 
-	//@GetMapping("sngenerate/{snExpression}")
 	@RequestMapping("sngenerate")
 	@Operation(summary = "序列号生成器", description = "序列号生成器", method = "POST")
 	public Result<Object> snGenerate(@RequestBody SNExpression snExpression) {
