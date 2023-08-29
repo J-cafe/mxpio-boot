@@ -370,7 +370,7 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
     Map<String, String> dictMapping = cacheService.get("DictCache:" + code);
     if (dictMapping == null) {
       dictMapping = dictService.getDictMappingByCode(code);
-      cacheService.put(code, dictMapping);
+      cacheService.put("DictCache:" + code, dictMapping);
     }
     return dictMapping;
   }
