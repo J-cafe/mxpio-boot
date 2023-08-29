@@ -373,8 +373,13 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	
 	@Override
 	public List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateUser(String username, Criteria criteria,
-			Integer pageSize, Integer pageNo) {
-		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().unfinished().taskHadCandidateUser(username);
+			Integer pageSize, Integer pageNo, boolean finished) {
+		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().taskHadCandidateUser(username);
+		if(finished){
+			query.finished();
+		}else{
+			query.unfinished();
+		}
 		if(criteria != null){
 			for(Object criterion : criteria.getCriterions()){
 				if(criterion instanceof SimpleCriterion){
@@ -408,8 +413,13 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	
 	@Override
 	public List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateGroup(Set<String> authorities,
-			Criteria criteria, Integer pageSize, Integer pageNo) {
-		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().unfinished();
+			Criteria criteria, Integer pageSize, Integer pageNo, boolean finished) {
+		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
+		if(finished){
+			query.finished();
+		}else{
+			query.unfinished();
+		}
 		if(authorities != null && authorities.size()>0 ){
 			query.or();
 			for(String authority : authorities){
@@ -450,8 +460,14 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public long countHistoricTaskListByUser(String username) {
-		return historyService.createHistoricTaskInstanceQuery().unfinished().taskAssignee(username).count();
+	public long countHistoricTaskListByUser(String username, boolean finished) {
+		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
+		if(finished){
+			query.finished();
+		}else{
+			query.unfinished();
+		}
+		return query.taskAssignee(username).count();
 	}
 
 	@Override

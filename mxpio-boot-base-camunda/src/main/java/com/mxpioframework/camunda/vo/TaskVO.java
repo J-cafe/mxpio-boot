@@ -46,6 +46,10 @@ public class TaskVO implements Serializable, DictAble {
 	@Schema(description = "创建时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date createTime;
+	
+	@Schema(description = "完成时间")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private Date endTime;
 
 	@Schema(description = "流程发起时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -66,6 +70,7 @@ public class TaskVO implements Serializable, DictAble {
 		this.processInstanceId = task.getProcessInstanceId();
 		this.processDefinitionKey = task.getProcessDefinitionKey();
 		this.createTime = task.getStartTime();
+		this.endTime = task.getEndTime();
 	}
 
 	public TaskVO(HistoricTaskInstance task, HistoricProcessInstance historicProcessInstance) {
