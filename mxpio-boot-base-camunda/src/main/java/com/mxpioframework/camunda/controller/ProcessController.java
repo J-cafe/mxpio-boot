@@ -60,7 +60,7 @@ public class ProcessController {
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
 		List<ProcessInstanceVO> list = new ArrayList<>();
 		
-		List<HistoricProcessInstance> procInsts = bpmnFlowService.pagingHistoricProcessInstances((pageNo-1) * pageSize, pageNo * pageSize - 1);
+		List<HistoricProcessInstance> procInsts = bpmnFlowService.pagingHistoricProcessInstances((pageNo-1) * pageSize, pageNo * pageSize);
 		long total = bpmnFlowService.countHistoricProcessInstances();
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
