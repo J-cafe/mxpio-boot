@@ -102,7 +102,7 @@ public class TaskController {
 		List<TaskVO> list = new ArrayList<>();
 		String username = SecurityUtils.getLoginUsername();
 		List<HistoricTaskInstance> tasks = bpmnFlowService.pagingHistoricTaskListPageByCandidateUser(username, criteria, pageSize, pageNo, false);
-		long total = bpmnFlowService.countHistoricTaskListByUser(username, false);
+		long total = bpmnFlowService.countHistoricTaskListByCandidateUser(username, criteria, false);
 		for(HistoricTaskInstance task : tasks){
 			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
 			list.add(new TaskVO(task, historicProcessInstance));
@@ -119,10 +119,9 @@ public class TaskController {
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
 		List<TaskVO> list = new ArrayList<>();
-		String username = SecurityUtils.getLoginUsername();
 		Set<String> authorities = SecurityUtils.getAuthorityKeys();
 		List<HistoricTaskInstance> tasks = bpmnFlowService.pagingHistoricTaskListPageByCandidateGroup(authorities, criteria, pageSize, pageNo, false);
-		long total = bpmnFlowService.countHistoricTaskListByUser(username, false);
+		long total = bpmnFlowService.countHistoricTaskListByCandidateGroup(authorities, criteria, false);
 		for(HistoricTaskInstance task : tasks){
 			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
 			list.add(new TaskVO(task, historicProcessInstance));

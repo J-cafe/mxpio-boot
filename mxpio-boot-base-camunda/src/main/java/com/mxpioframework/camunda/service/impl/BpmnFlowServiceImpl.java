@@ -372,6 +372,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateUser(String username, Criteria criteria,
 			Integer pageSize, Integer pageNo, boolean finished) {
 		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().taskHadCandidateUser(username);
@@ -412,6 +413,47 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
+	public long countHistoricTaskListByCandidateUser(String username, Criteria criteria, boolean finished) {
+		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().taskHadCandidateUser(username);
+		if(finished){
+			query.finished();
+		}else{
+			query.unfinished();
+		}
+		if(criteria != null){
+			for(Object criterion : criteria.getCriterions()){
+				if(criterion instanceof SimpleCriterion){
+					switch(((SimpleCriterion) criterion).getFieldName()){
+						case "name":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.taskName(((SimpleCriterion) criterion).getValue() + "");
+							}else{
+								query.taskNameLike("%" + ((SimpleCriterion) criterion).getValue() + "%");
+							}
+							break;
+						case "processDefinitionName":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processDefinitionName(((SimpleCriterion) criterion).getValue() + "");
+							}
+							break;
+						default:
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processVariableValueEquals(((SimpleCriterion) criterion).getFieldName(), ((SimpleCriterion) criterion).getValue());
+							}else{
+								query.processVariableValueLike(((SimpleCriterion) criterion).getFieldName(), "%" + ((SimpleCriterion) criterion).getValue() + "%");
+							}
+							
+							break;
+					}
+				}
+			}
+		}
+		return query.count();
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
 	public List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateGroup(Set<String> authorities,
 			Criteria criteria, Integer pageSize, Integer pageNo, boolean finished) {
 		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
@@ -456,6 +498,53 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			}
 		}
 		return query.orderByHistoricActivityInstanceStartTime().desc().listPage((pageNo - 1) * pageSize, pageNo * pageSize);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public long countHistoricTaskListByCandidateGroup(Set<String> authorities, Criteria criteria, boolean finished) {
+		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
+		if(finished){
+			query.finished();
+		}else{
+			query.unfinished();
+		}
+		if(authorities != null && authorities.size()>0 ){
+			query.or();
+			for(String authority : authorities){
+				query.taskHadCandidateGroup(authority);
+			}
+			query.taskHadCandidateGroup("any");
+			query.endOr();
+		}
+		if(criteria != null){
+			for(Object criterion : criteria.getCriterions()){
+				if(criterion instanceof SimpleCriterion){
+					switch(((SimpleCriterion) criterion).getFieldName()){
+						case "name":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.taskName(((SimpleCriterion) criterion).getValue() + "");
+							}else{
+								query.taskNameLike("%" + ((SimpleCriterion) criterion).getValue() + "%");
+							}
+							break;
+						case "processDefinitionName":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processDefinitionName(((SimpleCriterion) criterion).getValue() + "");
+							}
+							break;
+						default:
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processVariableValueEquals(((SimpleCriterion) criterion).getFieldName(), ((SimpleCriterion) criterion).getValue());
+							}else{
+								query.processVariableValueLike(((SimpleCriterion) criterion).getFieldName(), "%" + ((SimpleCriterion) criterion).getValue() + "%");
+							}
+							break;
+					}
+				}
+			}
+		}
+		return query.count();
 	}
 
 	@Override

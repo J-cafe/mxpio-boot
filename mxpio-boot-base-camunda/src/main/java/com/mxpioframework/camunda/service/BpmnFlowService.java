@@ -102,4 +102,8 @@ public interface BpmnFlowService {
 
 	ResultMessage claim(String taskId, String loginUsername);
 
+	long countHistoricTaskListByCandidateUser(String username, Criteria criteria, boolean finished);
+
+	long countHistoricTaskListByCandidateGroup(Set<String> authorities, Criteria criteria, boolean finished);
+
 }
