@@ -116,4 +116,16 @@ public class FileController {
 		response.sendError(HttpServletResponse.SC_NOT_FOUND);
 	}
 
+	@GetMapping("getFileInfo/{fileNo}")
+	@Operation(summary = "获取文件信息", description = "根据fileNo获取文件信息", method = "GET")
+	public Result<MxpioFileInfo> getFileInfoByNo(@PathVariable("fileNo") String fileNo, HttpServletRequest request,
+						 HttpServletResponse response) throws IOException {
+		MxpioFileInfo mxpioFileInfo = fileService.get(fileNo);
+		if (mxpioFileInfo == null) {
+			return Result.error("未获取到文件");
+		}else{
+			return Result.OK(mxpioFileInfo);
+		}
+	}
+
 }
