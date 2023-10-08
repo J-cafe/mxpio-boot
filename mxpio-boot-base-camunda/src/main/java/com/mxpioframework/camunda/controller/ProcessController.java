@@ -129,9 +129,10 @@ public class ProcessController {
 	@PostMapping("start/{key}")
 	@Operation(summary = "启动流程", description = "启动流程", method = "POST")
 	public Result<?> start(@PathVariable(name = "key", required = true) String key,
+			@RequestParam(value="businessKey", required = false) String businessKey,
 			@RequestBody Map<String, Object> properties) {
 		
-		ProcessInstance processInstance = bpmnFlowService.startWithFormByKey(key, SecurityUtils.getLoginUsername(), properties);
+		ProcessInstance processInstance = bpmnFlowService.startWithFormByKey(key, SecurityUtils.getLoginUsername(), businessKey, properties);
 		return Result.OK("启动成功！", processInstance.getId());
 	}
 	

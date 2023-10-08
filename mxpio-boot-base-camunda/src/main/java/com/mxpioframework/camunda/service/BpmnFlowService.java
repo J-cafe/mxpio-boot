@@ -38,7 +38,7 @@ public interface BpmnFlowService {
 
 	BpmnFlow deploy(String code);
 
-	ProcessInstance startWithFormByKey(String key, String loginUsername, Map<String, Object> properties);
+	ProcessInstance startWithFormByKey(String key, String loginUsername, String businessKey, Map<String, Object> properties);
 
 	String getStartFormKeyByProcessDefinitionKey(String key);
 
