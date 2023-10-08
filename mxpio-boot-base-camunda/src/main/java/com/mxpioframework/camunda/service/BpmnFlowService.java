@@ -52,7 +52,23 @@ public interface BpmnFlowService {
 
 	VariableMap getTaskFormDataByTaskId(String taskId);
 
+	/**
+	 * 任务签核
+	 * @param taskId
+	 * @param properties
+	 * @param loginUsername
+	 * @return
+	 */
 	ResultMessage complete(String taskId, Map<String, Object> properties, String loginUsername);
+	
+	/**
+	 * 任务委托
+	 * @param taskId
+	 * @param username
+	 * @param loginUsername
+	 * @return
+	 */
+	ResultMessage delegate(String taskId, String username, String loginUsername);
 
 	ProcessDefinition getProcDefByProcessDefinitionKey(String key);
 	

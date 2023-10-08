@@ -209,6 +209,21 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	
 	@Override
 	@Transactional(readOnly = false)
+	public ResultMessage delegate(String taskId, String username, String loginUsername) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		if(task == null){
+			return ResultMessage.error("任务不存在！");
+		}
+		if (task.getAssignee().equals(loginUsername)) {
+			taskService.delegateTask(taskId, username);
+			return ResultMessage.success("审批成功！");
+		}else{
+			return ResultMessage.error("无权审批！");
+		}
+	}
+	
+	@Override
+	@Transactional(readOnly = false)
 	public ResultMessage rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername) {
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
 		String processInstanceId = task.getProcessInstanceId();

@@ -156,6 +156,18 @@ public class TaskController {
 		}
 	}
 	
+	@PostMapping("delegate/{taskId}/{username}")
+	@Operation(summary = "节点委派", description = "节点委派", method = "POST")
+	public Result<?> delegate(@PathVariable(name = "taskId", required = true) String taskId,
+			@PathVariable(name = "username", required = true) String username){
+		ResultMessage msg = bpmnFlowService.delegate(taskId, username, SecurityUtils.getLoginUsername());
+		if(msg.isSuccess()){
+			return Result.OK(msg.getMsg(), null);
+		}else{
+			return Result.error(msg.getMsg());
+		}
+	}
+	
 	@PostMapping("reject/first/{taskId}")
 	@Operation(summary = "节点驳回开始节点", description = "节点驳回开始节点", method = "POST")
 	public Result<?> rejectToFirst(@PathVariable(name = "taskId", required = true) String taskId,
