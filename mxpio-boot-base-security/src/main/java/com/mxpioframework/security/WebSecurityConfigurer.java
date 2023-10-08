@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDecisionManager;
@@ -91,6 +92,10 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private AuthenticationProvider jwtAuthenticationProvider;
+
+	@Autowired
+	@Qualifier("thirdAuthorizeProvider")
+	private AuthenticationProvider thirdAuthorizeProvider;
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -133,7 +138,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         
 //        JwtAuthenticationProvider jwtAuthenticationProvider = new JwtAuthenticationProvider(userDetailsService, passwordEncoder);
         
-        http.authenticationProvider(jwtAuthenticationProvider).cors().and().csrf().disable()
+        http.authenticationProvider(jwtAuthenticationProvider).authenticationProvider(thirdAuthorizeProvider).cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 // 添加系统及客户定义的白名单地址

@@ -85,6 +85,7 @@ public class FileController {
 				String.format("attachment; filename=\"%1$s\"; filename*=utf-8''%1$s", encodFilename));
 
 		InputStream inputStream = fileService.getInputStream(mxpioFileInfo);
+		response.setHeader("Content-Length", "" + inputStream.available());//返回文件长度（下载进度）
 		if (inputStream == null) {
 			findNotFound(response, fileNo);
 		}
