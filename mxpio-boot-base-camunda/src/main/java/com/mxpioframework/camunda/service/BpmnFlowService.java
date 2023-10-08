@@ -91,7 +91,7 @@ public interface BpmnFlowService {
 	List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateUser(String username, Criteria criteria,
 			Integer pageSize, Integer pageNo, boolean finished);
 	
-	List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateGroup(Set<String> authorities, Criteria criteria,
+	List<Task> pagingHistoricTaskListPageByCandidateGroup(Set<String> authorities, Criteria criteria,
 			Integer pageSize, Integer pageNo, boolean finished);
 
 	long countHistoricTaskListByUser(String username, boolean finished);

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
+import org.camunda.bpm.engine.task.Task;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mxpioframework.jpa.annotation.DictAble;
@@ -72,11 +73,30 @@ public class TaskVO implements Serializable, DictAble {
 		this.createTime = task.getStartTime();
 		this.endTime = task.getEndTime();
 	}
+	
+	public TaskVO(Task task) {
+		this.id = task.getId();
+		this.assignee = task.getAssignee();
+		this.name = task.getName();
+		this.taskDefinitionKey = task.getTaskDefinitionKey();
+		this.processInstanceId = task.getProcessInstanceId();
+		// this.processDefinitionKey = task.getTaskDefinitionKey();
+		this.createTime = task.getCreateTime();
+		// this.endTime = task.getEndTime();
+	}
 
 	public TaskVO(HistoricTaskInstance task, HistoricProcessInstance historicProcessInstance) {
 		this(task);
 		this.procStartTime = historicProcessInstance.getStartTime();
 		this.procStartUserId = historicProcessInstance.getStartUserId();
+		this.processDefinitionName = historicProcessInstance.getProcessDefinitionName();
+	}
+	
+	public TaskVO(Task task, HistoricProcessInstance historicProcessInstance) {
+		this(task);
+		this.procStartTime = historicProcessInstance.getStartTime();
+		this.procStartUserId = historicProcessInstance.getStartUserId();
+		this.processDefinitionKey = historicProcessInstance.getProcessDefinitionKey();
 		this.processDefinitionName = historicProcessInstance.getProcessDefinitionName();
 	}
 

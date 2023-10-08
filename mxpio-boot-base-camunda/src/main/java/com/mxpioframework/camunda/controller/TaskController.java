@@ -9,6 +9,7 @@ import org.camunda.bpm.engine.history.HistoricActivityInstance;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.camunda.bpm.engine.task.Comment;
+import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -120,13 +121,9 @@ public class TaskController {
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
 		List<TaskVO> list = new ArrayList<>();
 		Set<String> authorities = SecurityUtils.getAuthorityKeys();
-		System.out.println("=====================");
-		for(String authority : authorities){
-			System.out.println(authority);
-		}
-		List<HistoricTaskInstance> tasks = bpmnFlowService.pagingHistoricTaskListPageByCandidateGroup(authorities, criteria, pageSize, pageNo, false);
+		List<Task> tasks = bpmnFlowService.pagingHistoricTaskListPageByCandidateGroup(authorities, criteria, pageSize, pageNo, false);
 		long total = bpmnFlowService.countHistoricTaskListByCandidateGroup(authorities, criteria, false);
-		for(HistoricTaskInstance task : tasks){
+		for(Task task : tasks){
 			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
 			list.add(new TaskVO(task, historicProcessInstance));
 		}
