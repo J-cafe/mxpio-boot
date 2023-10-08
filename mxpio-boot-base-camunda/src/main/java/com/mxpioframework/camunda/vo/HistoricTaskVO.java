@@ -28,6 +28,9 @@ public class HistoricTaskVO implements Serializable  {
 	@Schema(description = "名称")
 	private String name;
 	
+	@Schema(description = "节点定义Key")
+	private String taskDefinitionKey;
+	
 	@Schema(description = "操作人")
 	private String assignee;
 	
