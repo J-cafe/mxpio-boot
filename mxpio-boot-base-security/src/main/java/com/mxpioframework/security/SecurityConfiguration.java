@@ -25,9 +25,9 @@ public class SecurityConfiguration {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 	
-	@Bean
+	/*@Bean(name="jwtAuthenticationProvider")
 	@ConditionalOnMissingBean(AuthenticationProvider.class)
-	public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, List<PasswordCheckPolicy> passwordCheckPolicies) {
+	public AuthenticationProvider jwtAuthenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, List<PasswordCheckPolicy> passwordCheckPolicies) {
 		return new JwtAuthenticationProvider(userDetailsService, passwordEncoder, passwordCheckPolicies);
-	}
+	}*/
 }

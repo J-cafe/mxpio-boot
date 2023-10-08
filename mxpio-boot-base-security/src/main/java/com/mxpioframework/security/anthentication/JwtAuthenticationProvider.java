@@ -2,6 +2,7 @@ package com.mxpioframework.security.anthentication;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,16 +16,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.mxpioframework.security.access.policy.PasswordCheckPolicy;
 import com.mxpioframework.security.util.ApplicationContextProvider;
+import org.springframework.stereotype.Component;
 
 /**
  * 用户角色校验具体实现
  */
+@Component("jwtAuthenticationProvider")
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
+	@Autowired
 	private UserDetailsService userDetailsService;
-
+	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+	@Autowired
 	private List<PasswordCheckPolicy> passwordCheckPolicies;
 
 	public JwtAuthenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, List<PasswordCheckPolicy> passwordCheckPolicies) {
