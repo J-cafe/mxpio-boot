@@ -390,7 +390,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Transactional(readOnly = true)
 	public List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateUser(String username, Criteria criteria,
 			Integer pageSize, Integer pageNo, boolean finished) {
-		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().taskHadCandidateUser(username);
+		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().taskHadCandidateUser(username).taskAssignee(null);
 		if(finished){
 			query.finished();
 		}else{
@@ -430,7 +430,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Override
 	@Transactional(readOnly = true)
 	public long countHistoricTaskListByCandidateUser(String username, Criteria criteria, boolean finished) {
-		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().taskHadCandidateUser(username);
+		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().taskHadCandidateUser(username).taskAssignee(null);
 		if(finished){
 			query.finished();
 		}else{
@@ -471,7 +471,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Transactional(readOnly = true)
 	public List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateGroup(Set<String> authorities,
 			Criteria criteria, Integer pageSize, Integer pageNo, boolean finished) {
-		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
+		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().taskAssignee(null);
 		if(finished){
 			query.finished();
 		}else{
@@ -518,7 +518,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Override
 	@Transactional(readOnly = true)
 	public long countHistoricTaskListByCandidateGroup(Set<String> authorities, Criteria criteria, boolean finished) {
-		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
+		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().taskAssignee(null);
 		if(finished){
 			query.finished();
 		}else{
