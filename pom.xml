@@ -57,6 +57,7 @@
 		<module>mxpio-boot-base-dbconsole</module>
         <module>mxpio-boot-base-message</module>
         <module>mxpio-boot-base-websocket</module>
+		<module>mxpio-boot-module-dingtalk</module>
 		<!--<module>mxpio-boot-webapp</module>-->
     </modules>
 	<dependencies>
@@ -229,6 +230,11 @@
 			<dependency>
 				<groupId>com.mxpio</groupId>
 				<artifactId>mxpio-boot-base-websocket</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-module-dingtalk</artifactId>
 				<version>${mxpio.version}</version>
 			</dependency>
 			<dependency>
@@ -471,7 +477,7 @@
 				</configuration>
 			</plugin>
 			<!-- GPG mvn clean deploy -P release -Dgpg.passphrase=YourPassphase -->
-			<plugin>
+			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
 				<version>1.5</version>
@@ -484,7 +490,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 		</plugins>
 		<resources>
 			<resource>
