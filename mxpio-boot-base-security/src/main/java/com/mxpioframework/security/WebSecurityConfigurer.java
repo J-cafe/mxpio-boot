@@ -2,13 +2,13 @@ package com.mxpioframework.security;
 
 import java.io.IOException;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDecisionManager;
@@ -90,11 +90,10 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private ObjectMapper objectMapper;
 	
-	@Autowired
+	@Resource(name = "jwtAuthenticationProvider")
 	private AuthenticationProvider jwtAuthenticationProvider;
 
-	@Autowired
-	@Qualifier("thirdAuthorizeProvider")
+	@Resource(name = "thirdAuthorizeProvider")
 	private AuthenticationProvider thirdAuthorizeProvider;
 	
 	@Override
