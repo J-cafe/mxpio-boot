@@ -120,6 +120,10 @@ public class TaskController {
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
 		List<TaskVO> list = new ArrayList<>();
 		Set<String> authorities = SecurityUtils.getAuthorityKeys();
+		System.out.println("=====================");
+		for(String authority : authorities){
+			System.out.println(authority);
+		}
 		List<HistoricTaskInstance> tasks = bpmnFlowService.pagingHistoricTaskListPageByCandidateGroup(authorities, criteria, pageSize, pageNo, false);
 		long total = bpmnFlowService.countHistoricTaskListByCandidateGroup(authorities, criteria, false);
 		for(HistoricTaskInstance task : tasks){
