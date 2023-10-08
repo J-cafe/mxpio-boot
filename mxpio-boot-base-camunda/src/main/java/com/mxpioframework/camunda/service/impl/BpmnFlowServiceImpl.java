@@ -502,22 +502,6 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 				}
 			}
 		}
-		/*List<Task> tasks = taskQuery.list();*/
-		
-		/*HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().taskUnassigned();
-		if(finished){
-			query.finished();
-		}else{
-			query.unfinished();
-		}*/
-		/*if(authorities != null && authorities.size()>0 ){
-			query.or();
-			for(String authority : authorities){
-				query.taskHadCandidateGroup(authority);
-			}
-			// query.taskHadCandidateGroup("any");
-			query.endOr();
-		}*/
 		
 		return taskQuery.orderByTaskCreateTime().desc().listPage((pageNo - 1) * pageSize, pageNo * pageSize);
 	}
@@ -525,47 +509,6 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Override
 	@Transactional(readOnly = true)
 	public long countHistoricTaskListByCandidateGroup(Set<String> authorities, Criteria criteria, boolean finished) {
-		/*HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().taskUnassigned();
-		if(finished){
-			query.finished();
-		}else{
-			query.unfinished();
-		}
-		if(authorities != null && authorities.size()>0 ){
-			query.or();
-			for(String authority : authorities){
-				query.taskHadCandidateGroup(authority);
-			}
-			// query.taskHadCandidateGroup("any");
-			query.endOr();
-		}
-		if(criteria != null){
-			for(Object criterion : criteria.getCriterions()){
-				if(criterion instanceof SimpleCriterion){
-					switch(((SimpleCriterion) criterion).getFieldName()){
-						case "name":
-							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
-								query.taskName(((SimpleCriterion) criterion).getValue() + "");
-							}else{
-								query.taskNameLike("%" + ((SimpleCriterion) criterion).getValue() + "%");
-							}
-							break;
-						case "processDefinitionName":
-							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
-								query.processDefinitionName(((SimpleCriterion) criterion).getValue() + "");
-							}
-							break;
-						default:
-							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
-								query.processVariableValueEquals(((SimpleCriterion) criterion).getFieldName(), ((SimpleCriterion) criterion).getValue());
-							}else{
-								query.processVariableValueLike(((SimpleCriterion) criterion).getFieldName(), "%" + ((SimpleCriterion) criterion).getValue() + "%");
-							}
-							break;
-					}
-				}
-			}
-		}*/
 		List<String> authoritiesList = new ArrayList<>();
 		authoritiesList.addAll(authorities);
 		TaskQuery taskQuery = taskService.createTaskQuery().taskCandidateGroupIn(authoritiesList).taskUnassigned();
