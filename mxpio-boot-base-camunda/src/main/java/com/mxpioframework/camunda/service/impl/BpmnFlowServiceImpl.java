@@ -158,7 +158,8 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Transactional(readOnly = true)
 	public String getTaskFormKeyByTaskId(String taskId) {
 		try {
-			Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+			HistoricTaskInstance task = historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
+			// Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
 			return formService.getTaskFormKey(task.getProcessDefinitionId(), task.getTaskDefinitionKey());
 		} catch (Exception e) {
 			return null;
