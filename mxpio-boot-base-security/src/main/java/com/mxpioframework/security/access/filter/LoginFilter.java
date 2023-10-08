@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mxpioframework.security.anthentication.ThirdAuthorizeToken;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -35,35 +36,43 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
 		// 从json中获取username和password
-		String username = null, password = null,captcha = null,uuid = null;
-		username = request.getParameter("username");
-		password = request.getParameter("password");
-		captcha = request.getParameter("captcha");
-		uuid = request.getParameter("uuid");
-		String body = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
-		if (StringUtils.hasText(body) && username == null) {
-			JSONObject jsonObj = JSON.parseObject(body);
-			username = jsonObj.getString("username");
-			password = jsonObj.getString("password");
-			captcha = jsonObj.getString("captcha");
-			uuid = jsonObj.getString("uuid");
-		}
-		CaptchaProperties captchaProperties = SpringUtil.getBean(CaptchaProperties.class);
-		if(captchaProperties.getOpen()) {
-			if(uuid == null || captcha == null) {
-				throw new CaptchaAuthenticationException("验证码错误");
+		String username = null, password = null,captcha = null,uuid = null,authCode = null,thirdPlatformType = null;
+		authCode = request.getParameter("authCode");
+		thirdPlatformType = request.getParameter("thirdPlatformType");
+		if(authCode!=null&&!authCode.equals("")){//三方登录
+			// 封装到token中提交
+			ThirdAuthorizeToken authRequest = new ThirdAuthorizeToken(authCode,authCode, thirdPlatformType);
+			return this.getAuthenticationManager().authenticate(authRequest);
+		}else{
+			//常规校验
+			username = request.getParameter("username");
+			password = request.getParameter("password");
+			captcha = request.getParameter("captcha");
+			uuid = request.getParameter("uuid");
+			String body = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
+			if (StringUtils.hasText(body) && username == null) {
+				JSONObject jsonObj = JSON.parseObject(body);
+				username = jsonObj.getString("username");
+				password = jsonObj.getString("password");
+				captcha = jsonObj.getString("captcha");
+				uuid = jsonObj.getString("uuid");
 			}
-			CacheProvider cacheProvider = SpringUtil.getBean(CacheProvider.class);
-			if(!captcha.equals(cacheProvider.get(Constants.CAPTCHA_REDIS_KEY+uuid)+"")) {
-				throw new CaptchaAuthenticationException("验证码错误");
+			CaptchaProperties captchaProperties = SpringUtil.getBean(CaptchaProperties.class);
+			if(captchaProperties.getOpen()) {
+				if(uuid == null || captcha == null) {
+					throw new CaptchaAuthenticationException("验证码错误");
+				}
+				CacheProvider cacheProvider = SpringUtil.getBean(CacheProvider.class);
+				if(!captcha.equals(cacheProvider.get(Constants.CAPTCHA_REDIS_KEY+uuid)+"")) {
+					throw new CaptchaAuthenticationException("验证码错误");
+				}
 			}
+			if(username == null || password == null) {
+				throw new BadCredentialsException("账户名密码错误！");
+			}
+			// 封装到token中提交
+			JwtLoginToken authRequest = new JwtLoginToken(username, password);
+			return this.getAuthenticationManager().authenticate(authRequest);
 		}
-		if(username == null || password == null) {
-			throw new BadCredentialsException("账户名密码错误！");
-		}
-		// 封装到token中提交
-		JwtLoginToken authRequest = new JwtLoginToken(username, password);
-
-		return this.getAuthenticationManager().authenticate(authRequest);
 	}
 }

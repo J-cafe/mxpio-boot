@@ -86,6 +86,26 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 	@Schema(description = "密码更新时间")
 	private Date pwdUpdateTime;
 
+	@Column(name = "USER_TYPE_")
+	@Schema(description = "用户类型")
+	private String userType;
+
+	@Column(name = "PHONE_")
+	@Schema(description = "联系方式")
+	private String phone;
+
+	@Column(name = "RANK_")
+	@Schema(description = "职级")
+	private String rank;
+
+	@Column(name = "ID_NUMBER_")
+	@Schema(description = "身份证号")
+	private String idNumber;
+
+
+	@Column(name = "THIRD_ID_")
+	@Schema(description = "三方平台用户ID")
+	private String thirdId;
 	@Transient
 	@Schema(description = "密码是否过期")
 	private boolean pwdExpiredFlag = false;
