@@ -18,6 +18,7 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.history.HistoricActivityInstance;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
+import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.camunda.bpm.engine.history.HistoricTaskInstanceQuery;
 import org.camunda.bpm.engine.repository.Deployment;
@@ -328,15 +329,33 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<HistoricProcessInstance> pagingHistoricProcessInstances(int firstResult, int maxResults) {
-		return historyService.createHistoricProcessInstanceQuery().active().orderByProcessInstanceStartTime().desc()
+	public List<HistoricProcessInstance> pagingHistoricProcessInstances(int firstResult, int maxResults, String username, boolean finished) {
+		HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
+		if(username != null){
+			query.startedBy(username);
+		}
+		if(finished){
+			query.finished();
+		}else{
+			query.unfinished();
+		}
+		return query.orderByProcessInstanceStartTime().desc()
 				.listPage(firstResult, maxResults);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public long countHistoricProcessInstances() {
-		return historyService.createHistoricProcessInstanceQuery().active().count();
+	public long countHistoricProcessInstances(String username, boolean finished) {
+		HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
+		if(username != null){
+			query.startedBy(username);
+		}
+		if(finished){
+			query.finished();
+		}else{
+			query.unfinished();
+		}
+		return query.count();
 	}
 
 	@Override

@@ -26,6 +26,7 @@ import com.mxpioframework.camunda.vo.ProcessDefVO;
 import com.mxpioframework.camunda.vo.ProcessInstanceVO;
 import com.mxpioframework.camunda.vo.TaskDetailVO;
 import com.mxpioframework.common.vo.Result;
+import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.security.util.SecurityUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,8 +61,27 @@ public class ProcessController {
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
 		List<ProcessInstanceVO> list = new ArrayList<>();
 		
-		List<HistoricProcessInstance> procInsts = bpmnFlowService.pagingHistoricProcessInstances((pageNo-1) * pageSize, pageNo * pageSize);
-		long total = bpmnFlowService.countHistoricProcessInstances();
+		List<HistoricProcessInstance> procInsts = bpmnFlowService.pagingHistoricProcessInstances((pageNo-1) * pageSize, pageNo * pageSize, null, false);
+		long total = bpmnFlowService.countHistoricProcessInstances(null, false);
+		
+		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
+		for(HistoricProcessInstance procInst : procInsts){
+			list.add(new ProcessInstanceVO(procInst));
+		}
+		Page<ProcessInstanceVO> page = new PageImpl<ProcessInstanceVO>(list, pageAble, total);
+		return Result.OK(page);
+	}
+	
+	@GetMapping("page/my")
+	@Operation(summary = "我发起的流程列表(分页)", description = "我发起的流程列表(分页)", method = "GET")
+	public Result<Page<ProcessInstanceVO>> page(Criteria criteria,
+			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
+		List<ProcessInstanceVO> list = new ArrayList<>();
+		String username = SecurityUtils.getLoginUsername();
+		
+		List<HistoricProcessInstance> procInsts = bpmnFlowService.pagingHistoricProcessInstances((pageNo-1) * pageSize, pageNo * pageSize, username, false);
+		long total = bpmnFlowService.countHistoricProcessInstances(username, true);
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		for(HistoricProcessInstance procInst : procInsts){

@@ -80,9 +80,9 @@ public interface BpmnFlowService {
 
 	List<HistoricProcessInstance> getHistoricProcessInstances();
 
-	List<HistoricProcessInstance> pagingHistoricProcessInstances(int firstResult, int maxResults);
+	List<HistoricProcessInstance> pagingHistoricProcessInstances(int firstResult, int maxResults, String username, boolean finished);
 
-	long countHistoricProcessInstances();
+	long countHistoricProcessInstances(String username, boolean finished);
 
 	List<HistoricTaskInstance> getHistoricTaskListByUser(String loginUsername);
 
