@@ -276,4 +276,44 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 	public void setDept(Dept dept) {
 		this.dept = dept;
 	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getRank() {
+		return rank;
+	}
+
+	public void setRank(String rank) {
+		this.rank = rank;
+	}
+
+	public String getIdNumber() {
+		return idNumber;
+	}
+
+	public void setIdNumber(String idNumber) {
+		this.idNumber = idNumber;
+	}
+
+	public String getThirdId() {
+		return thirdId;
+	}
+
+	public void setThirdId(String thirdId) {
+		this.thirdId = thirdId;
+	}
 }
