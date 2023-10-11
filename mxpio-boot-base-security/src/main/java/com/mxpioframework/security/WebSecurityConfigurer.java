@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mxpioframework.security.anthentication.ThirdAuthorizeException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -126,6 +127,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101("Nonce已过期")));
 				}else if(exception instanceof DataAuthenticationException){
 					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth403("无权访问")));
+				}else if(exception instanceof ThirdAuthorizeException){
+					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401(exception.getMessage())));
 				}else {
 					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("登录异常")));
 				}
@@ -254,6 +257,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 			}else if(exception instanceof DataAuthenticationException){
 				response.setStatus(403);
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth403("无权访问")));
+			}else if(exception instanceof ThirdAuthorizeException){
+				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401(exception.getMessage())));
 			}else {
 				response.setStatus(401);
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("登录异常")));

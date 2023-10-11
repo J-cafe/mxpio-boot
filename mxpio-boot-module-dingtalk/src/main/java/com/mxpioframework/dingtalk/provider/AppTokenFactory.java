@@ -6,9 +6,9 @@ import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiGettokenRequest;
 import com.dingtalk.api.response.OapiGettokenResponse;
 import com.mxpioframework.cache.provider.CacheProvider;
-import com.mxpioframework.common.exception.MBootException;
 import com.mxpioframework.common.util.SpringUtil;
 import com.mxpioframework.security.Constants;
+import com.mxpioframework.security.anthentication.ThirdAuthorizeException;
 import com.taobao.api.ApiException;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -64,11 +64,11 @@ public class AppTokenFactory {
                 response = client.execute(request);
             } catch (ApiException e) {
                 log.error("dingUtil getAppToken error", e);
-                throw new MBootException( "获取token失败");
+                throw new ThirdAuthorizeException( "获取应用token失败:"+e.getErrMsg());
             }
             if (!response.isSuccess()) {
                 log.error("dingUtil getAccessTokenAfresh failed, errorCode={}, errorMsg={}", response.getErrcode(), response.getErrmsg());
-                return null;
+                throw new ThirdAuthorizeException( "获取应用token失败:"+response.getErrmsg());
             }
             ACCESS_TOKEN = response.getAccessToken();
             LAST_TIME = curTime;
@@ -88,11 +88,11 @@ public class AppTokenFactory {
             response = client.execute(request);
         } catch (ApiException e) {
             log.error("dingUtil getAppToken error", e);
-            throw new MBootException( "获取应用token失败:"+e.getErrMsg());
+            throw new ThirdAuthorizeException( "获取应用token失败:"+e.getErrMsg());
         }
         if (!response.isSuccess()) {
             log.error("dingUtil getAccessTokenAfresh failed, errorCode={}, errorMsg={}", response.getErrcode(), response.getErrmsg());
-            throw new MBootException( "获取token失败:"+response.getErrmsg());
+            throw new ThirdAuthorizeException( "获取应用token失败:"+response.getErrmsg());
         }
         return response;
     }

@@ -4,8 +4,8 @@ import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiUserGetuserinfoRequest;
 import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
-import com.mxpioframework.common.exception.MBootException;
 import com.mxpioframework.jpa.JpaUtil;
+import com.mxpioframework.security.anthentication.ThirdAuthorizeException;
 import com.mxpioframework.security.anthentication.ThirdAuthorizeToken;
 import com.mxpioframework.security.anthentication.ThirdAuthorizeUserProvider;
 import com.mxpioframework.security.entity.User;
@@ -44,12 +44,18 @@ public class DingTalkAuthorizeUserProvider implements ThirdAuthorizeUserProvider
             response = client.execute(request, access_token);
         } catch (ApiException e) {
             e.printStackTrace();
-            throw new MBootException( "获取钉钉用户UserId失败："+e.getMessage());
+            throw new ThirdAuthorizeException( "获取钉钉用户UserId失败："+e.getMessage());
         }
         String userId = response.getUserid();
         List<User> user = JpaUtil.linq(User.class).equal("thirdId", userId).list();
         if (user==null||user.size()==0){
-            throw new MBootException("三方ID未能在系统中匹配到用户，原因："+response.getErrmsg());
+            String msg = "三方用户ID未能在应用系统中匹配到用户";
+            if (StringUtils.isNotBlank(response.getErrmsg())){
+                msg += "，原因："+response.getErrmsg();
+            }else{
+                msg += "，请检查用户管理第三方账号信息是否已绑定或者有效";
+            }
+            throw new ThirdAuthorizeException(msg);
         }
         return user.get(0);
     }
