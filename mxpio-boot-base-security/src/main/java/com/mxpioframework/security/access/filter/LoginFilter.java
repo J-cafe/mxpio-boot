@@ -39,24 +39,27 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 		String username = null, password = null,captcha = null,uuid = null,authCode = null,thirdPlatformType = null;
 		authCode = request.getParameter("authCode");
 		thirdPlatformType = request.getParameter("thirdPlatformType");
+		username = request.getParameter("username");
+		password = request.getParameter("password");
+		captcha = request.getParameter("captcha");
+		uuid = request.getParameter("uuid");
+		String body = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
+		if (StringUtils.hasText(body) && username == null) {
+			JSONObject jsonObj = JSON.parseObject(body);
+			username = jsonObj.getString("username");
+			password = jsonObj.getString("password");
+			captcha = jsonObj.getString("captcha");
+			uuid = jsonObj.getString("uuid");
+			authCode = jsonObj.getString("authCode");
+			thirdPlatformType = jsonObj.getString("thirdPlatformType");
+		}
+
 		if(authCode!=null&&!authCode.equals("")){//三方登录
 			// 封装到token中提交
 			ThirdAuthorizeToken authRequest = new ThirdAuthorizeToken(authCode,authCode, thirdPlatformType);
 			return this.getAuthenticationManager().authenticate(authRequest);
 		}else{
 			//常规校验
-			username = request.getParameter("username");
-			password = request.getParameter("password");
-			captcha = request.getParameter("captcha");
-			uuid = request.getParameter("uuid");
-			String body = StreamUtils.copyToString(request.getInputStream(), Charset.forName("UTF-8"));
-			if (StringUtils.hasText(body) && username == null) {
-				JSONObject jsonObj = JSON.parseObject(body);
-				username = jsonObj.getString("username");
-				password = jsonObj.getString("password");
-				captcha = jsonObj.getString("captcha");
-				uuid = jsonObj.getString("uuid");
-			}
 			CaptchaProperties captchaProperties = SpringUtil.getBean(CaptchaProperties.class);
 			if(captchaProperties.getOpen()) {
 				if(uuid == null || captcha == null) {
