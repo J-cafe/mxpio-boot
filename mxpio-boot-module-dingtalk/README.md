@@ -6,4 +6,4 @@ dingtalk:
   appSecret: FE25rIntG7Jl*******
   agentId: 275*****
 ```
-实际值为钉钉平台中对应应用的值。
+实际值为钉钉平台中对应应用的值
