@@ -18,6 +18,10 @@
             <artifactId>mxpio-boot-base-security</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.mxpio</groupId>
+            <artifactId>mxpio-boot-base-message</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>dingtalk</artifactId>
             <version>2.0.43</version>
