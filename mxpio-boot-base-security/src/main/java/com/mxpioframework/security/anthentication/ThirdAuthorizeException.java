@@ -9,7 +9,9 @@ import org.springframework.security.core.AuthenticationException;
  */
 //三方登录异常
 public class ThirdAuthorizeException extends AuthenticationException {
-    public ThirdAuthorizeException(String msg) {
+	private static final long serialVersionUID = 1L;
+
+	public ThirdAuthorizeException(String msg) {
         super(msg);
     }
 

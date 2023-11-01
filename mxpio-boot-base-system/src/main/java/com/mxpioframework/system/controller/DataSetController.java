@@ -4,9 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mxpioframework.common.ds.DataSet;
@@ -25,14 +29,25 @@ public class DataSetController {
 
 	@GetMapping("list")
 	@Operation(summary = "数据集列表", description = "获取数据集列表", method = "GET")
-	public Result<Map<String, List<DataSet>>> list() {
+	public Result<Map<String, List<? extends DataSet>>> list() {
 		return Result.OK(dataSetService.list());
 	}
 	
-	@GetMapping("data")
+	@GetMapping("{type}/{code}/data")
 	@Operation(summary = "数据集数据", description = "获取数据集数据", method = "GET")
-	public Result<Object> data(@RequestBody DataSet dataSet) {
-		return Result.OK(dataSetService.getData(dataSet));
+	public Result<Object> data(@PathVariable(name = "type", required = true) String type,
+			@PathVariable(name = "code", required = true) String code) {
+		return Result.OK(dataSetService.getData(type, code));
+	}
+	
+	@GetMapping("{type}/{code}/page")
+	@Operation(summary = "数据集分页数据", description = "获取数据集分页数据", method = "GET")
+	public Result<Page<Object>> page(@PathVariable(name = "type", required = true) String type,
+			@PathVariable(name = "code", required = true) String code,
+			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
+			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
+		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
+		return Result.OK(dataSetService.getData(type, code, pageAble));
 	}
 	
 }

@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Entity
-@Table(name = "MB_DBINFO")
+@Table(name = "MB_DB_DBINFO")
 @Schema(description="数据源信息")
 public class DbInfo extends BaseEntity {
 	private static final long serialVersionUID = 1L;
