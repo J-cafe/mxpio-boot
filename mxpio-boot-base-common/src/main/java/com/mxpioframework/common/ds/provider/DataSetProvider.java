@@ -29,7 +29,7 @@ public interface DataSetProvider {
 	 * @param page
 	 * @return
 	 */
-	public Page<Object> getPagingResult(DataSet dataSet, Pageable page);
+	public Page<?> getPagingResult(DataSet dataSet, Pageable page);
 	
 	/**
 	 * 获取数据集清单

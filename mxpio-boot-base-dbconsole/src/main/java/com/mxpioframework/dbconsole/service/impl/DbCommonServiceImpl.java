@@ -18,6 +18,9 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -145,16 +148,6 @@ public class DbCommonServiceImpl implements IDbCommonService {
 			ProcInfo procInfo = null;
 			while (rs.next()) {
 				procInfo = new ProcInfo();
-		        System.out.println("PROCEDURE_CAT=>" + rs.getString("PROCEDURE_CAT"));
-		        System.out.println("PROCEDURE_SCHEM=>" + rs.getString("PROCEDURE_SCHEM"));
-		        System.out.println("PROCEDURE_NAME=>" + rs.getString("PROCEDURE_NAME"));
-		        System.out.println("reserved1=>" + rs.getString("reserved1"));
-		        System.out.println("reserved2=>" + rs.getString("reserved2"));
-		        System.out.println("reserved3=>" + rs.getString("reserved3"));
-		        System.out.println("REMARKS=>" + rs.getString("REMARKS"));
-		        System.out.println("PROCEDURE_TYPE=>" + rs.getByte("PROCEDURE_TYPE"));
-		        System.out.println("SPECIFIC_NAME=>" + rs.getString("SPECIFIC_NAME"));
-		        System.out.println("==================================================");
 				procInfo.setProcName(rs.getString("PROCEDURE_NAME"));
 				procInfo.setDbInfoId(dbInfoId);
 				procsList.add(procInfo);
@@ -366,6 +359,45 @@ public class DbCommonServiceImpl implements IDbCommonService {
 		return null;
 	}
 	
+	@Override
+	public Page<Map<String, Object>> pagingSqlData(String dbInfoId, String sql, Pageable page) throws Exception {
+		if (StringUtils.hasText(dbInfoId)) {
+			StringBuilder selectSql = new StringBuilder();
+			StringBuilder countSql = new StringBuilder();
+
+			selectSql.append(sql.replace(";", " "));
+			countSql.append("select count(*) from (" + selectSql + ") A");
+			
+			DataSource ds = this.getDataSourceByDbInfoId(dbInfoId);
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(ds);
+			IDialect dialect = this.getDBDialectByDbInfoId(jdbcTemplate);
+			
+			List<Map<String, Object>> listData;
+			if (page.getPageSize() != -1 && page.getPageNumber() != -1) {
+				String paginationSql = dialect.getPaginationSql(selectSql.toString(), page.getPageNumber(), page.getPageSize());
+				listData = jdbcTemplate.queryForList(paginationSql);
+			} else {
+				listData = jdbcTemplate.queryForList(selectSql.toString());
+			}
+			long totalCount = jdbcTemplate.queryForObject(countSql.toString(),Long.class);
+			
+			Page<Map<String, Object>> result = new PageImpl<Map<String, Object>>(listData, page, totalCount);
+			
+			return result;
+		}
+		return null;
+	}
+
+	@Override
+	public List<ColumnInfo> querySqlColumns(String dbInfoId, String sql) throws Exception {
+		if (StringUtils.hasText(dbInfoId)) {
+			StringBuilder selectSql = new StringBuilder();
+			selectSql.append(sql.replace(";", " "));
+			return this.findMultiColumnInfos(dbInfoId, selectSql.toString());
+		}
+		return null;
+	}
+	
 	protected IDialect getDialect(JdbcTemplate jdbcTemplate){
 		return jdbcTemplate.execute(new ConnectionCallback<IDialect>(){
 			public IDialect doInConnection(Connection connection) throws SQLException,
@@ -396,6 +428,5 @@ public class DbCommonServiceImpl implements IDbCommonService {
 	public IConsoleDbInfoManager getConsoleDbInfoManager() {
 		return consoleDbInfoManager;
 	}
-
 
 }

@@ -29,6 +29,14 @@ public class DbDataSet extends BaseEntity implements DataSet {
 	@Schema(description = "名称")
 	@Column(name = "NAME_")
 	private String name;
+	
+	@Schema(description = "数据库ID")
+	@Column(name = "DB_ID_")
+	private String dbId;
+	
+	@Schema(description = "SQL")
+	@Column(name = "SQL_STR_")
+	private String sqlStr;
 
 	@Override
 	public String getType() {

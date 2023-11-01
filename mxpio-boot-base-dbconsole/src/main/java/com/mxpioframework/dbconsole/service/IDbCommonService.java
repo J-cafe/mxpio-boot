@@ -1,8 +1,12 @@
 package com.mxpioframework.dbconsole.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.mxpioframework.dbconsole.entity.DbInfo;
 import com.mxpioframework.dbconsole.jdbc.dialect.IDialect;
@@ -84,6 +88,27 @@ public interface IDbCommonService {
 	 * @throws Exception
 	 */
 	public DataGridWrapper queryTableData(String dbInfoId, String tableName, String sql, int pageSize, int pageNo) throws Exception;
+	
+	/**
+	 * 查询Sql分页数据
+	 * 
+	 * @param dbInfoId
+	 * @param sql
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	public Page<Map<String,Object>> pagingSqlData(String dbInfoId, String sql, Pageable page) throws Exception;
+	
+	/**
+	 * 查询Sql字段
+	 * 
+	 * @param dbInfoId
+	 * @param sql
+	 * @return
+	 * @throws Exception
+	 */
+	public List<ColumnInfo> querySqlColumns(String dbInfoId, String sql) throws Exception;
 
 	/**
 	 * 创建数据库连接池
