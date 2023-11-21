@@ -42,7 +42,7 @@ public class DataSetController {
 	
 	@GetMapping("{type}/{code}/page")
 	@Operation(summary = "数据集分页数据", description = "获取数据集分页数据", method = "GET")
-	public Result<Page<Object>> page(@PathVariable(name = "type", required = true) String type,
+	public Result<Page<?>> page(@PathVariable(name = "type", required = true) String type,
 			@PathVariable(name = "code", required = true) String code,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {

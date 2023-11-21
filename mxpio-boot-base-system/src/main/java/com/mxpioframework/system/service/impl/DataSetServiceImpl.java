@@ -47,7 +47,7 @@ public class DataSetServiceImpl implements DataSetService {
 	}
 
 	@Override
-	public Page<Object> getData(String type, String code, Pageable pageAble) {
+	public Page<?> getData(String type, String code, Pageable pageAble) {
 		if(providers != null){
 			for(DataSetProvider provider : providers){
 				if(provider.support(type)){

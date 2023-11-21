@@ -14,6 +14,6 @@ public interface DataSetService {
 
 	public Object getData(String type, String code);
 
-	public Page<Object> getData(String type, String code, Pageable pageAble);
+	public Page<?> getData(String type, String code, Pageable pageAble);
 
 }
