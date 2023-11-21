@@ -330,12 +330,15 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<HistoricProcessInstance> pagingHistoricProcessInstances(int firstResult, int maxResults, String username, boolean finished) {
+	public List<HistoricProcessInstance> pagingHistoricProcessInstances(int firstResult, int maxResults, String username, Boolean finished) {
 		HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
 		if(username != null){
 			query.startedBy(username);
 		}
-		if(finished){
+
+		if(finished == null){
+
+		}else if(finished){
 			query.finished();
 		}else{
 			query.unfinished();
@@ -346,12 +349,14 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public long countHistoricProcessInstances(String username, boolean finished) {
+	public long countHistoricProcessInstances(String username, Boolean finished) {
 		HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
 		if(username != null){
 			query.startedBy(username);
 		}
-		if(finished){
+		if(finished == null){
+
+		}else if(finished){
 			query.finished();
 		}else{
 			query.unfinished();

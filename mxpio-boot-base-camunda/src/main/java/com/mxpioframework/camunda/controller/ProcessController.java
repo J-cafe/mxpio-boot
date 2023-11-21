@@ -75,13 +75,14 @@ public class ProcessController {
 	@GetMapping("page/my")
 	@Operation(summary = "我发起的流程列表(分页)", description = "我发起的流程列表(分页)", method = "GET")
 	public Result<Page<ProcessInstanceVO>> page(Criteria criteria,
+			@RequestParam(value="finished",required = false) Boolean finished,
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
 		List<ProcessInstanceVO> list = new ArrayList<>();
 		String username = SecurityUtils.getLoginUsername();
 		
-		List<HistoricProcessInstance> procInsts = bpmnFlowService.pagingHistoricProcessInstances((pageNo-1) * pageSize, pageSize, username, false);
-		long total = bpmnFlowService.countHistoricProcessInstances(username, true);
+		List<HistoricProcessInstance> procInsts = bpmnFlowService.pagingHistoricProcessInstances((pageNo-1) * pageSize, pageSize, username, finished);
+		long total = bpmnFlowService.countHistoricProcessInstances(username, finished);
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		for(HistoricProcessInstance procInst : procInsts){
