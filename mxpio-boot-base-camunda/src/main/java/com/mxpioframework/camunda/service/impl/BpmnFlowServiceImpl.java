@@ -9,6 +9,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
+import com.mxpioframework.camunda.vo.ProcessInstanceVO;
 import org.apache.commons.io.IOUtils;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.HistoryService;
@@ -204,7 +205,9 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 				taskService.createComment(taskId, task.getProcessInstanceId(), properties.get(CamundaConstant.BPMN_COMMENT)+"");
 			}
 			taskService.complete(taskId, properties);
-			return ResultMessage.success("审批成功！");
+			HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
+			HistoricProcessInstance procInst = query.processInstanceId(task.getProcessInstanceId()).singleResult();
+			return ResultMessage.success("审批成功！", new ProcessInstanceVO(procInst));
 		}else{
 			return ResultMessage.error("无权审批！");
 		}

@@ -13,6 +13,8 @@ public class ResultMessage implements Serializable {
 	
 	private String msg;
 
+	private Object data;
+
 	public static ResultMessage error(String msg) {
 		ResultMessage resultMessage = new ResultMessage();
 		resultMessage.setSuccess(false);
@@ -24,6 +26,12 @@ public class ResultMessage implements Serializable {
 		ResultMessage resultMessage = new ResultMessage();
 		resultMessage.setSuccess(true);
 		resultMessage.setMsg(msg);
+		return resultMessage;
+	}
+
+	public static ResultMessage success(String msg, Object data) {
+		ResultMessage resultMessage = ResultMessage.success(msg);
+		resultMessage.setData(data);
 		return resultMessage;
 	}
 

@@ -151,7 +151,7 @@ public class TaskController {
 			@RequestBody Map<String, Object> properties){
 		ResultMessage msg = bpmnFlowService.complete(taskId, properties, SecurityUtils.getLoginUsername());
 		if(msg.isSuccess()){
-			return Result.OK(msg.getMsg(), null);
+			return Result.OK(msg.getMsg(), msg.getData());
 		}else{
 			return Result.error(msg.getMsg());
 		}
