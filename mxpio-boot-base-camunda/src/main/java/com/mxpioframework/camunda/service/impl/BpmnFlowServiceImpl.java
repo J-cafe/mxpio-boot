@@ -177,7 +177,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Transactional(readOnly = true)
 	public List<Task> pagingTaskListPageByUser(String username, Integer pageSize, Integer pageNo) {
 		return taskService.createTaskQuery().taskAssignee(username).active().orderByTaskCreateTime().desc()
-				.listPage((pageNo - 1) * pageSize, pageNo * pageSize);
+				.listPage((pageNo - 1) * pageSize, pageSize);
 	}
 
 	@Override
@@ -404,7 +404,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 				}
 			}
 		}
-		return query.orderByHistoricActivityInstanceStartTime().desc().listPage((pageNo - 1) * pageSize, pageNo * pageSize);
+		return query.orderByHistoricActivityInstanceStartTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
 	}
 	
 	@Override
@@ -445,7 +445,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 				}
 			}
 		}
-		return query.orderByHistoricActivityInstanceStartTime().desc().listPage((pageNo - 1) * pageSize, pageNo * pageSize);
+		return query.orderByHistoricActivityInstanceStartTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
 	}
 	
 	@Override
@@ -523,7 +523,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			}
 		}
 		
-		return taskQuery.orderByTaskCreateTime().desc().listPage((pageNo - 1) * pageSize, pageNo * pageSize);
+		return taskQuery.orderByTaskCreateTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
 	}
 	
 	@Override

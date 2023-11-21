@@ -61,7 +61,7 @@ public class ProcessController {
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
 		List<ProcessInstanceVO> list = new ArrayList<>();
 		
-		List<HistoricProcessInstance> procInsts = bpmnFlowService.pagingHistoricProcessInstances((pageNo-1) * pageSize, pageNo * pageSize, null, false);
+		List<HistoricProcessInstance> procInsts = bpmnFlowService.pagingHistoricProcessInstances((pageNo-1) * pageSize, pageSize, null, false);
 		long total = bpmnFlowService.countHistoricProcessInstances(null, false);
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
@@ -80,7 +80,7 @@ public class ProcessController {
 		List<ProcessInstanceVO> list = new ArrayList<>();
 		String username = SecurityUtils.getLoginUsername();
 		
-		List<HistoricProcessInstance> procInsts = bpmnFlowService.pagingHistoricProcessInstances((pageNo-1) * pageSize, pageNo * pageSize, username, false);
+		List<HistoricProcessInstance> procInsts = bpmnFlowService.pagingHistoricProcessInstances((pageNo-1) * pageSize, pageSize, username, false);
 		long total = bpmnFlowService.countHistoricProcessInstances(username, true);
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
