@@ -86,15 +86,48 @@ public interface BpmnFlowService {
 
 	List<HistoricTaskInstance> getHistoricTaskListByUser(String loginUsername);
 
+	/**
+	 * 历史任务查询
+	 * @param username
+	 * @param criteria
+	 * @param pageSize
+	 * @param pageNo
+	 * @param finished
+	 * @return
+	 */
 	List<HistoricTaskInstance> pagingHistoricTaskListPageByUser(String username, Criteria criteria, Integer pageSize, Integer pageNo, boolean finished);
-	
+
+	/**
+	 * 历史任务计数
+	 * @param username
+	 * @param finished
+	 * @return
+	 */
+	long countHistoricTaskListByUser(String username, boolean finished);
+
 	List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateUser(String username, Criteria criteria,
 			Integer pageSize, Integer pageNo, boolean finished);
-	
-	List<Task> pagingHistoricTaskListPageByCandidateGroup(Set<String> authorities, Criteria criteria,
-			Integer pageSize, Integer pageNo, boolean finished);
 
-	long countHistoricTaskListByUser(String username, boolean finished);
+	long countHistoricTaskListByCandidateUser(String username, Criteria criteria, boolean finished);
+
+	/**
+	 * 获取分页组任务
+	 * @param authorities
+	 * @param criteria
+	 * @param pageSize
+	 * @param pageNo
+	 * @return
+	 */
+	List<Task> pagingCandidateGroupTasks(Set<String> authorities, Criteria criteria,
+			Integer pageSize, Integer pageNo);
+
+	/**
+	 * 组任务计数
+	 * @param authorities
+	 * @param criteria
+	 * @return
+	 */
+	long countCandidateGroupTasks(Set<String> authorities, Criteria criteria);
 
 	List<HistoricTaskInstance> getHistoricTaskByProcessInstanceId(String processInstanceId);
 	
@@ -118,8 +151,46 @@ public interface BpmnFlowService {
 
 	ResultMessage claim(String taskId, String loginUsername);
 
-	long countHistoricTaskListByCandidateUser(String username, Criteria criteria, boolean finished);
+	/**
+	 * 获取活动任务
+	 * @param username
+	 * @return
+	 */
+	List<Task> listActiveTasks(String username);
 
-	long countHistoricTaskListByCandidateGroup(Set<String> authorities, Criteria criteria, boolean finished);
+	/**
+	 * 获取分页活动任务
+	 * @param username
+	 * @param criteria
+	 * @param pageSize
+	 * @param pageNo
+	 * @return
+	 */
+	List<Task> pagingActiveTasks(String username, Criteria criteria, Integer pageSize, Integer pageNo);
 
+	/**
+	 * 活动任务计数
+	 * @param username
+	 * @param criteria
+	 * @return
+	 */
+	long countActiveTasks(String username, Criteria criteria);
+
+	/**
+	 * 获取候选任务列表
+	 * @param username
+	 * @param criteria
+	 * @param pageSize
+	 * @param pageNo
+	 * @return
+	 */
+	List<Task> pagingCandidateTasks(String username, Criteria criteria, Integer pageSize, Integer pageNo);
+
+	/**
+	 * 候选任务计数
+	 * @param username
+	 * @param criteria
+	 * @return
+	 */
+	long countCandidateTasks(String username, Criteria criteria);
 }

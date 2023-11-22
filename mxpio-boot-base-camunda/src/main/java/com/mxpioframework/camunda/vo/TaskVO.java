@@ -41,9 +41,6 @@ public class TaskVO implements Serializable, DictAble {
 	@Schema(description = "流程定义ID")
 	private String processDefinitionId;
 
-	@Schema(description = "流程定义Key")
-	private String processDefinitionKey;
-
 	@Schema(description = "创建时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date createTime;
@@ -72,7 +69,7 @@ public class TaskVO implements Serializable, DictAble {
 		this.name = task.getName();
 		this.taskDefinitionKey = task.getTaskDefinitionKey();
 		this.processInstanceId = task.getProcessInstanceId();
-		this.processDefinitionKey = task.getProcessDefinitionKey();
+		this.processDefinitionId = task.getProcessDefinitionId();
 		this.createTime = task.getStartTime();
 		this.endTime = task.getEndTime();
 	}
@@ -83,7 +80,7 @@ public class TaskVO implements Serializable, DictAble {
 		this.name = task.getName();
 		this.taskDefinitionKey = task.getTaskDefinitionKey();
 		this.processInstanceId = task.getProcessInstanceId();
-		// this.processDefinitionKey = task.getTaskDefinitionKey();
+		this.processDefinitionId = task.getProcessDefinitionId();
 		this.createTime = task.getCreateTime();
 		// this.endTime = task.getEndTime();
 	}
@@ -100,7 +97,6 @@ public class TaskVO implements Serializable, DictAble {
 		this(task);
 		this.procStartTime = historicProcessInstance.getStartTime();
 		this.procStartUserId = historicProcessInstance.getStartUserId();
-		this.processDefinitionKey = historicProcessInstance.getProcessDefinitionKey();
 		this.processDefinitionName = historicProcessInstance.getProcessDefinitionName();
 	}
 
