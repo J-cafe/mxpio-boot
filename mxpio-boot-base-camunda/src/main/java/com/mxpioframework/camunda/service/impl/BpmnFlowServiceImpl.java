@@ -17,11 +17,7 @@ import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
-import org.camunda.bpm.engine.history.HistoricActivityInstance;
-import org.camunda.bpm.engine.history.HistoricProcessInstance;
-import org.camunda.bpm.engine.history.HistoricProcessInstanceQuery;
-import org.camunda.bpm.engine.history.HistoricTaskInstance;
-import org.camunda.bpm.engine.history.HistoricTaskInstanceQuery;
+import org.camunda.bpm.engine.history.*;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ActivityInstance;
@@ -625,7 +621,14 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Override
 	@Transactional(readOnly = true)
 	public void handleVariables(String processInstanceId, TaskDetailVO taskDetail) {
-		taskDetail.setStartDatas(runtimeService.getVariables(processInstanceId));
+		HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery()
+				.processInstanceId(processInstanceId);
+		List<HistoricVariableInstance> variables = query.list();
+		Map<String, Object> startDatas = new HashMap<>();
+		for(HistoricVariableInstance variable : variables){
+			startDatas.put(variable.getName(),variable.getValue());
+		}
+		taskDetail.setStartDatas(startDatas);
 	}
 	
 	/**
