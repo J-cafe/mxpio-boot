@@ -418,7 +418,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			Criteria criteria, Integer pageSize, Integer pageNo) {
 		List<String> authoritiesList = new ArrayList<>();
 		authoritiesList.addAll(authorities);
-		TaskQuery taskQuery = taskService.createTaskQuery().taskCandidateGroupIn(authoritiesList).taskUnassigned();
+		TaskQuery taskQuery = taskService.createTaskQuery().active().taskCandidateGroupIn(authoritiesList).taskUnassigned();
 		criteria2TaskQuery(criteria, taskQuery);
 		return taskQuery.orderByTaskCreateTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
 	}
@@ -428,7 +428,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	public long countCandidateGroupTasks(Set<String> authorities, Criteria criteria) {
 		List<String> authoritiesList = new ArrayList<>();
 		authoritiesList.addAll(authorities);
-		TaskQuery taskQuery = taskService.createTaskQuery().taskCandidateGroupIn(authoritiesList).taskUnassigned();
+		TaskQuery taskQuery = taskService.createTaskQuery().active().taskCandidateGroupIn(authoritiesList).taskUnassigned();
 		criteria2TaskQuery(criteria, taskQuery);
 		return taskQuery.count();
 	}
