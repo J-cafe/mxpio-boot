@@ -18,6 +18,7 @@ public class HistoricTaskVO implements Serializable  {
 		this.assignee = activity.getAssignee();
 		this.canceled = activity.isCanceled();
 		this.activityType = activity.getActivityType();
+		this.activityId = activity.getActivityId();
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -27,9 +28,9 @@ public class HistoricTaskVO implements Serializable  {
 	
 	@Schema(description = "名称")
 	private String name;
-	
-	@Schema(description = "节点定义Key")
-	private String taskDefinitionKey;
+
+	@Schema(description = "节点ID")
+	private String activityId;
 	
 	@Schema(description = "操作人")
 	private String assignee;
