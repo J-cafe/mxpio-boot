@@ -203,7 +203,7 @@ public class TaskController {
 			if("userTask".equals(activity.getActivityType())){
 				List<Comment> comments = bpmnFlowService.getCommentsByTaskId(activity.getTaskId());
 				HistoricTaskInstance task = bpmnFlowService.getHistoricTaskById(activity.getTaskId());
-//				historicTaskDto.setTaskDefinitionKey(task.getTaskDefinitionKey());
+				historicTaskDto.setTaskDefinitionKey(task.getTaskDefinitionKey());
 				StringBuffer sb = new StringBuffer("");
 				for(Comment comment : comments){
 					sb.append(comment.getFullMessage() + ";");
@@ -215,7 +215,7 @@ public class TaskController {
 		}
 		return Result.OK("查询成功！",list);
 	}
-	
+
 	@GetMapping("form/{taskId}")
 	@Operation(summary = "获取节点表单Key", description = "获取节点表单Key", method = "GET")
 	public Result<?> form(@PathVariable(name = "taskId", required = true) String taskId) {
