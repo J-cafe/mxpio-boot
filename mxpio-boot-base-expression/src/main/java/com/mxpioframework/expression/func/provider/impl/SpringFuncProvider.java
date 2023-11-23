@@ -2,6 +2,7 @@ package com.mxpioframework.expression.func.provider.impl;
 
 import java.util.Collection;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -11,22 +12,24 @@ import com.googlecode.aviator.AviatorEvaluator;
 import com.mxpioframework.expression.func.provider.FuncProvider;
 import com.mxpioframework.expression.func.type.AbstractSpringAviatorFunction;
 
+@Slf4j
 @Component
 public class SpringFuncProvider implements ApplicationContextAware, FuncProvider {
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		Collection<AbstractSpringAviatorFunction> providers=applicationContext.getBeansOfType(AbstractSpringAviatorFunction.class).values();
-		System.out.println("===========SpringAviatorFunction loading start ==========");
-		for(AbstractSpringAviatorFunction provider:providers){
-			if(provider.disabled() || provider.getName()==null){
-				System.out.println("[mxpio-expression]Function==>"+provider.getName()+"(disabled)");
+		Collection<AbstractSpringAviatorFunction> functions=applicationContext.getBeansOfType(AbstractSpringAviatorFunction.class).values();
+		log.info("===========SpringAviatorFunction loading start ==========");
+		for(AbstractSpringAviatorFunction function:functions){
+			if(function.disabled() || function.getName()==null){
+				log.info("[mxpio-expression]Function==>"+function.getName()+"(disabled)");
 				continue;
 			}
-			System.out.println("[mxpio-expression]Function==>"+provider.getName()+"(enabled)");
-			AviatorEvaluator.addFunction(provider);
+			log.info("[mxpio-expression]Function==>"+function.getName()+"(enabled)");
+			AviatorEvaluator.addFunction(function);
 		}
-		System.out.println("===========SpringAviatorFunction  loading end  ==========");
+		log.info("===========SpringAviatorFunction  loading end  ==========");
+
 	}
 
 }
