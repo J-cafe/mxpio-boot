@@ -5,6 +5,7 @@ import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiUserGetuserinfoRequest;
 import com.dingtalk.api.response.OapiUserGetuserinfoResponse;
 import com.mxpioframework.jpa.JpaUtil;
+import com.mxpioframework.security.Constants;
 import com.mxpioframework.security.anthentication.ThirdAuthorizeException;
 import com.mxpioframework.security.anthentication.ThirdAuthorizeToken;
 import com.mxpioframework.security.anthentication.ThirdAuthorizeUserProvider;
@@ -62,6 +63,6 @@ public class DingTalkAuthorizeUserProvider implements ThirdAuthorizeUserProvider
 
     @Override
     public boolean support(ThirdAuthorizeToken thirdAuthorizeToken) {
-        return StringUtils.equals(thirdAuthorizeToken.getThirdPlatformType().toString(),"dingtalk");//钉钉
+        return StringUtils.equals(thirdAuthorizeToken.getThirdPlatformType().toString(), Constants.ThirdPlatformTypeEnum.DingTalk.getCode());//钉钉
     }
 }
