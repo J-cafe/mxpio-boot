@@ -30,4 +30,6 @@ com.mxpioframework.autoconfigure.websocket.WebSocketAutoConfiguration,\
 com.mxpioframework.autoconfigure.multitenant.MultitenantAutoConfiguration,\
 com.mxpioframework.autoconfigure.dbconsole.DbconsoleAutoConfiguration,\
 com.mxpioframework.autoconfigure.module.datav.DatavAutoConfiguration,\
-com.mxpioframework.autoconfigure.dingtalk.DingTalkAutoConfiguration
+com.mxpioframework.autoconfigure.dingtalk.DingTalkAutoConfiguration,\
+com.mxpioframework.autoconfigure.oauth.OAuthAutoConfiguration,\
+com.mxpioframework.autoconfigure.msal.MSALAutoConfiguration

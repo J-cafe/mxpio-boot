@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,6 +76,8 @@ public abstract class AbstractExcelReportBuilder {
 				cell.setCellValue((Long) value);
 			} else if (value instanceof Float) {
 				cell.setCellValue((Float) value);
+			} else if (value instanceof BigDecimal) {
+				cell.setCellValue(((BigDecimal) value).doubleValue());
 			} else {
 				// cell.setCellType(CellType.STRING);
 				cell.setCellValue(value.toString());
