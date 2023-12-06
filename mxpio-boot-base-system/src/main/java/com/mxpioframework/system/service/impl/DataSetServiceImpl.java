@@ -52,7 +52,7 @@ public class DataSetServiceImpl implements DataSetService {
 			for(DataSetProvider provider : providers){
 				if(provider.support(type)){
 					DataSet dataSet = provider.getDataSet(code);
-					return provider.getPagingResult(dataSet, pageAble);
+					return (Page<Object>) provider.getPagingResult(dataSet, pageAble);
 				}
 			}
 		}

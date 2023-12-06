@@ -35,6 +35,10 @@ public class BpmnFlow extends BaseEntity {
 	@Column(name = "STATUS_")
 	@Schema(description = "发布状态")
 	private String status;
+
+	@Column(name = "VISIBLE_")
+	@Schema(description = "是否显示")
+	private Boolean visible;
 	
 	@Lob
 	@Column(name = "XML_")
