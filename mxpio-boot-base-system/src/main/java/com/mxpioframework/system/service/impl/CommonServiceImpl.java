@@ -1,5 +1,6 @@
 package com.mxpioframework.system.service.impl;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.springframework.stereotype.Service;
@@ -19,8 +20,16 @@ public class CommonServiceImpl implements CommonService {
 		if(exclude != null){
 			sql = sql + " AND "+ column + " <> '" + exclude + "'";
 		}
-		BigInteger count = (BigInteger) JpaUtil.nativeQuery(sql).getSingleResult();
-		return count.longValue();
+		Object singleResult = JpaUtil.nativeQuery(sql).getSingleResult();
+		if (singleResult instanceof BigInteger){//mysql类型数据库返回结果类型
+			return  ((BigInteger) singleResult).longValue();
+		}else if (singleResult instanceof Double){
+			return  ((Double) singleResult).longValue();
+		}else if (singleResult instanceof BigDecimal){
+			return  ((BigDecimal) singleResult).longValue();
+		}else {
+			return  ((Integer) singleResult).longValue();//sqlserver类型数据库返回结果类型
+		}
 	}
 
 }
