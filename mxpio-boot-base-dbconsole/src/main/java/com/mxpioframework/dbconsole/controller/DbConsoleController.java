@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.mxpioframework.dbconsole.DbConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -165,7 +166,7 @@ public class DbConsoleController {
 	
 	/**
 	 * 测试连接是否成功
-	 * @param map
+	 * @param
 	 * @return
 	 */
 	@PostMapping("db/test")
@@ -395,4 +396,21 @@ public class DbConsoleController {
 		}
 	}
 
+	// 获取动态任务列表
+	@RequestMapping("tableList")
+	@Operation(summary = "查询表单信息", description = "查询表单信息（分页）", method = "POST")
+	public Result<Page<Map<String, Object>>> tableList(@RequestParam(value = "tableName", required = true) String tableName,
+													   @RequestBody Map<String, Object> map,
+													   @RequestParam(value = "pageSize", defaultValue = "100") Integer pageSize,
+													   @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo){
+		PageRequest page = PageRequest.of(pageNo - 1, pageSize);
+		DataGridWrapper tableData;
+		try {
+			tableData = dbService.queryTableData(DbConstants.DEFAULTDATASOURCE, "", tableName, page.getPageSize(), pageNo, map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Result.error("查询失败" + e.getMessage());
+		}
+		return Result.OK(new PageImpl<Map<String, Object>>(tableData.getTableData(), page, tableData.getTotalCount()));
+	}
 }
