@@ -156,5 +156,5 @@ public interface IDbCommonService {
 	 */
 	public List<String> findDefaultColumnType(String dbInfoId) throws Exception;
 
-    DataGridWrapper queryTableData(String dbInfoId, String sql, String tableName, int pageSize, Integer pageNo, Map<String, Object> map) throws Exception;
+    public DataGridWrapper queryTableData(String dbInfoId, String sql, String tableName, int pageSize, Integer pageNo, Map<String, Object> map) throws Exception;
 }
