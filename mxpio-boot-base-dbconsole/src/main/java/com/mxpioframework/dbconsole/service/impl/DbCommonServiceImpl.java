@@ -429,7 +429,8 @@ public class DbCommonServiceImpl implements IDbCommonService {
 		return consoleDbInfoManager;
 	}
 
-	public DataGridWrapper queryTableData(String dbInfoId, String sql, String tableName, int pageSize, Integer pageNo, Map<String, Object> map) throws Exception {
+	@Override
+	public DataGridWrapper queryTableData(String dbInfoId, String sql, String tableName, int pageSize, Integer pageNo, Map<String, Object> whereMap) throws Exception {
 		DataGridWrapper dgw = new DataGridWrapper();
 		if (org.apache.commons.lang3.StringUtils.isNotEmpty(dbInfoId)){
 			StringBuilder selectSql = new StringBuilder();
@@ -444,17 +445,17 @@ public class DbCommonServiceImpl implements IDbCommonService {
 				return dgw;
 			}
 			// 拼接where条件
-			if (!map.isEmpty()){
+			if (!whereMap.isEmpty()){
 				String where = "";
 				int count = 0;
-				for (Map.Entry<String, Object> entry : map.entrySet()){
+				for (Map.Entry<String, Object> entry : whereMap.entrySet()){
 					// 如果不是最后一个条件，加上AND
-					if (count == map.size() - 2){
+					if (count == whereMap.size() - 2){
 						where += entry.getKey() + "=\'" + entry.getValue() + "\' AND ";
 					}else {
 						// 如果是最后一次循环，去掉AND "
 //						where += entry.getKey() + "=\'" + entry.getValue() + "";
-						if (count == map.size() - 1){
+						if (count == whereMap.size() - 1){
 							where += entry.getKey() + "=\'" + entry.getValue() + "\'";
 						}else {
 							where += entry.getKey() + "=\'" + entry.getValue() + "\' AND ";
