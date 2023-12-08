@@ -165,7 +165,7 @@ public class DbConsoleController {
 	
 	/**
 	 * 测试连接是否成功
-	 * @param map
+	 * @param
 	 * @return
 	 */
 	@PostMapping("db/test")
@@ -394,5 +394,4 @@ public class DbConsoleController {
 			return Result.error("删除失败："+e.getMessage());
 		}
 	}
-
 }

@@ -429,4 +429,69 @@ public class DbCommonServiceImpl implements IDbCommonService {
 		return consoleDbInfoManager;
 	}
 
+	@Override
+	public DataGridWrapper queryTableData(String dbInfoId, String sql, String tableName, int pageSize, Integer pageNo, Map<String, Object> whereMap) throws Exception {
+		DataGridWrapper dgw = new DataGridWrapper();
+		if (org.apache.commons.lang3.StringUtils.isNotEmpty(dbInfoId)){
+			StringBuilder selectSql = new StringBuilder();
+			StringBuilder countSql = new StringBuilder();
+			if (org.apache.commons.lang3.StringUtils.isNotEmpty(tableName)){
+				selectSql.append("select * from " + tableName + " WHERE 1=1");
+				countSql.append("select count(*) from " + tableName + " WHERE 1=1");
+			}else if (org.apache.commons.lang3.StringUtils.isNotEmpty(sql)){
+				selectSql.append(sql.replace(";", " "));
+				countSql.append("select count(*) from (" + selectSql + ") A");
+			}else {
+				return dgw;
+			}
+			// 拼接where条件
+			if (!whereMap.isEmpty()){
+				String where = "";
+				int count = 0;
+				for (Map.Entry<String, Object> entry : whereMap.entrySet()){
+					// 如果不是最后一个条件，加上AND
+					if (count == whereMap.size() - 2){
+						where += entry.getKey() + "=\'" + entry.getValue() + "\' AND ";
+					}else {
+						// 如果是最后一次循环，去掉AND "
+//						where += entry.getKey() + "=\'" + entry.getValue() + "";
+						if (count == whereMap.size() - 1){
+							where += entry.getKey() + "=\'" + entry.getValue() + "\'";
+						}else {
+							where += entry.getKey() + "=\'" + entry.getValue() + "\' AND ";
+						}
+					}
+					count++;
+				}
+				if (selectSql.toString().contains(" WHERE ")){
+					// 如果已经存在 WHERE, 则在末尾添加 AND 连接符
+					selectSql.append(" AND ");
+					countSql.append(" AND ");
+				}else {
+					// 如果不存在 WHERE, 则直接添加 WHERE 子句
+					selectSql.append(" WHERE ");
+					countSql.append(" WHERE ");
+				}
+				selectSql.append(where); // 无论是否存在 WHERE, 都直接在末尾添加 WHERE 子句
+				countSql.append(where);
+			}
+			DataSource ds = this.getDataSourceByDbInfoId(dbInfoId);
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(ds);
+			IDialect dialect = this.getDBDialectByDbInfoId(jdbcTemplate);
+			List<ColumnInfo> listColumns = this.findMultiColumnInfos(dbInfoId, selectSql.toString());
+			List<Map<String, Object>> listData;
+			if (pageSize != -1 && pageNo != -1) {
+				String paginationSql = dialect.getPaginationSql(selectSql.toString(), pageNo, pageSize);
+				listData = jdbcTemplate.queryForList(paginationSql);
+			} else {
+				listData = jdbcTemplate.queryForList(selectSql.toString());
+			}
+			int totalCount = jdbcTemplate.queryForObject(countSql.toString(),Integer.class);
+			dgw.setColumnNames(listColumns);
+			dgw.setTableData(listData);
+			dgw.setTotalCount(totalCount);
+			return dgw;
+		}
+		return null;
+	}
 }
