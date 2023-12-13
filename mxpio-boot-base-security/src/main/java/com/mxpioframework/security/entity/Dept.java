@@ -31,11 +31,11 @@ public class Dept extends BaseEntity implements Actor {
 	private Integer deptType;
 	
 	@Schema(description = "部门代码")
-	@Column(name = "DEPT_CODE_", length=20, nullable=false, unique=true)
+	@Column(name = "DEPT_CODE_", length=200, nullable=false, unique=true)
 	private String deptCode;
 	
 	@Schema(description = "部门名称")
-	@Column(name = "DEPT_NAME_", length=20, nullable=false)
+	@Column(name = "DEPT_NAME_", length=255, nullable=false)
 	private String deptName;
 	
 	@Schema(description = "部门描述")
