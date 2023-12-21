@@ -3,6 +3,7 @@ package com.mxpioframework.quartz.controller;
 import java.io.IOException;
 import java.util.List;
 
+import com.mxpioframework.jpa.query.Operator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -92,5 +93,47 @@ public class QuartzController {
 	public Result<QuartzJob> delete(@PathVariable(value = "id") String id) {
 		quartzService.deleteJob(id);
 		return Result.OK();
+	}
+
+	/**
+	 * 立即执行
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("execute")
+	@Operation(summary = "立即执行", description = "立即执行", method = "GET")
+	public Result<?> execute(@RequestParam(name = "id", required = true) String id) {
+		QuartzJob quartzJob = quartzService.getById(id);
+		if (quartzJob == null) {
+			return Result.error("未找到对应实体");
+		}
+		try {
+			quartzService.execute(quartzJob);
+		} catch (Exception e) {
+			//e.printStackTrace();
+			return Result.error("执行失败!");
+		}
+		return Result.OK("执行成功!",null);
+	}
+	@GetMapping("executeByJobClassName")
+	@Operation(summary = "根据JobClassName立即执行", description = "根据JobClassName立即执行", method = "GET")
+	public Result<?> executeByJobClassName(@RequestParam(name = "jobClassName", required = true) String jobClassName) {
+		Criteria criteria = Criteria.create();
+		criteria.addCriterion("jobClassName", Operator.EQ,jobClassName);
+		List<QuartzJob> quartzJobList = quartzService.list(criteria);
+		if(quartzJobList==null||quartzJobList.size()==0) {
+			return Result.error("未找到对应实体");
+		}
+		if(quartzJobList.size() > 1) {
+			return Result.error("找到多个实体 [ " + jobClassName + " ]");
+		}
+		QuartzJob quartzJob = quartzJobList.get(0);
+		try {
+			quartzService.execute(quartzJob);
+		} catch (Exception e) {
+			//e.printStackTrace();
+			return Result.error("执行失败!");
+		}
+		return Result.OK("执行成功!");
 	}
 }
