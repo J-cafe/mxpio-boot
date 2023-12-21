@@ -134,6 +134,6 @@ public class QuartzController {
 			//e.printStackTrace();
 			return Result.error("执行失败!");
 		}
-		return Result.OK("执行成功!");
+		return Result.OK("执行成功!",null);
 	}
 }
