@@ -89,6 +89,8 @@ public class QuartzServiceImpl implements QuartzService {
 	@Transactional(readOnly = false)
 	public boolean pause(String jobId) {
 		QuartzJob quartzJob = JpaUtil.linq(QuartzJob.class).idEqual(jobId).findOne();
+		removeScheduler(quartzJob.getJobClassName());
+
 		quartzJob.setStatus("PAUSE");
 		JpaUtil.update(quartzJob);
 		return true;
