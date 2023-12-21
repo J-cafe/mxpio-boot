@@ -1,16 +1,10 @@
 package com.mxpioframework.quartz.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
-import org.quartz.CronScheduleBuilder;
-import org.quartz.CronTrigger;
-import org.quartz.Job;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.TriggerBuilder;
-import org.quartz.TriggerKey;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +32,12 @@ public class QuartzServiceImpl implements QuartzService {
 	@Transactional(readOnly = true)
 	public List<QuartzJob> list(Criteria c) {
 		return JpaUtil.linq(QuartzJob.class).where(c).list();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public QuartzJob getById(String id) {
+		return JpaUtil.getOne(QuartzJob.class,id);
 	}
 
 	@Override
@@ -95,9 +95,34 @@ public class QuartzServiceImpl implements QuartzService {
 	}
 	
 	@Override
-	@Transactional(readOnly = false)
 	public boolean execute(QuartzJob quartzJob) {
-		return true;
+		try{
+			String jobName = quartzJob.getJobClassName().trim();
+			Class<?> jobClass = Class.forName(jobName);
+			if(!Job.class.isAssignableFrom(jobClass)) {
+				return false;
+			}
+			Date startDate = new Date();
+			String ymd = DateFormatUtils.format(startDate,"yyyyMMddHHmmss");
+			String identity =  jobName + ymd;
+			//3秒后执行 只执行一次
+			startDate.setTime(startDate.getTime()+3000L);
+			// 定义一个Trigger
+			SimpleTrigger trigger = (SimpleTrigger)TriggerBuilder.newTrigger()
+					.withIdentity(identity)
+					.startAt(startDate)
+					.build();
+			// 构建job信息
+			JobDetail jobDetail = JobBuilder.newJob((Class<? extends Job>) jobClass).withIdentity(identity).usingJobData("params", quartzJob.getJobParams()).build();
+			// 将trigger和 jobDetail 加入这个调度
+			scheduler.scheduleJob(jobDetail, trigger);
+			// 启动scheduler
+			scheduler.start();
+			return true;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override

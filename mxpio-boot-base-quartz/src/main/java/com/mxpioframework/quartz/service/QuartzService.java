@@ -82,4 +82,6 @@ public interface QuartzService {
 	 * @return
 	 */
 	boolean removeScheduler(String jobClassName);
+
+    QuartzJob getById(String id);
 }
