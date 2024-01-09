@@ -115,7 +115,14 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 									.equals(dataFilter.getDataScope())) {
 								Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
 								if(deptCodes.size()>0){
-									juntion.addCriterion("createDept", Operator.LIKE_START, deptCodes.toArray()[0]);
+									String deptCode = (String) deptCodes.toArray()[0];
+									//获取部门及子部门
+									List<String> deptCodeWithSubByCode = deptService.getDeptCodeWithSubByCode(deptCode);
+									if (deptCodeWithSubByCode.isEmpty()||deptCodeWithSubByCode.size()==1){
+										juntion.addCriterion("createDept", Operator.EQ, deptCode);
+									}else{
+										juntion.addCriterion("createDept", Operator.IN, deptCodeWithSubByCode);
+									}
 								}else{
 									juntion.addCriterion("createDept", Operator.EQ, "");
 								}

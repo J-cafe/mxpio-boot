@@ -98,6 +98,16 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 		}
 		return returnDept;
 	}
+
+	@Override
+	public List<String> getDeptCodeWithSubByCode(String deptCode) {//查询当前部门及子部门所有的编码
+		Dept deptWithBranchByCode = this.getDeptWithBranchByCode(deptCode);
+		List<String> deptCodes = new ArrayList<>();
+		if (deptWithBranchByCode!=null){
+			getDeptCode(deptWithBranchByCode,deptCodes);
+		}
+		return deptCodes;
+	}
 	@Override
 	@SecurityCacheEvict
 	@Transactional(readOnly = false)
@@ -394,4 +404,12 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 		return result;
 	}
 
+	private void getDeptCode(Dept dept,List<String> deptCodes){
+		deptCodes.add(dept.getDeptCode());
+		if (dept.getChildren()!=null&&dept.getChildren().size()>0){
+			for (Dept per:dept.getChildren()){
+				getDeptCode(per,deptCodes);
+			}
+		}
+	}
 }
