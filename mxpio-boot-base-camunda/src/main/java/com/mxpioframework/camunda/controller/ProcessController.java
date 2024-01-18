@@ -71,6 +71,13 @@ public class ProcessController {
 		Page<ProcessInstanceVO> page = new PageImpl<ProcessInstanceVO>(list, pageAble, total);
 		return Result.OK(page);
 	}
+
+	@GetMapping("list/{processInstanceId}")
+	@Operation(summary = "根据processInstanceId获取流程", description = "根据processInstanceId获取流程", method = "GET")
+	public Result<ProcessInstanceVO> getById(@PathVariable String processInstanceId) {
+		HistoricProcessInstance procInst =  bpmnFlowService.getHistoricProcessInstanceById(processInstanceId);
+		return Result.OK(new ProcessInstanceVO(procInst));
+	}
 	
 	@GetMapping("page/my")
 	@Operation(summary = "我发起的流程列表(分页)", description = "我发起的流程列表(分页)", method = "GET")
