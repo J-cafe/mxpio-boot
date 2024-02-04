@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -117,7 +118,31 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 		}catch (Exception e) {
 			return null;
 		}
-		
+
+	}
+
+	/**
+	 * 对于动态数据字典，根据value反查text
+	 * @param dicCode
+	 * @param clazz
+	 * @param dicText
+	 * @param textValue
+	 * @return
+	 */
+	@Override
+	@Transactional
+	public String getEntityDictValueByText(String dicCode, Class<? extends BaseEntity> clazz, String dicText, String textValue){
+		try{
+			List<Object> entityList = JpaUtil.linq(clazz).equal(dicText, textValue).list();
+			if(CollectionUtils.isEmpty(entityList)){
+				return null;
+			}
+			Object entity = entityList.get(0);
+			Object result = BeanReflectionUtils.getProperty(entity, dicCode);
+			return result == null ? null : result.toString();
+		}catch (Exception e) {
+			return null;
+		}
 	}
 
 }

@@ -113,4 +113,14 @@ public interface DictService extends BaseService<Dict> {
 
     Map<String, String> getDictMappingByCode(String code);
 
+	/**
+	 * 对于动态数据字典，根据value反查text
+	 * @param dicCode
+	 * @param clazz
+	 * @param dicText
+	 * @param textValue
+	 * @return
+	 */
+	String getEntityDictValueByText(String dicCode, Class<? extends BaseEntity> clazz, String dicText, String textValue);
+
 }

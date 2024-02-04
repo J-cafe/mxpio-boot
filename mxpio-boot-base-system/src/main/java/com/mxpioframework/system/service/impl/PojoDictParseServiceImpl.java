@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.ConcurrentReferenceHashMap;
 
@@ -122,7 +123,7 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
 
       Method readMethod = propertyDescriptor.getReadMethod();
       String propertyName = propertyDescriptor.getName();
-      
+
       if("textMap".equals(propertyName)){
     	  continue;
       }
@@ -480,6 +481,66 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
       resultMap = myResultMap;
     }
     return resultMap.get(name);
+  }
+
+  /**
+   * 根据类名和字段名获取Dict注解
+   * @param clazz
+   * @param field
+   * @return
+   */
+  @Override
+  @Transactional
+  public Dict getDictByClazzAndField(Class<?> clazz,String field){
+    Map<String, Dict> dictInfo = loadDictInfo(clazz);
+    return dictInfo.get(field);
+  }
+
+  /**
+   * 根据静态数据字典(mb_dict/mb_dict_item)itemText反查itemValue
+   * @param dictCode
+   * @param itemText
+   * @return
+   */
+  @Override
+  @Transactional
+  public String getValueByText(String dictCode,String itemText){
+    Map<String, String> mappings = getDictMappings(dictCode);
+    for(Map.Entry<String,String> entry:mappings.entrySet()){
+      if(StringUtils.equals(itemText,entry.getValue())){
+        return entry.getKey();
+      }
+    }
+    return null;
+  }
+
+  /**
+   * 对于动态数据字典，根据value反查text
+   * @param dicCode
+   * @param clazz
+   * @param dicText
+   * @param value
+   * @return
+   */
+  @Override
+  @Transactional
+  public String getEntityValueByText(String dicCode, Class<? extends BaseEntity> clazz,
+                                     String dicText, String value) {
+    String cacheKey =
+            "EntityTextCache:" + dicCode + ":" + clazz.getName() + ":" + Objects.toString(dicText, "") + ":"
+                    + Objects.toString(value, "");
+
+    String result = cacheService.get(cacheKey);
+    if (result != null) {
+      return result;
+    }
+
+    result = dictService.getEntityDictValueByText(dicCode, clazz, dicText, value);
+    if (result == null) {
+      result = "";
+    }
+    cacheService.put(cacheKey, result);
+    return result;
   }
 
 }
