@@ -8,15 +8,20 @@ import com.mxpioframework.excel.importer.policy.Context;
 import com.mxpioframework.excel.importer.policy.ParseRecordPolicy;
 import com.mxpioframework.excel.importer.processor.*;
 import com.mxpioframework.jpa.JpaUtil;
+import com.mxpioframework.jpa.annotation.Generator;
+import com.mxpioframework.jpa.policy.GeneratorPolicy;
+import com.mxpioframework.jpa.policy.impl.CrudType;
 import net.sf.cglib.beans.BeanMap;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 @Component("importer.parseRecordPolicyImpl")
 public class ParseRecordPolicyImpl implements ParseRecordPolicy, ApplicationContextAware {
@@ -38,11 +43,16 @@ public class ParseRecordPolicyImpl implements ParseRecordPolicy, ApplicationCont
 			Object entity = BeanReflectionUtils.newInstance(context.getEntityClass());
 			context.setCurrentEntity(entity);
 			context.setCurrentRecord(record);
-			String idProperty = JpaUtil.getIdName(context.getEntityClass());
+
+			/*String idProperty = JpaUtil.getIdName(context.getEntityClass());
 			BeanMap beanMap = BeanMap.create(context.getCurrentEntity());
 			if (beanMap.getPropertyType(idProperty) == String.class) {
 				beanMap.put(idProperty, UUID.randomUUID().toString());
-			}
+			}*/
+
+			Map<String, GeneratorPolicy> generatorPolicyMap = getNeedGeneratorFields(context.getEntityClass());
+			applyGeneratorPolicy(context.getCurrentEntity(),generatorPolicyMap);
+
 			for (MappingRule mappingRule : context.getMappingRules()) {
 				Cell cell = record.getCell(mappingRule.getExcelColumn());
 
@@ -110,6 +120,33 @@ public class ParseRecordPolicyImpl implements ParseRecordPolicy, ApplicationCont
 		cellPostprocessors = applicationContext.getBeansOfType(CellPostprocessor.class).values();
 		beforePersistProcessors = applicationContext.getBeansOfType(BeforePersistProcessor.class).values();
 		afterPersistProcessors = applicationContext.getBeansOfType(AfterPersistProcessor.class).values();
+
+	}
+
+	protected Map<String, GeneratorPolicy> getNeedGeneratorFields(Class<?> clazz) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+		Map<String, GeneratorPolicy> generatorPolicyMap = new HashMap<>();
+		List<Field> fields = BeanReflectionUtils.loadClassFields(clazz);
+		if(CollectionUtils.isNotEmpty(fields)){
+			for(Field field:fields){
+				Generator generator = field.getAnnotation(Generator.class);
+				if (generator != null) {
+					GeneratorPolicy policy = generator.policy().getDeclaredConstructor().newInstance();
+					if (CrudType.SAVE.equals(policy.getType()) || CrudType.SAVE_OR_UPDATE.equals(policy.getType())){
+						generatorPolicyMap.put(field.getName(),policy);
+					}
+				}
+			}
+		}
+		return generatorPolicyMap;
+	}
+
+	protected void applyGeneratorPolicy(Object entity,Map<String, GeneratorPolicy> generatorPolicyMap){
+		if(MapUtils.isEmpty(generatorPolicyMap)){
+			return;
+		}
+		for(Map.Entry<String, GeneratorPolicy> entry:generatorPolicyMap.entrySet()){
+			entry.getValue().apply(entity,entry.getKey());
+		}
 
 	}
 
