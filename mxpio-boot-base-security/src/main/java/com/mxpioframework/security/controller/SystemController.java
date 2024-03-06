@@ -106,8 +106,8 @@ public class SystemController {
 				Map<String,Object> patternMap = new HashMap<>();
 				switch (per){
 					case "DIGANDLETTERCASE":
-						patternMap.put("pattern",Constants.RegexEnum.DIGANDLETTER.getCode());
-						patternMap.put("message",Constants.RegexEnum.DIGANDLETTER.getName());
+						patternMap.put("pattern",Constants.RegexEnum.DIGANDLETTERCASE.getCode());
+						patternMap.put("message",Constants.RegexEnum.DIGANDLETTERCASE.getName());
 						configRegexs.add(patternMap);
 						break;
 					case "DIGANDLETTER":
