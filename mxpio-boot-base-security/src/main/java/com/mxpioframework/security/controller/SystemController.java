@@ -105,6 +105,11 @@ public class SystemController {
 			for (String per:split){
 				Map<String,Object> patternMap = new HashMap<>();
 				switch (per){
+					case "DIGANDLETTERCASE":
+						patternMap.put("pattern",Constants.RegexEnum.DIGANDLETTER.getCode());
+						patternMap.put("message",Constants.RegexEnum.DIGANDLETTER.getName());
+						configRegexs.add(patternMap);
+						break;
 					case "DIGANDLETTER":
 						patternMap.put("pattern",Constants.RegexEnum.DIGANDLETTER.getCode());
 						patternMap.put("message",Constants.RegexEnum.DIGANDLETTER.getName());
@@ -115,9 +120,14 @@ public class SystemController {
 						patternMap.put("message",Constants.RegexEnum.CONTINUOUS.getName());
 						configRegexs.add(patternMap);
 						break;
-					case "MINLENGTH":
-						patternMap.put("min",Integer.parseInt(Constants.RegexEnum.MINLENGTH.getCode()));
-						patternMap.put("message",Constants.RegexEnum.MINLENGTH.getName());
+					case "MINLENGTH12":
+						patternMap.put("min",Integer.parseInt(Constants.RegexEnum.MINLENGTH12.getCode()));
+						patternMap.put("message",Constants.RegexEnum.MINLENGTH12.getName());
+						configRegexs.add(patternMap);
+						break;
+					case "MINLENGTH6":
+						patternMap.put("min",Integer.parseInt(Constants.RegexEnum.MINLENGTH6.getCode()));
+						patternMap.put("message",Constants.RegexEnum.MINLENGTH6.getName());
 						configRegexs.add(patternMap);
 						break;
 				}
