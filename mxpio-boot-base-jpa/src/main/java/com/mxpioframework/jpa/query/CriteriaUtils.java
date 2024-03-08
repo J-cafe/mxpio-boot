@@ -165,6 +165,10 @@ public class CriteriaUtils {
 			}else {
 				linq.notIn(property, value);
 			}
+		} else if (Operator.IS_NULL.equals(operator)) {
+			linq.isNull(property);
+		} else if (Operator.IS_NOT_NULL.equals(operator)) {
+			linq.isNotNull(property);
 		}
 
 	}
@@ -203,6 +207,12 @@ public class CriteriaUtils {
 		} else if (Operator.LIKE.equals(operator)) {
 			c.append(" like ");
 			criterion.setValue("%" + value + "%");
+		}else if (Operator.IS_NULL.equals(operator)) {
+			c.append(" is null ");
+			criterion.setValue(value);
+		}else if (Operator.IS_NOT_NULL.equals(operator)) {
+			c.append(" is not null ");
+			criterion.setValue(value);
 		}
 		c.append(":" + property);
 		return c;
