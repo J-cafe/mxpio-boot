@@ -169,6 +169,8 @@ public class CriteriaUtils {
 			linq.isNull(property);
 		} else if (Operator.IS_NOT_NULL.equals(operator)) {
 			linq.isNotNull(property);
+		}else if (Operator.NOT_LIKE.equals(operator)) {
+			linq.notLike(property, "%" + (String) value + "%");
 		}
 
 	}
@@ -206,6 +208,9 @@ public class CriteriaUtils {
 			criterion.setValue(value);
 		} else if (Operator.LIKE.equals(operator)) {
 			c.append(" like ");
+			criterion.setValue("%" + value + "%");
+		} else if (Operator.NOT_LIKE.equals(operator)) {
+			c.append(" not like ");
 			criterion.setValue("%" + value + "%");
 		}else if (Operator.IS_NULL.equals(operator)) {
 			c.append(" is null ");
