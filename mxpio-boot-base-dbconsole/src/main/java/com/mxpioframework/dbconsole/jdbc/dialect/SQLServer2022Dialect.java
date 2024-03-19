@@ -6,7 +6,6 @@ import java.sql.Connection;
 
 @Component
 public class SQLServer2022Dialect extends SQLServer2005Dialect {
-
 	@Override
 	public boolean support(Connection connection) {
 		return support(connection, "sql server", "16");
