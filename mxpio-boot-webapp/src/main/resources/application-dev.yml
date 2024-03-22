@@ -19,19 +19,17 @@ spring:
     username: root
     password: mxp9827459
     driver-class-name: com.mysql.cj.jdbc.Driver
-    sql-script-encoding: UTF-8
-    continue-on-error: true
-    initialization-mode: ALWAYS
   redis:
     host: 127.0.0.1
     port: 6379
     password:
     timeout:
-    pool:
-      maxActive: 8
-      maxWait: -1
-      maxIdle: 8
-      minIdle: 0
+    lettuce:
+      pool:
+        maxActive: 8
+        maxWait: -1
+        maxIdle: 8
+        minIdle: 0
   quartz:
     #持久化到数据库方式
     job-store-type: jdbc
@@ -55,6 +53,11 @@ spring:
             threadCount: 10
             threadPriority: 5
             threadsInheritContextClassLoaderOfInitializingThread: true
+  sql:
+    init:
+      continue-on-error: true
+      mode: always
+      encoding: UTF-8
 management:
   endpoints:
     web:
@@ -65,7 +68,5 @@ camunda:
     database:
       type: mysql
       schema-update: true
-    process-engine: 
-      history-level: full
+    history-level: FULL
     auto-deployment-enabled: false # 自动部署 resources 下的 bpmn文件
-    enable-deprecated-history-removal: true
