@@ -3,7 +3,6 @@ package com.mxpioframework.autoconfigure.msal;
 import com.mxpioframework.common.CommonConstant;
 import com.mxpioframework.common.vo.ModuleVO;
 import com.mxpioframework.msal.MSALConfiguration;
-import com.mxpioframework.oauth.OAuthConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;

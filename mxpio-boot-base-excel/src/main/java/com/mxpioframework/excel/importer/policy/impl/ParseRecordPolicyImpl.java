@@ -11,7 +11,6 @@ import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.annotation.Generator;
 import com.mxpioframework.jpa.policy.GeneratorPolicy;
 import com.mxpioframework.jpa.policy.impl.CrudType;
-import net.sf.cglib.beans.BeanMap;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.BeansException;

@@ -1,14 +1,10 @@
 package com.mxpioframework.msal.provider;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.microsoft.aad.msal4j.AuthorizationCodeParameters;
 import com.microsoft.aad.msal4j.ConfidentialClientApplication;
-import com.microsoft.aad.msal4j.IAccount;
 import com.microsoft.aad.msal4j.IAuthenticationResult;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.msal.utils.AuthHelper;
-import com.mxpioframework.msal.utils.HttpClientHelper;
 import com.mxpioframework.security.Constants;
 import com.mxpioframework.security.anthentication.ThirdAuthorizeException;
 import com.mxpioframework.security.anthentication.ThirdAuthorizeToken;
@@ -19,8 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.naming.ServiceUnavailableException;
-import java.io.IOException;
 import java.net.*;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
