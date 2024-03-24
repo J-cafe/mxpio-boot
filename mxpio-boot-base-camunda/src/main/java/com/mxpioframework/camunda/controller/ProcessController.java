@@ -156,8 +156,7 @@ public class ProcessController {
 	@Operation(summary = "重启流程", description = "重启流程", method = "GET")
 	public Result<?> restart(@PathVariable(name = "processDefinitionId", required = true) String processDefinitionId,
 			@PathVariable(name = "instanceId", required = true) String instanceId) {
-		
-		runtimeService.restartProcessInstances(processDefinitionId).processInstanceIds(instanceId).execute();
+		runtimeService.activateProcessInstanceById(instanceId);
 		return Result.OK();
 	}
 

@@ -230,7 +230,25 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	public ResultMessage rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername) {
 		Task task = getTaskById(taskId);
 		String processInstanceId = task.getProcessInstanceId();
-		ActivityInstance tree = runtimeService.getActivityInstance(processInstanceId);
+		//获取流程实例
+		HistoricProcessInstance inst = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+		String businessKey = inst.getBusinessKey();
+		String processDefinitionId = inst.getProcessDefinitionId();
+		String startUser = inst.getStartUserId();
+		//获取流程变量
+		HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery()
+				.processInstanceId(processInstanceId);
+		List<HistoricVariableInstance> variables = query.list();
+		Map<String, Object> startDatas = new HashMap<>();
+		for(HistoricVariableInstance variable : variables){
+			startDatas.put(variable.getName(),variable.getValue());
+		}
+		//获取流程定义
+		ProcessDefinition procDef = repositoryService.createProcessDefinitionQuery().processDefinitionId(processDefinitionId).singleResult();
+		
+		ProcessInstance newProcInst = startWithFormByKey(procDef.getKey(), startUser, businessKey, startDatas);
+		runtimeService.deleteProcessInstance(processInstanceId, "不同意！");
+		/*ActivityInstance tree = runtimeService.getActivityInstance(processInstanceId);
 		List<HistoricActivityInstance> resultList = getHistoricActivityByProcessInstanceId(processInstanceId);
 		if(null == resultList || resultList.size()<1){
 			log.error("第一个用户节点无法驳回！");
@@ -251,9 +269,9 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
                 .cancelActivityInstance(getInstanceIdForActivity(tree, task.getTaskDefinitionKey()))//关闭相关任务
                 .setAnnotation("进行了驳回到第一个任务节点操作")
                 .startBeforeActivity(toActId)//启动目标活动节点
-                .execute();
+                .execute();*/
 		
-		return ResultMessage.success("进行了驳回到第一个任务节点操作");
+		return ResultMessage.success("进行了驳回到第一个任务节点操作", newProcInst.getId());
 	}
 	
 	@Override
