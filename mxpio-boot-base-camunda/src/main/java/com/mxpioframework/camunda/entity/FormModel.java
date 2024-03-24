@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
+import com.mxpioframework.security.annotation.Dict;
 import com.mxpioframework.security.entity.BaseEntity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -34,6 +35,7 @@ public class FormModel extends BaseEntity {
 	
 	@Column(name = "STATUS_")
 	@Schema(description = "发布状态")
+	@Dict(dicCode = "MB_BPMN_DEPLOY_CODE")
 	private String status;
 	
 	@Column(name = "DESC_")
