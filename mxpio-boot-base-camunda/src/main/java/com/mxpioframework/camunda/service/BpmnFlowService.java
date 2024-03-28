@@ -133,6 +133,8 @@ public interface BpmnFlowService {
 	
 	List<HistoricActivityInstance> getHistoricActivityByProcessInstanceId(String processInstanceId);
 
+	List<HistoricActivityInstance> getHistoricUserActivityByProcessInstanceId(String processInstanceId);
+
 	HistoricProcessInstance getHistoricProcessInstanceById(String processInstanceId);
 
 	HistoricTaskInstance getHistoricTaskById(String startActivityId);

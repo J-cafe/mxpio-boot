@@ -258,8 +258,8 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		Task task = getTaskById(taskId);
 		String processInstanceId = task.getProcessInstanceId();
 		ActivityInstance tree = runtimeService.getActivityInstance(processInstanceId);
-		List<HistoricActivityInstance> resultList = getHistoricActivityByProcessInstanceId(processInstanceId);
-		if(null == resultList || resultList.size()<1){
+		List<HistoricActivityInstance> resultList = getHistoricUserActivityByProcessInstanceId(processInstanceId);
+		if(null == resultList || resultList.isEmpty()){
 			log.error("第一个用户节点无法驳回！");
             return ResultMessage.error("第一个用户节点无法驳回！");
         }
@@ -496,14 +496,26 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<HistoricActivityInstance> getHistoricActivityByProcessInstanceId(String processInstanceId) {
-		List<HistoricActivityInstance> list = historyService
+        return historyService
                 .createHistoricActivityInstanceQuery()
                 .processInstanceId(processInstanceId)
                 .finished()
                 .orderByHistoricActivityInstanceEndTime()
                 .asc()
                 .list();
-		return list;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<HistoricActivityInstance> getHistoricUserActivityByProcessInstanceId(String processInstanceId) {
+		return historyService
+				.createHistoricActivityInstanceQuery()
+				.processInstanceId(processInstanceId)
+				.activityType("user-task")
+				.finished()
+				.orderByHistoricActivityInstanceEndTime()
+				.asc()
+				.list();
 	}
 
 	@Override
