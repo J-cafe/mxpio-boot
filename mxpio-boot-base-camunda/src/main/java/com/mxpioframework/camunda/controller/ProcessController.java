@@ -152,10 +152,9 @@ public class ProcessController {
 		return Result.OK();
 	}
 
-	@GetMapping("restart/{processDefinitionId}/{instanceId}")
+	@GetMapping("restart/{instanceId}")
 	@Operation(summary = "重启流程", description = "重启流程", method = "GET")
-	public Result<?> restart(@PathVariable(name = "processDefinitionId", required = true) String processDefinitionId,
-			@PathVariable(name = "instanceId", required = true) String instanceId) {
+	public Result<?> restart(@PathVariable(name = "instanceId", required = true) String instanceId) {
 		runtimeService.activateProcessInstanceById(instanceId);
 		return Result.OK();
 	}
