@@ -350,9 +350,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		if(username != null){
 			query.startedBy(username);
 		}
-		if(finished == null){
-
-		}else if(finished){
+		if(finished){
 			query.finished();
 		}else{
 			query.unfinished();
