@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.mxpioframework.security.util.SecurityUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -98,7 +100,20 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 		}
 		return returnDept;
 	}
-
+	@Override
+	@Transactional(readOnly = true)
+	public Dept getUserDeptTree(String username){//查询用户所属部门的部门树
+		if (StringUtils.isBlank(username)){
+			username = SecurityUtils.getLoginUsername();//支持传参和当前用户
+		}
+		Map<String, Set<String>> allDeptCodeGroupByUser = getAllDeptCodeGroupByUser();
+		Set<String> deptCodeSet = allDeptCodeGroupByUser.get(username);
+		if (deptCodeSet.isEmpty()){
+			return null;
+		}
+		String deptCode = deptCodeSet.iterator().next();//用户只能有一个部门
+		return getDeptWithBranchByCode(deptCode);
+	}
 	@Override
 	public List<String> getDeptCodeWithSubByCode(String deptCode) {//查询当前部门及子部门所有的编码
 		Dept deptWithBranchByCode = this.getDeptWithBranchByCode(deptCode);

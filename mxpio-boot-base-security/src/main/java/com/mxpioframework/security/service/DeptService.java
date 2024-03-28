@@ -23,7 +23,10 @@ public interface DeptService extends BaseService<Dept> {
 	List<Dept> getDeptTree(Criteria c);
 
 	Dept getDeptWithBranchByCode(String deptCode);
-	List<String> getDeptCodeWithSubByCode(String deptCode);
+
+    Dept getUserDeptTree(String username);
+
+    List<String> getDeptCodeWithSubByCode(String deptCode);
 	/**
 	 * 新增部门信息
 	 * @param depts
