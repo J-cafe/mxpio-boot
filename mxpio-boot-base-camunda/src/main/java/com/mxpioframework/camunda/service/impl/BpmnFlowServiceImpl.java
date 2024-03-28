@@ -1,6 +1,7 @@
 package com.mxpioframework.camunda.service.impl;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -310,9 +311,9 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	public void handleBpmnFile(ProcessDefinition procDef, BpmnResource bpmnResource) {
 		String source = null;
 		try {
-			source = IOUtils.toString(repositoryService.getProcessModel(procDef.getId()), "UTF-8");
+			source = IOUtils.toString(repositoryService.getProcessModel(procDef.getId()), StandardCharsets.UTF_8);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		}
 		bpmnResource.setSource(source);
 	}
@@ -332,9 +333,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			query.startedBy(username);
 		}
 
-		if(finished == null){
-
-		}else if(finished){
+		if(finished){
 			query.finished();
 		}else{
 			query.unfinished();
@@ -410,8 +409,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Transactional(readOnly = true)
 	public List<Task> pagingCandidateGroupTasks(Set<String> authorities,
 			Criteria criteria, Integer pageSize, Integer pageNo) {
-		List<String> authoritiesList = new ArrayList<>();
-		authoritiesList.addAll(authorities);
+        List<String> authoritiesList = new ArrayList<>(authorities);
 		TaskQuery taskQuery = taskService.createTaskQuery().active().taskCandidateGroupIn(authoritiesList).taskUnassigned();
 		criteria2TaskQuery(criteria, taskQuery);
 		return taskQuery.orderByTaskCreateTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
@@ -420,8 +418,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Override
 	@Transactional(readOnly = true)
 	public long countCandidateGroupTasks(Set<String> authorities, Criteria criteria) {
-		List<String> authoritiesList = new ArrayList<>();
-		authoritiesList.addAll(authorities);
+        List<String> authoritiesList = new ArrayList<>(authorities);
 		TaskQuery taskQuery = taskService.createTaskQuery().active().taskCandidateGroupIn(authoritiesList).taskUnassigned();
 		criteria2TaskQuery(criteria, taskQuery);
 		return taskQuery.count();
@@ -486,9 +483,8 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<HistoricTaskInstance> getHistoricTaskByProcessInstanceId(String processInstanceId) {
-		List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery()
+        return historyService.createHistoricTaskInstanceQuery()
 				.processInstanceId(processInstanceId).finished().orderByHistoricTaskInstanceEndTime().asc().list();
-		return list;
 	}
 	
 	@Override
