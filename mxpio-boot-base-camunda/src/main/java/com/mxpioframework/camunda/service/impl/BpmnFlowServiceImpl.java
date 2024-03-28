@@ -505,7 +505,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		return historyService
 				.createHistoricActivityInstanceQuery()
 				.processInstanceId(processInstanceId)
-				.activityType("user-task")
+				.activityType("userTask")
 				.finished()
 				.orderByHistoricActivityInstanceEndTime()
 				.asc()
