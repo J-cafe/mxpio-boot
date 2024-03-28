@@ -455,7 +455,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Override
 	public List<Task> pagingCandidateTasks(String username, Criteria criteria, Integer pageSize, Integer pageNo) {
-		TaskQuery query = taskService.createTaskQuery().taskCandidateUser(username).active().taskUnassigned();;
+		TaskQuery query = taskService.createTaskQuery().taskCandidateUser(username).active().taskUnassigned();
 
 		criteria2TaskQuery(criteria, query);
 		return query.orderByTaskCreateTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
@@ -463,7 +463,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Override
 	public long countCandidateTasks(String username, Criteria criteria) {
-		TaskQuery query = taskService.createTaskQuery().taskCandidateUser(username).active().taskUnassigned();;
+		TaskQuery query = taskService.createTaskQuery().taskCandidateUser(username).active().taskUnassigned();
 		criteria2TaskQuery(criteria, query);
 		return query.count();
 	}
@@ -659,8 +659,8 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	/**
 	 * 通过Criteria构建TaskQuery
-	 * @param criteria
-	 * @param query
+	 * @param criteria 查询构造器
+	 * @param query Task查询器
 	 */
 	private void criteria2TaskQuery(Criteria criteria, TaskQuery query){
 		if(criteria != null) {
