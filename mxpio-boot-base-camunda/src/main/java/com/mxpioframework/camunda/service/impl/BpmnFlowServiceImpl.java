@@ -333,7 +333,9 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			query.startedBy(username);
 		}
 
-		if(finished){
+		if(finished == null){
+			
+		}else if(finished){
 			query.finished();
 		}else{
 			query.unfinished();
@@ -349,7 +351,9 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		if(username != null){
 			query.startedBy(username);
 		}
-		if(finished){
+		if(finished == null){
+			
+		}else if(finished){
 			query.finished();
 		}else{
 			query.unfinished();
