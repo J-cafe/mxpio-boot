@@ -230,8 +230,10 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	public ResultMessage rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername) {
 		Task task = getTaskById(taskId);
 		String processInstanceId = task.getProcessInstanceId();
+		runtimeService.deleteProcessInstance(processInstanceId, "不同意！");
+		return ResultMessage.success("不同意！");
 		//获取流程实例
-		HistoricProcessInstance inst = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+		/*HistoricProcessInstance inst = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
 		String businessKey = inst.getBusinessKey();
 		String processDefinitionId = inst.getProcessDefinitionId();
 		String startUser = inst.getStartUserId();
@@ -244,34 +246,10 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			startDatas.put(variable.getName(),variable.getValue());
 		}
 		//获取流程定义
-		ProcessDefinition procDef = repositoryService.createProcessDefinitionQuery().processDefinitionId(processDefinitionId).singleResult();
+		ProcessDefinition procDef = repositoryService.createProcessDefinitionQuery().processDefinitionId(processDefinitionId).singleResult();*/
 		
-		ProcessInstance newProcInst = startWithFormByKey(procDef.getKey(), startUser, businessKey, startDatas);
-		runtimeService.deleteProcessInstance(processInstanceId, "不同意！");
-		/*ActivityInstance tree = runtimeService.getActivityInstance(processInstanceId);
-		List<HistoricActivityInstance> resultList = getHistoricActivityByProcessInstanceId(processInstanceId);
-		if(null == resultList || resultList.size()<1){
-			log.error("第一个用户节点无法驳回！");
-            return ResultMessage.error("第一个用户节点无法驳回！");
-        }
-		if(!task.getAssignee().equals(loginUsername)){
-			return ResultMessage.error("非当前审批人！");
-		}
-		
-		//得到第一个任务节点的id
-        HistoricActivityInstance historicActivityInstance = resultList.get(0);
-        String toActId = historicActivityInstance.getActivityId();
-        if(properties.get(CamundaConstant.BPMN_COMMENT) != null){
-        	taskService.createComment(task.getId(), processInstanceId, "驳回原因:" + properties.get(CamundaConstant.BPMN_COMMENT));
-		}
-        
-        runtimeService.createProcessInstanceModification(processInstanceId)
-                .cancelActivityInstance(getInstanceIdForActivity(tree, task.getTaskDefinitionKey()))//关闭相关任务
-                .setAnnotation("进行了驳回到第一个任务节点操作")
-                .startBeforeActivity(toActId)//启动目标活动节点
-                .execute();*/
-		
-		return ResultMessage.success("进行了驳回到第一个任务节点操作", newProcInst.getId());
+		/*ProcessInstance newProcInst = startWithFormByKey(procDef.getKey(), startUser, businessKey, startDatas);*/
+
 	}
 	
 	@Override
