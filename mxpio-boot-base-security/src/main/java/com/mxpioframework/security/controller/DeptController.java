@@ -116,6 +116,12 @@ public class DeptController {
 		deptService.deleteDepts(deptId);
 		return Result.OK("删除部门成功",null);
 	}
-	
+
+	@GetMapping("user_dept_tree")
+	@Operation(summary = "用户所属部门的部门树（部门及子部门，username为空时按当前用户查询", description = "用户所属部门的部门树（部门及子部门，username为空时按当前用户查询）", method = "GET")
+	public Result<Dept> getUserDeptTree( @RequestParam(value="username", defaultValue = "") String username) {
+		return Result.OK(deptService.getUserDeptTree(username));
+	}
+
 
 }
