@@ -231,8 +231,9 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	public ResultMessage rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername) {
 		Task task = getTaskById(taskId);
 		String processInstanceId = task.getProcessInstanceId();
+		HistoricProcessInstance inst = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
 		runtimeService.deleteProcessInstance(processInstanceId, "不同意！");
-		return ResultMessage.success("不同意！");
+		return ResultMessage.success("不同意！", inst);
 		//获取流程实例
 		/*HistoricProcessInstance inst = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
 		String businessKey = inst.getBusinessKey();
