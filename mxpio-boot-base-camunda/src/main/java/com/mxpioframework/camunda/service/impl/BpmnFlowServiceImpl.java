@@ -30,6 +30,7 @@ import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.task.TaskQuery;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -477,6 +478,13 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		TaskQuery query = taskService.createTaskQuery().taskCandidateUser(username).active().taskUnassigned();
 		criteria2TaskQuery(criteria, query);
 		return query.count();
+	}
+
+	@Override
+	@Transactional
+	@Cacheable(cacheNames = CamundaConstant.BPMN_TITLE_CACHE_KEY)
+	public String getTitleByInstanceId(String id) {
+		return runtimeService.getVariable(id, CamundaConstant.BPMN_TITLE) == null ? "" : runtimeService.getVariable(id, CamundaConstant.BPMN_TITLE).toString();
 	}
 
 	@Override

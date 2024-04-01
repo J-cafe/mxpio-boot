@@ -18,6 +18,9 @@ public class ProcessInstanceVO implements Serializable {
 	
 	@Schema(description = "业务ID")
 	private String businessKey;
+
+	@Schema(description = "流程标题")
+	private String title;
 	
 	@Schema(description = "流程定义ID")
 	private String processDefinitionId;

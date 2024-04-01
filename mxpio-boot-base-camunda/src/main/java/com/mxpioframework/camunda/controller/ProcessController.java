@@ -66,7 +66,10 @@ public class ProcessController {
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		for(HistoricProcessInstance procInst : procInsts){
-			list.add(new ProcessInstanceVO(procInst));
+			String title = bpmnFlowService.getTitleByInstanceId(procInst.getId());
+			ProcessInstanceVO instVO = new ProcessInstanceVO(procInst);
+			instVO.setTitle(title);
+			list.add(instVO);
 		}
 		Page<ProcessInstanceVO> page = new PageImpl<ProcessInstanceVO>(list, pageAble, total);
 		return Result.OK(page);

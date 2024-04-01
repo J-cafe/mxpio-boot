@@ -112,20 +112,20 @@ public interface BpmnFlowService {
 
 	/**
 	 * 获取分页组任务
-	 * @param authorities
-	 * @param criteria
-	 * @param pageSize
-	 * @param pageNo
-	 * @return
+	 * @param authorities 组
+	 * @param criteria 查询构造器
+	 * @param pageSize 分页大小
+	 * @param pageNo 页码
+	 * @return 分页组任务列表
 	 */
 	List<Task> pagingCandidateGroupTasks(Set<String> authorities, Criteria criteria,
 			Integer pageSize, Integer pageNo);
 
 	/**
 	 * 组任务计数
-	 * @param authorities
-	 * @param criteria
-	 * @return
+	 * @param authorities 组
+	 * @param criteria 查询构造器
+	 * @return 组任务计数
 	 */
 	long countCandidateGroupTasks(Set<String> authorities, Criteria criteria);
 
@@ -155,44 +155,51 @@ public interface BpmnFlowService {
 
 	/**
 	 * 获取活动任务
-	 * @param username
-	 * @return
+	 * @param username 用户名
+	 * @return 活动任务列表
 	 */
 	List<Task> listActiveTasks(String username);
 
 	/**
 	 * 获取分页活动任务
-	 * @param username
-	 * @param criteria
-	 * @param pageSize
-	 * @param pageNo
-	 * @return
+	 * @param username 用户名
+	 * @param criteria 查询构造器
+	 * @param pageSize 分页大小
+	 * @param pageNo 页数
+	 * @return 分页活动任务
 	 */
 	List<Task> pagingActiveTasks(String username, Criteria criteria, Integer pageSize, Integer pageNo);
 
 	/**
 	 * 活动任务计数
-	 * @param username
-	 * @param criteria
-	 * @return
+	 * @param username 用户名
+	 * @param criteria 查询构造器
+	 * @return 活动任务计数
 	 */
 	long countActiveTasks(String username, Criteria criteria);
 
 	/**
 	 * 获取候选任务列表
-	 * @param username
-	 * @param criteria
-	 * @param pageSize
-	 * @param pageNo
-	 * @return
+	 * @param username 用户名
+	 * @param criteria 查询构造器
+	 * @param pageSize 分页大小
+	 * @param pageNo 页数
+	 * @return 候选任务列表
 	 */
 	List<Task> pagingCandidateTasks(String username, Criteria criteria, Integer pageSize, Integer pageNo);
 
 	/**
 	 * 候选任务计数
-	 * @param username
-	 * @param criteria
-	 * @return
+	 * @param username 用户名
+	 * @param criteria 查询构造器
+	 * @return 候选任务计数
 	 */
 	long countCandidateTasks(String username, Criteria criteria);
+
+	/**
+	 * 获取流程标题
+	 * @param id 流程实例ID
+	 * @return 流程标题
+	 */
+	String getTitleByInstanceId(String id);
 }
