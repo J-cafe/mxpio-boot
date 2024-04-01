@@ -133,8 +133,10 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	public ProcessInstance startWithFormByKey(String key, String loginUsername, String businessKey, Map<String, Object> properties) {
 
 		BpmnFlow flow = JpaUtil.linq(BpmnFlow.class).idEqual(key).findOne();
-		String title = AviatorEvaluator.execute(flow.getTitle(),properties).toString();
-		properties.put(CamundaConstant.BPMN_TITLE, title);
+		if (flow.getTitle()!=null){
+			String title = AviatorEvaluator.execute(flow.getTitle(),properties).toString();
+			properties.put(CamundaConstant.BPMN_TITLE, title);
+		}
 
 		ProcessInstance procInst;
 		ProcessDefinition procDef = repositoryService.createProcessDefinitionQuery().processDefinitionKey(key)
