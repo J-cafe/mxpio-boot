@@ -10,6 +10,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
+import com.googlecode.aviator.AviatorEvaluator;
 import com.mxpioframework.camunda.vo.ProcessInstanceVO;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -129,6 +130,11 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Override
 	@Transactional(readOnly = false)
 	public ProcessInstance startWithFormByKey(String key, String loginUsername, String businessKey, Map<String, Object> properties) {
+
+		BpmnFlow flow = JpaUtil.linq(BpmnFlow.class).idEqual(key).findOne();
+		String title = AviatorEvaluator.execute(flow.getTitle(),properties).toString();
+		properties.put(CamundaConstant.BPMN_TITLE, title);
+
 		ProcessInstance procInst;
 		ProcessDefinition procDef = repositoryService.createProcessDefinitionQuery().processDefinitionKey(key)
 				.latestVersion().singleResult();

@@ -16,6 +16,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-boot-base-expression</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.camunda.bpm.springboot</groupId>
 			<artifactId>camunda-bpm-spring-boot-starter</artifactId>
 		</dependency>
