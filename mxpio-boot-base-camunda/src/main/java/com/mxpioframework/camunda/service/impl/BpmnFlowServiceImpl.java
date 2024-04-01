@@ -484,7 +484,13 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Transactional
 	@Cacheable(cacheNames = CamundaConstant.BPMN_TITLE_CACHE_KEY)
 	public String getTitleByInstanceId(String id) {
-		return runtimeService.getVariable(id, CamundaConstant.BPMN_TITLE) == null ? "" : runtimeService.getVariable(id, CamundaConstant.BPMN_TITLE).toString();
+		String title = null;
+		try{
+			title = runtimeService.getVariable(id, CamundaConstant.BPMN_TITLE).toString();
+		} catch (Exception ignored){
+
+		}
+		return title == null ? "" : title;
 	}
 
 	@Override

@@ -54,19 +54,19 @@ public interface BpmnFlowService {
 
 	/**
 	 * 任务签核
-	 * @param taskId
-	 * @param properties
-	 * @param loginUsername
-	 * @return
+	 * @param taskId  任务ID
+	 * @param properties 流程变量
+	 * @param loginUsername 登录用户
+	 * @return 返回消息
 	 */
 	ResultMessage complete(String taskId, Map<String, Object> properties, String loginUsername);
 	
 	/**
 	 * 任务委托
-	 * @param taskId
-	 * @param username
-	 * @param loginUsername
-	 * @return
+	 * @param taskId 任务ID
+	 * @param username 被委托人
+	 * @param loginUsername 登录用户
+	 * @return 返回消息
 	 */
 	ResultMessage delegate(String taskId, String username, String loginUsername);
 
@@ -88,20 +88,20 @@ public interface BpmnFlowService {
 
 	/**
 	 * 历史任务查询
-	 * @param username
-	 * @param criteria
-	 * @param pageSize
-	 * @param pageNo
-	 * @param finished
-	 * @return
+	 * @param username 用户名
+	 * @param criteria 查询构造器
+	 * @param pageSize 分页大小
+	 * @param pageNo 页数
+	 * @param finished 完成标识
+	 * @return 历史任务列表
 	 */
 	List<HistoricTaskInstance> pagingHistoricTaskListPageByUser(String username, Criteria criteria, Integer pageSize, Integer pageNo, boolean finished);
 
 	/**
 	 * 历史任务计数
-	 * @param username
-	 * @param finished
-	 * @return
+	 * @param username 用户名
+	 * @param finished 完成标识
+	 * @return 任务计数
 	 */
 	long countHistoricTaskListByUser(String username, boolean finished);
 
