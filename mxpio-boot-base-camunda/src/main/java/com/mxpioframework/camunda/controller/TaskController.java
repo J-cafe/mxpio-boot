@@ -68,7 +68,9 @@ public class TaskController {
 		long total = bpmnFlowService.countActiveTasks(username, criteria);
 		for(Task task : tasks){
 			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
-			list.add(new TaskVO(task, historicProcessInstance));
+			TaskVO taskVO = new TaskVO(task, historicProcessInstance);
+			taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
+			list.add(taskVO);
 		}
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
@@ -87,7 +89,9 @@ public class TaskController {
 		long total = bpmnFlowService.countHistoricTaskListByUser(username, true);
 		for(HistoricTaskInstance task : tasks){
 			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
-			list.add(new TaskVO(task, historicProcessInstance));
+			TaskVO taskVO = new TaskVO(task, historicProcessInstance);
+			taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
+			list.add(taskVO);
 		}
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
@@ -106,7 +110,9 @@ public class TaskController {
 		long total = bpmnFlowService.countCandidateTasks(username, criteria);
 		for(Task task : tasks){
 			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
-			list.add(new TaskVO(task, historicProcessInstance));
+			TaskVO taskVO = new TaskVO(task, historicProcessInstance);
+			taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
+			list.add(taskVO);
 		}
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
@@ -125,7 +131,9 @@ public class TaskController {
 		long total = bpmnFlowService.countCandidateGroupTasks(authorities, criteria);
 		for(Task task : tasks){
 			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
-			list.add(new TaskVO(task, historicProcessInstance));
+			TaskVO taskVO = new TaskVO(task, historicProcessInstance);
+			taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
+			list.add(taskVO);
 		}
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);

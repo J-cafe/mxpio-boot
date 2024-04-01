@@ -63,6 +63,10 @@ public class TaskVO implements Serializable, DictAble {
 	@Schema(description = "流程状态")
 	private String procState;
 
+	@Schema(description = "流程标题")
+	private String title;
+
+
 	public TaskVO(HistoricTaskInstance task) {
 		this.id = task.getId();
 		this.assignee = task.getAssignee();
