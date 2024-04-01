@@ -129,7 +129,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Override
 	@Transactional(readOnly = false)
 	public ProcessInstance startWithFormByKey(String key, String loginUsername, String businessKey, Map<String, Object> properties) {
-		ProcessInstance procInst = null;
+		ProcessInstance procInst;
 		ProcessDefinition procDef = repositoryService.createProcessDefinitionQuery().processDefinitionKey(key)
 				.latestVersion().singleResult();
 		identityService.setAuthenticatedUserId(loginUsername);
