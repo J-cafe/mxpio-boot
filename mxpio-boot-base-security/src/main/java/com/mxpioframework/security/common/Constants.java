@@ -47,6 +47,8 @@ public final class Constants {
 	public final static String USER_DEPT_CODE_CACHE_KEY = "UserDeptCode";
 	
 	public final static String USER_DEPT_ID_CACHE_KEY = "UserDeptId";
+
+	public final static String USER_POST_CODE_CACHE_KEY = "UserPostCode";
 	
 	public final static String DEPT_CACHE_KEY = "DeptKey";
 	/**

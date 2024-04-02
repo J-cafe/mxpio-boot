@@ -24,6 +24,7 @@ import com.mxpioframework.security.common.Constants;
 				Constants.DATA_ATTRIBUTE_MAP_CACHE_KEY,
 				Constants.DATA_RESOURCE_CACHE_KEY,
 				Constants.USER_DEPT_CODE_CACHE_KEY,
+				Constants.USER_POST_CODE_CACHE_KEY,
 				Constants.USER_DEPT_ID_CACHE_KEY,
 				Constants.DEPT_CACHE_KEY,
 				Constants.DATA_FILTER_ROLE_CACHE_KEY,

@@ -11,7 +11,11 @@ import javax.persistence.Transient;
 import com.mxpioframework.jpa.annotation.Generator;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
+@Data
 @Entity
 @Table(name = "MB_DEPT")
 @Schema(description="部门")
@@ -53,62 +57,6 @@ public class Dept extends BaseEntity implements Actor {
 	
 	@Transient
 	private List<Dept> children;
-
-	public Integer getDeptType() {
-		return deptType;
-	}
-
-	public void setDeptType(Integer deptType) {
-		this.deptType = deptType;
-	}
-
-	public String getDeptCode() {
-		return deptCode;
-	}
-
-	public void setDeptCode(String deptCode) {
-		this.deptCode = deptCode;
-	}
-
-	public String getDeptName() {
-		return deptName;
-	}
-
-	public void setDeptName(String deptName) {
-		this.deptName = deptName;
-	}
-
-	public String getDeptDesc() {
-		return deptDesc;
-	}
-
-	public void setDeptDesc(String deptDesc) {
-		this.deptDesc = deptDesc;
-	}
-
-	public List<Dept> getChildren() {
-		return children;
-	}
-
-	public void setChildren(List<Dept> children) {
-		this.children = children;
-	}
-
-	public String getFaDeptId() {
-		return faDeptId;
-	}
-
-	public void setFaDeptId(String faDeptId) {
-		this.faDeptId = faDeptId;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	@Override
 	public String getActorId() {

@@ -95,8 +95,16 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 	private String phone;
 
 	@Column(name = "RANK_")
-	@Schema(description = "职级")
+	@Schema(description = "级别")
 	private String rank;
+
+	@Column(name = "POST_ID_")
+	@Schema(description = "职位")
+	private String postId;
+
+	@Column(name = "CONCURRENT_POST_IDS_")
+	@Schema(description = "兼任")
+	private String concurrentPostIds;
 
 	@Column(name = "ID_NUMBER_")
 	@Schema(description = "身份证号")
@@ -315,5 +323,21 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 
 	public void setThirdId(String thirdId) {
 		this.thirdId = thirdId;
+	}
+
+	public String getPostId() {
+		return postId;
+	}
+
+	public void setPostId(String postId) {
+		this.postId = postId;
+	}
+
+	public String getConcurrentPostIds() {
+		return concurrentPostIds;
+	}
+
+	public void setConcurrentPostIds(String concurrentPostIds) {
+		this.concurrentPostIds = concurrentPostIds;
 	}
 }
