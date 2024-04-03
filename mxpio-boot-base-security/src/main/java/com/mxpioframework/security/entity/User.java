@@ -96,14 +96,17 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 
 	@Column(name = "RANK_")
 	@Schema(description = "级别")
+	@com.mxpioframework.security.annotation.Dict(dicCode = "MB_SYSTEM_RANK")
 	private String rank;
 
 	@Column(name = "POST_ID_")
 	@Schema(description = "职位")
+	@com.mxpioframework.security.annotation.Dict(dicCode = "id", dicEntity = Post.class, dicText = "name")
 	private String postId;
 
 	@Column(name = "CONCURRENT_POST_IDS_")
 	@Schema(description = "兼任")
+	@com.mxpioframework.security.annotation.Dict(dicCode = "id", dicEntity = Post.class, dicText = "name")
 	private String concurrentPostIds;
 
 	@Column(name = "ID_NUMBER_")
