@@ -32,11 +32,11 @@ public class Post extends BaseEntity implements Actor {
 	@Schema(description = "职系")
 	@Column(name = "POST_TYPE_")
 	@com.mxpioframework.security.annotation.Dict(dicCode = "code", dicEntity = DataType.class, dicText = "name")
-	private Integer postType;
+	private String postType;
 
 	@Schema(description = "职级")
 	@Column(name = "POST_GRADE_")
-	private Integer postGrade;
+	private String postGrade;
 
 	@Override
 	public String getActorId() {
