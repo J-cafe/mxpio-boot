@@ -17,7 +17,7 @@ import java.util.List;
 
 @Tag(name = "PostController", description = "职系管理")
 @RestController("mxpio.security.postTypeController")
-@RequestMapping("/post type/")
+@RequestMapping("/posttype/")
 public class PostTypeController {
 	
 	@Autowired

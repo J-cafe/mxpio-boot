@@ -29,6 +29,6 @@ public class PostType extends BaseEntity {
 
     @Schema(description = "名称")
     @Column(name = "NAME_")
-    private String mame;
+    private String name;
 
 }
