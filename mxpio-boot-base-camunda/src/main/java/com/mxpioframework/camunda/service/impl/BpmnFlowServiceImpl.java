@@ -90,19 +90,19 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public void save(BpmnFlow bpmnFlow) {
 		JpaUtil.save(bpmnFlow);
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public void delete(String key) {
 		JpaUtil.lind(BpmnFlow.class).idEqual(key).delete();
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public void update(BpmnFlow bpmnFlow) {
 		JpaUtil.update(bpmnFlow);
 	}
@@ -114,7 +114,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public BpmnFlow deploy(String code) {
 		BpmnFlow bpmnFlow = this.findByID(code);
 		Deployment deployment = repositoryService.createDeployment()
@@ -129,14 +129,18 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public ProcessInstance startWithFormByKey(String key, String loginUsername, String businessKey, Map<String, Object> properties) {
 
 		BpmnFlow flow = JpaUtil.linq(BpmnFlow.class).idEqual(key).findOne();
+		String title;
 		if (flow.getTitle()!=null){
-			String title = AviatorEvaluator.execute(flow.getTitle(),properties).toString();
-			properties.put(CamundaConstant.BPMN_TITLE, title);
+			title = AviatorEvaluator.execute(flow.getTitle(),properties).toString();
+		}else{
+			title = flow.getName() + "---" + loginUsername;
 		}
+
+		properties.put(CamundaConstant.BPMN_TITLE, title);
 
 		ProcessInstance procInst;
 		ProcessDefinition procDef = repositoryService.createProcessDefinitionQuery().processDefinitionKey(key)
@@ -145,7 +149,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		if (procDef.hasStartFormKey()) {
 			procInst = formService.submitStartForm(procDef.getId(), businessKey, properties);
 		} else {
-			procInst = runtimeService.startProcessInstanceById(procDef.getId());
+			procInst = runtimeService.startProcessInstanceById(procDef.getId(), properties);
 		}
 		return procInst;
 	}
@@ -201,7 +205,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public ResultMessage complete(String taskId, Map<String, Object> properties, String loginUsername) {
 		Task task = getTaskById(taskId);
 		if(task == null){
@@ -221,7 +225,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	}
 	
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public ResultMessage delegate(String taskId, String username, String loginUsername) {
 		Task task = getTaskById(taskId);
 		if(task == null){
@@ -236,7 +240,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	}
 	
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public ResultMessage rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername) {
 		Task task = getTaskById(taskId);
 		String processInstanceId = task.getProcessInstanceId();
@@ -264,7 +268,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	}
 	
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public ResultMessage rejectToLast(String taskId, Map<String, Object> properties, String loginUsername) {
 		Task task = getTaskById(taskId);
 		String processInstanceId = task.getProcessInstanceId();
@@ -670,7 +674,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public ResultMessage claim(String taskId, String loginUsername) {
 		try{
 			taskService.claim(taskId, loginUsername);
