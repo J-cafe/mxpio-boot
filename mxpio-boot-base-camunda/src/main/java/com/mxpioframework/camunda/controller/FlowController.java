@@ -1,29 +1,19 @@
 package com.mxpioframework.camunda.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.mxpioframework.camunda.entity.BpmnFlow;
 import com.mxpioframework.camunda.enums.BpmnEnums;
 import com.mxpioframework.camunda.service.BpmnFlowService;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.query.Criteria;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "FlowController", description = "流程管理")
 @RestController("mxpio.camunda.FlowController")
@@ -43,14 +33,14 @@ public class FlowController {
 	
 	@GetMapping("list")
 	@Operation(summary = "流程列表", description = "获取流程列表", method = "GET")
-	public Result<List<BpmnFlow>> list(Criteria criteria) throws UnsupportedEncodingException {
+	public Result<List<BpmnFlow>> list(Criteria criteria) {
 		List<BpmnFlow> bpmnFlows = bpmnFlowService.list(criteria);
 		return Result.OK(bpmnFlows);
 	}
 	
 	@GetMapping("page")
 	@Operation(summary = "流程列表（分页）", description = "获取流程列表（分页）", method = "GET")
-	public Result<Page<BpmnFlow>> page(Criteria criteria, Integer pageSize, Integer pageNo) throws UnsupportedEncodingException {
+	public Result<Page<BpmnFlow>> page(Criteria criteria, Integer pageSize, Integer pageNo) {
 		Pageable page = PageRequest.of(pageNo-1, pageSize);
 		Page<BpmnFlow> bpmnFlows = bpmnFlowService.listPage(page, criteria);
 		return Result.OK(bpmnFlows);
@@ -77,7 +67,7 @@ public class FlowController {
 	@DeleteMapping("remove/{bpmnFlowCode}")
 	@Operation(summary = "删除流程", description = "删除流程", method = "DELETE")
 	public Result<BpmnFlow> remove(@PathVariable(name = "bpmnFlowCode", required = true) String bpmnFlowCode) {
-		String bpmnFlowCodes[] = bpmnFlowCode.split(",");
+		String[] bpmnFlowCodes = bpmnFlowCode.split(",");
 		for(String key : bpmnFlowCodes){
 			bpmnFlowService.delete(key);
 		}

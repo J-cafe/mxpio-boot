@@ -1,6 +1,5 @@
 package com.mxpioframework.camunda.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,14 +34,14 @@ public class FormModelController {
 	
 	@GetMapping("list")
 	@Operation(summary = "表单列表", description = "获取表单列表", method = "GET")
-	public Result<List<FormModel>> list(Criteria criteria) throws UnsupportedEncodingException {
+	public Result<List<FormModel>> list(Criteria criteria) {
 		List<FormModel> formModels = formModelService.list(criteria);
 		return Result.OK(formModels);
 	}
 	
 	@GetMapping("page")
 	@Operation(summary = "表单列表（分页）", description = "获取表单列表（分页）", method = "GET")
-	public Result<Page<FormModel>> page(Criteria criteria, Integer pageSize, Integer pageNo) throws UnsupportedEncodingException {
+	public Result<Page<FormModel>> page(Criteria criteria, Integer pageSize, Integer pageNo) {
 		Pageable page = PageRequest.of(pageNo-1, pageSize);
 		Page<FormModel> formModels = formModelService.listPage(page, criteria);
 		return Result.OK(formModels);
@@ -50,7 +49,7 @@ public class FormModelController {
 	
 	@GetMapping("def/list/{key}")
 	@Operation(summary = "获取表单定义", description = "根据Key获取表单定义", method = "GET")
-	public Result<FormModelDef> defList(@PathVariable(name = "key", required = true) String key) throws UnsupportedEncodingException {
+	public Result<FormModelDef> defList(@PathVariable(name = "key", required = true) String key) {
 		FormModelDef formModel = formModelService.getFormModelDefByKey(key);
 		return Result.OK(formModel);
 	}
