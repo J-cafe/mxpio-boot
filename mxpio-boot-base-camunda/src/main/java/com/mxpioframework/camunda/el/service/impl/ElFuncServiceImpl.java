@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.Set;
 
-@Service("$bpmn")
+@Service("bpmn")
 public class ElFuncServiceImpl implements ElFuncService {
 
     @Autowired
@@ -28,4 +28,5 @@ public class ElFuncServiceImpl implements ElFuncService {
         }
         return "";
     }
+
 }

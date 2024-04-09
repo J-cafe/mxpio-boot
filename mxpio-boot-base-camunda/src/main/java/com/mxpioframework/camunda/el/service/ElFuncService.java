@@ -9,4 +9,5 @@ public interface ElFuncService {
      * @return 审批人
      */
     public String deptManager(String deptLevel, String username);
+
 }
