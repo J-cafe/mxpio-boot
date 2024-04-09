@@ -9,7 +9,7 @@ public class AviatorFuncServiceImpl implements AviatorFuncService {
     @Override
     public String exe(String funcStr) {
         String[] strs = funcStr.split(",");
-        StringBuffer func = new StringBuffer();
+        StringBuilder func = new StringBuilder();
         for (int i = 0; i < strs.length; i++) {
             if(i == 0){
                 func.append(strs[i]).append("(");
