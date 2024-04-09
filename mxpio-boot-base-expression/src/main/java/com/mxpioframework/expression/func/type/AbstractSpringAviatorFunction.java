@@ -9,4 +9,6 @@ public abstract class AbstractSpringAviatorFunction extends AbstractFunction {
 	
 	public abstract boolean disabled();
 
+	public abstract String getDesc();
+
 }

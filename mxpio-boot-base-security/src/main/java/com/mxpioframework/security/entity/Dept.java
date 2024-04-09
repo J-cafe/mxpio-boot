@@ -45,6 +45,10 @@ public class Dept extends BaseEntity implements Actor {
 	@Schema(description = "部门负责人")
 	@Column(name = "DEPT_MANAGER_")
 	private String deptManager;
+
+	@Schema(description = "部门级别")
+	@Column(name = "DEPT_LEVEL_")
+	private String deptLevel;
 	
 	@Schema(description = "部门描述")
 	@Column(name = "DEPT_DESC_")
