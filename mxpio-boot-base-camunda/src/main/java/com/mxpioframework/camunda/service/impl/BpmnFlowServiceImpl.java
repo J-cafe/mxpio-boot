@@ -141,6 +141,8 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		}
 
 		properties.put(CamundaConstant.BPMN_TITLE, title);
+		properties.put(CamundaConstant.BPMN_START_USER, loginUsername);
+
 
 		ProcessInstance procInst;
 		ProcessDefinition procDef = repositoryService.createProcessDefinitionQuery().processDefinitionKey(key)
@@ -149,7 +151,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		if (procDef.hasStartFormKey()) {
 			procInst = formService.submitStartForm(procDef.getId(), businessKey, properties);
 		} else {
-			procInst = runtimeService.startProcessInstanceById(procDef.getId(), properties);
+			procInst = runtimeService.startProcessInstanceById(procDef.getId(), businessKey, properties);
 		}
 		return procInst;
 	}

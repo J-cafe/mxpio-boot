@@ -12,6 +12,8 @@ public class CamundaConstant {
 	 */
 	public static final String BPMN_TITLE = "$BPMN_TITLE_";
 
+	public static final String BPMN_START_USER = "$START_USER";
+
 	public static final String BPMN_TITLE_CACHE_KEY = "bpmnTitle";
 	
 

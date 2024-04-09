@@ -8,6 +8,6 @@ public interface ElFuncService {
      * @param username 发起人
      * @return 审批人
      */
-    public String deptManager(String deptLevel, String username);
+    String deptManager(String deptLevel, String username);
 
 }
