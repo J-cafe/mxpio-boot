@@ -10,6 +10,7 @@ import javax.persistence.Transient;
 
 import com.mxpioframework.jpa.annotation.Generator;
 
+import com.mxpioframework.security.annotation.Dict;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,6 +49,7 @@ public class Dept extends BaseEntity implements Actor {
 
 	@Schema(description = "部门级别")
 	@Column(name = "DEPT_LEVEL_")
+	@Dict(dicCode = "MB_SYSTEM_DEPT_LEVEL")
 	private String deptLevel;
 	
 	@Schema(description = "部门描述")
