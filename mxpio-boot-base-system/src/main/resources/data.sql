@@ -72,6 +72,13 @@ INSERT INTO mb_dict_item(id_, create_by, create_time, update_by, update_time, di
 INSERT INTO mb_dict_item(id_, create_by, create_time, update_by, update_time, dict_id_, item_desc_, item_sort_, item_status_, item_text_, item_value_, create_dept) VALUES ('a2ddb87b-34c3-441b-81b4-70d88b94e7b7', 'admin', '2024-04-03 11:36:23', NULL, NULL, '9a543332-9651-45fd-964f-40369101c0a7', NULL, '2', '1', '二级', '02', 'QS01');
 INSERT INTO mb_dict_item(id_, create_by, create_time, update_by, update_time, dict_id_, item_desc_, item_sort_, item_status_, item_text_, item_value_, create_dept) VALUES ('a38e1c09-3e95-4e21-86c5-fce7a2c5e64e', 'admin', '2024-04-03 11:36:12', NULL, NULL, '9a543332-9651-45fd-964f-40369101c0a7', NULL, '1', '1', '一级', '01', 'QS01');
 
+--部门级别字典
+INSERT INTO mb_dict(id_, create_by, create_time, update_by, update_time, dict_code_, dict_default_value_, dict_desc_, dict_name_, dict_type_, create_dept) VALUES ('dfc6c991-c414-4c9e-9dd0-d9e9ffe7ebb5', 'admin', '2024-04-09 15:17:53', NULL, NULL, 'MB_SYSTEM_DEPT_LEVEL', NULL, NULL, '部门级别', '1', 'QS01');
+INSERT INTO mb_dict_item(id_, create_by, create_time, update_by, update_time, dict_id_, item_desc_, item_sort_, item_status_, item_text_, item_value_, create_dept) VALUES ('96ad7bce-340f-434c-8171-b684517106bc', 'admin', '2024-04-09 15:18:29', NULL, NULL, 'dfc6c991-c414-4c9e-9dd0-d9e9ffe7ebb5', NULL, '1', '1', '一级', '01', 'QS01');
+INSERT INTO mb_dict_item(id_, create_by, create_time, update_by, update_time, dict_id_, item_desc_, item_sort_, item_status_, item_text_, item_value_, create_dept) VALUES ('c0ef5144-1c35-4757-9b31-42feaf0583a8', 'admin', '2024-04-09 15:18:37', NULL, NULL, 'dfc6c991-c414-4c9e-9dd0-d9e9ffe7ebb5', NULL, '2', '1', '二级', '02', 'QS01');
+INSERT INTO mb_dict_item(id_, create_by, create_time, update_by, update_time, dict_id_, item_desc_, item_sort_, item_status_, item_text_, item_value_, create_dept) VALUES ('dd3eeb13-0f51-430d-bdd6-44091bdcfa98', 'admin', '2024-04-09 15:18:45', NULL, NULL, 'dfc6c991-c414-4c9e-9dd0-d9e9ffe7ebb5', NULL, '3', '1', '三级', '03', 'QS01');
+
+
 
 -- 个人中心菜单
 -- INSERT INTO mb_url (id_, create_by, create_time, update_by, update_time, component_, description_, icon_, keep_alive_, name_, navigable_, order_, parent_id_, path_, title_, outside_) VALUES ('6d4febe8-5a7e-46e8-bf3c-520bf9e6f0da', NULL, '2022-05-18 16:52:10.918000', NULL, '2022-05-18 16:57:53.846000', 'account/center/Index', NULL, NULL,  0, '/account/center',  0, '1', 'd7d6e2e4e2934f2c9385a623fd98c6f3', '/account/center', '个人中心', 0);
