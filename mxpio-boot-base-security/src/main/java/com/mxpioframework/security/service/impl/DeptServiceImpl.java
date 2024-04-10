@@ -437,7 +437,7 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 			deptIds.add(deptId);
 			result.put(username, deptIds);
 		}
-		return null;
+		return result;
 	}
 
 	private void addFaDept(Set<String> deptIds, String deptId, Map<String, Dept> deptMap) {
