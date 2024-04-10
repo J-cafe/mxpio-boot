@@ -51,12 +51,14 @@ public class UrlServiceImpl extends BaseServiceImpl<Url> implements UrlService {
 			Map<String, Url> urlMap = JpaUtil.index(urls);
 			for (Permission permission : permissions) {
 				Url url = urlMap.get(permission.getResourceId());
-				List<ConfigAttribute> configAttributes = url.getAttributes();
-				if (configAttributes == null) {
-					configAttributes = new ArrayList<ConfigAttribute>();
-					url.setAttributes(configAttributes);
+				if(url!=null){//增加非空判断（存在url删除，但是对应permission中的resourceid依然存在，此处报NP的问题）
+					List<ConfigAttribute> configAttributes = url.getAttributes();
+					if (configAttributes == null) {
+						configAttributes = new ArrayList<ConfigAttribute>();
+						url.setAttributes(configAttributes);
+					}
+					configAttributes.add(permission);
 				}
-				configAttributes.add(permission);
 			}
 		}
 		return urls;
