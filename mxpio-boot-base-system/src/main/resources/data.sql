@@ -57,8 +57,8 @@ INSERT INTO mb_dict_item (id_, create_by, create_time, update_by, update_time, d
 
 
 -- 岗位、职系菜单
-INSERT INTO mb_url(id_, create_by, create_time, update_by, update_time, component_, description_, icon_, keep_alive_, name_, navigable_, order_, parent_id_, path_, title_, outside_, create_dept, rul_type_) VALUES ('bb624457-ad73-467a-92fc-388ff2c60066', 'admin', '2024-04-02 15:17:42.647000', NULL, NULL, 'system/PostTypeList', NULL, NULL, '1', NULL, '1', 11, 'd7d6e2e4e2934f2c9385a623fd98c6f3', 'postTypeList', '职系管理', '0', 'QS01', 'C');
-INSERT INTO mb_url(id_, create_by, create_time, update_by, update_time, component_, description_, icon_, keep_alive_, name_, navigable_, order_, parent_id_, path_, title_, outside_, create_dept, rul_type_) VALUES ('925d0c5a-b309-4597-b85d-8d59e052b0db', 'admin', '2024-04-02 15:17:10.088000', NULL, NULL, 'system/PostList', NULL, NULL, '1', NULL, '1', 10, 'd7d6e2e4e2934f2c9385a623fd98c6f3', 'postList', '岗位管理', '0', '001', 'C');
+INSERT INTO mb_url(id_, create_by, create_time, update_by, update_time, component_, description_, icon_, keep_alive_, name_, navigable_, order_, parent_id_, path_, title_, outside_, create_dept, rul_type_) VALUES ('bb624457-ad73-467a-92fc-388ff2c60066', 'admin', '2024-04-02 15:17:42.647000', NULL, NULL, 'system/PostTypeList', NULL, NULL, 1, NULL, 1, 11, 'd7d6e2e4e2934f2c9385a623fd98c6f3', 'postTypeList', '职系管理', 0, 'QS01', 'C');
+INSERT INTO mb_url(id_, create_by, create_time, update_by, update_time, component_, description_, icon_, keep_alive_, name_, navigable_, order_, parent_id_, path_, title_, outside_, create_dept, rul_type_) VALUES ('925d0c5a-b309-4597-b85d-8d59e052b0db', 'admin', '2024-04-02 15:17:10.088000', NULL, NULL, 'system/PostList', NULL, NULL, 1, NULL, 1, 10, 'd7d6e2e4e2934f2c9385a623fd98c6f3', 'postList', '岗位管理', 0, '001', 'C');
 
 --人员级别字典
 INSERT INTO mb_dict(id_, create_by, create_time, update_by, update_time, dict_code_, dict_default_value_, dict_desc_, dict_name_, dict_type_, create_dept) VALUES ('9a543332-9651-45fd-964f-40369101c0a7', 'admin', '2024-04-03 11:36:02', NULL, NULL, 'MB_SYSTEM_RANK', NULL, NULL, '人员级别', '1', 'QS01');
