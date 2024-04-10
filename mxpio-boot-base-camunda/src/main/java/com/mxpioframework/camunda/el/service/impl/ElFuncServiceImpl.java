@@ -17,7 +17,7 @@ public class ElFuncServiceImpl implements ElFuncService {
 
     @Override
     public String deptManager(String deptLevel, String username) {
-        Map<String, Set<String>> userDepts = deptService.getAllDeptIdGroupByUser();
+        Map<String, Set<String>> userDepts = deptService.getAllDeptIdWithFatherGroupByUser();
         Set<String> deptIds = userDepts.get(username);
         Map<String, Dept> depts = deptService.getDeptMap();
         for(String id : deptIds){

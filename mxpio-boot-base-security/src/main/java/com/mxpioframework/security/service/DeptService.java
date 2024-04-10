@@ -145,5 +145,6 @@ public interface DeptService extends BaseService<Dept> {
 	 * @return
 	 */
 	public Map<String, Set<String>> getAllDeptIdGroupByUser();
-	
+
+	Map<String, Set<String>> getAllDeptIdWithFatherGroupByUser();
 }

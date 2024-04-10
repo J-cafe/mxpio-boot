@@ -419,6 +419,35 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 		return result;
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	@Cacheable(cacheNames = Constants.USER_DEPT_ID_FA_CACHE_KEY, keyGenerator = Constants.KEY_GENERATOR_BEAN_NAME)
+	public Map<String, Set<String>> getAllDeptIdWithFatherGroupByUser() {
+		List<UserDept> userDepts = JpaUtil.linq(UserDept.class).list();
+		Map<String, Set<String>> result = new HashMap<String, Set<String>>();
+		for (UserDept userDept : userDepts) {
+			String username = userDept.getUserId();
+			String deptId = userDept.getDeptId();
+			Set<String> deptIds = result.get(username);
+			if(CollectionUtils.isEmpty(deptIds)){
+				deptIds = new HashSet<>();
+			}
+			Map<String, Dept> deptMap = getDeptMap();
+			addFaDept(deptIds, deptId, deptMap);
+			deptIds.add(deptId);
+			result.put(username, deptIds);
+		}
+		return null;
+	}
+
+	private void addFaDept(Set<String> deptIds, String deptId, Map<String, Dept> deptMap) {
+		String faDeptId = deptMap.get(deptId).getFaDeptId();
+		if (StringUtils.isNotEmpty(faDeptId)){
+			addFaDept(deptIds, faDeptId, deptMap);
+			deptIds.add(faDeptId);
+		}
+	}
+
 	private void getDeptCode(Dept dept,List<String> deptCodes){
 		deptCodes.add(dept.getDeptCode());
 		if (dept.getChildren()!=null&&dept.getChildren().size()>0){

@@ -47,6 +47,7 @@ public final class Constants {
 	public final static String USER_DEPT_CODE_CACHE_KEY = "UserDeptCode";
 	
 	public final static String USER_DEPT_ID_CACHE_KEY = "UserDeptId";
+	public static final String USER_DEPT_ID_FA_CACHE_KEY = "UserDeptIdFa";
 
 	public final static String USER_POST_CODE_CACHE_KEY = "UserPostCode";
 	
@@ -93,5 +94,5 @@ public final class Constants {
 	public static final String KEY_GENERATOR_BEAN_NAME = "securityKeyGenerator";
 	
 	public static final int SECURITY_CONFIGURER_ORDER = Ordered.LOWEST_PRECEDENCE - 1000;
-	
+
 }
