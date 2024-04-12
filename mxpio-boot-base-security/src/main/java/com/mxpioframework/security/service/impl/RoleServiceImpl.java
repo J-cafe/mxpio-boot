@@ -38,21 +38,21 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	@SecurityCacheEvict
 	public void save(Role role) {
 		JpaUtil.save(role);
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	@SecurityCacheEvict
 	public void update(Role role) {
 		JpaUtil.update(role);
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	@SecurityCacheEvict
 	public void delete(String key) {
 		Role role = getById(key);
@@ -88,7 +88,7 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	@SecurityCacheEvict
 	public void addActors(String id, List<String> actorIds) {
 		for(String actorId : actorIds) {
@@ -100,7 +100,7 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	@SecurityCacheEvict
 	public void removeActors(String id, List<String> actorIds) {
 		JpaUtil.lind(RoleGrantedAuthority.class).equal("roleId", id).in("actorId", actorIds).delete();

@@ -25,7 +25,7 @@ public class UrlServiceCacheImpl implements UrlServiceCache {
 	@Override
 	@Cacheable(cacheNames = Constants.URL_TREE_CACHE_KEY, keyGenerator = Constants.KEY_GENERATOR_BEAN_NAME)
 	public List<Url> findTree() {
-		List<Url> result = new ArrayList<Url>();
+		List<Url> result = new ArrayList<>();
 		List<Url> urls = JpaUtil.linq(Url.class).asc("order").list();
 		List<Permission> permissions = JpaUtil.linq(Permission.class).equal("resourceType", ResourceType.URL).list();
 		Map<String, Url> urlMap = new HashMap<String, Url>(urls.size());
@@ -47,7 +47,7 @@ public class UrlServiceCacheImpl implements UrlServiceCache {
 				if (childrenMap.containsKey(url.getParentId())) {
 					children = childrenMap.get(url.getParentId());
 				} else {
-					children = new ArrayList<Url>();
+					children = new ArrayList<>();
 					childrenMap.put(url.getParentId(), children);
 				}
 				children.add(url);
@@ -60,7 +60,7 @@ public class UrlServiceCacheImpl implements UrlServiceCache {
 			}
 			List<ConfigAttribute> configAttributes = url.getAttributes();
 			if (configAttributes == null) {
-				configAttributes = new ArrayList<ConfigAttribute>();
+				configAttributes = new ArrayList<>();
 				url.setAttributes(configAttributes);
 			}
 			configAttributes.add(permission);

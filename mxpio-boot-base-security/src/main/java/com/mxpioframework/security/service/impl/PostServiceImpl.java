@@ -97,17 +97,4 @@ public class PostServiceImpl extends BaseServiceImpl<Post> implements PostServic
                 .paging(pageable);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    @Cacheable(cacheNames = Constants.USER_POST_CODE_CACHE_KEY, keyGenerator = Constants.KEY_GENERATOR_BEAN_NAME)
-    public Set<String> getPostKeyByUser(String username) {
-        User user = JpaUtil.getOne(User.class, username);
-        Set<String> result = new HashSet<>();
-        result.add(user.getPostId());
-        if(user.getConcurrentPostIds() != null){
-            String[] concurrentPostIds = user.getConcurrentPostIds().split(",");
-            result.addAll(Arrays.asList(concurrentPostIds));
-        }
-        return result;
-    }
 }

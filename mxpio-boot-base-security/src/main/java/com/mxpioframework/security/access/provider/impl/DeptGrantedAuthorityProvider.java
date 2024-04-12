@@ -30,7 +30,7 @@ public class DeptGrantedAuthorityProvider implements GrantedAuthorityProvider  {
 		
 		for(String deptId : deptIds){
 			if(authorities == null){
-				authorities = new ArrayList<GrantedAuthority>();
+				authorities = new ArrayList<>();
 			}
 			List<RoleGrantedAuthority> actorId = JpaUtil.linq(RoleGrantedAuthority.class)
 					.equal("actorId", deptId)

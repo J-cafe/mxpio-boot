@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.mxpioframework.security.service.RbacCacheService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -20,8 +21,7 @@ public class SecurityUtils {
 		if ("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getPrincipal())){//匿名用户直接返回null
 			return null;
 		}
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return user;
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 	
 	public static String getLoginUsername() {
@@ -32,18 +32,17 @@ public class SecurityUtils {
 	}
 	
 	public static Collection<? extends GrantedAuthority> getAuthorities() {
-		Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-		return authorities;
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 	}
 	
 	public static Set<String> getDeptCode(){
-		DeptService deptService = ApplicationContextProvider.getBean(DeptService.class);
-		Map<String,Set<String>> deptMap = deptService.getAllDeptCodeGroupByUser();
+		RbacCacheService rbacCacheService = ApplicationContextProvider.getBean(RbacCacheService.class);
+		Map<String,Set<String>> deptMap = rbacCacheService.getAllDeptCodeGroupByUser();
 		return deptMap.get(getLoginUsername());
 	}
 	
 	public static Set<String> getAuthorityKeys(){
 		return getAuthorities().stream()
-			     .map(r -> r.getAuthority()).collect(Collectors.toSet());
+			     .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
 	}
 }

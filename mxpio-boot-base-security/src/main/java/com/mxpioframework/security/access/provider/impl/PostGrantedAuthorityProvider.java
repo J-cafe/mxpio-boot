@@ -4,6 +4,7 @@ import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.security.access.provider.GrantedAuthorityProvider;
 import com.mxpioframework.security.entity.RoleGrantedAuthority;
 import com.mxpioframework.security.service.PostService;
+import com.mxpioframework.security.service.RbacCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,11 +21,11 @@ import java.util.Set;
 public class PostGrantedAuthorityProvider implements GrantedAuthorityProvider  {
 	
 	@Autowired
-	private PostService postService;
+	private RbacCacheService rbacCacheService;
 	
 	@Override
 	public Collection<? extends GrantedAuthority> provide(UserDetails userDetails) {
-		Set<String> postIds = postService.getPostKeyByUser(userDetails.getUsername());
+		Set<String> postIds = rbacCacheService.getPostKeyByUser(userDetails.getUsername());
 		List<GrantedAuthority> authorities = null;
 		
 		for(String postId : postIds){

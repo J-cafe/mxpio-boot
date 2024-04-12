@@ -128,23 +128,4 @@ public interface DeptService extends BaseService<Dept> {
 	 */
 	Set<String> getDeptKeysByUser(String username, String key);
 	
-	/**
-	 * 获取部门用户关系（缓存）
-	 * @return
-	 */
-	public Map<String, Set<String>> getAllDeptCodeGroupByUser();
-	
-	/**
-	 * 获取部门索引（缓存）
-	 * @return
-	 */
-	public Map<String, Dept> getDeptMap();
-
-	/**
-	 * 获取部门用户关系,ID索引（缓存）
-	 * @return
-	 */
-	public Map<String, Set<String>> getAllDeptIdGroupByUser();
-
-	Map<String, Set<String>> getAllDeptIdWithFatherGroupByUser();
 }

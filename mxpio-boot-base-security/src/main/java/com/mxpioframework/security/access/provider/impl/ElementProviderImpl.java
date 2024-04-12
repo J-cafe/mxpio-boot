@@ -30,11 +30,11 @@ public class ElementProviderImpl implements ElementProvider {
 	@Cacheable(cacheNames = Constants.ELEMENT_MAP_CACHE_KEY, keyGenerator = Constants.KEY_GENERATOR_BEAN_NAME)
 	public Map<String, Collection<Element>> provide() {
 		List<Element> elements = elementService.findAll();
-		Map<String, Collection<Element>> elementMap = new LinkedHashMap<String, Collection<Element>>();
+		Map<String, Collection<Element>> elementMap = new LinkedHashMap<>();
 		for (Element element : elements) {
 			String key = element.getPath();
-			Collection<Element> cs = elementMap.computeIfAbsent(key,k -> new ArrayList<Element>());
-			if (cs.size() == 0) {
+			Collection<Element> cs = elementMap.computeIfAbsent(key,k -> new ArrayList<>());
+			if (cs.isEmpty()) {
 				elementMap.put(key, cs);
 			}
 			cs.add(element);

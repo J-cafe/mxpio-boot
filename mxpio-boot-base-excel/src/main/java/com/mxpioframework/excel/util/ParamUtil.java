@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.mxpioframework.security.service.*;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Set;
@@ -25,10 +26,6 @@ import com.mxpioframework.security.decision.manager.SecurityDecisionManager;
 import com.mxpioframework.security.entity.DataFilter;
 import com.mxpioframework.security.entity.DataResource;
 import com.mxpioframework.security.entity.RoleGrantedAuthority;
-import com.mxpioframework.security.service.DataResourceService;
-import com.mxpioframework.security.service.DeptService;
-import com.mxpioframework.security.service.GrantedAuthorityService;
-import com.mxpioframework.security.service.RoleDataFilterService;
 import com.mxpioframework.security.util.ApplicationContextProvider;
 import com.mxpioframework.security.util.SecurityUtils;
 
@@ -38,9 +35,9 @@ public class ParamUtil {
 		if("criteria".equals(methodParam.getName())){
 			boolean decide = false;
 			Criteria c = CriteriaUtils.json2Criteria(values[0]);
-			DataResourceService dataResourceService = ApplicationContextProvider.getBean(DataResourceService.class);
+			RbacCacheService rbacCacheService = ApplicationContextProvider.getBean(RbacCacheService.class);
 			SecurityDecisionManager securityDecisionManager = ApplicationContextProvider.getBean(SecurityDecisionManager.class);
-			List<DataResource> datas = dataResourceService.findAll();
+			List<DataResource> datas = rbacCacheService.findAllDataResource();
 			
 			Map<String, DataResource> dataResourceMap = new HashMap<>();
 			for (DataResource obj : datas) {
@@ -58,9 +55,8 @@ public class ParamUtil {
 				if (dataResource != null && dataResource.isHasFilter()) {
 					Map<String, CriteriaFilterPreProcessor> criteriaFilterPreProcessors = ApplicationContextProvider.getBeansOfType(CriteriaFilterPreProcessor.class);
 					Map<String, DataScapeProvider> dataScapeProviderMap = ApplicationContextProvider.getApplicationContextSpring().getBeansOfType(DataScapeProvider.class);
-					RoleDataFilterService roleDataFilterService = ApplicationContextProvider.getApplicationContextSpring().getBean(RoleDataFilterService.class);
 					GrantedAuthorityService grantedAuthorityService = ApplicationContextProvider.getApplicationContextSpring().getBean(GrantedAuthorityService.class);
-					Map<String, List<DataFilter>> roleDataFilterMap = roleDataFilterService.findAll();
+					Map<String, List<DataFilter>> roleDataFilterMap = rbacCacheService.findAllDataFilter();
 					Collection<? extends GrantedAuthority> roleGrantedAuthorities = grantedAuthorityService.getGrantedAuthorities(SecurityUtils.getLoginUser());
 					List<DataFilter> dataFilters = new ArrayList<>();
 					for(GrantedAuthority grantedAuthority : roleGrantedAuthorities){
@@ -71,7 +67,7 @@ public class ParamUtil {
 							}
 						}
 					}
-					if(dataFilters.size() > 0){
+					if(!dataFilters.isEmpty()){
 						Junction juntion = new Junction(JunctionType.OR);
 						for(DataFilter dataFilter : dataFilters){
 							if(!dataResource.getId().equals(dataFilter.getDataResourceId())){
@@ -98,7 +94,7 @@ public class ParamUtil {
 										.equals(dataFilter.getDataScope())) {
 									DeptService deptService = ApplicationContextProvider.getBean(DeptService.class);
 									Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
-									if(deptCodes.size()>0){
+									if(!deptCodes.isEmpty()){
 										juntion.addCriterion("createDept", Operator.LIKE_START, deptCodes.toArray()[0]);
 									}else{
 										juntion.addCriterion("createDept", Operator.EQ, "");

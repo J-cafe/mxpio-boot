@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mxpioframework.security.service.RbacCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -45,6 +46,9 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 	
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private RbacCacheService rbacCacheService;
 	
 	@Override
 	public List<DataVo> findAllApi(boolean onlyCriteria, String path) {
@@ -97,14 +101,6 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 
 	@Override
 	@Transactional(readOnly = true)
-	@Cacheable(cacheNames = Constants.DATA_RESOURCE_CACHE_KEY, keyGenerator = Constants.KEY_GENERATOR_BEAN_NAME)
-	public Map<String, DataResource> findAllByCatch() {
-		List<DataResource> list = JpaUtil.linq(DataResource.class).list();
-		return JpaUtil.index(list, "path");
-	}
-
-	@Override
-	@Transactional(readOnly = true)
 	public List<DataResource> getByUrlId(String urlId) {
 		List<DataResource> list = JpaUtil.linq(DataResource.class).equal("parentId", urlId).list();
 		return list;
@@ -112,32 +108,8 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 
 	@Override
 	@Transactional(readOnly = true)
-	@Cacheable(cacheNames = Constants.DATA_LIST_CACHE_KEY, keyGenerator = Constants.KEY_GENERATOR_BEAN_NAME)
-	public List<DataResource> findAll() {
-		List<DataResource> datas = JpaUtil.linq(DataResource.class).list();
-		List<Permission> permissions = JpaUtil.linq(Permission.class).equal("resourceType", ResourceType.DATA).list();
-		if (!permissions.isEmpty()) {
-			Map<String, DataResource> dataMap = JpaUtil.index(datas);
-			for (Permission permission : permissions) {
-				DataResource data = dataMap.get(permission.getResourceId());
-				if(data == null) {
-					continue;
-				}
-				List<ConfigAttribute> configAttributes = data.getAttributes();
-				if (configAttributes == null) {
-					configAttributes = new ArrayList<ConfigAttribute>();
-					data.setAttributes(configAttributes);
-				}
-				configAttributes.add(permission);
-			}
-		}
-		return datas;
-	}
-
-	@Override
-	@Transactional(readOnly = true)
 	public List<DataResource> findByUsername(String username) {
-		List<DataResource> datas = findAll();
+		List<DataResource> datas = rbacCacheService.findAllDataResource();
 		List<DataResource> result = new ArrayList<>();
 		for(DataResource data : datas){
 			if (decide(username, data, userService.isAdministrator())) {

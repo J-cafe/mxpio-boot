@@ -31,7 +31,7 @@ public class ElementConfigAttributeProviderImpl implements ElementConfigAttribut
 	@Cacheable(cacheNames = Constants.ELEMENT_ATTRIBUTE_MAP_CACHE_KEY, keyGenerator = Constants.KEY_GENERATOR_BEAN_NAME)
 	public Map<String, Collection<ConfigAttribute>> provide() {
 		List<Element> elements = elementService.findAll();
-		Map<String, Collection<ConfigAttribute>> elementMap = new LinkedHashMap<String, Collection<ConfigAttribute>>();
+		Map<String, Collection<ConfigAttribute>> elementMap = new LinkedHashMap<>();
 		for (Element element : elements) {
 			String key = element.toString();
 			Collection<ConfigAttribute> attributes = elementMap.get(key);

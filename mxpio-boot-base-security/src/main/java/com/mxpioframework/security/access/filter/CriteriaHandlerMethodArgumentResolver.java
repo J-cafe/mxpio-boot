@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.mxpioframework.security.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,10 +30,6 @@ import com.mxpioframework.security.access.provider.CriteriaFilterPreProcessor;
 import com.mxpioframework.security.entity.DataFilter;
 import com.mxpioframework.security.entity.DataResource;
 import com.mxpioframework.security.entity.RoleGrantedAuthority;
-import com.mxpioframework.security.service.DataResourceService;
-import com.mxpioframework.security.service.DeptService;
-import com.mxpioframework.security.service.GrantedAuthorityService;
-import com.mxpioframework.security.service.RoleDataFilterService;
 import com.mxpioframework.security.util.SecurityUtils;
 
 @Component
@@ -49,6 +46,9 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 	
 	@Autowired
 	private DeptService deptService;
+
+	@Autowired
+	private RbacCacheService rbacCacheService;
 
 	@Autowired(required = false)
 	private Map<String, DataScapeProvider> dataScapeProviderMap;
@@ -67,7 +67,7 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 		RequestMapping classRequestMapping = parameter.getContainingClass().getDeclaredAnnotation(RequestMapping.class);
 
 		if (requestMapping != null) {
-			List<DataResource> datas = dataResourceService.findAll();
+			List<DataResource> datas = rbacCacheService.findAllDataResource();
 			
 			Map<String, DataResource> dataResourceMap = new HashMap<>();
 			for (DataResource obj : datas) {
@@ -78,7 +78,7 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 			DataResource dataResource = dataResourceMap.get(urlKey+"_"+classRequestMapping.value()[0] + requestMapping.value()[0]);
 			
 			if (dataResource != null && dataResource.isHasFilter()) {
-				Map<String, List<DataFilter>> roleDataFilterMap = roleDataFilterService.findAll();
+				Map<String, List<DataFilter>> roleDataFilterMap = rbacCacheService.findAllDataFilter();
 				Collection<? extends GrantedAuthority> roleGrantedAuthorities = grantedAuthorityService.getGrantedAuthorities(SecurityUtils.getLoginUser());
 				List<DataFilter> dataFilters = new ArrayList<>();
 				for(GrantedAuthority grantedAuthority : roleGrantedAuthorities){
@@ -89,7 +89,7 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 						}
 					}
 				}
-				if(dataFilters.size() > 0){
+				if(!dataFilters.isEmpty()){
 					Junction juntion = new Junction(JunctionType.OR);
 					for(DataFilter dataFilter : dataFilters){
 						if(!dataResource.getId().equals(dataFilter.getDataResourceId())){
@@ -114,7 +114,7 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 							} else if (com.mxpioframework.security.Constants.DatascopeEnum.DEPT_AND_CHILD.getCode()
 									.equals(dataFilter.getDataScope())) {
 								Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
-								if(deptCodes.size()>0){
+								if(!deptCodes.isEmpty()){
 									String deptCode = (String) deptCodes.toArray()[0];
 									//获取部门及子部门
 									List<String> deptCodeWithSubByCode = deptService.getDeptCodeWithSubByCode(deptCode);

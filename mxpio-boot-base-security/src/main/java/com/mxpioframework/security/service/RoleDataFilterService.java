@@ -9,8 +9,6 @@ import com.mxpioframework.security.entity.RoleDataFilter;
 
 public interface RoleDataFilterService {
 
-	public Map<String, List<DataFilter>> findAll();
-
 	public void save(RoleDataFilter roleDataFilter);
 
 	public void save(List<RoleDataFilter> roleDataFilters);

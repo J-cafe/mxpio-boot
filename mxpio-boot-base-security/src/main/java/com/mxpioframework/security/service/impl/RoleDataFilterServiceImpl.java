@@ -21,35 +21,6 @@ import com.mxpioframework.security.service.RoleDataFilterService;
 @Service("mxpio.security.roleDataFilterService")
 public class RoleDataFilterServiceImpl implements RoleDataFilterService {
 
-	@Override
-	@Transactional(readOnly = false)
-	@Cacheable(cacheNames = Constants.DATA_FILTER_ROLE_CACHE_KEY, keyGenerator = Constants.KEY_GENERATOR_BEAN_NAME)
-	public Map<String, List<DataFilter>> findAll() {
-		List<RoleDataFilter> roleDataFilters = JpaUtil.linq(RoleDataFilter.class).list();
-		List<DataFilter> dataFilters = JpaUtil.linq(DataFilter.class).list();
-		Map<String, DataFilter> dataFilterMap = JpaUtil.index(dataFilters);
-		Map<String, List<DataFilter>> result = new HashMap<>();
-		roleDataFilters.forEach(roleDataFilter -> {
-			if (!result.containsKey(roleDataFilter.getRoleId())) {
-				result.put(roleDataFilter.getRoleId(), new ArrayList<DataFilter>() {
-					private static final long serialVersionUID = 1L;
-					{
-						DataFilter dataFilter = new DataFilter();
-						//拷贝对象，解决同一个DataFilter被多个角色引用时，redis缓存存放对象变为对象引用，导致取值时为空的问题
-						//"$ref":"$.68bd82da\\-0575\\-4143\\-b82c\\-1a0fb5bcce2a[1]"
-						BeanReflectionUtils.copyProperties(dataFilter,dataFilterMap.get(roleDataFilter.getDataFilterId()));
-						add(dataFilter);
-					}
-				});
-			} else {
-				DataFilter dataFilter = new DataFilter();
-				BeanReflectionUtils.copyProperties(dataFilter,dataFilterMap.get(roleDataFilter.getDataFilterId()));
-				result.get(roleDataFilter.getRoleId()).add(dataFilter);
-			}
-		});
-		return result;
-	}
-	
 	@SecurityCacheEvict
 	@Override
 	@Transactional

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mxpioframework.security.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,10 +19,6 @@ import com.mxpioframework.security.entity.DataResource;
 import com.mxpioframework.security.entity.Element;
 import com.mxpioframework.security.entity.Permission;
 import com.mxpioframework.security.entity.Url;
-import com.mxpioframework.security.service.DataResourceService;
-import com.mxpioframework.security.service.PermissionService;
-import com.mxpioframework.security.service.RoleUrlService;
-import com.mxpioframework.security.service.UrlService;
 import com.mxpioframework.security.util.RouterUtil;
 import com.mxpioframework.security.vo.RouterVo;
 
@@ -44,6 +41,9 @@ public class PermissionController {
 	
 	@Autowired
 	private DataResourceService dataResourceService;
+
+	@Autowired
+	private RbacCacheService rbacCacheService;
 	
 	@GetMapping("list")
 	@Operation(summary = "授权信息", description = "根据登录用户获取权限信息", method = "GET")
@@ -84,7 +84,7 @@ public class PermissionController {
 	public Result<Map<String, List<DataResource>>> loadDataResource(){
 		Map<String, List<DataResource>> result = new HashMap<>();
 		result.put("datas", dataResourceService.findByUsername(null));
-		result.put("allDatas", dataResourceService.findAll());
+		result.put("allDatas", rbacCacheService.findAllDataResource());
 		return Result.OK(result);
 	}
 	

@@ -58,11 +58,4 @@ public interface PostService extends BaseService<Post> {
 	 */
 	Page<Post> loadPostsWithin(Pageable pageable, Criteria criteria, String roleId);
 
-	/**
-	 * 根据用户获取岗位ID
-	 * @param username 用户名
-	 * @return 岗位ID
-	 */
-	Set<String> getPostKeyByUser(String username);
-
 }

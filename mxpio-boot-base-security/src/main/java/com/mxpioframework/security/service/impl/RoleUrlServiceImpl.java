@@ -52,21 +52,21 @@ public class RoleUrlServiceImpl implements RoleUrlService {
 	
 	@Override
 	@SecurityCacheEvict
-	@Transactional(readOnly = false)
+	@Transactional
 	public void save(List<Permission> permissions) {
 		JpaUtil.save(permissions);
 	}
 	
 	@Override
 	@SecurityCacheEvict
-	@Transactional(readOnly = false)
+	@Transactional
 	public void update(List<Permission> permissions) {
 		JpaUtil.update(permissions);
 	}
 	
 	@Override
 	@SecurityCacheEvict
-	@Transactional(readOnly = false)
+	@Transactional
 	public void delete(List<Permission> permissions) {
 		JpaUtil.delete(permissions);
 	}

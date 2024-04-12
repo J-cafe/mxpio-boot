@@ -25,7 +25,7 @@ import com.mxpioframework.security.service.UrlService;
 public class UrlFilterConfigAttributeProvider implements
 		FilterConfigAttributeProvider  {
 	
-	@Autowired(required = true)
+	@Autowired
 	private UrlService urlService;
 	
 
@@ -33,7 +33,7 @@ public class UrlFilterConfigAttributeProvider implements
 	@Cacheable(cacheNames = Constants.REQUEST_MAP_CACHE_KEY, keyGenerator = Constants.KEY_GENERATOR_BEAN_NAME)
 	public Map<String, Collection<ConfigAttribute>> provide() {
 		List<Url> urls = urlService.findAll();
-		Map<String, Collection<ConfigAttribute>> requestMap = new LinkedHashMap<String, Collection<ConfigAttribute>>();
+		Map<String, Collection<ConfigAttribute>> requestMap = new LinkedHashMap<>();
 		for (Url url : urls) {
 			if (validate(url)) {
 				requestMap.put(url.getPath(), url.getAttributes());
@@ -43,10 +43,7 @@ public class UrlFilterConfigAttributeProvider implements
 	}
 
 	protected boolean validate(Url url) {
-		if (StringUtils.hasText(url.getPath())) {
-			return false;
-		}
-		return true;
-	}
+        return !StringUtils.hasText(url.getPath());
+    }
 
 }

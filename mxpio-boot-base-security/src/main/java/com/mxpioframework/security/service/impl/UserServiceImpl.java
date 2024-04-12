@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	private CacheProvider cacheProvider;
 	
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public User create(User user) {
 		user.setPassword(passwordEncoder.encode("123456"));
 		JpaUtil.save(user);
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public void update(User user) throws Exception {
 		User temp = JpaUtil.getOne(User.class, user.getUsername());
 		user.setPassword(temp.getPassword());
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public void delete(Set<String> usernames) {
 		JpaUtil.lind(User.class).in("username", usernames).delete();
 		for(String username : usernames){
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public void updatePass(String username, String newPassword) {
 		User u = JpaUtil.getOne(User.class, username);
 		u.setPassword(passwordEncoder.encode(newPassword));
@@ -82,13 +82,13 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public Map<String, String> updateAvatar(MultipartFile file) {
 		return null;
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public void updateEmail(String username, String email) {
 		
 	}
@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public void updateCenter(User resources) {
 
 	}
@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public void afterPropertiesSet(ApplicationContext applicationContext) {
 		
 		/*List<User> users = JpaUtil.linq(User.class).aliasToBean().select("username", "nickname").list();
@@ -174,7 +174,7 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public Result<User> updatePassWithCheck(UpatePassVo upatePassVo) {
 		if (StringUtils.isBlank(upatePassVo.getUsername())
 				||StringUtils.isBlank(upatePassVo.getNewPassword())

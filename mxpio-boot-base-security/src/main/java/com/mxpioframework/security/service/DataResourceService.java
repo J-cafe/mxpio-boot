@@ -17,23 +17,11 @@ public interface DataResourceService extends BaseService<DataResource> {
 	List<DataVo> findAllApi(boolean onlyCriteria, String path);
 
 	/**
-	 * 数据资源索引
-	 * @return
-	 */
-	Map<String, DataResource> findAllByCatch();
-
-	/**
 	 * 根据urlId获取数据资源
 	 * @param urlId
 	 * @return
 	 */
 	List<DataResource> getByUrlId(String urlId);
-
-	/**
-	 * 获取所有数据权限
-	 * @return
-	 */
-	List<DataResource> findAll();
 
 	/**
 	 * 获取用户有权访问的接口(基于当前登录用户)

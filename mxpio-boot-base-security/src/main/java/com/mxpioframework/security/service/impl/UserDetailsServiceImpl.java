@@ -58,7 +58,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 					.equal("userId", user.getUsername())
 					.end()
 					.list();
-			if (depts.size()>0){
+			if (!depts.isEmpty()){
 				user.setDept(depts.get(0));
 			}
 			return user;
