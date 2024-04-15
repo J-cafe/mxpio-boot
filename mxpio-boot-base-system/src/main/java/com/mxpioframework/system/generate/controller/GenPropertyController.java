@@ -71,7 +71,7 @@ public class GenPropertyController {
 	@DeleteMapping("remove/{id}")
 	@Operation(summary = "删除属性", description = "删除属性", method = "DELETE")
 	public Result<GenProperty> remove(@PathVariable(name = "id", required = true) String id) {
-		String ids[] = id.split(",");
+		String[] ids = id.split(",");
 		for(String key : ids){
 			genPropertySerivce.delete(GenProperty.class, key);
 		}

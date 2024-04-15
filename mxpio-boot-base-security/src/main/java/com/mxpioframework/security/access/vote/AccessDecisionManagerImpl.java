@@ -75,7 +75,7 @@ public class AccessDecisionManagerImpl extends AbstractAccessDecisionManager {
 	}
 	
 	public boolean supports(Class<?> clazz) {
-		for (AccessDecisionVoter<?> voter : this.decisionVoters) {
+		for (AccessDecisionVoter<? extends Object> voter : this.decisionVoters) {
 			if (voter.supports(clazz)) {
 				return true;
 			}

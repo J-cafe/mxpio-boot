@@ -53,15 +53,12 @@ public class SecurityDecisionManagerImpl implements SecurityDecisionManager {
 			}
 			try {
 				accessDecisionManager.decide(authentication, resource, attributes);
-			} catch (AccessDeniedException e) {
-				log.error(e.getMessage()+ ":" + resource.getResourceType()+":"+resource.getId());
-				return false;
-			} catch (InsufficientAuthenticationException e) {
+			} catch (AccessDeniedException | InsufficientAuthenticationException e) {
 				log.error(e.getMessage()+ ":" + resource.getResourceType()+":"+resource.getId());
 				return false;
 			}
 
-		}
+        }
 		return true;
 	}
 
