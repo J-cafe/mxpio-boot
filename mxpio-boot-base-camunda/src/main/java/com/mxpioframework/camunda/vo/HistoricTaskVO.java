@@ -2,14 +2,19 @@ package com.mxpioframework.camunda.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.mxpioframework.jpa.annotation.DictAble;
+import com.mxpioframework.security.annotation.Dict;
+import com.mxpioframework.security.entity.User;
 import org.camunda.bpm.engine.history.HistoricActivityInstance;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class HistoricTaskVO implements Serializable  {
+public class HistoricTaskVO implements Serializable, DictAble {
 
 	public HistoricTaskVO(HistoricActivityInstance activity) {
 		this.id = activity.getTaskId();
@@ -36,6 +41,7 @@ public class HistoricTaskVO implements Serializable  {
 	private String taskDefinitionKey;
 
 	@Schema(description = "操作人")
+	@Dict(dicCode = "username", dicEntity = User.class, dicText = "nickname")
 	private String assignee;
 	
 	@Schema(description = "结束时间")
@@ -49,5 +55,14 @@ public class HistoricTaskVO implements Serializable  {
 	
 	@Schema(description = "节点类型")
 	private String activityType;
+
+	private Map<String, String> textMap;
+
+	public String putText(String key, String value) {
+		if (textMap == null) {
+			textMap = new HashMap<>();
+		}
+		return textMap.put(key, value);
+	}
 
 }
