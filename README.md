@@ -335,7 +335,7 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.9.jar
 
 ## 7.开发文档
 
-- 在线文档：筹备中...
+- 在线文档：[mxpio-boot](http://1.94.114.6:8081/)
 
 - Linq JPA说明： [mxpio-boot-base-jpa](https://gitee.com/i_mxpio/mxpio-boot/tree/master/mxpio-boot-base-jpa/README.md)
 
