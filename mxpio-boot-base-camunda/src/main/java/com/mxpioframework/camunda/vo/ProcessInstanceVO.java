@@ -2,14 +2,19 @@ package com.mxpioframework.camunda.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.mxpioframework.jpa.annotation.DictAble;
+import com.mxpioframework.security.annotation.Dict;
+import com.mxpioframework.security.entity.User;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class ProcessInstanceVO implements Serializable {
+public class ProcessInstanceVO implements Serializable, DictAble {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -41,6 +46,7 @@ public class ProcessInstanceVO implements Serializable {
 	private String state;
 	
 	@Schema(description = "申请人")
+	@Dict(dicCode = "username", dicText = "nickname", dicEntity = User.class)
 	private String startUserId;
 
 	public ProcessInstanceVO(HistoricProcessInstance procInst) {
@@ -53,5 +59,14 @@ public class ProcessInstanceVO implements Serializable {
 		this.startTime = procInst.getStartTime();
 		this.state = procInst.getState();
 		this.startUserId = procInst.getStartUserId();
+	}
+
+	private Map<String, String> textMap;
+
+	public String putText(String key, String value) {
+		if (textMap == null) {
+			textMap = new HashMap<>();
+		}
+		return textMap.put(key, value);
 	}
 }
