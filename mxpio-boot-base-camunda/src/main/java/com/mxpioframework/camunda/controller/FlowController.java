@@ -25,7 +25,7 @@ public class FlowController {
 
 	@GetMapping("deploy/{code}")
 	@Operation(summary = "部署流程", description = "部署流程", method = "GET")
-	public Result<?> deploy(@PathVariable(name = "code", required = true) String code){
+	public Result<?> deploy(@PathVariable(name = "code") String code){
 		
 		BpmnFlow bpmnFlow = bpmnFlowService.deploy(code);
 		return Result.OK("部署成功！", bpmnFlow);
@@ -66,7 +66,7 @@ public class FlowController {
 	
 	@DeleteMapping("remove/{bpmnFlowCode}")
 	@Operation(summary = "删除流程", description = "删除流程", method = "DELETE")
-	public Result<BpmnFlow> remove(@PathVariable(name = "bpmnFlowCode", required = true) String bpmnFlowCode) {
+	public Result<BpmnFlow> remove(@PathVariable(name = "bpmnFlowCode") String bpmnFlowCode) {
 		String[] bpmnFlowCodes = bpmnFlowCode.split(",");
 		for(String key : bpmnFlowCodes){
 			bpmnFlowService.delete(key);

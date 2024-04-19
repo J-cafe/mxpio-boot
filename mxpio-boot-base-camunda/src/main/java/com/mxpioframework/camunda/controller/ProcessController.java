@@ -71,7 +71,7 @@ public class ProcessController {
 			instVO.setTitle(title);
 			list.add(instVO);
 		}
-		Page<ProcessInstanceVO> page = new PageImpl<ProcessInstanceVO>(list, pageAble, total);
+		Page<ProcessInstanceVO> page = new PageImpl<>(list, pageAble, total);
 		return Result.OK(page);
 	}
 
@@ -101,13 +101,13 @@ public class ProcessController {
 			instVO.setTitle(title);
 			list.add(instVO);
 		}
-		Page<ProcessInstanceVO> page = new PageImpl<ProcessInstanceVO>(list, pageAble, total);
+		Page<ProcessInstanceVO> page = new PageImpl<>(list, pageAble, total);
 		return Result.OK(page);
 	}
 	
 	@GetMapping("form/{key}")
 	@Operation(summary = "获取流程开始表单Key", description = "获取流程开始表单Key", method = "GET")
-	public Result<?> form(@PathVariable(name = "key", required = true) String key) {
+	public Result<?> form(@PathVariable(name = "key") String key) {
 		
 		String formKey = bpmnFlowService.getStartFormKeyByProcessDefinitionKey(key);
 		return Result.OK("查询成功！",formKey);
@@ -115,7 +115,7 @@ public class ProcessController {
 	
 	@GetMapping("def/{key}")
 	@Operation(summary = "获取流程定义", description = "根据key获取最新流程定义", method = "GET")
-	public Result<ProcessDefVO> def(@PathVariable(name = "key", required = true) String key) {
+	public Result<ProcessDefVO> def(@PathVariable(name = "key") String key) {
 		
 		ProcessDefinition procDef = bpmnFlowService.getProcDefByProcessDefinitionKey(key);
 		ProcessDefVO procDefDto = new ProcessDefVO(procDef);
@@ -128,7 +128,7 @@ public class ProcessController {
 	
 	@GetMapping("details/{processInstanceId}")
 	@Operation(summary = "获取流程详情", description = "获取流程详情", method = "GET")
-	public Result<TaskDetailVO> detail(@PathVariable(name = "processInstanceId", required = true) String processInstanceId) {
+	public Result<TaskDetailVO> detail(@PathVariable(name = "processInstanceId") String processInstanceId) {
 		TaskDetailVO taskDetail = new TaskDetailVO();
 		//获取流程信息
 		ProcessDefinition procDef = bpmnFlowService.getProcDefByProcessInstanceId(processInstanceId);
@@ -142,7 +142,7 @@ public class ProcessController {
 
 	@PostMapping("start/{key}")
 	@Operation(summary = "启动流程", description = "启动流程", method = "POST")
-	public Result<?> start(@PathVariable(name = "key", required = true) String key,
+	public Result<?> start(@PathVariable(name = "key") String key,
 			@RequestParam(value="businessKey", required = false) String businessKey,
 			@RequestBody Map<String, Object> properties) {
 		
@@ -152,7 +152,7 @@ public class ProcessController {
 	
 	@GetMapping("suspend/{instanceId}")
 	@Operation(summary = "暂停流程", description = "暂停流程", method = "GET")
-	public Result<?> suspend(@PathVariable(name = "instanceId", required = true) String instanceId) {
+	public Result<?> suspend(@PathVariable(name = "instanceId") String instanceId) {
 		
 		runtimeService.suspendProcessInstanceById(instanceId);
 		return Result.OK();
@@ -160,7 +160,7 @@ public class ProcessController {
 
 	@GetMapping("restart/{instanceId}")
 	@Operation(summary = "重启流程", description = "重启流程", method = "GET")
-	public Result<?> restart(@PathVariable(name = "instanceId", required = true) String instanceId) {
+	public Result<?> restart(@PathVariable(name = "instanceId") String instanceId) {
 		runtimeService.activateProcessInstanceById(instanceId);
 		return Result.OK();
 	}

@@ -74,7 +74,7 @@ public class TaskController {
 		}
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Page<TaskVO> page = new PageImpl<TaskVO>(list, pageAble, total);
+		Page<TaskVO> page = new PageImpl<>(list, pageAble, total);
 		return Result.OK(page);
 	}
 	
@@ -95,7 +95,7 @@ public class TaskController {
 		}
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Page<TaskVO> page = new PageImpl<TaskVO>(list, pageAble, total);
+		Page<TaskVO> page = new PageImpl<>(list, pageAble, total);
 		return Result.OK(page);
 	}
 	
@@ -116,7 +116,7 @@ public class TaskController {
 		}
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Page<TaskVO> page = new PageImpl<TaskVO>(list, pageAble, total);
+		Page<TaskVO> page = new PageImpl<>(list, pageAble, total);
 		return Result.OK(page);
 	}
 	
@@ -137,13 +137,13 @@ public class TaskController {
 		}
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Page<TaskVO> page = new PageImpl<TaskVO>(list, pageAble, total);
+		Page<TaskVO> page = new PageImpl<>(list, pageAble, total);
 		return Result.OK(page);
 	}
 	
 	@PostMapping("claim/{taskId}")
 	@Operation(summary = "任务领取", description = "任务领取", method = "POST")
-	public Result<?> claim(@PathVariable(name = "taskId", required = true) String taskId){
+	public Result<?> claim(@PathVariable(name = "taskId") String taskId){
 		
 		ResultMessage msg = bpmnFlowService.claim(taskId, SecurityUtils.getLoginUsername());
 		if(msg.isSuccess()){
@@ -155,7 +155,7 @@ public class TaskController {
 	
 	@PostMapping("complete/{taskId}")
 	@Operation(summary = "节点签核", description = "节点签核", method = "POST")
-	public Result<?> complete(@PathVariable(name = "taskId", required = true) String taskId,
+	public Result<?> complete(@PathVariable(name = "taskId") String taskId,
 			@RequestBody Map<String, Object> properties){
 		ResultMessage msg = bpmnFlowService.complete(taskId, properties, SecurityUtils.getLoginUsername());
 		if(msg.isSuccess()){
@@ -167,8 +167,8 @@ public class TaskController {
 	
 	@PostMapping("delegate/{taskId}/{username}")
 	@Operation(summary = "节点委派", description = "节点委派", method = "POST")
-	public Result<?> delegate(@PathVariable(name = "taskId", required = true) String taskId,
-			@PathVariable(name = "username", required = true) String username){
+	public Result<?> delegate(@PathVariable(name = "taskId") String taskId,
+			@PathVariable(name = "username") String username){
 		ResultMessage msg = bpmnFlowService.delegate(taskId, username, SecurityUtils.getLoginUsername());
 		if(msg.isSuccess()){
 			return Result.OK(msg.getMsg(), null);
@@ -179,7 +179,7 @@ public class TaskController {
 	
 	@PostMapping("reject/first/{taskId}")
 	@Operation(summary = "节点驳回开始节点", description = "节点驳回开始节点", method = "POST")
-	public Result<?> rejectToFirst(@PathVariable(name = "taskId", required = true) String taskId,
+	public Result<?> rejectToFirst(@PathVariable(name = "taskId") String taskId,
 			@RequestBody Map<String, Object> properties){
 		ResultMessage msg = bpmnFlowService.rejectToFirst(taskId, properties, SecurityUtils.getLoginUsername());
 		if(msg.isSuccess()){
@@ -191,7 +191,7 @@ public class TaskController {
 	
 	@PostMapping("reject/last/{taskId}")
 	@Operation(summary = "节点驳回上一节点", description = "节点上一节点", method = "POST")
-	public Result<?> rejectToLast(@PathVariable(name = "taskId", required = true) String taskId,
+	public Result<?> rejectToLast(@PathVariable(name = "taskId") String taskId,
 			@RequestBody Map<String, Object> properties){
 		ResultMessage msg = bpmnFlowService.rejectToLast(taskId, properties, SecurityUtils.getLoginUsername());
 		if(msg.isSuccess()){
@@ -203,7 +203,7 @@ public class TaskController {
 	
 	@GetMapping("historics/{processInstanceId}")
 	@Operation(summary = "获取历史节点信息", description = "获取历史节点信息", method = "GET")
-	public Result<List<HistoricTaskVO>> historics(@PathVariable(name = "processInstanceId", required = true) String processInstanceId) {
+	public Result<List<HistoricTaskVO>> historics(@PathVariable(name = "processInstanceId") String processInstanceId) {
 		List<HistoricTaskVO> list = new ArrayList<>();
 		List<HistoricActivityInstance> activitis = bpmnFlowService.getHistoricActivityByProcessInstanceId(processInstanceId);
 		for(HistoricActivityInstance activity : activitis){
@@ -212,9 +212,9 @@ public class TaskController {
 				List<Comment> comments = bpmnFlowService.getCommentsByTaskId(activity.getTaskId());
 				HistoricTaskInstance task = bpmnFlowService.getHistoricTaskById(activity.getTaskId());
 				historicTaskDto.setTaskDefinitionKey(task.getTaskDefinitionKey());
-				StringBuffer sb = new StringBuffer("");
+				StringBuilder sb = new StringBuilder();
 				for(Comment comment : comments){
-					sb.append(comment.getFullMessage() + ";");
+					sb.append(comment.getFullMessage()).append(";");
 				}
 				historicTaskDto.setComment(sb.toString());
 			}
@@ -226,7 +226,7 @@ public class TaskController {
 
 	@GetMapping("form/{taskId}")
 	@Operation(summary = "获取节点表单Key", description = "获取节点表单Key", method = "GET")
-	public Result<?> form(@PathVariable(name = "taskId", required = true) String taskId) {
+	public Result<?> form(@PathVariable(name = "taskId") String taskId) {
 		
 		String formKey = bpmnFlowService.getTaskFormKeyByTaskId(taskId);
 		return Result.OK("查询成功！",formKey);
@@ -234,7 +234,7 @@ public class TaskController {
 	
 	@GetMapping("form/data/{taskId}")
 	@Operation(summary = "获取节点表单模型及数据", description = "获取节点表单模型及数据", method = "GET")
-	public Result<TaskFormDto> formData(@PathVariable(name = "taskId", required = true) String taskId) {
+	public Result<TaskFormDto> formData(@PathVariable(name = "taskId") String taskId) {
 		VariableMap formData = bpmnFlowService.getTaskFormDataByTaskId(taskId);
 		FormModelDef formModelDef = bpmnFlowService.getTaskFormModelByTaskId(taskId);
 		TaskFormDto dto = new TaskFormDto(formData, formModelDef);
@@ -243,7 +243,7 @@ public class TaskController {
 	
 	@GetMapping("form/model/{taskId}")
 	@Operation(summary = "获取表单模型", description = "获取表单模型", method = "GET")
-	public Result<FormModelDef> formHistoric(@PathVariable(name = "taskId", required = true) String taskId) {
+	public Result<FormModelDef> formHistoric(@PathVariable(name = "taskId") String taskId) {
 		FormModelDef formModelDef = bpmnFlowService.getTaskFormModelByTaskId(taskId);
 		return Result.OK("查询成功！",formModelDef);
 	}
