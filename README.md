@@ -6,6 +6,8 @@
 ## 1.简介
 >MxpIO Boot基于Spring Boot研发的开发框架，目前处于孵化中。MxpIO Boot采用宽泛的[MIT](https://gitee.com/i_mxpio/mxpio-boot/blob/master/LICENSE)开源协议，完全开源。
 
+在线文档：[mxpio-boot](https://doc.datazhzh.com/)
+
 前端地址：[Mxpio-Boot-Antd-Vue](https://gitee.com/i_mxpio/mxpio-boot-antd-vue)
 ## 2.后端技术栈
 
@@ -333,17 +335,7 @@ mvn clean package spring-boot:repackage
 java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.9.jar
 ```
 
-## 7.开发文档
-
-- 在线文档：[mxpio-boot](http://1.94.114.6:8081/)
-
-- Linq JPA说明： [mxpio-boot-base-jpa](https://gitee.com/i_mxpio/mxpio-boot/tree/master/mxpio-boot-base-jpa/README.md)
-
-- 权限说明： [mxpio-boot-base-security](https://gitee.com/i_mxpio/mxpio-boot/blob/master/mxpio-boot-base-security/README.md)
-
-- 表达式说明： [mxpio-boot-base-expression](https://gitee.com/i_mxpio/mxpio-boot/blob/master/mxpio-boot-base-expression/README.md)
-
-## 8.开发计划
+## 7.开发计划
 
 
 | 模块 | 功能 | 后端 | 前端 | 文档 |
@@ -371,7 +363,7 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.9.jar
 | 多租户 |       | 进行中 | 未开始 | 暂无 |
 | 代码生成 |       | 进行中 | 未开始 | 暂无 |
 
-## 截图
+## 8.截图
 
 ![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E7%99%BB%E5%BD%95.png)
 
@@ -389,7 +381,7 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.9.jar
 
 ![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6.png)
 
-## 相关开源项目
+## 9.相关开源项目
 
 - [Spring Boot](https://spring.io/projects/spring-boot)
 - [Vue-Antd-Admin](https://gitee.com/iczer/vue-antd-admin)
