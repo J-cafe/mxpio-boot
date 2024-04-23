@@ -56,6 +56,9 @@ public class HistoricTaskVO implements Serializable, DictAble {
 	@Schema(description = "节点类型")
 	private String activityType;
 
+	@Schema(description = "是否有表单")
+	private Boolean hasForm;
+
 	private Map<String, String> textMap;
 
 	public String putText(String key, String value) {

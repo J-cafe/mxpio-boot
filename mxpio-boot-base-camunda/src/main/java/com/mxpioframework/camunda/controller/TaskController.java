@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.history.HistoricActivityInstance;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
@@ -217,6 +218,9 @@ public class TaskController {
 					sb.append(comment.getFullMessage()).append(";");
 				}
 				historicTaskDto.setComment(sb.toString());
+
+				String formKey = bpmnFlowService.getTaskFormKey(task.getProcessDefinitionId(), task.getTaskDefinitionKey());
+                historicTaskDto.setHasForm(StringUtils.isNotEmpty(formKey));
 			}
 			list.add(historicTaskDto);
 			

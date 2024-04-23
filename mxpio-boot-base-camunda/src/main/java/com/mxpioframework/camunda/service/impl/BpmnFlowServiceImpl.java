@@ -507,6 +507,11 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	}
 
 	@Override
+	public String getTaskFormKey(String processDefinitionId, String taskDefinitionKey) {
+		return formService.getTaskFormKey(processDefinitionId, taskDefinitionKey);
+	}
+
+	@Override
 	@Transactional(readOnly = true)
 	public long countHistoricTaskListByUser(String username, boolean finished) {
 		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();

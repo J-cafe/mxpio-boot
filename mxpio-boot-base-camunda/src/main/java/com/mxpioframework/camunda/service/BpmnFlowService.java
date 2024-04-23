@@ -209,4 +209,12 @@ public interface BpmnFlowService {
 	 * @return 活动节点清单
 	 */
     List<Task> getActiveTaskByProcessInstanceId(String processInstanceId);
+
+	/**
+	 * 获取节点表单Key
+	 * @param processDefinitionId 流程定义ID
+	 * @param taskDefinitionKey 节点定义ID
+	 * @return 节点表单Key
+	 */
+	String getTaskFormKey(String processDefinitionId, String taskDefinitionKey);
 }
