@@ -225,7 +225,7 @@ public class TaskController {
 	}
 
 	@GetMapping("active/{processInstanceId}")
-	@Operation(summary = "获取历史节点信息", description = "获取历史节点信息", method = "GET")
+	@Operation(summary = "获取活动节点", description = "根据流程实例ID获取活动节点", method = "GET")
 	public Result<List<TaskVO>> active(@PathVariable(name = "processInstanceId") String processInstanceId) {
 		List<TaskVO> list = new ArrayList<>();
 		List<Task> tasks = bpmnFlowService.getActiveTaskByProcessInstanceId(processInstanceId);
