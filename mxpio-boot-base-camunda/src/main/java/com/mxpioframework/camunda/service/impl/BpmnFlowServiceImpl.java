@@ -502,6 +502,11 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	}
 
 	@Override
+	public List<Task> getActiveTaskByProcessInstanceId(String processInstanceId) {
+		return taskService.createTaskQuery().processInstanceId(processInstanceId).active().list();
+	}
+
+	@Override
 	@Transactional(readOnly = true)
 	public long countHistoricTaskListByUser(String username, boolean finished) {
 		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();

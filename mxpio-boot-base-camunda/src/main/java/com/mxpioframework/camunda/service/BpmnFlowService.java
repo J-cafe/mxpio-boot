@@ -202,4 +202,11 @@ public interface BpmnFlowService {
 	 * @return 流程标题
 	 */
 	String getTitleByInstanceId(String id);
+
+	/**
+	 * 根据流程实例ID获取活动节点
+	 * @param processInstanceId 流程实例ID
+	 * @return 活动节点清单
+	 */
+    List<Task> getActiveTaskByProcessInstanceId(String processInstanceId);
 }

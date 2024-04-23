@@ -224,6 +224,17 @@ public class TaskController {
 		return Result.OK("查询成功！",list);
 	}
 
+	@GetMapping("active/{processInstanceId}")
+	@Operation(summary = "获取历史节点信息", description = "获取历史节点信息", method = "GET")
+	public Result<List<TaskVO>> active(@PathVariable(name = "processInstanceId") String processInstanceId) {
+		List<TaskVO> list = new ArrayList<>();
+		List<Task> tasks = bpmnFlowService.getActiveTaskByProcessInstanceId(processInstanceId);
+		for(Task task : tasks){
+			list.add(new TaskVO(task));
+		}
+		return Result.OK("查询成功！",list);
+	}
+
 	@GetMapping("form/{taskId}")
 	@Operation(summary = "获取节点表单Key", description = "获取节点表单Key", method = "GET")
 	public Result<?> form(@PathVariable(name = "taskId") String taskId) {
