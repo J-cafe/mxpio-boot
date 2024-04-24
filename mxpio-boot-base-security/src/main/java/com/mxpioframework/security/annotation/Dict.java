@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 import com.mxpioframework.security.entity.BaseEntity;
 import com.mxpioframework.security.entity.DictItem;
 
-@Target(ElementType.FIELD)
+@Target({ElementType.TYPE,ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Dict {
 	
