@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Dict(dicCode = "id", dicEntity = MxpioFileInfo.class, dicText = "fileName")
+@Dict(dicCode = "fileNo", dicEntity = MxpioFileInfo.class, dicText = "fileName")
 public @interface FileName {
 }
