@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(name = "MB_DB_DATASET")
-@Schema(description="数据集")
+@Schema(description="Db数据集")
 public class DbDataSet extends BaseEntity implements DataSet {
 
 	private static final long serialVersionUID = 1L;

@@ -1,6 +1,5 @@
 package com.mxpioframework.dbconsole.controller;
 
-import java.sql.BatchUpdateException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -59,7 +58,6 @@ public class DbConsoleController {
 		try {
 			return Result.OK(dbService.findDbInfos());
 		} catch (Exception e) {
-			e.printStackTrace();
 			return Result.error("查询失败：" + e.getMessage());
 		}
 	}
@@ -70,7 +68,6 @@ public class DbConsoleController {
 		try {
 			return Result.OK(dbService.findTableInfos(dbInfoId));
 		} catch (Exception e) {
-			e.printStackTrace();
 			return Result.error("查询失败：" + e.getMessage());
 		}
 	}
@@ -81,7 +78,6 @@ public class DbConsoleController {
 		try {
 			return Result.OK(dbService.findViewInfos(dbInfoId));
 		} catch (Exception e) {
-			e.printStackTrace();
 			return Result.error("查询失败：" + e.getMessage());
 		}
 	}
@@ -92,7 +88,6 @@ public class DbConsoleController {
 		try {
 			return Result.OK(dbService.findProcInfos(dbInfoId));
 		} catch (Exception e) {
-			e.printStackTrace();
 			return Result.error("查询失败：" + e.getMessage());
 		}
 	}
@@ -103,7 +98,6 @@ public class DbConsoleController {
 		try {
 			return Result.OK(dbService.findColumnInfos(dbInfoId, tableName));
 		} catch (Exception e) {
-			e.printStackTrace();
 			return Result.error("查询失败：" + e.getMessage());
 		}
 	}
@@ -121,10 +115,9 @@ public class DbConsoleController {
 			tableData = dbService.queryTableData(dbInfoId, tableName, sql, pageAble.getPageSize(),
 					pageNo);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return Result.error("查询失败：" + e.getMessage());
 		}
-		return Result.OK(new PageImpl<Map<String, Object>>(tableData.getTableData(), pageAble, tableData.getTotalCount()));
+		return Result.OK(new PageImpl<>(tableData.getTableData(), pageAble, tableData.getTotalCount()));
 	}
 
 	@PostMapping("db/add")
@@ -133,7 +126,6 @@ public class DbConsoleController {
 		try {
 			consoleDbInfoManager.insertDbInfo(dbInfo);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return Result.error("新增失败：" + e.getMessage());
 		}
 		return Result.OK(dbInfo);
@@ -145,7 +137,6 @@ public class DbConsoleController {
 		try {
 			consoleDbInfoManager.updateDbInfo(dbInfo);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return Result.error("编辑失败：" + e.getMessage());
 		}
 		return Result.OK(dbInfo);
@@ -157,7 +148,6 @@ public class DbConsoleController {
 		try {
 			consoleDbInfoManager.deleteDbInfoById(id);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return Result.error("删除失败：" + e.getMessage());
 		}
 		return Result.OK();
@@ -165,8 +155,8 @@ public class DbConsoleController {
 	
 	/**
 	 * 测试连接是否成功
-	 * @param
-	 * @return
+	 * @param dbInfo 数据库链接信息
+	 * @return 测试结果
 	 */
 	@PostMapping("db/test")
 	@Operation(summary = "测试连接", description = "测试连接(url\\class\\username\\password必填)", method = "POST")
@@ -189,7 +179,6 @@ public class DbConsoleController {
 		try {
 			dbService.insertColumn(dbInfoId, columnInfo);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return Result.error("新增失败：" + e.getMessage());
 		}
 		return Result.OK();
@@ -212,7 +201,6 @@ public class DbConsoleController {
 		try {
 			dbService.deleteColumn(dbInfoId, tableName, columnName);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return Result.error("删除失败：" + e.getMessage());
 		}
 		return Result.OK();
@@ -239,8 +227,6 @@ public class DbConsoleController {
 		int[] ints;
 		try {
 			ints = dbService.updateSql(dbInfoId, sqls);
-		} catch (BatchUpdateException e) {
-			return Result.error(e.getMessage());
 		} catch (Exception e) {
 			return Result.error(e.getMessage());
 		}
@@ -257,7 +243,6 @@ public class DbConsoleController {
 			try {
 				types = dbService.findDefaultColumnType(dbInfoId);
 			} catch (Exception e) {
-				e.printStackTrace();
 				return Result.error("查询失败：" + e.getMessage());
 			}
 			for (String s : types) {
@@ -277,7 +262,6 @@ public class DbConsoleController {
 			dbService.deleteTable(dbInfoId, tableName);
 			return Result.OK();
 		} catch (Exception e) {
-			e.printStackTrace();
 			return Result.error("删除失败："+e.getMessage());
 		}
 	}
@@ -289,7 +273,6 @@ public class DbConsoleController {
 			dbService.alertTableName(dbInfoId, tableName, newTableName);
 			return Result.OK();
 		} catch (Exception e) {
-			e.printStackTrace();
 			return Result.error("修改失败："+e.getMessage());
 		}
 	}
@@ -301,7 +284,6 @@ public class DbConsoleController {
 			dbService.createTable(dbInfoId, tableName);
 			return Result.OK();
 		} catch (Exception e) {
-			e.printStackTrace();
 			return Result.error("创建失败："+e.getMessage());
 		}
 	}
@@ -313,7 +295,6 @@ public class DbConsoleController {
 			dbService.deleteTableData(dbInfoId, tableName);
 			return Result.OK();
 		} catch (Exception e) {
-			e.printStackTrace();
 			return Result.error("删除失败："+e.getMessage());
 		}
 	}
