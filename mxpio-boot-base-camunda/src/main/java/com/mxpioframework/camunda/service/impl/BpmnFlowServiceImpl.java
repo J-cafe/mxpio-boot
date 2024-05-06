@@ -2,16 +2,12 @@ package com.mxpioframework.camunda.service.impl;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.googlecode.aviator.AviatorEvaluator;
 import com.mxpioframework.camunda.vo.ProcessInstanceVO;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.FormService;
@@ -21,10 +17,17 @@ import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.history.*;
+import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import org.camunda.bpm.engine.impl.persistence.entity.HistoricActivityInstanceEntity;
+import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.camunda.bpm.engine.impl.pvm.PvmTransition;
+import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ActivityInstance;
+import org.camunda.bpm.engine.runtime.Execution;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.runtime.ProcessInstanceModificationBuilder;
 import org.camunda.bpm.engine.task.Comment;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.task.TaskQuery;
@@ -269,7 +272,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	}
 	
-	@Override
+	/*@Override
 	@Transactional
 	public ResultMessage rejectToLast(String taskId, Map<String, Object> properties, String loginUsername) {
 		Task task = getTaskById(taskId);
@@ -300,6 +303,206 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
                 .execute();
 		
 		return ResultMessage.success("进行了驳回到上一个任务节点操作");
+	}*/
+	@Override
+	@Transactional
+	public ResultMessage rejectToLast(String taskId, Map<String, Object> properties, String loginUsername) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		String processDefinitionId = task.getProcessDefinitionId();
+		String processInstanceId = task.getProcessInstanceId();
+		List<HistoricActivityInstanceEntity> histActInstList = getHistoricActivityInstanceEntityList(processInstanceId);
+		if(CollectionUtils.isEmpty(histActInstList)){
+			return ResultMessage.error("第一个用户节点无法驳回！");
+		}
+
+		ProcessDefinitionEntity processDefinition = (ProcessDefinitionEntity)repositoryService.getProcessDefinition(processDefinitionId);
+		ActivityImpl activityImpl = processDefinition.getChildActivity(task.getTaskDefinitionKey());
+
+		List<String> histUserTaskActIdList = gethistoricUserTaskActIdList(processInstanceId);
+
+		//需要回退到的节点
+		Set<String> toActSet = new HashSet<>();
+		findRejectToUserTask(processDefinition,histActInstList,histUserTaskActIdList,activityImpl,toActSet);
+
+		//获取所有未执行task
+		Map<String, ExecutionEntity> executionMap = getExecutionMapByProcessInstanceId(processInstanceId);
+
+		//从回退节点开始向后寻找在execution表中待执行的task
+		Set<String> cancelSet = new HashSet<>();
+		for (String actId : toActSet) {
+			ActivityImpl act = processDefinition.getChildActivity(actId);
+			findNeedCanceledUserTask(executionMap, act, cancelSet);
+		}
+
+		//更改工作流
+		taskService.createComment(task.getId(), processInstanceId, "驳回原因:" + properties.get(CamundaConstant.BPMN_COMMENT));
+		ProcessInstanceModificationBuilder builder = runtimeService.createProcessInstanceModification(processInstanceId);
+		for(String actInstId:cancelSet){
+			builder.cancelActivityInstance(actInstId)//关闭相关任务
+					.setAnnotation("进行了驳回到上一个任务节点操作");
+		}
+		for(String toActId:toActSet){
+			builder.startBeforeActivity(toActId);
+		}
+		builder.execute();
+		return ResultMessage.success("进行了驳回到上一个任务节点操作");
+	}
+
+	/**
+	 * 从驳回当前节点开始向前找，直到所有前驱都找到一个userTask节点为止
+	 * @param historyActivityList
+	 * @param activityImpl
+	 * @param toActSet
+	 */
+	private void findRejectToUserTask(ProcessDefinitionEntity processDefinition,List<HistoricActivityInstanceEntity> HistoricActivityInstanceEntityList,List<String> historyActivityList,ActivityImpl activityImpl,Set<String> toActSet){
+		List<PvmTransition> incomingtTransition = activityImpl.getIncomingTransitions();
+		if(CollectionUtils.isEmpty(incomingtTransition)){
+			return;
+		}
+		List<PvmTransition> realTransition = getGatewayPath(incomingtTransition,processDefinition,HistoricActivityInstanceEntityList,activityImpl);
+
+		for(PvmTransition pvmTransition:realTransition){
+			ActivityImpl sourceActivityImpl = (ActivityImpl)pvmTransition.getSource();
+			String sourceTaskType = String.valueOf(sourceActivityImpl.getProperty("type"));
+			if("userTask".equals(sourceTaskType)){
+				if(historyActivityList.contains(sourceActivityImpl.getActivityId())){
+					toActSet.add(sourceActivityImpl.getActivityId());
+				}
+			}
+			else{
+				findRejectToUserTask(processDefinition,HistoricActivityInstanceEntityList,historyActivityList,sourceActivityImpl,toActSet);
+			}
+
+		}
+	}
+	/**
+	 * 网关汇聚端，根据历史表寻找真是的网关路径
+	 * @param incomingtTransition
+	 * @param processDefinition
+	 * @param HistoricActivityInstanceEntityList
+	 * @param activityImpl
+	 * @return
+	 */
+	private List<PvmTransition> getGatewayPath(List<PvmTransition> incomingtTransition,ProcessDefinitionEntity processDefinition,List<HistoricActivityInstanceEntity> HistoricActivityInstanceEntityList,ActivityImpl activityImpl){
+		List<PvmTransition> realTransition = new ArrayList<>();
+		String taskType = String.valueOf(activityImpl.getProperty("type"));
+		Set<String> betweenGatewayActivity = new HashSet<>();
+		//Gateway汇聚端
+		if(taskType.endsWith("Gateway")&& CollectionUtils.size(incomingtTransition)>1){
+			String actId = activityImpl.getActivityId();
+			int begin=-1,end=-1;
+			for(int i=0;i<HistoricActivityInstanceEntityList.size();i++){
+				HistoricActivityInstanceEntity entity = HistoricActivityInstanceEntityList.get(i);
+				if(entity.getActivityId().equals(actId)&&entity.getActivityType().equals(taskType)){
+					begin = i;
+					continue;
+				}
+				if(entity.getActivityType().equals(taskType)){
+					ActivityImpl gatewayFirst = processDefinition.getChildActivity(entity.getActivityId());
+					if(CollectionUtils.size(gatewayFirst.getOutgoingTransitions())>1){
+						end = i;
+						break;
+					}
+				}
+			}
+			for(int i=begin;i<end+1;i++){
+				betweenGatewayActivity.add(HistoricActivityInstanceEntityList.get(i).getActivityId());
+			}
+			for(PvmTransition pvmTransition:incomingtTransition){
+				ActivityImpl sourceActivityImpl = (ActivityImpl)pvmTransition.getSource();
+				if(betweenGatewayActivity.contains(sourceActivityImpl.getActivityId())){
+					realTransition.add(pvmTransition);
+				}
+			}
+		}
+		else{
+			realTransition=incomingtTransition;
+		}
+		return realTransition;
+	}
+
+	/**
+	 * 获取所有的HistoricActivityInstance，并转换成HistoricActivityInstanceEntity
+	 * @param processInstanceId
+	 * @return
+	 */
+	private List<HistoricActivityInstanceEntity> getHistoricActivityInstanceEntityList(String processInstanceId){
+		List<HistoricActivityInstance> instances =historyService
+				.createHistoricActivityInstanceQuery()
+				.processInstanceId(processInstanceId)
+				.finished()
+				.orderByHistoricActivityInstanceEndTime()
+				.desc()
+				.orderByHistoricActivityInstanceStartTime()
+				.desc()
+				.list();
+		List<HistoricActivityInstanceEntity> entities = new ArrayList<>();
+		for(HistoricActivityInstance instance:instances){
+			HistoricActivityInstanceEntity entity = (HistoricActivityInstanceEntity)instance;
+			entities.add(entity);
+		}
+		return entities;
+	}
+
+	/**
+	 * 获取历史执行UserTask的activityId数据
+	 * @param processInstanceId
+	 * @return
+	 */
+	private List<String> gethistoricUserTaskActIdList(String processInstanceId){
+        /*List<HistoricActivityInstance> instances =historyService
+                .createHistoricActivityInstanceQuery()
+                .processInstanceId(processInstanceId)
+                .activityType("userTask")
+                .finished()
+                .orderByHistoricActivityInstanceEndTime()
+                .asc()
+                .list();
+        List<HistoricActivityInstanceEntity> entities = new ArrayList<>();
+        for(HistoricActivityInstance instance:instances){
+            HistoricActivityInstanceEntity entity = (HistoricActivityInstanceEntity)instance;
+            if(entity.getActivityInstanceState()==4){
+                entities.add(entity);
+            }
+        }*/
+		List<HistoricActivityInstanceEntity> entityList = getHistoricActivityInstanceEntityList(processInstanceId);
+		return entityList.stream().filter(p->StringUtils.equals(p.getActivityType(),"userTask")).filter(p->p.getActivityInstanceState()==4).map(HistoricActivityInstanceEntity::getActivityId).collect(Collectors.toList());
+	}
+
+	/**
+	 * 获取ACT_RU_EXECTION数据
+	 * @param processInstanceId
+	 * @return
+	 */
+	private Map<String,ExecutionEntity> getExecutionMapByProcessInstanceId(String processInstanceId){
+		List<Execution> executionList = runtimeService.createExecutionQuery().processInstanceId(processInstanceId).list();
+		Map<String,ExecutionEntity> returnMap = new HashMap<>();
+		for(Execution e:executionList){
+			ExecutionEntity entity = (ExecutionEntity)e;
+			if(/*entity.isActive()&&*/StringUtils.isNotBlank(entity.getActivityId())){
+				returnMap.put(entity.getActivityId(),entity);
+			}
+		}
+		return returnMap;
+	}
+
+
+	/**
+	 * 从需要回退的节点向后找,根据ACT_RU_EXECUTION表，找到所有待执行状态的userTask
+	 * @param executionMap
+	 * @param act
+	 * @param cancelSet
+	 */
+	public void findNeedCanceledUserTask(Map<String,ExecutionEntity> executionMap,ActivityImpl act, Set<String> cancelSet){
+		List<PvmTransition> outgoingList = act.getOutgoingTransitions();
+		for(PvmTransition pvmTransition:outgoingList) {
+			ActivityImpl destinationActivityImpl = (ActivityImpl) pvmTransition.getDestination();
+			String taskType = String.valueOf(destinationActivityImpl.getProperty("type"));
+			if("userTask".equals(taskType)&&executionMap.containsKey(destinationActivityImpl.getActivityId())){
+				cancelSet.add(executionMap.get(destinationActivityImpl.getActivityId()).getActivityInstanceId());
+			}
+			findNeedCanceledUserTask(executionMap,destinationActivityImpl,cancelSet);
+		}
 	}
 
 	@Override
