@@ -29,10 +29,10 @@
 			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-base-security</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-base-multitenant</artifactId>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-base-excel</artifactId>
