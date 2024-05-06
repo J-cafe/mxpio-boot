@@ -45,6 +45,5 @@ public class DataSourceInfoController {
 		}
 		return Result.OK();
 	}
-	
 
 }
