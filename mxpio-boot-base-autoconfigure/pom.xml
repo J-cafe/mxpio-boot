@@ -112,6 +112,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-boot-module-email</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-module-oauth</artifactId>
 			<optional>true</optional>
 		</dependency>
