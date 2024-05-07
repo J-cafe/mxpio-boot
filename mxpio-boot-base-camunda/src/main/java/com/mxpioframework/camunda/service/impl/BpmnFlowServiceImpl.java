@@ -181,7 +181,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		} catch (Exception e) {
 			return null;
 		}
-		
+
 	}
 
 	@Override
@@ -228,7 +228,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			return ResultMessage.error("无权审批！");
 		}
 	}
-	
+
 	@Override
 	@Transactional
 	public ResultMessage delegate(String taskId, String username, String loginUsername) {
@@ -243,7 +243,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			return ResultMessage.error("无权审批！");
 		}
 	}
-	
+
 	@Override
 	@Transactional
 	public ResultMessage rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername) {
@@ -267,11 +267,11 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		}
 		//获取流程定义
 		ProcessDefinition procDef = repositoryService.createProcessDefinitionQuery().processDefinitionId(processDefinitionId).singleResult();*/
-		
+
 		/*ProcessInstance newProcInst = startWithFormByKey(procDef.getKey(), startUser, businessKey, startDatas);*/
 
 	}
-	
+
 	/*@Override
 	@Transactional
 	public ResultMessage rejectToLast(String taskId, Map<String, Object> properties, String loginUsername) {
@@ -283,11 +283,11 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			log.error("第一个用户节点无法驳回！");
             return ResultMessage.error("第一个用户节点无法驳回！");
         }
-		
+
 		if(!task.getAssignee().equals(loginUsername)){
 			return ResultMessage.error("非当前审批人！");
 		}
-		
+
 		//得到上一个任务节点的ActivityId和待办人
         Map<String,String> lastNode = getLastNode(resultList,task.getTaskDefinitionKey());
         if(null == lastNode){
@@ -301,11 +301,9 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
                 .setAnnotation("进行了驳回到上一个任务节点操作")
                 .startBeforeActivity(toActId)//启动目标活动节点
                 .execute();
-		
+
 		return ResultMessage.success("进行了驳回到上一个任务节点操作");
 	}*/
-	@Override
-	@Transactional
 	public ResultMessage rejectToLast(String taskId, Map<String, Object> properties, String loginUsername) {
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
 		String processDefinitionId = task.getProcessDefinitionId();
@@ -313,6 +311,10 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		List<HistoricActivityInstanceEntity> histActInstList = getHistoricActivityInstanceEntityList(processInstanceId);
 		if(CollectionUtils.isEmpty(histActInstList)){
 			return ResultMessage.error("第一个用户节点无法驳回！");
+		}
+
+		if(!task.getAssignee().equals(loginUsername)){
+			return ResultMessage.error("非当前审批人！");
 		}
 
 		ProcessDefinitionEntity processDefinition = (ProcessDefinitionEntity)repositoryService.getProcessDefinition(processDefinitionId);
@@ -325,21 +327,20 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		findRejectToUserTask(processDefinition,histActInstList,histUserTaskActIdList,activityImpl,toActSet);
 
 		//获取所有未执行task
-		Map<String, ExecutionEntity> executionMap = getExecutionMapByProcessInstanceId(processInstanceId);
+		List<ExecutionEntity> executionEntityList = getExecutionListByProcessInstanceId(processInstanceId);
 
-		//从回退节点开始向后寻找在execution表中待执行的task
-		Set<String> cancelSet = new HashSet<>();
+		//从回退节点开始向后寻找在act_ru_execution表中需要取消的execution
+		Set<ExecutionEntity> cancelSet = new HashSet<>();
 		for (String actId : toActSet) {
 			ActivityImpl act = processDefinition.getChildActivity(actId);
-			findNeedCanceledUserTask(executionMap, act, cancelSet);
+			findNeedCanceledUserTask(executionEntityList, act, cancelSet);
 		}
-
 		//更改工作流
-		taskService.createComment(task.getId(), processInstanceId, "驳回原因:" + properties.get(CamundaConstant.BPMN_COMMENT));
+		taskService.createComment(task.getId(), processInstanceId, "用户"+loginUsername+"进行了驳回操作，驳回原因:" + properties.get(CamundaConstant.BPMN_COMMENT));
 		ProcessInstanceModificationBuilder builder = runtimeService.createProcessInstanceModification(processInstanceId);
-		for(String actInstId:cancelSet){
-			builder.cancelActivityInstance(actInstId)//关闭相关任务
-					.setAnnotation("进行了驳回到上一个任务节点操作");
+		for(ExecutionEntity e:cancelSet){
+			builder.cancelActivityInstance(e.getActivityInstanceId())//关闭相关任务
+					.setAnnotation("用户"+loginUsername+"进行了驳回到上一个任务节点操作");
 		}
 		for(String toActId:toActSet){
 			builder.startBeforeActivity(toActId);
@@ -388,30 +389,46 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		String taskType = String.valueOf(activityImpl.getProperty("type"));
 		Set<String> betweenGatewayActivity = new HashSet<>();
 		//Gateway汇聚端
-		if(taskType.endsWith("Gateway")&& CollectionUtils.size(incomingtTransition)>1){
-			String actId = activityImpl.getActivityId();
-			int begin=-1,end=-1;
-			for(int i=0;i<HistoricActivityInstanceEntityList.size();i++){
-				HistoricActivityInstanceEntity entity = HistoricActivityInstanceEntityList.get(i);
-				if(entity.getActivityId().equals(actId)&&entity.getActivityType().equals(taskType)){
-					begin = i;
-					continue;
-				}
-				if(entity.getActivityType().equals(taskType)){
-					ActivityImpl gatewayFirst = processDefinition.getChildActivity(entity.getActivityId());
-					if(CollectionUtils.size(gatewayFirst.getOutgoingTransitions())>1){
-						end = i;
-						break;
+		if(taskType.endsWith("Gateway")&&CollectionUtils.size(incomingtTransition)>1){
+			if("parallelGateway".equals(taskType)){
+				realTransition=incomingtTransition;
+			}
+			else{
+				int gatewayNestedNum = 0;
+				String actId = activityImpl.getActivityId();
+				int begin=-1,end=-1;
+				for(int i=0;i<HistoricActivityInstanceEntityList.size();i++){
+					HistoricActivityInstanceEntity entity = HistoricActivityInstanceEntityList.get(i);
+					if(entity.getActivityId().equals(actId)&&entity.getActivityType().equals(taskType)){
+						begin = i;
+						continue;
+					}
+					//找分散端
+					if(entity.getActivityType().equals(taskType)){
+						ActivityImpl gatewayFirst = processDefinition.getChildActivity(entity.getActivityId());
+						//如果又找到一个汇聚端
+						if(CollectionUtils.size(gatewayFirst.getIncomingTransitions())>1){
+							gatewayNestedNum++;
+						}
+						if(CollectionUtils.size(gatewayFirst.getOutgoingTransitions())>1){
+							if(gatewayNestedNum>0){
+								gatewayNestedNum--;
+							}
+							else{
+								end = i;
+								break;
+							}
+						}
 					}
 				}
-			}
-			for(int i=begin;i<end+1;i++){
-				betweenGatewayActivity.add(HistoricActivityInstanceEntityList.get(i).getActivityId());
-			}
-			for(PvmTransition pvmTransition:incomingtTransition){
-				ActivityImpl sourceActivityImpl = (ActivityImpl)pvmTransition.getSource();
-				if(betweenGatewayActivity.contains(sourceActivityImpl.getActivityId())){
-					realTransition.add(pvmTransition);
+				for(int i=begin;i<end+1;i++){
+					betweenGatewayActivity.add(HistoricActivityInstanceEntityList.get(i).getActivityId());
+				}
+				for(PvmTransition pvmTransition:incomingtTransition){
+					ActivityImpl sourceActivityImpl = (ActivityImpl)pvmTransition.getSource();
+					if(betweenGatewayActivity.contains(sourceActivityImpl.getActivityId())){
+						realTransition.add(pvmTransition);
+					}
 				}
 			}
 		}
@@ -474,34 +491,35 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	 * @param processInstanceId
 	 * @return
 	 */
-	private Map<String,ExecutionEntity> getExecutionMapByProcessInstanceId(String processInstanceId){
+	private List<ExecutionEntity> getExecutionListByProcessInstanceId(String processInstanceId){
 		List<Execution> executionList = runtimeService.createExecutionQuery().processInstanceId(processInstanceId).list();
-		Map<String,ExecutionEntity> returnMap = new HashMap<>();
+		List<ExecutionEntity> execEntityList = new ArrayList<>();
 		for(Execution e:executionList){
-			ExecutionEntity entity = (ExecutionEntity)e;
-			if(/*entity.isActive()&&*/StringUtils.isNotBlank(entity.getActivityId())){
-				returnMap.put(entity.getActivityId(),entity);
-			}
+			execEntityList.add((ExecutionEntity)e);
 		}
-		return returnMap;
+		return execEntityList;
 	}
 
 
 	/**
 	 * 从需要回退的节点向后找,根据ACT_RU_EXECUTION表，找到所有待执行状态的userTask
-	 * @param executionMap
+	 * @param executionEntityList
 	 * @param act
 	 * @param cancelSet
 	 */
-	public void findNeedCanceledUserTask(Map<String,ExecutionEntity> executionMap,ActivityImpl act, Set<String> cancelSet){
+	public void findNeedCanceledUserTask(List<ExecutionEntity> executionEntityList,ActivityImpl act, Set<ExecutionEntity> cancelSet){
 		List<PvmTransition> outgoingList = act.getOutgoingTransitions();
+		if(CollectionUtils.isEmpty(outgoingList)){
+			return;
+		}
 		for(PvmTransition pvmTransition:outgoingList) {
 			ActivityImpl destinationActivityImpl = (ActivityImpl) pvmTransition.getDestination();
-			String taskType = String.valueOf(destinationActivityImpl.getProperty("type"));
-			if("userTask".equals(taskType)&&executionMap.containsKey(destinationActivityImpl.getActivityId())){
-				cancelSet.add(executionMap.get(destinationActivityImpl.getActivityId()).getActivityInstanceId());
+			for(ExecutionEntity e:executionEntityList){
+				if(StringUtils.equals(destinationActivityImpl.getActivityId(),e.getActivityId())){
+					cancelSet.add(e);
+				}
 			}
-			findNeedCanceledUserTask(executionMap,destinationActivityImpl,cancelSet);
+			findNeedCanceledUserTask(executionEntityList,destinationActivityImpl,cancelSet);
 		}
 	}
 
@@ -553,7 +571,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		}
 
 		if(finished == null){
-			
+
 		}else if(finished){
 			query.finished();
 		}else{
@@ -571,7 +589,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			query.startedBy(username);
 		}
 		if(finished == null){
-			
+
 		}else if(finished){
 			query.finished();
 		}else{
@@ -600,7 +618,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		criteria2HistoricTaskInstanceQuery(criteria, query);
 		return query.orderByHistoricActivityInstanceStartTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateUser(String username, Criteria criteria,
@@ -614,7 +632,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		criteria2HistoricTaskInstanceQuery(criteria, query);
 		return query.orderByHistoricActivityInstanceStartTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public long countHistoricTaskListByCandidateUser(String username, Criteria criteria, boolean finished) {
@@ -627,7 +645,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		criteria2HistoricTaskInstanceQuery(criteria, query);
 		return query.count();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<Task> pagingCandidateGroupTasks(Set<String> authorities,
@@ -637,7 +655,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		criteria2TaskQuery(criteria, taskQuery);
 		return taskQuery.orderByTaskCreateTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public long countCandidateGroupTasks(Set<String> authorities, Criteria criteria) {
@@ -732,7 +750,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
         return historyService.createHistoricTaskInstanceQuery()
 				.processInstanceId(processInstanceId).finished().orderByHistoricTaskInstanceEndTime().asc().list();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<HistoricActivityInstance> getHistoricActivityByProcessInstanceId(String processInstanceId) {
@@ -789,7 +807,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		}
 		taskDetail.setStartDatas(startDatas);
 	}
-	
+
 	/**
      * 获取上一节点信息
      * 分两种情况：
@@ -850,7 +868,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
         }
         return null;
     }
-    
+
     private String getInstanceIdForActivity(ActivityInstance activityInstance, String activityId) {
         ActivityInstance instance = getChildInstanceForActivity(activityInstance, activityId);
         if (instance != null) {
