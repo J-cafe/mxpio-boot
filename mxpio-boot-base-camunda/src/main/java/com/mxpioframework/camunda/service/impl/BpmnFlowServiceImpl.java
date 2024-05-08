@@ -249,6 +249,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	public ResultMessage rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername) {
 		Task task = getTaskById(taskId);
 		String processInstanceId = task.getProcessInstanceId();
+		taskService.createComment(task.getId(), processInstanceId, "用户"+loginUsername+"进行了驳回操作，驳回原因:" + properties.get(CamundaConstant.BPMN_COMMENT));
 		HistoricProcessInstance inst = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
 		runtimeService.deleteProcessInstance(processInstanceId, "不同意！");
 		return ResultMessage.success("不同意！", inst);
