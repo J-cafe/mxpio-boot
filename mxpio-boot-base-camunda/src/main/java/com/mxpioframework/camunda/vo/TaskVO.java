@@ -44,7 +44,7 @@ public class TaskVO implements Serializable, DictAble {
 	@Schema(description = "创建时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date createTime;
-	
+
 	@Schema(description = "完成时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date endTime;
@@ -66,6 +66,8 @@ public class TaskVO implements Serializable, DictAble {
 	@Schema(description = "流程标题")
 	private String title;
 
+	@Schema(description = "是否有表单")
+	private Boolean hasForm;
 
 	public TaskVO(HistoricTaskInstance task) {
 		this.id = task.getId();
@@ -77,7 +79,7 @@ public class TaskVO implements Serializable, DictAble {
 		this.createTime = task.getStartTime();
 		this.endTime = task.getEndTime();
 	}
-	
+
 	public TaskVO(Task task) {
 		this.id = task.getId();
 		this.assignee = task.getAssignee();
@@ -96,7 +98,7 @@ public class TaskVO implements Serializable, DictAble {
 		this.processDefinitionName = historicProcessInstance.getProcessDefinitionName();
 		this.procState = historicProcessInstance.getState();
 	}
-	
+
 	public TaskVO(Task task, HistoricProcessInstance historicProcessInstance) {
 		this(task);
 		this.procStartTime = historicProcessInstance.getStartTime();

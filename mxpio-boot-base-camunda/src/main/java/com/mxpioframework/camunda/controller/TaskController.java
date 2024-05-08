@@ -42,15 +42,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController("mxpio.camunda.TaskController")
 @RequestMapping("/camunda/task/")
 public class TaskController {
-	
+
 	@Autowired
 	private BpmnFlowService bpmnFlowService;
-	
+
 	@GetMapping("list")
 	@Operation(summary = "待办任务列表", description = "待办任务列表", method = "GET")
 	public Result<List<TaskVO>> list() {
 		List<TaskVO> list = new ArrayList<>();
-		
+
 		List<Task> tasks = bpmnFlowService.listActiveTasks(SecurityUtils.getLoginUsername());
 		for(Task task : tasks){
 			list.add(new TaskVO(task));
@@ -69,16 +69,18 @@ public class TaskController {
 		long total = bpmnFlowService.countActiveTasks(username, criteria);
 		for(Task task : tasks){
 			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
+			String formKey = bpmnFlowService.getTaskFormKey(task.getProcessDefinitionId(), task.getTaskDefinitionKey());
 			TaskVO taskVO = new TaskVO(task, historicProcessInstance);
 			taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
+			taskVO.setHasForm(StringUtils.isNotEmpty(formKey));
 			list.add(taskVO);
 		}
-		
+
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		Page<TaskVO> page = new PageImpl<>(list, pageAble, total);
 		return Result.OK(page);
 	}
-	
+
 	@GetMapping("finished/page")
 	@Operation(summary = "已办任务列表(分页)", description = "已办任务列表(分页)", method = "GET")
 	public Result<Page<TaskVO>> finishPage(Criteria criteria,
@@ -94,12 +96,12 @@ public class TaskController {
 			taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
 			list.add(taskVO);
 		}
-		
+
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		Page<TaskVO> page = new PageImpl<>(list, pageAble, total);
 		return Result.OK(page);
 	}
-	
+
 	@GetMapping("candidate/page")
 	@Operation(summary = "候选任务列表(分页)", description = "候选任务列表(分页)", method = "GET")
 	public Result<Page<TaskVO>> candidatePage(Criteria criteria,
@@ -115,12 +117,12 @@ public class TaskController {
 			taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
 			list.add(taskVO);
 		}
-		
+
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		Page<TaskVO> page = new PageImpl<>(list, pageAble, total);
 		return Result.OK(page);
 	}
-	
+
 	@GetMapping("group/page")
 	@Operation(summary = "组任务列表(分页)", description = "组任务列表(分页)", method = "GET")
 	public Result<Page<TaskVO>> groupPage(Criteria criteria,
@@ -136,16 +138,16 @@ public class TaskController {
 			taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
 			list.add(taskVO);
 		}
-		
+
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		Page<TaskVO> page = new PageImpl<>(list, pageAble, total);
 		return Result.OK(page);
 	}
-	
+
 	@PostMapping("claim/{taskId}")
 	@Operation(summary = "任务领取", description = "任务领取", method = "POST")
 	public Result<?> claim(@PathVariable(name = "taskId") String taskId){
-		
+
 		ResultMessage msg = bpmnFlowService.claim(taskId, SecurityUtils.getLoginUsername());
 		if(msg.isSuccess()){
 			return Result.OK(msg.getMsg(), null);
@@ -153,7 +155,7 @@ public class TaskController {
 			return Result.error(msg.getMsg());
 		}
 	}
-	
+
 	@PostMapping("complete/{taskId}")
 	@Operation(summary = "节点签核", description = "节点签核", method = "POST")
 	public Result<?> complete(@PathVariable(name = "taskId") String taskId,
@@ -165,7 +167,7 @@ public class TaskController {
 			return Result.error(msg.getMsg());
 		}
 	}
-	
+
 	@PostMapping("delegate/{taskId}/{username}")
 	@Operation(summary = "节点委派", description = "节点委派", method = "POST")
 	public Result<?> delegate(@PathVariable(name = "taskId") String taskId,
@@ -177,7 +179,7 @@ public class TaskController {
 			return Result.error(msg.getMsg());
 		}
 	}
-	
+
 	@PostMapping("reject/first/{taskId}")
 	@Operation(summary = "节点驳回开始节点", description = "节点驳回开始节点", method = "POST")
 	public Result<?> rejectToFirst(@PathVariable(name = "taskId") String taskId,
@@ -189,7 +191,7 @@ public class TaskController {
 			return Result.error(msg.getMsg());
 		}
 	}
-	
+
 	@PostMapping("reject/last/{taskId}")
 	@Operation(summary = "节点驳回上一节点", description = "节点上一节点", method = "POST")
 	public Result<?> rejectToLast(@PathVariable(name = "taskId") String taskId,
@@ -201,7 +203,7 @@ public class TaskController {
 			return Result.error(msg.getMsg());
 		}
 	}
-	
+
 	@GetMapping("historics/{processInstanceId}")
 	@Operation(summary = "获取历史节点信息", description = "获取历史节点信息", method = "GET")
 	public Result<List<HistoricTaskVO>> historics(@PathVariable(name = "processInstanceId") String processInstanceId) {
@@ -223,7 +225,7 @@ public class TaskController {
                 historicTaskDto.setHasForm(StringUtils.isNotEmpty(formKey));
 			}
 			list.add(historicTaskDto);
-			
+
 		}
 		return Result.OK("查询成功！",list);
 	}
@@ -242,11 +244,11 @@ public class TaskController {
 	@GetMapping("form/{taskId}")
 	@Operation(summary = "获取节点表单Key", description = "获取节点表单Key", method = "GET")
 	public Result<?> form(@PathVariable(name = "taskId") String taskId) {
-		
+
 		String formKey = bpmnFlowService.getTaskFormKeyByTaskId(taskId);
 		return Result.OK("查询成功！",formKey);
 	}
-	
+
 	@GetMapping("form/data/{taskId}")
 	@Operation(summary = "获取节点表单模型及数据", description = "获取节点表单模型及数据", method = "GET")
 	public Result<TaskFormDto> formData(@PathVariable(name = "taskId") String taskId) {
@@ -255,7 +257,7 @@ public class TaskController {
 		TaskFormDto dto = new TaskFormDto(formData, formModelDef);
 		return Result.OK("查询成功！",dto);
 	}
-	
+
 	@GetMapping("form/model/{taskId}")
 	@Operation(summary = "获取表单模型", description = "获取表单模型", method = "GET")
 	public Result<FormModelDef> formHistoric(@PathVariable(name = "taskId") String taskId) {
