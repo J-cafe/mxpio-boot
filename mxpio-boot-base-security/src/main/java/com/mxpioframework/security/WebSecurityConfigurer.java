@@ -147,6 +147,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 				.antMatchers(mergeAnonymous()).permitAll()
 				// 添加SWAGGER地址
 				.antMatchers(Constants.SWAGGER_WHITELIST).permitAll()
+				.antMatchers(Constants.MULTITENANT_WHITELIST).permitAll()
                 .anyRequest().authenticated()  // 所有请求需要身份认证
                 .and()
                 .exceptionHandling()

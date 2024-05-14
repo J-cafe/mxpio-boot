@@ -8,7 +8,7 @@
 		<version>1.0.12-beta.9</version>
 	</parent>
 	<artifactId>mxpio-boot-base-multitenant</artifactId>
-	<name>mxpio-boot-base-multitenant</name>
+	<name>多租户管理</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>

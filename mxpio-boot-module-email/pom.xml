@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>mxpio-boot-module-email</artifactId>
+    <name>邮件消息模块</name>
     <dependencies>
         <dependency>
             <groupId>com.mxpio</groupId>

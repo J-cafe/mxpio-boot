@@ -7,6 +7,7 @@
 		<version>1.0.12-beta.9</version>
 	</parent>
 	<artifactId>mxpio-boot-base-dbconsole</artifactId>
+	<name>云数据库</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.mxpio</groupId>
