@@ -1,7 +1,10 @@
 package com.mxpioframework.email.channel;
 
+import com.mxpioframework.common.exception.MBootException;
+import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.message.entity.Message;
+import com.mxpioframework.security.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 @Component
@@ -58,9 +63,26 @@ public class EmailMessageChannel extends EmailAbstractMessageChannel {
             //谁发
             minehelper.setFrom(from);
             log.info("发送HTML邮件from:"+from);
-            //谁要接收
-            minehelper.setTo(to);
-            log.info("发送HTML邮件to:"+to);
+            //谁要接收 收件人接收系统用户
+            log.info("发送HTML邮件to(原始):"+to);
+            List<String> toEmailAddressList = new ArrayList<>();
+            for (String per:to){
+                Pattern pattern = Pattern.compile("^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$");
+                if (StringUtils.isNotBlank(per)&&pattern.matcher(per).matches()){
+                    toEmailAddressList.add(per);
+                }else {
+                    User user = JpaUtil.getOne(User.class, per);
+                    if (user != null){
+                        toEmailAddressList.add( user.getEmail());
+                    }
+                }
+            }
+            if (toEmailAddressList.isEmpty()){
+                log.error("有效的收件人为空");
+                throw new MBootException("有效的收件人为空");
+            }
+            minehelper.setTo(toEmailAddressList.stream().toArray(String[]::new));
+            log.info("发送HTML邮件to(转换):"+StringUtils.join(toEmailAddressList, ","));
             //邮件主题
             minehelper.setSubject(title);
             log.info("发送HTML邮件title:"+title);
