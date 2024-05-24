@@ -64,7 +64,7 @@ public class EmailMessageChannel extends EmailAbstractMessageChannel {
             minehelper.setFrom(from);
             log.info("发送HTML邮件from:"+from);
             //谁要接收 收件人接收系统用户
-            log.info("发送HTML邮件to(原始):"+to);
+            log.info("发送HTML邮件to(原始):"+StringUtils.join(to, ","));
             List<String> toEmailAddressList = new ArrayList<>();
             for (String per:to){
                 Pattern pattern = Pattern.compile("^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$");
