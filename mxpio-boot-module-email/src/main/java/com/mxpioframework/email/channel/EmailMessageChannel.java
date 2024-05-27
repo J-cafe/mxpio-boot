@@ -72,7 +72,7 @@ public class EmailMessageChannel extends EmailAbstractMessageChannel {
                     toEmailAddressList.add(per);
                 }else {
                     User user = JpaUtil.getOne(User.class, per);
-                    if (user != null){
+                    if (user != null && StringUtils.isNotBlank(user.getEmail())){
                         toEmailAddressList.add( user.getEmail());
                     }
                 }
