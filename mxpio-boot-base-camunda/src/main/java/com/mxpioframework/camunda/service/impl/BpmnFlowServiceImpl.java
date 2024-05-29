@@ -137,7 +137,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 		BpmnFlow flow = JpaUtil.linq(BpmnFlow.class).idEqual(key).findOne();
 		String title;
-		if (flow.getTitle()!=null){
+		if (StringUtils.isNotBlank(flow.getTitle())){
 			title = AviatorEvaluator.execute(flow.getTitle(),properties).toString();
 		}else{
 			title = flow.getName() + "---" + loginUsername;

@@ -13,10 +13,10 @@ import com.mxpioframework.multitenant.domain.Organization;
 import com.mxpioframework.multitenant.service.DataSourceInfoService;
 
 @Service("mxpio.multitenant.dataSourceInfoService")
-@Transactional(readOnly = true)
 public class DataSourceInfoServiceImpl implements DataSourceInfoService {
 
 	@Override
+	@Transactional(readOnly = true)
 	public DataSourceInfo get(Organization organization) {
 		return JpaUtil.linq(DataSourceInfo.class)
 			.addIf(organization.getDataSourceInfoId())
@@ -32,6 +32,7 @@ public class DataSourceInfoServiceImpl implements DataSourceInfoService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public DataSourceInfo allocate(Organization organization) {
 		if (StringUtils.isEmpty(organization.getDataSourceInfoId())) {
 			List<DataSourceInfo> list = JpaUtil.linq(DataSourceInfo.class)

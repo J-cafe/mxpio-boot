@@ -60,7 +60,8 @@
 		<module>mxpio-boot-module-dingtalk</module>
 		<module>mxpio-boot-module-oauth</module>
 		<module>mxpio-boot-module-msal</module>
-		<!--<module>mxpio-boot-webapp</module>-->
+        <module>mxpio-boot-module-email</module>
+        <!--<module>mxpio-boot-webapp</module>-->
     </modules>
 	<dependencies>
 		<dependency>
@@ -227,6 +228,11 @@
 			<dependency>
 				<groupId>com.mxpio</groupId>
 				<artifactId>mxpio-boot-module-dingtalk</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-module-email</artifactId>
 				<version>${mxpio.version}</version>
 			</dependency>
 			<dependency>

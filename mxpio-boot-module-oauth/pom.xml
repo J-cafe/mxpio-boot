@@ -8,6 +8,7 @@
 
 
     <artifactId>mxpio-boot-module-oauth</artifactId>
+    <name>三方权限模块</name>
     <dependencies>
         <dependency>
             <groupId>com.mxpio</groupId>

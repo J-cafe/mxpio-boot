@@ -21,10 +21,10 @@
 			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-module-cache-caffeine</artifactId>
 		</dependency>
-		<!--<dependency>
+		<dependency>
 			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-module-datav</artifactId>
-		</dependency>-->
+		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-base-security</artifactId>

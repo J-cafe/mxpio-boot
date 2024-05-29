@@ -8,7 +8,7 @@
 
 在线文档：[mxpio-boot](https://doc.datazhzh.com/)
 
-前端地址：[Mxpio-Boot-Antd-Vue](https://gitee.com/i_mxpio/mxpio-boot-antd-vue)
+Vue2前端地址：[Mxpio-Boot-Antd-Vue](https://gitee.com/i_mxpio/mxpio-boot-antd-vue)
 ## 2.后端技术栈
 
 * Spring Boot 2.5.14
@@ -20,7 +20,7 @@
 * SpringDoc
 * Jwt
 * Poi
-* Flowable
+* Camunda
 * Quartz
 
 ### 2.1模块继承关系
@@ -385,4 +385,4 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.9.jar
 
 - [Spring Boot](https://spring.io/projects/spring-boot)
 - [Vue-Antd-Admin](https://gitee.com/iczer/vue-antd-admin)
-- [Druid](https://github.com/alibaba/druid)
+- [Camunda](https://github.com/camunda/camunda-bpm-platform)
