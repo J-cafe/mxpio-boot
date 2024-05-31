@@ -6,7 +6,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.googlecode.aviator.AviatorEvaluator;
+import com.mxpioframework.camunda.vo.AllTaskRetVO;
 import com.mxpioframework.camunda.vo.ProcessInstanceVO;
+import com.mxpioframework.jpa.query.Order;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -918,6 +920,44 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		return ResultMessage.success("领取成功！");
 	}
 
+	/**
+	 * 获取所有任务，包括组任务，候选任务，活动任务
+	 * @param username 用户名
+	 * @param authorities 组
+	 * @param criteria 查询构造器
+	 * @return 任务列表
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public AllTaskRetVO getAllTasks(String username, Set<String> authorities, Criteria criteria){
+		//活动任务
+		TaskQuery activeTaskQuery = taskService.createTaskQuery().active().taskAssignee(username);
+		criteria2TaskQuery(criteria, activeTaskQuery);
+		List<Task> activeTaskList = activeTaskQuery.list();
+		//候选任务
+		TaskQuery candidateUserTaskQuery = taskService.createTaskQuery().taskCandidateUser(username).active().taskUnassigned();
+		criteria2TaskQuery(criteria, candidateUserTaskQuery);
+		List<Task> candidateUserTaskList = candidateUserTaskQuery.list();
+		//组任务
+		TaskQuery candidateGroupTaskQuery = taskService.createTaskQuery().active().taskCandidateGroupIn(new ArrayList<>(authorities)).taskUnassigned();
+		criteria2TaskQuery(criteria, candidateGroupTaskQuery);
+		List<Task> candidateGroupTaskList = candidateGroupTaskQuery.list();
+
+		List<Task> allTasks = new ArrayList<>();
+		allTasks.addAll(activeTaskList);
+		allTasks.addAll(candidateUserTaskList);
+		allTasks.addAll(candidateGroupTaskList);
+
+		Comparator<Task> comparator = criteria2Comparator(criteria);
+		if(comparator!=null){
+			allTasks=allTasks.stream().sorted(comparator).collect(Collectors.toList());
+		}
+		AllTaskRetVO retVO = new AllTaskRetVO();
+		retVO.setAllTasks(allTasks);
+		retVO.setCount((long) allTasks.size());
+		return retVO;
+	}
+
 	private Task getTaskById(String taskId){
 		return taskService.createTaskQuery().taskId(taskId).singleResult();
 	}
@@ -960,6 +1000,61 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			}
 		}
 	}
+
+	private Comparator<Task>  criteria2Comparator(Criteria criteria){
+		List<Order> orderList = criteria.getOrders();
+		if(CollectionUtils.isEmpty(orderList)){
+			return null;
+		}
+		Comparator<Task> comparator = null;
+		for(Order order:orderList){
+			String orderField = order.getFieldName();
+			boolean desc = order.isDesc();
+			switch (orderField){
+				case "id":
+					if(desc){
+						if(comparator==null){
+							comparator = Comparator.comparing(Task::getId,Comparator.reverseOrder());
+						}
+						else{
+							comparator = comparator.thenComparing(Task::getId,Comparator.reverseOrder());
+						}
+					}
+					else{
+						if(comparator==null){
+							comparator = Comparator.comparing(Task::getId);
+						}
+						else{
+							comparator = comparator.thenComparing(Task::getId);
+						}
+					}
+					break;
+				case "createTime":
+					if(desc){
+						if(comparator==null){
+							comparator = Comparator.comparing(Task::getCreateTime,Comparator.reverseOrder());
+						}
+						else{
+							comparator = comparator.thenComparing(Task::getCreateTime,Comparator.reverseOrder());
+						}
+					}
+					else{
+						if(comparator==null){
+							comparator = Comparator.comparing(Task::getCreateTime);
+						}
+						else{
+							comparator = comparator.thenComparing(Task::getCreateTime);
+						}
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		return comparator;
+	}
+
+
 
 	private void criteria2HistoricTaskInstanceQuery(Criteria criteria, HistoricTaskInstanceQuery query){
 		if(criteria != null){

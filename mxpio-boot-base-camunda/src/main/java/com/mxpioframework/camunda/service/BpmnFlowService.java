@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.mxpioframework.camunda.vo.AllTaskRetVO;
 import org.camunda.bpm.engine.history.HistoricActivityInstance;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
@@ -60,7 +61,7 @@ public interface BpmnFlowService {
 	 * @return 返回消息
 	 */
 	ResultMessage complete(String taskId, Map<String, Object> properties, String loginUsername);
-	
+
 	/**
 	 * 任务委托
 	 * @param taskId 任务ID
@@ -71,7 +72,7 @@ public interface BpmnFlowService {
 	ResultMessage delegate(String taskId, String username, String loginUsername);
 
 	ProcessDefinition getProcDefByProcessDefinitionKey(String key);
-	
+
 	ProcessDefinition getProcDefByProcessDefinitionId(String id);
 
 	void handleFormInfo(ProcessDefinition procDef, BpmnResource bpmnResource);
@@ -130,7 +131,7 @@ public interface BpmnFlowService {
 	long countCandidateGroupTasks(Set<String> authorities, Criteria criteria);
 
 	List<HistoricTaskInstance> getHistoricTaskByProcessInstanceId(String processInstanceId);
-	
+
 	List<HistoricActivityInstance> getHistoricActivityByProcessInstanceId(String processInstanceId);
 
 	List<HistoricActivityInstance> getHistoricUserActivityByProcessInstanceId(String processInstanceId);
@@ -144,7 +145,7 @@ public interface BpmnFlowService {
 	void handleVariables(String processInstanceId, TaskDetailVO taskDetail);
 
 	ResultMessage rejectToLast(String taskId, Map<String, Object> properties, String loginUsername);
-	
+
 	ResultMessage rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername);
 
 	List<Comment> getCommentsByTaskId(String taskId);
@@ -217,4 +218,15 @@ public interface BpmnFlowService {
 	 * @return 节点表单Key
 	 */
 	String getTaskFormKey(String processDefinitionId, String taskDefinitionKey);
+
+
+	/**
+	 * 获取所有任务，包括组任务，候选任务，活动任务
+	 * @param username 用户名
+	 * @param authorities 组
+	 * @param criteria 查询构造器
+	 * @return 任务列表
+	 */
+	AllTaskRetVO getAllTasks(String username, Set<String> authorities, Criteria criteria);
+
 }

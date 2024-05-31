@@ -144,6 +144,21 @@ public class TaskController {
 		return Result.OK(page);
 	}
 
+	@GetMapping("all/page")
+	@Operation(summary = "所有任务列表(分页)", description = "所有任务列表(分页)", method = "GET")
+	public Result<Page<TaskVO>> allPage(Criteria criteria,
+										  @RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
+										  @RequestParam(value="pageNo", defaultValue = "1") Integer pageNo){
+
+		Set<String> authorities = SecurityUtils.getAuthorityKeys();
+		String username = SecurityUtils.getLoginUsername();
+
+		return Result.OK();
+
+	}
+
+
+
 	@PostMapping("claim/{taskId}")
 	@Operation(summary = "任务领取", description = "任务领取", method = "POST")
 	public Result<?> claim(@PathVariable(name = "taskId") String taskId){
