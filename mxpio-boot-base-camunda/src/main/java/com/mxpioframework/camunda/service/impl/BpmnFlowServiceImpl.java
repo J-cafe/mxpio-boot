@@ -6,8 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.googlecode.aviator.AviatorEvaluator;
-import com.mxpioframework.camunda.vo.AllTaskRetVO;
-import com.mxpioframework.camunda.vo.ProcessInstanceVO;
+import com.mxpioframework.camunda.vo.*;
 import com.mxpioframework.jpa.query.Order;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
@@ -48,8 +47,6 @@ import com.mxpioframework.camunda.entity.FormModelDef;
 import com.mxpioframework.camunda.enums.BpmnEnums;
 import com.mxpioframework.camunda.service.BpmnFlowService;
 import com.mxpioframework.camunda.service.FormModelService;
-import com.mxpioframework.camunda.vo.BpmnResource;
-import com.mxpioframework.camunda.vo.TaskDetailVO;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.Operator;
@@ -943,12 +940,30 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		criteria2TaskQuery(criteria, candidateGroupTaskQuery);
 		List<Task> candidateGroupTaskList = candidateGroupTaskQuery.list();
 
-		List<Task> allTasks = new ArrayList<>();
-		allTasks.addAll(activeTaskList);
-		allTasks.addAll(candidateUserTaskList);
-		allTasks.addAll(candidateGroupTaskList);
+		List<TaskVO> allTasks = new ArrayList<>();
+		for(Task t:activeTaskList){
+			HistoricProcessInstance historicProcessInstance = this.getHistoricProcessInstanceById(t.getProcessInstanceId());
+			TaskVO taskVO = new TaskVO(t, historicProcessInstance);
+			taskVO.setTitle(this.getTitleByInstanceId(historicProcessInstance.getId()));
+			taskVO.setTaskType("active");
+			allTasks.add(taskVO);
+		}
+		for(Task t:candidateUserTaskList){
+			HistoricProcessInstance historicProcessInstance = this.getHistoricProcessInstanceById(t.getProcessInstanceId());
+			TaskVO taskVO = new TaskVO(t, historicProcessInstance);
+			taskVO.setTitle(this.getTitleByInstanceId(historicProcessInstance.getId()));
+			taskVO.setTaskType("candidateUser");
+			allTasks.add(taskVO);
+		}
+		for(Task t:candidateGroupTaskList){
+			HistoricProcessInstance historicProcessInstance = this.getHistoricProcessInstanceById(t.getProcessInstanceId());
+			TaskVO taskVO = new TaskVO(t, historicProcessInstance);
+			taskVO.setTitle(this.getTitleByInstanceId(historicProcessInstance.getId()));
+			taskVO.setTaskType("candidateGroup");
+			allTasks.add(taskVO);
+		}
 
-		Comparator<Task> comparator = criteria2Comparator(criteria);
+		Comparator<TaskVO> comparator = criteria2Comparator(criteria);
 		if(comparator!=null){
 			allTasks=allTasks.stream().sorted(comparator).collect(Collectors.toList());
 		}
@@ -1001,12 +1016,12 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		}
 	}
 
-	private Comparator<Task>  criteria2Comparator(Criteria criteria){
+	private Comparator<TaskVO>  criteria2Comparator(Criteria criteria){
 		List<Order> orderList = criteria.getOrders();
 		if(CollectionUtils.isEmpty(orderList)){
 			return null;
 		}
-		Comparator<Task> comparator = null;
+		Comparator<TaskVO> comparator = null;
 		for(Order order:orderList){
 			String orderField = order.getFieldName();
 			boolean desc = order.isDesc();
@@ -1014,36 +1029,36 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 				case "id":
 					if(desc){
 						if(comparator==null){
-							comparator = Comparator.comparing(Task::getId,Comparator.reverseOrder());
+							comparator = Comparator.comparing(TaskVO::getId,Comparator.reverseOrder());
 						}
 						else{
-							comparator = comparator.thenComparing(Task::getId,Comparator.reverseOrder());
+							comparator = comparator.thenComparing(TaskVO::getId,Comparator.reverseOrder());
 						}
 					}
 					else{
 						if(comparator==null){
-							comparator = Comparator.comparing(Task::getId);
+							comparator = Comparator.comparing(TaskVO::getId);
 						}
 						else{
-							comparator = comparator.thenComparing(Task::getId);
+							comparator = comparator.thenComparing(TaskVO::getId);
 						}
 					}
 					break;
 				case "createTime":
 					if(desc){
 						if(comparator==null){
-							comparator = Comparator.comparing(Task::getCreateTime,Comparator.reverseOrder());
+							comparator = Comparator.comparing(TaskVO::getCreateTime,Comparator.reverseOrder());
 						}
 						else{
-							comparator = comparator.thenComparing(Task::getCreateTime,Comparator.reverseOrder());
+							comparator = comparator.thenComparing(TaskVO::getCreateTime,Comparator.reverseOrder());
 						}
 					}
 					else{
 						if(comparator==null){
-							comparator = Comparator.comparing(Task::getCreateTime);
+							comparator = Comparator.comparing(TaskVO::getCreateTime);
 						}
 						else{
-							comparator = comparator.thenComparing(Task::getCreateTime);
+							comparator = comparator.thenComparing(TaskVO::getCreateTime);
 						}
 					}
 					break;

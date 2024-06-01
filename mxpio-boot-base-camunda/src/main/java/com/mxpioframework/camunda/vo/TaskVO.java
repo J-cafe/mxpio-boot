@@ -69,6 +69,9 @@ public class TaskVO implements Serializable, DictAble {
 	@Schema(description = "是否有表单")
 	private Boolean hasForm;
 
+	@Schema(description = "task类别,active,candidateUser,candidateGroup")
+	private String taskType;
+
 	public TaskVO(HistoricTaskInstance task) {
 		this.id = task.getId();
 		this.assignee = task.getAssignee();

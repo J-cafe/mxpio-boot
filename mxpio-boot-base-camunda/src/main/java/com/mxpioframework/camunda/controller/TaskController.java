@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.mxpioframework.camunda.vo.*;
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.history.HistoricActivityInstance;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
@@ -28,9 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mxpioframework.camunda.dto.ResultMessage;
 import com.mxpioframework.camunda.entity.FormModelDef;
 import com.mxpioframework.camunda.service.BpmnFlowService;
-import com.mxpioframework.camunda.vo.HistoricTaskVO;
-import com.mxpioframework.camunda.vo.TaskVO;
-import com.mxpioframework.camunda.vo.TaskFormDto;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.security.util.SecurityUtils;
@@ -152,8 +150,13 @@ public class TaskController {
 
 		Set<String> authorities = SecurityUtils.getAuthorityKeys();
 		String username = SecurityUtils.getLoginUsername();
+		AllTaskRetVO allTaskRetVO = bpmnFlowService.getAllTasks(username,authorities,criteria);
+		List<TaskVO> taskVOList = allTaskRetVO.getAllTasks();
+		long total = allTaskRetVO.getCount();
 
-		return Result.OK();
+		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
+		Page<TaskVO> page = new PageImpl<>(taskVOList, pageAble, total);
+		return Result.OK(page);
 
 	}
 
