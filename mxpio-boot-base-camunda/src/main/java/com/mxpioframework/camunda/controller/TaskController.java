@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.mxpioframework.camunda.vo.*;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.history.HistoricActivityInstance;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
@@ -155,9 +156,17 @@ public class TaskController {
 		long total = allTaskRetVO.getCount();
 
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Page<TaskVO> page = new PageImpl<>(taskVOList, pageAble, total);
-		return Result.OK(page);
 
+		if(CollectionUtils.isNotEmpty(taskVOList)){
+			int startIndex = (pageNo-1)*pageSize;
+			if(startIndex< taskVOList.size()){
+				List<TaskVO> returnList = taskVOList.subList(startIndex, Math.min(startIndex + pageSize, taskVOList.size()));
+				Page<TaskVO> page = new PageImpl<>(returnList, pageAble, total);
+				return Result.OK(page);
+			}
+		}
+
+		return Result.OK(new PageImpl<>(new ArrayList<>(),pageAble,0));
 	}
 
 
