@@ -161,6 +161,12 @@ public class TaskController {
 			int startIndex = (pageNo-1)*pageSize;
 			if(startIndex< taskVOList.size()){
 				List<TaskVO> returnList = taskVOList.subList(startIndex, Math.min(startIndex + pageSize, taskVOList.size()));
+				for(TaskVO task:returnList){
+					HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
+					String formKey = bpmnFlowService.getTaskFormKey(task.getProcessDefinitionId(), task.getTaskDefinitionKey());
+					task.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
+					task.setHasForm(StringUtils.isNotEmpty(formKey));
+				}
 				Page<TaskVO> page = new PageImpl<>(returnList, pageAble, total);
 				return Result.OK(page);
 			}
