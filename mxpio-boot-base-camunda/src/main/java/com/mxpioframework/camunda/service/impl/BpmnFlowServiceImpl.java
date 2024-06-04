@@ -6,7 +6,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.googlecode.aviator.AviatorEvaluator;
-import com.mxpioframework.camunda.vo.ProcessInstanceVO;
+import com.mxpioframework.camunda.vo.*;
+import com.mxpioframework.jpa.query.Order;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -46,8 +47,6 @@ import com.mxpioframework.camunda.entity.FormModelDef;
 import com.mxpioframework.camunda.enums.BpmnEnums;
 import com.mxpioframework.camunda.service.BpmnFlowService;
 import com.mxpioframework.camunda.service.FormModelService;
-import com.mxpioframework.camunda.vo.BpmnResource;
-import com.mxpioframework.camunda.vo.TaskDetailVO;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.Operator;
@@ -918,6 +917,59 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		return ResultMessage.success("领取成功！");
 	}
 
+	/**
+	 * 获取所有任务，包括组任务，候选任务，活动任务
+	 * @param username 用户名
+	 * @param authorities 组
+	 * @param criteria 查询构造器
+	 * @return 任务列表
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public AllTaskRetVO getAllTasks(String username, Set<String> authorities, Criteria criteria){
+		//活动任务
+		TaskQuery activeTaskQuery = taskService.createTaskQuery().active().taskAssignee(username);
+		criteria2TaskQuery(criteria, activeTaskQuery);
+		List<Task> activeTaskList = activeTaskQuery.list();
+		//候选任务
+		TaskQuery candidateUserTaskQuery = taskService.createTaskQuery().taskCandidateUser(username).active().taskUnassigned();
+		criteria2TaskQuery(criteria, candidateUserTaskQuery);
+		List<Task> candidateUserTaskList = candidateUserTaskQuery.list();
+		//组任务
+		TaskQuery candidateGroupTaskQuery = taskService.createTaskQuery().active().taskCandidateGroupIn(new ArrayList<>(authorities)).taskUnassigned();
+		criteria2TaskQuery(criteria, candidateGroupTaskQuery);
+		List<Task> candidateGroupTaskList = candidateGroupTaskQuery.list();
+
+		List<TaskVO> allTasks = new ArrayList<>();
+		for(Task t:activeTaskList){
+			HistoricProcessInstance historicProcessInstance = this.getHistoricProcessInstanceById(t.getProcessInstanceId());
+			TaskVO taskVO = new TaskVO(t, historicProcessInstance);
+			taskVO.setTaskType("active");
+			allTasks.add(taskVO);
+		}
+		for(Task t:candidateUserTaskList){
+			HistoricProcessInstance historicProcessInstance = this.getHistoricProcessInstanceById(t.getProcessInstanceId());
+			TaskVO taskVO = new TaskVO(t, historicProcessInstance);
+			taskVO.setTaskType("candidateUser");
+			allTasks.add(taskVO);
+		}
+		for(Task t:candidateGroupTaskList){
+			HistoricProcessInstance historicProcessInstance = this.getHistoricProcessInstanceById(t.getProcessInstanceId());
+			TaskVO taskVO = new TaskVO(t, historicProcessInstance);
+			taskVO.setTaskType("candidateGroup");
+			allTasks.add(taskVO);
+		}
+
+		Comparator<TaskVO> comparator = criteria2Comparator(criteria);
+		if(comparator!=null){
+			allTasks=allTasks.stream().sorted(comparator).collect(Collectors.toList());
+		}
+		AllTaskRetVO retVO = new AllTaskRetVO();
+		retVO.setAllTasks(allTasks);
+		retVO.setCount((long) allTasks.size());
+		return retVO;
+	}
+
 	private Task getTaskById(String taskId){
 		return taskService.createTaskQuery().taskId(taskId).singleResult();
 	}
@@ -943,11 +995,22 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 							if (Operator.EQ == ((SimpleCriterion) criterion).getOperator()) {
 								query.processDefinitionName(((SimpleCriterion) criterion).getValue() + "");
 							}
+							else if(Operator.LIKE == ((SimpleCriterion) criterion).getOperator()) {
+								query.processDefinitionNameLike("%" + ((SimpleCriterion) criterion).getValue() + "%");
+							}
+							break;
+						case "processDefinitionKey":
+							if (Operator.EQ == ((SimpleCriterion) criterion).getOperator()) {
+								String values = ((SimpleCriterion) criterion).getValue() + "";
+								String [] valueArray = values.split(",");
+								query.processDefinitionKeyIn(valueArray);
+							}
 							break;
 						case "taskId":
 							if (Operator.EQ == ((SimpleCriterion) criterion).getOperator()) {
 								query.taskId(((SimpleCriterion) criterion).getValue()+ "");
 							}
+							break;
 						default:
 							if (Operator.EQ == ((SimpleCriterion) criterion).getOperator()) {
 								query.processVariableValueEquals(((SimpleCriterion) criterion).getFieldName(), ((SimpleCriterion) criterion).getValue());
@@ -960,6 +1023,61 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			}
 		}
 	}
+
+	private Comparator<TaskVO>  criteria2Comparator(Criteria criteria){
+		List<Order> orderList = criteria.getOrders();
+		if(CollectionUtils.isEmpty(orderList)){
+			return null;
+		}
+		Comparator<TaskVO> comparator = null;
+		for(Order order:orderList){
+			String orderField = order.getFieldName();
+			boolean desc = order.isDesc();
+			switch (orderField){
+				case "id":
+					if(desc){
+						if(comparator==null){
+							comparator = Comparator.comparing(TaskVO::getId,Comparator.reverseOrder());
+						}
+						else{
+							comparator = comparator.thenComparing(TaskVO::getId,Comparator.reverseOrder());
+						}
+					}
+					else{
+						if(comparator==null){
+							comparator = Comparator.comparing(TaskVO::getId);
+						}
+						else{
+							comparator = comparator.thenComparing(TaskVO::getId);
+						}
+					}
+					break;
+				case "createTime":
+					if(desc){
+						if(comparator==null){
+							comparator = Comparator.comparing(TaskVO::getCreateTime,Comparator.reverseOrder());
+						}
+						else{
+							comparator = comparator.thenComparing(TaskVO::getCreateTime,Comparator.reverseOrder());
+						}
+					}
+					else{
+						if(comparator==null){
+							comparator = Comparator.comparing(TaskVO::getCreateTime);
+						}
+						else{
+							comparator = comparator.thenComparing(TaskVO::getCreateTime);
+						}
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		return comparator;
+	}
+
+
 
 	private void criteria2HistoricTaskInstanceQuery(Criteria criteria, HistoricTaskInstanceQuery query){
 		if(criteria != null){

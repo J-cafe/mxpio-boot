@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.mxpioframework.camunda.vo.*;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.history.HistoricActivityInstance;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
@@ -28,9 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mxpioframework.camunda.dto.ResultMessage;
 import com.mxpioframework.camunda.entity.FormModelDef;
 import com.mxpioframework.camunda.service.BpmnFlowService;
-import com.mxpioframework.camunda.vo.HistoricTaskVO;
-import com.mxpioframework.camunda.vo.TaskVO;
-import com.mxpioframework.camunda.vo.TaskFormDto;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.security.util.SecurityUtils;
@@ -143,6 +142,40 @@ public class TaskController {
 		Page<TaskVO> page = new PageImpl<>(list, pageAble, total);
 		return Result.OK(page);
 	}
+
+	@GetMapping("all/page")
+	@Operation(summary = "所有任务列表(分页)", description = "所有任务列表(分页)", method = "GET")
+	public Result<Page<TaskVO>> allPage(Criteria criteria,
+										  @RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
+										  @RequestParam(value="pageNo", defaultValue = "1") Integer pageNo){
+
+		Set<String> authorities = SecurityUtils.getAuthorityKeys();
+		String username = SecurityUtils.getLoginUsername();
+		AllTaskRetVO allTaskRetVO = bpmnFlowService.getAllTasks(username,authorities,criteria);
+		List<TaskVO> taskVOList = allTaskRetVO.getAllTasks();
+		long total = allTaskRetVO.getCount();
+
+		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
+
+		if(CollectionUtils.isNotEmpty(taskVOList)){
+			int startIndex = (pageNo-1)*pageSize;
+			if(startIndex< taskVOList.size()){
+				List<TaskVO> returnList = taskVOList.subList(startIndex, Math.min(startIndex + pageSize, taskVOList.size()));
+				for(TaskVO task:returnList){
+					HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
+					String formKey = bpmnFlowService.getTaskFormKey(task.getProcessDefinitionId(), task.getTaskDefinitionKey());
+					task.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
+					task.setHasForm(StringUtils.isNotEmpty(formKey));
+				}
+				Page<TaskVO> page = new PageImpl<>(returnList, pageAble, total);
+				return Result.OK(page);
+			}
+		}
+
+		return Result.OK(new PageImpl<>(new ArrayList<>(),pageAble,0));
+	}
+
+
 
 	@PostMapping("claim/{taskId}")
 	@Operation(summary = "任务领取", description = "任务领取", method = "POST")

@@ -60,6 +60,9 @@ public class TaskVO implements Serializable, DictAble {
 	@Schema(description = "流程定义名称")
 	private String processDefinitionName;
 
+	@Schema(description = "流程定义Key")
+	private String processDefinitionKey;
+
 	@Schema(description = "流程状态")
 	private String procState;
 
@@ -69,6 +72,9 @@ public class TaskVO implements Serializable, DictAble {
 	@Schema(description = "是否有表单")
 	private Boolean hasForm;
 
+	@Schema(description = "task类别,active,candidateUser,candidateGroup")
+	private String taskType;
+
 	public TaskVO(HistoricTaskInstance task) {
 		this.id = task.getId();
 		this.assignee = task.getAssignee();
@@ -76,6 +82,7 @@ public class TaskVO implements Serializable, DictAble {
 		this.taskDefinitionKey = task.getTaskDefinitionKey();
 		this.processInstanceId = task.getProcessInstanceId();
 		this.processDefinitionId = task.getProcessDefinitionId();
+		this.processDefinitionKey = task.getProcessDefinitionKey();
 		this.createTime = task.getStartTime();
 		this.endTime = task.getEndTime();
 	}
@@ -104,6 +111,7 @@ public class TaskVO implements Serializable, DictAble {
 		this.procStartTime = historicProcessInstance.getStartTime();
 		this.procStartUserId = historicProcessInstance.getStartUserId();
 		this.processDefinitionName = historicProcessInstance.getProcessDefinitionName();
+		this.processDefinitionKey = historicProcessInstance.getProcessDefinitionKey();
 	}
 
 	private Map<String, String> textMap;
