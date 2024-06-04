@@ -944,21 +944,18 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		for(Task t:activeTaskList){
 			HistoricProcessInstance historicProcessInstance = this.getHistoricProcessInstanceById(t.getProcessInstanceId());
 			TaskVO taskVO = new TaskVO(t, historicProcessInstance);
-			taskVO.setTitle(this.getTitleByInstanceId(historicProcessInstance.getId()));
 			taskVO.setTaskType("active");
 			allTasks.add(taskVO);
 		}
 		for(Task t:candidateUserTaskList){
 			HistoricProcessInstance historicProcessInstance = this.getHistoricProcessInstanceById(t.getProcessInstanceId());
 			TaskVO taskVO = new TaskVO(t, historicProcessInstance);
-			taskVO.setTitle(this.getTitleByInstanceId(historicProcessInstance.getId()));
 			taskVO.setTaskType("candidateUser");
 			allTasks.add(taskVO);
 		}
 		for(Task t:candidateGroupTaskList){
 			HistoricProcessInstance historicProcessInstance = this.getHistoricProcessInstanceById(t.getProcessInstanceId());
 			TaskVO taskVO = new TaskVO(t, historicProcessInstance);
-			taskVO.setTitle(this.getTitleByInstanceId(historicProcessInstance.getId()));
 			taskVO.setTaskType("candidateGroup");
 			allTasks.add(taskVO);
 		}
@@ -1002,6 +999,10 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 								query.processDefinitionNameLike("%" + ((SimpleCriterion) criterion).getValue() + "%");
 							}
 							break;
+						case "processDefinitionKey":
+							if (Operator.EQ == ((SimpleCriterion) criterion).getOperator()) {
+								query.processDefinitionKey(((SimpleCriterion) criterion).getValue() + "");
+							}
 						case "taskId":
 							if (Operator.EQ == ((SimpleCriterion) criterion).getOperator()) {
 								query.taskId(((SimpleCriterion) criterion).getValue()+ "");
