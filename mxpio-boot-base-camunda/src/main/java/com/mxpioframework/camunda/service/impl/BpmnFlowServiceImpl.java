@@ -1001,12 +1001,16 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 							break;
 						case "processDefinitionKey":
 							if (Operator.EQ == ((SimpleCriterion) criterion).getOperator()) {
-								query.processDefinitionKey(((SimpleCriterion) criterion).getValue() + "");
+								String values = ((SimpleCriterion) criterion).getValue() + "";
+								String [] valueArray = values.split(",");
+								query.processDefinitionKeyIn(valueArray);
 							}
+							break;
 						case "taskId":
 							if (Operator.EQ == ((SimpleCriterion) criterion).getOperator()) {
 								query.taskId(((SimpleCriterion) criterion).getValue()+ "");
 							}
+							break;
 						default:
 							if (Operator.EQ == ((SimpleCriterion) criterion).getOperator()) {
 								query.processVariableValueEquals(((SimpleCriterion) criterion).getFieldName(), ((SimpleCriterion) criterion).getValue());
