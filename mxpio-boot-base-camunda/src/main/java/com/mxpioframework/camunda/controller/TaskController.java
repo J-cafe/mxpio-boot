@@ -92,8 +92,7 @@ public class TaskController {
 		for(HistoricTaskInstance task : tasks){
 			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
 			TaskVO taskVO = new TaskVO(task, historicProcessInstance);
-			//taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
-			taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(task.getExecutionId()));
+			taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
 			list.add(taskVO);
 		}
 
@@ -165,8 +164,7 @@ public class TaskController {
 				for(TaskVO task:returnList){
 					HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
 					String formKey = bpmnFlowService.getTaskFormKey(task.getProcessDefinitionId(), task.getTaskDefinitionKey());
-					//task.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
-					task.setTitle(bpmnFlowService.getTitleByInstanceId(task.getExecutionId()));
+					task.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
 					task.setHasForm(StringUtils.isNotEmpty(formKey));
 				}
 				Page<TaskVO> page = new PageImpl<>(returnList, pageAble, total);
