@@ -36,7 +36,7 @@ import com.mxpioframework.security.service.DeptService;
 @Service("mxpio.security.deptService")
 @Transactional(readOnly = true)
 public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptService {
-	
+
 	@Autowired(required = false)
 	private Collection<UserDeptProcessor> userDeptProcessors;
 
@@ -110,7 +110,7 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 		}
 		Map<String, Set<String>> allDeptCodeGroupByUser = rbacCacheService.getAllDeptCodeGroupByUser();
 		Set<String> deptCodeSet = allDeptCodeGroupByUser.get(username);
-		if (deptCodeSet.isEmpty()){
+		if (CollectionUtils.isEmpty(deptCodeSet)){
 			return null;
 		}
 		String deptCode = deptCodeSet.iterator().next();//用户只能有一个部门
@@ -143,7 +143,7 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 			}
 		});
 	}
-	
+
 	@Override
 	@SecurityCacheEvict
 	@Transactional
@@ -162,7 +162,7 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 			}
 		});
 	}
-	
+
 	@Override
 	@SecurityCacheEvict
 	@Transactional
@@ -181,7 +181,7 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 			}
 		});
 	}
-	
+
 	@Override
 	@SecurityCacheEvict
 	@Transactional
@@ -200,7 +200,7 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 			}
 		});
 	}
-	
+
 	@Override
 	@SecurityCacheEvict
 	@Transactional
@@ -237,7 +237,7 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 			.endIf()
 			.paging(pageable);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Dept> loadDeptsWithin(Pageable pageable, Criteria criteria, String roleId) {
@@ -257,7 +257,7 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 			.endIf()
 			.paging(pageable);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public Page<User> loadUsersWithout(Pageable pageable, Criteria criteria, String deptId) {
@@ -277,7 +277,7 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 			.endIf()
 			.paging(pageable);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public Page<User> loadUsersWithin(Pageable pageable, Criteria criteria, String deptId) {
@@ -331,7 +331,7 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 			}
 		}
 		JpaUtil.delete(userDepts);
-		
+
 		if(process){
 			for(UserDeptProcessor processor : userDeptProcessors){
 				processor.postProcess(context);
@@ -367,9 +367,9 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 		}else{
 			return new HashSet<>();
 		}
-		
+
 	}
-	
+
 	private void getDeptCode(Dept dept,List<String> deptCodes){
 		deptCodes.add(dept.getDeptCode());
 		if (dept.getChildren()!=null&& !dept.getChildren().isEmpty()){

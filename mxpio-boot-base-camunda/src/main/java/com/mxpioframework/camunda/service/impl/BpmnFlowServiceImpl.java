@@ -715,7 +715,13 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	public String getTitleByInstanceId(String id) {
 		String title = null;
 		try{
-			title = runtimeService.getVariable(id, CamundaConstant.BPMN_TITLE).toString();
+			//title = runtimeService.getVariable(id, CamundaConstant.BPMN_TITLE).toString();
+			HistoricVariableInstanceQuery hisVarQuery = historyService.createHistoricVariableInstanceQuery().processInstanceId(id).variableName(CamundaConstant.BPMN_TITLE);
+			List<HistoricVariableInstance> hisVarList = hisVarQuery.list();
+			if(CollectionUtils.isNotEmpty(hisVarList)){
+				title = hisVarList.get(0).getValue().toString();
+			}
+
 		} catch (Exception ignored){
 
 		}

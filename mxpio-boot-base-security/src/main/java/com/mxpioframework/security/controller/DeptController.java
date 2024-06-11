@@ -30,16 +30,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController("mxpio.security.deptController")
 @RequestMapping("/dept/")
 public class DeptController {
-	
+
 	@Autowired
 	private DeptService deptService;
-	
+
 	@GetMapping("tree")
 	@Operation(summary = "部门列表", description = "获取部门列表", method = "GET")
 	public Result<List<Dept>> tree(Criteria criteria) throws Exception {
 		return Result.OK(deptService.getDeptTree(criteria));
 	}
-	
+
 	@GetMapping("role/without/{roleId}")
 	@Operation(summary = "未绑定部门", description = "分页获取未绑定角色ID的部门", method = "GET")
 	public Result<Page<Dept>> without(Criteria criteria,
@@ -49,7 +49,7 @@ public class DeptController {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		return Result.OK(deptService.loadDeptsWithout(pageAble, criteria, roleId));
 	}
-	
+
 	@GetMapping("role/within/{roleId}")
 	@Operation(summary = "绑定部门", description = "分页获取绑定角色ID的部门", method = "GET")
 	public Result<Page<Dept>> within(Criteria criteria,
@@ -59,7 +59,7 @@ public class DeptController {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		return Result.OK(deptService.loadDeptsWithin(pageAble, criteria, roleId));
 	}
-	
+
 	@GetMapping("user/without/{deptId}")
 	@Operation(summary = "未关联用户", description = "分页获取未关联部门ID的用户", method = "GET")
 	public Result<Page<User>> userWithout(Criteria criteria,
@@ -69,7 +69,7 @@ public class DeptController {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		return Result.OK(deptService.loadUsersWithout(pageAble, criteria, deptId));
 	}
-	
+
 	@GetMapping("user/within/{deptId}")
 	@Operation(summary = "关联用户", description = "分页获取关联部门ID的用户", method = "GET")
 	public Result<Page<User>> userWithin(Criteria criteria,
@@ -79,14 +79,14 @@ public class DeptController {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		return Result.OK(deptService.loadUsersWithin(pageAble, criteria, deptId));
 	}
-	
+
 	@PostMapping("user/add")
 	@Operation(summary = "关联用户", description = "关联用户", method = "POST")
 	public Result<List<UserDept>> userAdd(@RequestBody List<UserDept> userDepts) throws Exception {
 		deptService.saveUserDepts(userDepts);
 		return Result.OK("关联用户成功",userDepts);
 	}
-	
+
 	@DeleteMapping("user/delete/{deptId}/{userIds}")
 	@Operation(summary = "删除关联用户", description = "删除关联用户", method = "DELETE")
 	public Result<List<UserDept>> userDelete(@PathVariable(name = "deptId", required = true) String deptId,
@@ -94,21 +94,21 @@ public class DeptController {
 		deptService.deleteUserDepts(deptId,userIds);
 		return Result.OK("删除关联用户成功", null);
 	}
-	
+
 	@PostMapping("add")
 	@Operation(summary = "添加部门", description = "添加部门信息", method = "POST")
 	public Result<List<Dept>> add(@RequestBody List<Dept> depts) throws Exception {
 		deptService.saveDepts(depts);
 		return Result.OK("添加部门成功",depts);
 	}
-	
+
 	@PutMapping("edit")
 	@Operation(summary = "更新部门", description = "更新部门信息", method = "PUT")
 	public Result<List<Dept>> edit(@RequestBody List<Dept> depts) throws Exception {
 		deptService.updateDepts(depts);
 		return Result.OK("更新部门成功",depts);
 	}
-	
+
 	@DeleteMapping("remove/{deptIds}")
 	@Operation(summary = "删除部门", description = "删除部门信息", method = "DELETE")
 	public Result<List<Dept>> remove(@PathVariable(name = "deptIds", required = true) String deptIds) throws Exception {
@@ -120,7 +120,11 @@ public class DeptController {
 	@GetMapping("user_dept_tree")
 	@Operation(summary = "用户所属部门的部门树（部门及子部门，username为空时按当前用户查询", description = "用户所属部门的部门树（部门及子部门，username为空时按当前用户查询）", method = "GET")
 	public Result<Dept> getUserDeptTree( @RequestParam(value="username", defaultValue = "") String username) {
-		return Result.OK(deptService.getUserDeptTree(username));
+		Dept dept = deptService.getUserDeptTree(username);
+		if(dept==null){
+			return Result.error("用户未配置所属部门");
+		}
+		return Result.OK(dept);
 	}
 
 
