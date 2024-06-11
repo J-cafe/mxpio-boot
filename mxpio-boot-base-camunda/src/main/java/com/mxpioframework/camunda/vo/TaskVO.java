@@ -75,6 +75,8 @@ public class TaskVO implements Serializable, DictAble {
 	@Schema(description = "task类别,active,candidateUser,candidateGroup")
 	private String taskType;
 
+	private String executionId;
+
 	public TaskVO(HistoricTaskInstance task) {
 		this.id = task.getId();
 		this.assignee = task.getAssignee();
@@ -85,6 +87,7 @@ public class TaskVO implements Serializable, DictAble {
 		this.processDefinitionKey = task.getProcessDefinitionKey();
 		this.createTime = task.getStartTime();
 		this.endTime = task.getEndTime();
+		this.executionId = task.getExecutionId();
 	}
 
 	public TaskVO(Task task) {
@@ -96,6 +99,7 @@ public class TaskVO implements Serializable, DictAble {
 		this.processDefinitionId = task.getProcessDefinitionId();
 		this.createTime = task.getCreateTime();
 		// this.endTime = task.getEndTime();
+		this.executionId = task.getExecutionId();
 	}
 
 	public TaskVO(HistoricTaskInstance task, HistoricProcessInstance historicProcessInstance) {
