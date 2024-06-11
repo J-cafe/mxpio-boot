@@ -92,7 +92,8 @@ public class TaskController {
 		for(HistoricTaskInstance task : tasks){
 			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
 			TaskVO taskVO = new TaskVO(task, historicProcessInstance);
-			taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
+			//taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
+			taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(task.getExecutionId()));
 			list.add(taskVO);
 		}
 
