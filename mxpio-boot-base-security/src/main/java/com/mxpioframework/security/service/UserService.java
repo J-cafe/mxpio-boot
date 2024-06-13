@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.vo.UpatePassVo;
@@ -92,7 +92,7 @@ public interface UserService {
      * @param user /
      */
     void updateCenter(User user);
-    
+
     /**
 
 	 * 判断当前登录用户是否为管理员
@@ -102,7 +102,7 @@ public interface UserService {
 	 */
 	boolean isAdministrator();
 
-	
+
 	/**
 
 	 * 判断是否为管理员

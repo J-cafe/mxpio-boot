@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class FolderToZipUtil {
     public static void zip(String sourceFileName, HttpServletResponse response){

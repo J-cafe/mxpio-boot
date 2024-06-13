@@ -9,10 +9,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class FileController {
 			this.fileStoragePolicyMap.put(fileStoragePolicy.getName(), fileStoragePolicy);
 		}
 	}
-	
+
 	@DeleteMapping("remove/{fileNo}")
 	@Operation(summary = "删除文件", description = "根据fileNo删除文件", method = "DELETE")
 	public Result<Object> removeFile(@PathVariable("fileNo") String fileNo) throws FileNotFoundException{
@@ -104,7 +104,7 @@ public class FileController {
 	@PostMapping("upload")
 	@Operation(summary = "上传文件", description = "上传文件", method = "POST")
 	public Result<MxpioFileInfo> handleFileUpload(MultipartFile file,String fileStorageType,HttpServletRequest request) throws IOException {
-		
+
 		if(file != null){
 			String fileName = file.getOriginalFilename();
 			MxpioFileInfo mxpioFileInfo = fileService.put(fileStorageType, file.getInputStream(), fileName,file.getSize(),file.getContentType());

@@ -2,7 +2,7 @@ package com.mxpioframework.excel.importer.converter.filter.impl;
 
 import java.util.List;
 
-import javax.persistence.metamodel.EntityType;
+import jakarta.persistence.metamodel.EntityType;
 
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ public class EmptyEntityTypeFilter implements EntityTypeFilter {
 	@Override
 	public void filter(List<EntityType<?>> entityTypes) {
 
-		
+
 	}
 
 }

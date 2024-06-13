@@ -1,20 +1,20 @@
 package com.mxpioframework.jpa.provider.impl;
 
 import java.util.Map;
-import javax.annotation.Resource;
-import javax.persistence.EntityManagerFactory;
+import jakarta.annotation.Resource;
+import jakarta.persistence.EntityManagerFactory;
 import org.springframework.stereotype.Component;
 
 import com.mxpioframework.jpa.provider.EntityManagerFactoryProvider;
 
 @Component
 public class EntityManagerFactoryProviderImpl implements EntityManagerFactoryProvider {
-	
+
 	@Resource
 	private Map<String, EntityManagerFactory> entityManagerFactoryMap;
-	
+
 /*	private Map<String, List<String>> entityClassNameMap = new HashMap<>();
-	
+
 	@PostConstruct
 	public void test(){
 		for (Entry<String, EntityManagerFactory> entry : entityManagerFactoryMap.entrySet()) {
@@ -34,7 +34,7 @@ public class EntityManagerFactoryProviderImpl implements EntityManagerFactoryPro
 				System.out.println("column=>"+s);
 			}
 		}
-		
+
 	}*/
 
 }

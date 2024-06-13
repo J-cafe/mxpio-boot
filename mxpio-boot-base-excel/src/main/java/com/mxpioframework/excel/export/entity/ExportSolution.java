@@ -3,11 +3,11 @@ package com.mxpioframework.excel.export.entity;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import com.mxpioframework.jpa.annotation.Generator;
 import com.mxpioframework.security.entity.BaseEntity;
@@ -25,13 +25,13 @@ import lombok.EqualsAndHashCode;
 public class ExportSolution extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Generator
 	@Column(name = "ID_", length = 64)
 	@Schema(description = "ID")
 	private String id;
-	
+
 	@Column(name = "CODE_", length = 64, unique = true)
 	@Schema(description = "方案编码")
 	private String code;
@@ -39,11 +39,11 @@ public class ExportSolution extends BaseEntity {
 	@Column(name = "FILE_NAME_")
 	@Schema(description = "文件名")
 	private String fileName;
-	
+
 	@Column(name = "API_")
 	@Schema(description = "接口")
 	private String api;
-	
+
 	@Column(name = "ELEMENT_ID_", length = 255)
 	@Schema(description = "组件标识")
 	private String elementId;
@@ -83,41 +83,41 @@ public class ExportSolution extends BaseEntity {
 	@Column(name = "FONT_SIZE_")
 	@Schema(description = "标题字体大小")
 	private int fontSize;
-	
+
 	@Column(name = "COLUMN_BG_COLOR_")
 	@Schema(description = "列头背景颜色（RGB）")
 	private String columnBgColor;
-	
+
 	@Column(name = "COLUMN_FONT_COLOR_")
 	@Schema(description = "列头字体颜色（RGB）")
 	private String columnFontColor;
-	
+
 	@Column(name = "COLUMN_FONT_SIZE_")
 	@Schema(description = "列头字体大小")
 	private Integer columnFontSize;
-	
+
 	@Column(name = "COLUMN_ALIGN_")
 	@Schema(description = "列头对齐方式")
 	private Integer columnAlign;
-	
+
 	@Column(name = "DATA_BG_COLOR_")
 	@Schema(description = "正文背景颜色（RGB）")
 	private String dataBgColor;
-	
+
 	@Column(name = "DATA_FONT_COLOR_")
 	@Schema(description = "正文颜色（RGB）")
 	private String dataFontColor;
-	
+
 	@Column(name = "DATA_FONT_SIZE_")
 	@Schema(description = "正文字体大小")
 	private int dataFontSize;
-	
+
 	@Transient
 	private List<ExportColumn> columns;
-	
+
 	@Transient
 	private Map<String,String[]> params;
-	
+
 	@Transient
 	private DataVo dataResource;
 }

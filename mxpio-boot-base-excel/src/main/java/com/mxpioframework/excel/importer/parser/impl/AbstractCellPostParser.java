@@ -2,8 +2,8 @@ package com.mxpioframework.excel.importer.parser.impl;
 
 import java.lang.reflect.Field;
 
-import javax.persistence.Column;
-import javax.persistence.Lob;
+import jakarta.persistence.Column;
+import jakarta.persistence.Lob;
 
 import org.springframework.util.ReflectionUtils;
 
@@ -32,7 +32,7 @@ public abstract class AbstractCellPostParser implements CellPostParser {
 						throw new DataNullableException(context.getCurrentCell().getRow(), context.getCurrentCell().getCol());
 					}
 				}
-				
+
 				if (field.getType() == String.class && !field.isAnnotationPresent(Lob.class)) {
 					String value = (String) context.getValue();
 					if (value.getBytes().length > column.length()) {

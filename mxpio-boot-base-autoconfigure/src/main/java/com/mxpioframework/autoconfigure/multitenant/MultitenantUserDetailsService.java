@@ -1,6 +1,6 @@
 package com.mxpioframework.autoconfigure.multitenant;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,19 +24,19 @@ import com.mxpioframework.security.util.SecurityUtils;
  */
 @Transactional(readOnly = true)
 public class MultitenantUserDetailsService implements UserDetailsService {
-	
-	@Autowired  
+
+	@Autowired
 	private HttpServletRequest request;
-	
+
 	@Autowired
 	private GrantedAuthorityService grantedAuthorityService;
-	
+
 	@Autowired
 	private OrganizationService organizationService;
-	
+
 	@Override
 	public UserDetails loadUserByUsername(String username)
-			throws UsernameNotFoundException {			
+			throws UsernameNotFoundException {
 		try {
 			Organization organization = loadOrganization();
 			return MultitenantUtils.doQuery(organization.getId(), () ->  {

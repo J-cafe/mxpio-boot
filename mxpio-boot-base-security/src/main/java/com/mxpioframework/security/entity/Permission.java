@@ -1,12 +1,12 @@
 package com.mxpioframework.security.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import org.springframework.security.access.ConfigAttribute;
 
@@ -20,40 +20,40 @@ import lombok.ToString;
 @ToString
 @Schema(description="权限对象")
 public class Permission extends BaseEntity implements ConfigAttribute{
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Generator
 	@Column(name = "ID_", length = 64)
 	@Schema(description = "ID")
 	private String id;
-	
+
 	@Column(name = "ROLE_ID_", length = 64)
 	@Schema(description = "角色ID")
 	private String roleId;
-	
+
 	@Column(name = "RESOURCE_ID_", length = 64)
 	@Schema(description = "资源ID")
 	private String resourceId;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "RESOURCE_TYPE_", length = 32)
 	@Schema(description = "资源类型")
 	private ResourceType resourceType;
-	
+
 	@Column(name = "ATTRIBUTE_", length = 255)
 	@Schema(description = "资源属性")
 	private String attribute;
-	
+
 	@Transient
 	@Schema(description = "角色对象")
 	private Role role;
-	
+
 	@Transient
 	@Schema(description = "资源对象")
 	private Resource resource;
-	
+
 	public Role getRole() {
 		return role;
 	}
@@ -95,7 +95,7 @@ public class Permission extends BaseEntity implements ConfigAttribute{
 	public String getResourceId() {
 		return resourceId;
 	}
-	
+
 	/**
 
 	 * 资源类型，菜单为URL，组件为ELEMENT

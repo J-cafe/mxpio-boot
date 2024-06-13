@@ -2,11 +2,11 @@ package com.mxpioframework.security.entity;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import com.mxpioframework.jpa.annotation.Generator;
 
@@ -23,7 +23,7 @@ import lombok.EqualsAndHashCode;
 public class Dept extends BaseEntity implements Actor {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Generator
 	@Schema(description = "ID")
@@ -34,11 +34,11 @@ public class Dept extends BaseEntity implements Actor {
 	@Column(name = "DEPT_TYPE_")
 	@com.mxpioframework.security.annotation.Dict(dicCode = "MB_SYSTEM_DEPT_TYPE")
 	private Integer deptType;
-	
+
 	@Schema(description = "部门代码")
 	@Column(name = "DEPT_CODE_", length=200, nullable=false, unique=true)
 	private String deptCode;
-	
+
 	@Schema(description = "部门名称")
 	@Column(name = "DEPT_NAME_", length=255, nullable=false)
 	private String deptName;
@@ -51,20 +51,20 @@ public class Dept extends BaseEntity implements Actor {
 	@Column(name = "DEPT_LEVEL_")
 	@Dict(dicCode = "MB_SYSTEM_DEPT_LEVEL")
 	private String deptLevel;
-	
+
 	@Schema(description = "部门描述")
 	@Column(name = "DEPT_DESC_")
 	private String deptDesc;
-	
+
 	@Schema(description = "父部门ID")
 	@Column(name = "FA_DEPT_ID_")
 	//@com.mxpioframework.security.annotation.Dict(dicCode = "id", dicEntity= Dept.class, dicText= "faDeptName")
 	private String faDeptId;
-	
+
 	@Transient
 	@Schema(description = "父部门名称")
 	private String faDeptName;
-	
+
 	@Transient
 	private List<Dept> children;
 
@@ -72,5 +72,5 @@ public class Dept extends BaseEntity implements Actor {
 	public String getActorId() {
 		return id;
 	}
-	
+
 }

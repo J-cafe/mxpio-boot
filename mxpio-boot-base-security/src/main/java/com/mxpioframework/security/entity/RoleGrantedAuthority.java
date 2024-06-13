@@ -1,9 +1,9 @@
 package com.mxpioframework.security.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,17 +20,17 @@ import lombok.ToString;
 public class RoleGrantedAuthority extends BaseEntity implements GrantedAuthority {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Column(name = "ID_", length = 64)
 	@Generator
 	@Schema(description = "ID")
 	private String id;
-	
+
 	@Column(name = "ACTOR_ID_", length = 64)
 	@Schema(description = "演员ID")
 	private String actorId;
-	
+
 	@Column(name = "ROLE_ID_", length = 64)
 	@Schema(description = "角色ID")
 	private String roleId;
@@ -68,7 +68,7 @@ public class RoleGrantedAuthority extends BaseEntity implements GrantedAuthority
 	public String getRoleId() {
 		return roleId;
 	}
-	
+
 	public void setRoleId(String roleId) {
 		this.roleId = roleId;
 	}

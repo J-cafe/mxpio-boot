@@ -1,7 +1,7 @@
 package com.mxpioframework.multitenant.resource;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 
 import com.mxpioframework.multitenant.domain.Organization;
 import com.mxpioframework.multitenant.service.EntityManagerFactoryService;
@@ -16,13 +16,13 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(1000)
 public class DatabaseResourceReleaser implements ResourceReleaser {
-	
+
 	@Autowired
 	private DataSourceProperties properties;
-	
+
 	@Autowired
 	private EntityManagerFactory emf;
-	
+
 	@Autowired
 	private EntityManagerFactoryService entityManagerFactoryService;
 
@@ -33,6 +33,6 @@ public class DatabaseResourceReleaser implements ResourceReleaser {
 		if (!EmbeddedDatabaseConnection.isEmbedded(properties.determineDriverClassName(),null)) {
 			em.createNativeQuery("drop database " + organization.getId()).executeUpdate();
 		}
-		
+
 	}
 }

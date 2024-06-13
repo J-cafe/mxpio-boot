@@ -1,6 +1,6 @@
 package com.mxpioframework.jpa.policy;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 import com.mxpioframework.jpa.policy.impl.CrudType;
 

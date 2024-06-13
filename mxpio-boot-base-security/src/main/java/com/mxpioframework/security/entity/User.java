@@ -3,11 +3,11 @@ package com.mxpioframework.security.entity;
 import java.util.Collection;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,7 +20,7 @@ import lombok.ToString;
 
 /**
  * 用戶模型
- * 
+ *
  * @author MxpIO
  *
  */
@@ -40,7 +40,7 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 	@Column(name = "NICKNAME_", length = 64)
 	@Schema(description = "昵称")
 	private String nickname;
-	
+
 	@Column(name = "AVATAR_", length = 64)
 	@Schema(description = "头像")
 	private String avatar;
@@ -49,7 +49,7 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 	@JsonIgnore
 	@Schema(description = "密码")
 	private String password;
-	
+
 	@Column(name = "EMAIL_", length = 125)
 	@Schema(description = "邮箱")
 	private String email;
@@ -72,11 +72,11 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 
 	@Column(name = "ENABLED_")
 	private boolean enabled = true;
-	
+
 	@Column(name = "SALT_")
 	@Schema(description = "盐值")
 	private String salt;
-	
+
 	@Column(name = "INTRODUCTION_")
 	@Schema(description = "简介")
 	private String introduction;
@@ -202,11 +202,11 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 	}
 
 	/**
-	 * 
+	 *
 	 * 昵称
-	 * 
+	 *
 	 * @return nickname
-	 * 
+	 *
 	 */
 	public String getNickname() {
 		return nickname;
