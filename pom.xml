@@ -35,7 +35,7 @@
 		<liquibase.version>4.8.0</liquibase.version>
 		<caffeine.version>2.9.3</caffeine.version>
 		<minio.version>8.2.1</minio.version>
-		<camunda.version>7.16.0</camunda.version>
+		<camunda.version>7.21.0</camunda.version>
 	</properties>
 	<modules>
 		<module>mxpio-boot-base-autoconfigure</module>
