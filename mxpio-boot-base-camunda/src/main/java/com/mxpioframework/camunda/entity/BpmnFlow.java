@@ -47,7 +47,7 @@ public class BpmnFlow extends BaseEntity {
 	private Boolean visible;
 
 	@Lob
-	@Column(name = "XML_")
+	@Column(name = "XML_",columnDefinition = "longtext")
 	@Schema(description = "流程定义")
 	private String xml;
 

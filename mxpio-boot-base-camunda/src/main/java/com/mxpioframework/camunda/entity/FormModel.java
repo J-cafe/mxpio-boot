@@ -43,7 +43,7 @@ public class FormModel extends BaseEntity {
 	private String desc;
 
 	@Lob
-	@Column(name = "MODEL_")
+	@Column(name = "MODEL_",columnDefinition = "longtext")
 	@Schema(description = "表单内容")
 	private String model;
 
