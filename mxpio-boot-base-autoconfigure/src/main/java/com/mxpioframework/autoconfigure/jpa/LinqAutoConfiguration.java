@@ -1,5 +1,6 @@
 package com.mxpioframework.autoconfigure.jpa;
 
+import com.mxpioframework.autoconfigure.common.CommonAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;
@@ -19,11 +20,11 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Configuration
 @ConditionalOnClass(LinqConfiguration.class)
-@AutoConfigureAfter(CommonConfiguration.class)
+@AutoConfigureAfter(CommonAutoConfiguration.class)
 @Import(LinqConfiguration.class)
 @Slf4j
 public class LinqAutoConfiguration {
-	
+
 	public LinqAutoConfiguration() {
 		log.info("[AutoConfiguration==>]:Linq Module Loading");
 		CommonConstant.addModule(new ModuleVO("Linq","LinqJpa模块"));
