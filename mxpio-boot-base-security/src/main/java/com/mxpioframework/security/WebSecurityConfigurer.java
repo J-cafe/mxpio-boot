@@ -104,13 +104,6 @@ public class WebSecurityConfigurer{
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
-	/*@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
-		ProviderManager manager = (ProviderManager)config.getAuthenticationManager();
-		manager.getProviders().add(jwtAuthenticationProvider);
-		manager.getProviders().add(thirdAuthorizeProvider);
-		return config.getAuthenticationManager();
-	}*/
 
 	@Bean
 	public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception{
@@ -120,14 +113,6 @@ public class WebSecurityConfigurer{
 		authenticationManagerBuilder.authenticationProvider(thirdAuthorizeProvider);
 		return authenticationManagerBuilder.build();
 	}
-
-	/*@Bean
-	public AuthenticationProvider authenticationProvider(){
-		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
-		return daoAuthenticationProvider;
-	}*/
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -148,7 +133,6 @@ public class WebSecurityConfigurer{
     			/*.rememberMe()*/;
 
         http.setSharedObject(FilterSecurityInterceptor.class, securityInterceptor);
-        //http.exceptionHandling().authenticationEntryPoint(new MxpioAuthenticationEntryPoint()).accessDeniedHandler(new MxpioAccessDeniedHandler());
 		return http.build();
 	}
 
