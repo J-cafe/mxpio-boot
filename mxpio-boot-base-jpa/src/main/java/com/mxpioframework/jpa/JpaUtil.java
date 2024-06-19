@@ -39,6 +39,7 @@ import com.mxpioframework.jpa.policy.impl.DirtyTreeCrudPolicy;
 import com.mxpioframework.jpa.policy.impl.SmartCrudPolicy;
 import com.mxpioframework.jpa.strategy.GetEntityManagerFactoryStrategy;
 
+import org.hibernate.query.criteria.JpaCriteriaQuery;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
@@ -963,33 +964,11 @@ public abstract class JpaUtil {
 		}
 		return total;
 	}
-	@SuppressWarnings("unchecked")
-	public static <T> TypedQuery<Long> getCountQuery(CriteriaQuery<T> cq) {
+
+	public static <T> TypedQuery<Long> getCountQuery(CriteriaQuery<T> cq){
 		Class<T> domainClass = cq.getResultType();
 		EntityManager em = getEntityManager(domainClass);
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
-		Root<T> root;
-		if (cq.getRestriction() != null) {
-			countCq.where(cq.getRestriction());
-		}
-		if (cq.getGroupRestriction() != null) {
-			countCq.having(cq.getGroupRestriction());
-		}
-		if (cq.getRoots().isEmpty()) {
-			root = countCq.from(domainClass);
-		} else {
-			countCq.getRoots().addAll(cq.getRoots());
-			root = (Root<T>) countCq.getRoots().iterator().next();
-		}
-		countCq.groupBy(cq.getGroupList());
-		if (cq.isDistinct()) {
-			countCq.select(cb.countDistinct(root));
-		} else {
-			countCq.select(cb.count(root));
-		}
-
-		return em.createQuery(countCq);
+		return em.createQuery(((JpaCriteriaQuery<T>)cq).createCountQuery());
 	}
 
 	/**
