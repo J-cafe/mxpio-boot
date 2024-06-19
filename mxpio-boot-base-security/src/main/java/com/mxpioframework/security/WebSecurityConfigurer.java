@@ -19,6 +19,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.*;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -103,18 +104,30 @@ public class WebSecurityConfigurer{
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
-	@Bean
+	/*@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
+		ProviderManager manager = (ProviderManager)config.getAuthenticationManager();
+		manager.getProviders().add(jwtAuthenticationProvider);
+		manager.getProviders().add(thirdAuthorizeProvider);
 		return config.getAuthenticationManager();
-	}
+	}*/
 
 	@Bean
+	public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception{
+		AuthenticationManagerBuilder authenticationManagerBuilder =
+				http.getSharedObject(AuthenticationManagerBuilder.class);
+		authenticationManagerBuilder.authenticationProvider(jwtAuthenticationProvider);
+		authenticationManagerBuilder.authenticationProvider(thirdAuthorizeProvider);
+		return authenticationManagerBuilder.build();
+	}
+
+	/*@Bean
 	public AuthenticationProvider authenticationProvider(){
 		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
 		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
 		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
 		return daoAuthenticationProvider;
-	}
+	}*/
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
