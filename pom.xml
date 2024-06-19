@@ -36,6 +36,7 @@
 		<caffeine.version>2.9.3</caffeine.version>
 		<minio.version>8.2.1</minio.version>
 		<camunda.version>7.21.0</camunda.version>
+		<burningwave.core.version>12.65.1</burningwave.core.version>
 	</properties>
 	<modules>
 		<module>mxpio-boot-base-autoconfigure</module>
@@ -411,6 +412,12 @@
 				<groupId>org.dom4j</groupId>
 				<artifactId>dom4j</artifactId>
 				<version>2.1.3</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.burningwave</groupId>
+				<artifactId>core</artifactId>
+				<version>${burningwave.core.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
