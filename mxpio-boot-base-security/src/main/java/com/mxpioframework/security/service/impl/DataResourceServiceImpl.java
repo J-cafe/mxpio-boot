@@ -1,11 +1,12 @@
 package com.mxpioframework.security.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import com.alibaba.druid.util.StringUtils;
+import com.mxpioframework.common.exception.MBootException;
 import com.mxpioframework.security.service.RbacCacheService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -31,42 +32,43 @@ import com.mxpioframework.security.util.ApplicationContextProvider;
 import com.mxpioframework.security.vo.DataVo;
 
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.web.util.pattern.PathPattern;
 
 @Service("mxpio.security.dataResourceService")
 public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> implements DataResourceService {
-	
+
 	@Value("${mxpio.systemAnonymous}")
 	private String systemAnonymous;
 
 	@Value("${mxpio.customAnonymous}")
 	private String customAnonymous;
-	
+
 	@Autowired
 	private SecurityDecisionManager securityDecisionManager;
-	
+
 	@Autowired
 	private UserService userService;
 
 	@Autowired
 	private RbacCacheService rbacCacheService;
-	
+
 	@Override
 	public List<DataVo> findAllApi(boolean onlyCriteria, String path) {
-		RequestMappingHandlerMapping mapping = ApplicationContextProvider.getBean(RequestMappingHandlerMapping.class);
+		RequestMappingHandlerMapping mapping = getRequestMappingHandlerMapping();
 		Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
 		List<DataVo> dataVos = new ArrayList<>();
 		Map<String,DataVo> patternsMap = new HashMap<>();
 		for(Map.Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet()){
 			RequestMappingInfo info = m.getKey();
 	        HandlerMethod method = m.getValue();
-			if(path != null && !info.getPatternsCondition().getPatterns().toArray()[0].equals(path)){
+			if(path != null && !StringUtils.equals(getRequestPath(info),path)){
 				continue;
 			}
-			
-			if(patternsMap.get(info.getPatternsCondition().getPatterns().toArray()[0]) != null){
+
+			if(patternsMap.get(getRequestPath(info)) != null){
 				continue;
 			}
-			
+
 	        RequestMethodsRequestCondition methodsCondition = info.getMethodsCondition();
 	        MethodParameter[] parameters = method.getMethodParameters();
 	        boolean hasCriteria = false;
@@ -87,13 +89,13 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 	    	        	.requestMethods(methodsCondition.getMethods())
 	    	        	.className(method.getMethod().getDeclaringClass().getName())
 	    	        	.classMethod(method.getMethod().getName())
-	    	        	.httpUrls(info.getPatternsCondition().getPatterns())
+	    	        	.httpUrls(getRequestPathSet(info))
 	    	        	.hasCriteria(hasCriteria)
 	    	        	.method(method.getMethod())
 	    	        	.beanClass(method.getBeanType())
 	    	        	.build();
 	    	    dataVos.add(dataVo);
-	    	    patternsMap.put(info.getPatternsCondition().getPatterns().toArray(new String[0])[0], dataVo);
+	    	    patternsMap.put(getRequestPath(info), dataVo);
 	        }
 		}
 		return dataVos;
@@ -118,11 +120,43 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 		}
 		return result;
 	}
-	
+
 	private boolean decide(String username, DataResource data, boolean administrator) {
 		if (administrator || securityDecisionManager.decide(username, data)) {
 			return true;
 		}
 		return false;
 	}
+
+	private RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
+		String clazzName = "org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping";
+		Map<String,RequestMappingHandlerMapping> requestMappingHandlerMappingMap = ApplicationContextProvider.getBeansOfType(RequestMappingHandlerMapping.class);
+		for(Map.Entry<String,RequestMappingHandlerMapping> entry:requestMappingHandlerMappingMap.entrySet()){
+			if(clazzName.equals(entry.getValue().getClass().getName())){
+				return entry.getValue();
+			}
+		}
+		throw new MBootException("获取RequestMapping异常");
+	}
+
+	private String getRequestPath(RequestMappingInfo info){
+		Set<String> set =getRequestPathSet(info);
+		if(CollectionUtils.isNotEmpty(set)){
+			return set.iterator().next();
+		}
+		return null;
+	}
+
+	private Set<String> getRequestPathSet(RequestMappingInfo info){
+		if(info.getPatternsCondition()!=null){
+			return info.getPatternsCondition().getPatterns();
+
+		}
+		else if(info.getPathPatternsCondition()!=null){
+			Set<PathPattern> patternsSet = info.getPathPatternsCondition().getPatterns();
+			return patternsSet.stream().map(PathPattern::getPatternString).collect(Collectors.toSet());
+		}
+		return null;
+	}
+
 }
