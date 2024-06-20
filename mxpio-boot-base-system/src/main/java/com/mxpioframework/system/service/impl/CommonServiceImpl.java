@@ -3,6 +3,7 @@ package com.mxpioframework.system.service.impl;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import com.mxpioframework.common.exception.MBootException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +16,7 @@ public class CommonServiceImpl implements CommonService {
 	@Override
 	@Transactional(readOnly = true)
 	public Long duplicate(String tableName, String column, String key, String exclude) {
-		
+
 		String sql = "SELECT COUNT(1) FROM " + tableName + " WHERE "+ column + " = '" + key + "'";
 		if(exclude != null){
 			sql = sql + " AND "+ column + " <> '" + exclude + "'";
@@ -27,8 +28,14 @@ public class CommonServiceImpl implements CommonService {
 			return  ((Double) singleResult).longValue();
 		}else if (singleResult instanceof BigDecimal){
 			return  ((BigDecimal) singleResult).longValue();
-		}else {
-			return  ((Integer) singleResult).longValue();//sqlserver类型数据库返回结果类型
+		}
+		else if(singleResult instanceof Long){
+			return (Long) singleResult;
+		}else if (singleResult instanceof Integer) {
+			return  ((Integer) singleResult).longValue();
+		}
+		else{
+			throw new MBootException("数据转换异常");
 		}
 	}
 
