@@ -25,7 +25,7 @@ public class DataSourceInfo implements Serializable {
 	@Column(name = "NAME_")
 	private String name;
 
-	@Column(name = "URL_")
+	@Column(name = "URL_",length = 512)
 	private String url;
 
 	@Column(name = "USERNAME_")
