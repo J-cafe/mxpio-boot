@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-parent</artifactId>
-	<version>1.0.12-beta.9</version>
+	<version>2.0.0</version>
 	<packaging>pom</packaging>
 	<name>mxpio-boot</name>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.14</version>
+		<version>3.3.0</version>
 	</parent>
 	<distributionManagement>
 		<snapshotRepository>
@@ -24,8 +24,8 @@
 		</repository>
 	</distributionManagement>
 	<properties>
-		<mxpio.version>1.0.12-beta.9</mxpio.version>
-		<java.version>1.8</java.version>
+		<mxpio.version>2.0.0</mxpio.version>
+		<java.version>21</java.version>
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
 		<swagger.version>1.6.11</swagger.version>
 		<fastjson.version>1.2.83</fastjson.version>
@@ -35,7 +35,8 @@
 		<liquibase.version>4.8.0</liquibase.version>
 		<caffeine.version>2.9.3</caffeine.version>
 		<minio.version>8.2.1</minio.version>
-		<camunda.version>7.16.0</camunda.version>
+		<camunda.version>7.21.0</camunda.version>
+		<burningwave.core.version>12.65.1</burningwave.core.version>
 	</properties>
 	<modules>
 		<module>mxpio-boot-base-autoconfigure</module>
@@ -255,13 +256,13 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-websocket</artifactId>
-				<version>2.4.3</version>
+				<version>3.3.0</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-actuator</artifactId>
-				<version>2.4.3</version>
+				<version>3.3.0</version>
 			</dependency>
 
 			<dependency>
@@ -274,13 +275,13 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-data-redis</artifactId>
-				<version>2.4.3</version>
+				<version>3.3.0</version>
 			</dependency>
 			<!--spring boot 集成redis所需common-pool2 -->
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-pool2</artifactId>
-				<version>2.9.0</version>
+				<version>2.12.0</version>
 			</dependency>
 
 			<dependency>
@@ -298,13 +299,13 @@
 		        <artifactId>knife4j-springdoc-ui</artifactId>
 		        <version>3.0.3</version>
 		    </dependency>
-		    
+
 		    <dependency>
 			    <groupId>org.camunda.bpm.springboot</groupId>
 			    <artifactId>camunda-bpm-spring-boot-starter</artifactId>
 			    <version>${camunda.version}</version>
 			</dependency>
-			
+
 			<dependency>
 			    <groupId>org.camunda.bpm.springboot</groupId>
 			    <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
@@ -406,6 +407,18 @@
 				<artifactId>minio</artifactId>
 				<version>${minio.version}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>org.dom4j</groupId>
+				<artifactId>dom4j</artifactId>
+				<version>2.1.3</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.burningwave</groupId>
+				<artifactId>core</artifactId>
+				<version>${burningwave.core.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
@@ -414,8 +427,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>21</source>
+					<target>21</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
@@ -525,6 +538,6 @@
 		<connection>scm:git:https://gitee.com/i_mxpio/mxpio-boot.git</connection>
 		<developerConnection>scm:git:https://gitee.com/i_mxpio/mxpio-boot.git</developerConnection>
 		<url>https://gitee.com/i_mxpio/mxpio-boot.git</url>
-		<tag>1.0.12-beta.9</tag>
+		<tag>2.0.0</tag>
 	</scm>
 </project>

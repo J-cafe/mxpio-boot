@@ -1,5 +1,6 @@
 package com.mxpioframework.autoconfigure.module.cache.caffeine;
 
+import com.mxpioframework.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -21,12 +22,12 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Configuration
 @ConditionalOnClass(CaffeineCacheConfiguration.class)
-@AutoConfigureAfter(CacheConfiguration.class)
+@AutoConfigureAfter(CacheAutoConfiguration.class)
 @AutoConfigureBefore(SecurityAutoConfiguration.class)
 @Import(CaffeineCacheConfiguration.class)
 @Slf4j
 public class CaffeineCacheAutoConfiguration {
-	
+
 	public CaffeineCacheAutoConfiguration() {
 		log.info("[AutoConfiguration==>]:CaffeineCache Module Loading");
 		CommonConstant.addModule(new ModuleVO("CaffeineCache","Caffeine缓存模块"));

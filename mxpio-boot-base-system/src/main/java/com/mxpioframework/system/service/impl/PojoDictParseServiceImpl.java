@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 import org.apache.commons.beanutils.BeanMap;
 import org.apache.commons.lang3.StringUtils;

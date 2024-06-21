@@ -1,6 +1,6 @@
 package com.mxpioframework.autoconfigure.dbconsole;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -26,10 +26,10 @@ import lombok.extern.slf4j.Slf4j;
 @Import(DbconsoleConfiguration.class)
 @Slf4j
 public class DbconsoleAutoConfiguration {
-	
+
 	@Resource
 	private Environment environment;
-	
+
 	public DbconsoleAutoConfiguration() {
 		log.info("[AutoConfiguration==>]:Dbconsole Module Loading");
 		CommonConstant.addModule(new ModuleVO("Dbconsole","云数据库模块"));

@@ -2,7 +2,7 @@ package com.mxpioframework.excel.importer.converter.filter;
 
 import java.util.Map;
 
-import javax.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManagerFactory;
 
 public interface EntityManagerFactoryFilter {
 

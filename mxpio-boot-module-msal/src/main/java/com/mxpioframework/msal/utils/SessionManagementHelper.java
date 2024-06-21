@@ -6,8 +6,8 @@ package com.mxpioframework.msal.utils;
 import com.microsoft.aad.msal4j.IAuthenticationResult;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;

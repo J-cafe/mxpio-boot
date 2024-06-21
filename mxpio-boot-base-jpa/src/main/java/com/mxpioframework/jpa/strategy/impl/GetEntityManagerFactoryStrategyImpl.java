@@ -2,7 +2,7 @@ package com.mxpioframework.jpa.strategy.impl;
 
 import java.util.List;
 
-import javax.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManagerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

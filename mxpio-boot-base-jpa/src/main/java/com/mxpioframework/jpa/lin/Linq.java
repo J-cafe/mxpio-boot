@@ -2,8 +2,8 @@ package com.mxpioframework.jpa.lin;
 
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Expression;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -66,7 +66,7 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 * @return 记录条数
 	 */
 	Long count();
-	
+
 	/**
 	 * 查询是否存在记录
 	 * @return true 则存在，false 则不存在
@@ -85,7 +85,7 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 * @return 本身
 	 */
 	Linq distinct();
-	
+
 	/**
 	 * 根据投影别名转Bean（此处为查询对应的领域类）<br>
 	 * 注意：<br>
@@ -94,7 +94,7 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 * @return 本身
 	 */
 	Linq aliasToBean();
-	
+
 	/**
 	 * 根据投影别名转Map<br>
 	 * 注意：<br>
@@ -103,7 +103,7 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 * @return 本身
 	 */
 	Linq aliasToMap();
-	
+
 	/**
 	 * 根据投影别名转Tuple<br>
 	 * 注意：<br>
@@ -112,7 +112,7 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 * @return 本身
 	 */
 	Linq aliasToTuple();
-	
+
 	/**
 	 * 根据投影别名转Bean<br>
 	 * 注意：<br>
@@ -140,7 +140,7 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 */
 	<T> List<T> list(int page, int size);
 
-	
+
 	/**
 	 * 获取语言集成查询上下文
 	 * @return 本身
@@ -153,7 +153,7 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 * @return 本身
 	 */
 	Linq collect(String... properties);
-	
+
 	/**
 	 * 根据主键收集entityClass对应的数据，
 	 * @param entityClass 实体类
@@ -176,7 +176,7 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 * @return 本身
 	 */
 	Linq collect(Class<?> entityClass, String... properties);
-	
+
 	/**
 	 * 根据属性收集entityClass对应的数据
 	 * @param otherProperty entityClass的某个属性，与properties属性存在关联
@@ -185,7 +185,7 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 * @return 本身
 	 */
 	Linq collect(String otherProperty, Class<?> entityClass, String... properties);
-	
+
 	/**
 	 * 根据主键收集entityClass对应的数据
 	 * @param entityClass 实体类
@@ -193,7 +193,7 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 * @return 本身
 	 */
 	Linq collect(Class<?> relationClass, Class<?> entityClass);
-	
+
 	/**
 	 * 根据主键收集entityClass对应的数据
 	 * @param entityClass 实体类
@@ -203,7 +203,7 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 * @return 本身
 	 */
 	Linq collect(Class<?> relationClass, String relationProperty, String relationOtherProperty, Class<?> entityClass);
-	
+
 	/**
 	 * 根据主键收集entityClass对应的数据
 	 * @param entityClass 实体类
@@ -215,7 +215,7 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 */
 	Linq collect(Class<?> relationClass, String relationProperty, String relationOtherProperty, String otherProperty,
 			Class<?> entityClass);
-	
+
 	/**
 	 * 根据属性收集entityClass对应的数据
 	 * @param entityClass 实体类
@@ -236,27 +236,27 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 * @return 本身
 	 */
 	Linq collectSelect(Class<?> entityClass, String... projections);
-	
+
 	/**
 	 *	禁用收集数据回填
 	 * @return 本身
 	 */
 	Linq setDisableBackFillFilter();
-	
+
 	/**
 	 * 设置结果过滤器
 	 * @param filter 结果过滤器
 	 * @return 本身
 	 */
 	Linq filter(Filter filter);
-	
+
 	/**
 	 * 添加条件解析器
 	 * @param criterionParser 条件解析器
 	 * @return 本身
 	 */
 	Linq addParser(CriterionParser criterionParser);
-	
+
 	/**
 	 * 添加子查询解析器
 	 * @param entityClass 实体类
@@ -278,11 +278,11 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 * @return 本身
 	 */
 	Linq where(Criteria criteria);
-	
+
 	/**
 	 * 禁用智能自查询条件生成
 	 * @return 本身
 	 */
 	Linq setDisableSmartSubQueryCriterion();
-	
+
 }

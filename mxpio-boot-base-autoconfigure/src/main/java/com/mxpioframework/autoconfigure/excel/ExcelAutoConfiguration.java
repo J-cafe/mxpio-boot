@@ -1,6 +1,6 @@
 package com.mxpioframework.autoconfigure.excel;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -26,10 +26,10 @@ import lombok.extern.slf4j.Slf4j;
 @Import(ExcelConfiguration.class)
 @Slf4j
 public class ExcelAutoConfiguration {
-	
+
 	@Resource
 	private Environment environment;
-	
+
 	public ExcelAutoConfiguration() {
 		log.info("[AutoConfiguration==>]:Excel Module Loading");
 		CommonConstant.addModule(new ModuleVO("Excel","Excel模块"));

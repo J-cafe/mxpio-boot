@@ -2,7 +2,7 @@ package com.mxpioframework.multitenant.strategy;
 
 import java.util.List;
 
-import javax.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManagerFactory;
 
 import com.mxpioframework.jpa.strategy.GetEntityManagerFactoryStrategy;
 import com.mxpioframework.multitenant.MultitenantUtils;
@@ -16,13 +16,13 @@ import org.springframework.stereotype.Component;
 @Primary
 public class GetEntityManagerFactoryStrategyImpl implements
 		GetEntityManagerFactoryStrategy {
-	
+
 	@Autowired
 	private List<EntityManagerFactory> entityManagerFactories;
-	
+
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
-	
+
 	@Autowired
 	private EntityManagerFactoryService entityManagerFactoryService;
 
@@ -43,11 +43,11 @@ public class GetEntityManagerFactoryStrategyImpl implements
 				exception = e;
 			}
 		}
-		
+
 		if (domainClass == null) {
 			return entityManagerFactory;
 		}
-		
+
 		for (EntityManagerFactory emf : entityManagerFactories) {
 			try {
 				emf.getMetamodel().entity(domainClass);

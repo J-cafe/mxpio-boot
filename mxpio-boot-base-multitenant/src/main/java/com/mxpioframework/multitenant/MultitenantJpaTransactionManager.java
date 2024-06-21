@@ -1,6 +1,6 @@
 package com.mxpioframework.multitenant;
 
-import javax.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import com.mxpioframework.multitenant.domain.Organization;
@@ -12,15 +12,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MultitenantJpaTransactionManager extends JpaTransactionManager {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Autowired
 	private EntityManagerFactoryService entityManagerFactoryService;
-	
+
 	@Autowired
 	private DataSourceService dataSourceService;
-	
+
 	@Override
 	public EntityManagerFactory getEntityManagerFactory() {
 		Organization organization = MultitenantUtils.peekOrganization();
@@ -28,7 +28,7 @@ public class MultitenantJpaTransactionManager extends JpaTransactionManager {
 			return entityManagerFactoryService.getOrCreateEntityManagerFactory(organization);
 		}
 		return super.getEntityManagerFactory();
-		
+
 	}
 
 	@Override
@@ -38,8 +38,8 @@ public class MultitenantJpaTransactionManager extends JpaTransactionManager {
 			return dataSourceService.getOrCreateDataSource(organization);
 		}
 		return super.getDataSource();
-	}	
+	}
 
-	
+
 
 }

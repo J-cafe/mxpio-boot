@@ -47,12 +47,12 @@ public class SimpleCriterion implements Criterion {
 	 * fieldName.split("."); expression = root.get(names[0]); for (int i = 1; i <
 	 * names.length; i++) { expression = expression.get(names[i]); } } else {
 	 * expression = root.get(fieldName); }
-	 * 
+	 *
 	 * switch (operator) { case EQ: return builder.equal(expression, value); case
 	 * NE: return builder.notEqual(expression, value); case LIKE: return
-	 * builder.like((javax.persistence.criteria.Expression<String>) expression, "%"
+	 * builder.like((jakarta.persistence.criteria.Expression<String>) expression, "%"
 	 * + value + "%"); case NOT_LIKE: return
-	 * builder.notLike((javax.persistence.criteria.Expression<String>) expression,
+	 * builder.notLike((jakarta.persistence.criteria.Expression<String>) expression,
 	 * "%" + value + "%"); case LT: return builder.lessThan(expression, (Comparable)
 	 * value); case GT: return builder.greaterThan(expression, (Comparable) value);
 	 * case LE: return builder.lessThanOrEqualTo(expression, (Comparable) value);

@@ -3,23 +3,23 @@ package com.mxpioframework.jpa.lin;
 import java.util.Collection;
 import java.util.Set;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CommonAbstractCriteria;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Selection;
-import javax.persistence.criteria.Subquery;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CommonAbstractCriteria;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Selection;
+import jakarta.persistence.criteria.Subquery;
 
 /**
  * 语言集成抽象接口<br>
  * 抽象了语言集成查询、语言集成删除和语言集成更新的共有方法
  *
  * @param <T> 具体语言集成操作类型，如语言集成查询（{@link Linq}）
- * @param <Q> JPA的{@link javax.persistence.criteria.CommonAbstractCriteria}的类型
+ * @param <Q> JPA的{@link jakarta.persistence.criteria.CommonAbstractCriteria}的类型
  */
 public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
-	
+
 	/**
 	 * 动态添加条件<br>
 	 * 根据目标对象（target）决定后继相关操作是否有效，endIf是后继相关操作范围边界<br>
@@ -32,27 +32,27 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	 * @return 自身
 	 */
 	T addIf(Object target);
-	
+
 	/**
 	 * 与addIf功能类似，只是规则相反
 	 * @param target 目标对象
 	 * @return 自身
 	 */
 	T addIfNot(Object target);
-	
+
 	/**
 	 * 动态添加条件结束
 	 * @return 自身
 	 */
 	T endIf();
-	
+
 	/**
 	 * 创建子查询，主要内部使用
 	 * @param domainClass 实体类
 	 * @return 自身
 	 */
 	T createChild(Class<?> domainClass);
-	
+
 	/**
 	 * 添加条件
 	 * @param predicate 条件
@@ -84,7 +84,7 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	 * @return 自身
 	 */
 	<E> Subquery<E> getSubquery();
-	
+
 	/**
 	 * 查询结果投影为主键设置<br>
 	 * 例如：<br>
@@ -92,7 +92,7 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	 * @return 自身
 	 */
 	T selectId();
-	
+
 	/**
 	 * 查询结果投影设置<br>
 	 * 例如：<br>
@@ -102,27 +102,27 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	 * @return 自身
 	 */
 	T select(String... selections);
-	
+
 	/**
 	 * 查询结果投影设置
-	 * @param selections 可以是String或者JPA标准{@link javax.persistence.criteria.Selection}
+	 * @param selections 可以是String或者JPA标准{@link jakarta.persistence.criteria.Selection}
 	 * @return 自身
 	 */
 	T select(Object... selections);
-	
+
 	/**
 	 * 查询结果投影设置
-	 * @param selections JPA标准{@link javax.persistence.criteria.Selection}
+	 * @param selections JPA标准{@link jakarta.persistence.criteria.Selection}
 	 * @return 自身
 	 */
 	T select(Selection<?>... selections);
-	
+
 	/**
 	 * 并且联合条件（支持递归定义）
 	 * @return 自身
 	 */
 	T and();
-	
+
 	/**
 	 * 或者联合条件（支持递归定义）
 	 * @return 自身
@@ -144,7 +144,7 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
      * @return
      */
     T idEqual(Object id);
-    
+
     /**
      * 添加条件：等于
      * @param x 属性名
@@ -183,25 +183,25 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	<Y extends Number> T gt(Expression<? extends Y> x, Expression<? extends Y> y);
 
 	T in(String property, Object... values);
-	
+
 	T in(String property, Expression<Collection<?>> values);
-	
+
 	T in(Expression<?> expression, Expression<Collection<?>> values);
 
 	T in(Expression<?> expression, Object... values);
-	
+
 	T in(String property, Expression<?>... values);
 
 	<E> T in(Expression<E> expression, Expression<?>... values);
-	
+
 	T notIn(String property, Object... values);
-	
+
 	T notIn(String property, Expression<Collection<?>> values);
-	
+
 	<E> T notIn(Expression<E> expression, Expression<Collection<?>> values);
 
 	T notIn(Expression<?> expression, Object... values);
-	
+
 	T notIn(String property, Expression<?>... values);
 
 	<E> T notIn(Expression<E> expression, Expression<?>... values);
@@ -310,11 +310,11 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	/**
 	 * 复杂条件结束标记方法<br>
 	 * 复杂条件后面如果是执行数据库操作方法（findAll、delete和update等等），可以不加结束标记方法end<br>
-	 * 
+	 *
 	 * @return 自身
 	 */
 	T end();
-	
+
 	/**
 	 * 分组
 	 * @param grouping 分组字段
@@ -364,5 +364,5 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	T in(String property, Set<?> values);
 
 	T notIn(String property, Set<?> values);
-	
+
 }

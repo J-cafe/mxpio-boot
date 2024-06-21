@@ -151,7 +151,7 @@ java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.9.jar
 <parent>
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-parent</artifactId>
-	<version>1.0.12-beta.9</version>
+	<version>2.0.0</version>
 </parent>
 ```
 

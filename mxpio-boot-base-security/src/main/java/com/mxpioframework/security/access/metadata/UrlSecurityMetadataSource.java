@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
@@ -32,14 +32,14 @@ import lombok.extern.slf4j.Slf4j;
 public class UrlSecurityMetadataSource  implements FilterInvocationSecurityMetadataSource {
 
 	private Map<RequestMatcher, Collection<ConfigAttribute>> requestMap;
-	
-	
+
+
 	@Autowired
 	private List<FilterConfigAttributeProvider> providers;
-	
+
 	@Autowired
 	private List<DataResourceConfigAttributeProvider> dataProviders;
-	
+
 	public Collection<ConfigAttribute> getAllConfigAttributes() {
 		Set<ConfigAttribute> allAttributes = new HashSet<ConfigAttribute>();
 
@@ -63,14 +63,14 @@ public class UrlSecurityMetadataSource  implements FilterInvocationSecurityMetad
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
-		
+
 		return null;
 	}
 
 	public boolean supports(Class<?> clazz) {
 		return FilterInvocation.class.isAssignableFrom(clazz);
 	}
-	
+
 	public Map<RequestMatcher, Collection<ConfigAttribute>> getRequestMap() {
 		AnnotationAwareOrderComparator.sort(providers);
 		requestMap = new ConcurrentHashMap<RequestMatcher, Collection<ConfigAttribute>>();

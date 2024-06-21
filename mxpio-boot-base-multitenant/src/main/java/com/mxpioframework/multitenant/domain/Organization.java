@@ -2,28 +2,28 @@ package com.mxpioframework.multitenant.domain;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "MB_ORGANIZATION")
 public class Organization implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Column(name = "ID_")
 	private String id;
-	
+
 	@Column(name = "NAME_")
 	private String name;
-	
+
 	@Column(name = "DATA_SOURCE_INFO_ID_")
 	private String dataSourceInfoId;
-	
+
 	@Transient
 	private DataSourceInfo dataSourceInfo;
 

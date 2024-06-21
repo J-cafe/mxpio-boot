@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
-import javax.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.apache.commons.logging.Log;
@@ -59,21 +59,21 @@ import com.mxpioframework.multitenant.service.ScriptService;
 @Service("mxpio.multitenant.entityManagerFactoryService")
 public class EntityManagerFactoryServiceImpl implements
 		EntityManagerFactoryService, BeanClassLoaderAware, BeanFactoryAware, BeanNameAware, ResourceLoaderAware, LoadTimeWeaverAware, InitializingBean {
-	
+
 	private Map<String, EntityManagerFactory> emfMap = new ConcurrentHashMap<String, EntityManagerFactory>();
-	
+
 	@Autowired
 	private DataSourceService dataSourceService;
-	
+
 	@Autowired
 	private ScriptService scriptService;
-	
+
 	@Value("${mxpio.multitenant.dataScript:}")
 	private String dataScript;
-	
+
 	@Autowired
 	private EntityManagerFactory emf;
-	
+
 	@Autowired(required = false)
 	private JtaTransactionManager jtaTransactionManager;
 
@@ -84,16 +84,16 @@ public class EntityManagerFactoryServiceImpl implements
 	private ClassLoader classLoader;
 
 	private String beanName;
-	
+
 	private final HibernateDefaultDdlAutoProvider defaultDdlAutoProvider;
-	
+
 	private HibernateProperties hibernateProperties;
 
 	private final List<HibernatePropertiesCustomizer> hibernatePropertiesCustomizers;
-	
+
 	@Autowired(required = false)
 	private List<EntityManagerFactoryCreateListener> listeners;
-	
+
 	private static final Log logger = LogFactory
 			.getLog(EntityManagerFactoryServiceImpl.class);
 
@@ -118,10 +118,10 @@ public class EntityManagerFactoryServiceImpl implements
 	private JpaProperties properties;
 
 	private BeanFactory beanFactory;
-	
+
 	@Autowired(required = false)
 	private PersistenceUnitManager persistenceUnitManager;
-	
+
 	@Value("${mxpio.multitenant.packagesToScan:"
 			+ "com.mxpioframework.excel.importer.model,"
 			+ "com.mxpioframework.filestorage.entity,"
@@ -131,11 +131,11 @@ public class EntityManagerFactoryServiceImpl implements
 			+ "com.mxpioframework.system.entity,"
 			+ "com.mxpioframework.security.entity}")
 	private String packagesToScan;
-	
+
 	@Value("${mxpio.multitenant.customPackagesToScan:}")
 	private String customPackagesToScan;
-	
-	
+
+
 	public EntityManagerFactoryServiceImpl(
 			HibernateProperties hibernateProperties,
 			ObjectProvider<List<SchemaManagementProvider>> providers,
@@ -148,11 +148,11 @@ public class EntityManagerFactoryServiceImpl implements
 		this.hibernatePropertiesCustomizers = hibernatePropertiesCustomizers
 				.getIfAvailable(() -> Collections.emptyList());
 	}
-	
+
 	protected AbstractJpaVendorAdapter createJpaVendorAdapter() {
 		return new HibernateJpaVendorAdapter();
 	}
-	
+
 	private String[] mergePackagesToScan() {
 		String[] packages = null;
 		if (StringUtils.hasText(packagesToScan) && StringUtils.hasText(customPackagesToScan)) {
@@ -164,7 +164,7 @@ public class EntityManagerFactoryServiceImpl implements
 		}
 		return packages;
 	}
-	
+
 	public JpaVendorAdapter getJpaVendorAdapter(DataSource dataSource) {
 		/*AbstractJpaVendorAdapter adapter = createJpaVendorAdapter();
 		adapter.setShowSql(this.properties.isShowSql());
@@ -172,7 +172,7 @@ public class EntityManagerFactoryServiceImpl implements
 		adapter.setDatabasePlatform(this.properties.getDatabasePlatform());
 		adapter.setGenerateDdl(this.properties.isGenerateDdl());
 		return adapter;*/
-		
+
 		AbstractJpaVendorAdapter adapter = createJpaVendorAdapter();
 		adapter.setShowSql(this.properties.isShowSql());
 		if (this.properties.getDatabase() != null) {
@@ -215,7 +215,7 @@ public class EntityManagerFactoryServiceImpl implements
 		scriptService.runScripts(organization.getId(), dataSource, dataScript, "multitenant-data");
 		return entityManagerFactoryBean.getObject();
 	}
-	
+
 	protected Map<String, Object> getVendorProperties(DataSource dataSource) {
 		/*String defaultDdlMode = this.defaultDdlAutoProvider
 				.getDefaultDdlAuto(dataSource);
@@ -226,7 +226,7 @@ public class EntityManagerFactoryServiceImpl implements
 				.hibernatePropertiesCustomizers(
 						this.hibernatePropertiesCustomizers)));
 		return vendorProperties;*/
-		
+
 		Supplier<String> defaultDdlMode = () -> this.defaultDdlAutoProvider.getDefaultDdlAuto(dataSource);
 		return new LinkedHashMap<>(this.hibernateProperties
 				.determineHibernateProperties(this.properties.getProperties(), new HibernateSettings()
@@ -254,7 +254,7 @@ public class EntityManagerFactoryServiceImpl implements
 			vendorProperties.put(JTA_PLATFORM, getNoJtaPlatformManager());
 		}
 	}
-	
+
 	private boolean runningOnWebSphere() {
 		return ClassUtils.isPresent(
 				"com.ibm.websphere.jtaextensions." + "ExtendedJTATransaction",
@@ -276,7 +276,7 @@ public class EntityManagerFactoryServiceImpl implements
 			vendorProperties.put(JTA_PLATFORM,
 					new SpringJtaPlatform(jtaTransactionManager));
 		}
-		catch (LinkageError ex) {		
+		catch (LinkageError ex) {
 			if (!isUsingJndi()) {
 				throw new IllegalStateException("Unable to set Hibernate JTA "
 						+ "platform, are you using the correct "
@@ -312,7 +312,7 @@ public class EntityManagerFactoryServiceImpl implements
 		}
 		throw new IllegalStateException("Could not configure JTA platform");
 	}
-	
+
 	protected JtaTransactionManager getJtaTransactionManager() {
 		return this.jtaTransactionManager;
 	}
@@ -324,15 +324,15 @@ public class EntityManagerFactoryServiceImpl implements
 	@Override
 	public void setBeanName(String name) {
 		this.beanName = name;
-		
+
 	}
 
 	@Override
 	public void setBeanClassLoader(ClassLoader classLoader) {
 		this.classLoader = classLoader;
-		
+
 	}
-	
+
 	@Override
 	public void setLoadTimeWeaver(LoadTimeWeaver loadTimeWeaver) {
 		this.loadTimeWeaver = loadTimeWeaver;
@@ -346,7 +346,7 @@ public class EntityManagerFactoryServiceImpl implements
 	@Override
 	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
 		this.beanFactory = beanFactory;
-		
+
 	}
 
 	@Override
@@ -359,7 +359,7 @@ public class EntityManagerFactoryServiceImpl implements
 		}
 		return emf;
 	}
-	
+
 	@Override
 	public void generateTables(Organization organization) {
 		SingleConnectionDataSource dataSource = dataSourceService.createSingleConnectionDataSource(organization);
@@ -382,7 +382,7 @@ public class EntityManagerFactoryServiceImpl implements
 			dataSource.destroy();
 		}
 	}
-	
+
 	@Override
 	public EntityManagerFactory createTempEntityManagerFactory(
 			Organization organization) {
@@ -417,14 +417,14 @@ public class EntityManagerFactoryServiceImpl implements
 		emfMap.remove(organization.getId());
 		dataSourceService.removeDataSource(organization);
 	}
-	
+
 	private void publishEvent(Organization organization, Builder builder) {
 		if (listeners != null) {
 			for (EntityManagerFactoryCreateListener entityManagerFactoryCreateListener : listeners) {
 				entityManagerFactoryCreateListener.onCreate(organization, builder);
 			}
 		}
-		
+
 	}
 
 }

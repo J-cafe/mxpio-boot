@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
@@ -93,24 +93,24 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 	@Autowired
 	@Qualifier(CvsReportBuilder.BEAN_ID)
 	public CvsReportBuilder cvsReportBuilder;
-	
+
 	@Autowired
 	public DataResourceService dataResourceService;
-	
+
 	@Autowired
 	private Map<String, ISwfFileHandler> swfFileHandlers;
 
 	public int rowAccessWindowSize = 500;
-	
+
 	@Value("${mxpio.excel.exporter.cacheSize}")
 	private String cacheSize;
-	
+
 	@Value("${mxpio.excel.exporter.extension.fileType}")
 	public String extensionFileType;
-	
+
 	@Autowired
 	private ExportSolutionService exportSolutionService;
-	
+
 	@GetMapping("download/{extension}/{solutionCode}")
 	@Operation(summary = "导出数据", description = "导出数据", method = "GET")
 	public void generateReportFile(@PathVariable("solutionCode") String solutionCode,
@@ -123,7 +123,7 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 		if(CollectionUtils.isNotEmpty(dataResourceVos)){
 			exportSolution.setDataResource(dataResourceVos.get(0));
 		}
-		
+
 		String fileName = exportSolution.getFileName();
 		String interceptorName = null;
 		if (exportSolution.getInterceptorName() != null) {
@@ -166,7 +166,7 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 		Assert.notNull(workbook, "the workbook must not be null");
 		Sheet sheet = excelReportBuilder.createSheet(workbook, fileName);
 		int nextRow = 0;
-		
+
 		ReportGrid reportGridModel = excelReportModelGenerater.generateReportGridModel(exportSolution, interceptorName, key);
 		List<ReportGridHeader> bottomColumnHeaderModelList = new ArrayList<ReportGridHeader>();
 		excelReportBuilder.calculateBottomColumnHeader(reportGridModel.getGridHeaderModelList(), bottomColumnHeaderModelList);
@@ -221,7 +221,7 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
 	}
-	
+
 	private void doDownloadExcelReport(Map<String, String> outParameter, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("UTF-8");
 		String id = outParameter.get("id");
@@ -295,7 +295,7 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 		out.flush();
 		out.close();
 	}
-	
+
 	@SuppressWarnings("unused")
 	private void doDownloadPdfReport(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		request.setCharacterEncoding("UTF-8");

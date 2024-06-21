@@ -1,5 +1,6 @@
 package com.mxpioframework.autoconfigure.module.cache.redis;
 
+import com.mxpioframework.autoconfigure.cache.CacheAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -21,12 +22,12 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Configuration
 @ConditionalOnClass(RedisCacheConfiguration.class)
-@AutoConfigureAfter(CacheConfiguration.class)
+@AutoConfigureAfter(CacheAutoConfiguration.class)
 @AutoConfigureBefore(SecurityAutoConfiguration.class)
 @Import(RedisCacheConfiguration.class)
 @Slf4j
 public class RedisCacheAutoConfiguration {
-	
+
 	public RedisCacheAutoConfiguration() {
 		log.info("[AutoConfiguration==>]:RedisCache Module Loading");
 		CommonConstant.addModule(new ModuleVO("RedisCache","Redis缓存模块"));

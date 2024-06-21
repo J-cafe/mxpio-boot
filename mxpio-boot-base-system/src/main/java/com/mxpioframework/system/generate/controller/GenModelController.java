@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,7 +39,7 @@ public class GenModelController {
 
 	@Autowired
 	private GenModelService genModelSerivce;
-	
+
 	@Autowired
 	private GenPropertyService genPropertySerivce;
 
@@ -49,7 +49,7 @@ public class GenModelController {
 		List<GenModel> items = genModelSerivce.list(GenModel.class, criteria);
 		return Result.OK(items);
 	}
-	
+
 	@GetMapping("page")
 	@Operation(summary = "模型列表", description = "获取模型列表", method = "GET")
 	public Result<Page<GenModel>> page(Criteria criteria, Integer pageSize, Integer pageNo) throws UnsupportedEncodingException {
@@ -57,7 +57,7 @@ public class GenModelController {
 		Page<GenModel> items = genModelSerivce.listPage(GenModel.class, page, criteria);
 		return Result.OK(items);
 	}
-	
+
 	@GetMapping("list/{id}")
 	@Operation(summary = "根据id获取模型", description = "根据id获取模型", method = "GET")
 	public Result<GenModel> getById(@PathVariable(name = "id", required = true) String id) {
@@ -74,14 +74,14 @@ public class GenModelController {
  		genModelSerivce.save(genModel);
 		return Result.OK(genModel);
 	}
-	
+
 	@PutMapping("edit")
 	@Operation(summary = "编辑模型", description = "编辑模型（全量）", method = "PUT")
 	public Result<GenModel> edit(@RequestBody GenModel genModel) {
 		genModelSerivce.update(genModel);
 		return Result.OK(genModel);
 	}
-	
+
 	@DeleteMapping("remove/{id}")
 	@Operation(summary = "删除模型", description = "删除模型", method = "DELETE")
 	public Result<GenModel> remove(@PathVariable(name = "id", required = true) String id) {
@@ -91,7 +91,7 @@ public class GenModelController {
 		}
 		return Result.OK();
 	}
-	
+
 	@GetMapping("generate/{modelCode}")
 	@Operation(summary = "生成代码", description = "生成代码", method = "GET")
 	public void generateReportFile(@PathVariable("modelCode") String modelCode,

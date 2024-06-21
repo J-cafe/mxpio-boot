@@ -11,19 +11,16 @@ import com.mxpioframework.security.anthentication.ThirdAuthorizeException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.*;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.AccountStatusException;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -31,7 +28,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -39,6 +35,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.www.NonceExpiredException;
+import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,10 +52,9 @@ import com.mxpioframework.security.service.OnlineUserService;
 import com.mxpioframework.security.util.TokenUtil;
 import com.mxpioframework.security.vo.TokenVo;
 
-@Configuration
-@EnableWebSecurity
+@Component
 @Order(120)
-public class WebSecurityConfigurer{
+public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 	private static final String URL_PREFIX = "/";
 
@@ -101,46 +97,17 @@ public class WebSecurityConfigurer{
 	@Resource(name = "thirdAuthorizeProvider")
 	private AuthenticationProvider thirdAuthorizeProvider;
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
-
-
-	@Bean
-	public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception{
-		AuthenticationManagerBuilder authenticationManagerBuilder =
-				http.getSharedObject(AuthenticationManagerBuilder.class);
-		authenticationManagerBuilder.authenticationProvider(jwtAuthenticationProvider);
-		authenticationManagerBuilder.authenticationProvider(thirdAuthorizeProvider);
-		return authenticationManagerBuilder.build();
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
 	}
 
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		LoginFilter jwtLoginFilter = createLoginFilter();
-        JwtTokenFilter jwtTokenFilter = new JwtTokenFilter();
-        FilterSecurityInterceptor securityInterceptor = createFilterSecurityInterceptor();
-        http.authenticationProvider(jwtAuthenticationProvider).
-				authenticationProvider(thirdAuthorizeProvider).cors(Customizer.withDefaults())
-				.csrf(AbstractHttpConfigurer::disable)
-				.sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(p->p.requestMatchers(mergeAnonymous()).permitAll().requestMatchers(Constants.SWAGGER_WHITELIST).permitAll().requestMatchers(Constants.MULTITENANT_WHITELIST).permitAll().anyRequest().authenticated())
-                .exceptionHandling(p->p.authenticationEntryPoint(new MxpioAuthenticationEntryPoint()).accessDeniedHandler(new MxpioAccessDeniedHandler()))
-                .addFilterAt(jwtLoginFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(jwtTokenFilter, LoginFilter.class)
-                .addFilterBefore(securityInterceptor,
-        				org.springframework.security.web.access.intercept.AuthorizationFilter.class)
-                .logout(p->p.logoutUrl(URL_PREFIX + logoutPath).logoutSuccessUrl("/login").logoutSuccessHandler(new JwtLogoutSuccessHandler()).permitAll()) // 默认注销行为为logout，可以通过下面的方式来修改
-    			/*.rememberMe()*/;
-
-        http.setSharedObject(FilterSecurityInterceptor.class, securityInterceptor);
-		return http.build();
-	}
-
-	private LoginFilter createLoginFilter(){
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
 		LoginFilter jwtLoginFilter = new LoginFilter();
-		jwtLoginFilter.setAuthenticationManager(authenticationManager);
-		jwtLoginFilter.setAuthenticationSuccessHandler(new JwtLoginSuccessHandler());
-		// jwtLoginFilter.setAuthenticationFailureHandler(new HttpStatusLoginFailureHandler());
+		jwtLoginFilter.setAuthenticationManager(authenticationManagerBean());
+        jwtLoginFilter.setAuthenticationSuccessHandler(new JwtLoginSuccessHandler());
+        // jwtLoginFilter.setAuthenticationFailureHandler(new HttpStatusLoginFailureHandler());
 		jwtLoginFilter.setAuthenticationFailureHandler(new AuthenticationFailureHandler(){
 			@Override
 			public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
@@ -167,14 +134,47 @@ public class WebSecurityConfigurer{
 				}
 			}
 		});
-		return jwtLoginFilter;
+        JwtTokenFilter jwtTokenFilter = new JwtTokenFilter();
+
+        FilterSecurityInterceptor securityInterceptor = createFilterSecurityInterceptor();
+
+//        JwtAuthenticationProvider jwtAuthenticationProvider = new JwtAuthenticationProvider(userDetailsService, passwordEncoder);
+
+        http.authenticationProvider(jwtAuthenticationProvider).authenticationProvider(thirdAuthorizeProvider).cors().and().csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests()
+                // 添加系统及客户定义的白名单地址
+				.antMatchers(mergeAnonymous()).permitAll()
+				// 添加SWAGGER地址
+				.antMatchers(Constants.SWAGGER_WHITELIST).permitAll()
+				.antMatchers(Constants.MULTITENANT_WHITELIST).permitAll()
+                .anyRequest().authenticated()  // 所有请求需要身份认证
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(new MxpioAccessDeniedHandler())
+                .and()
+                .addFilterAt(jwtLoginFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtTokenFilter, LoginFilter.class)
+                .addFilterBefore(securityInterceptor,
+        				org.springframework.security.web.access.intercept.FilterSecurityInterceptor.class)
+                .logout() // 默认注销行为为logout，可以通过下面的方式来修改
+                .logoutUrl(URL_PREFIX + logoutPath)
+                .logoutSuccessUrl("/login")// 设置注销成功后跳转页面，默认是跳转到登录页面;
+                .logoutSuccessHandler(new JwtLogoutSuccessHandler())
+                .permitAll()
+                .and()
+    			.rememberMe();
+
+        http.setSharedObject(FilterSecurityInterceptor.class, securityInterceptor);
+        http.exceptionHandling().authenticationEntryPoint(new MxpioAuthenticationEntryPoint()).accessDeniedHandler(new MxpioAccessDeniedHandler());
+
 	}
 
 	private FilterSecurityInterceptor createFilterSecurityInterceptor() throws Exception {
 		FilterSecurityInterceptor securityInterceptor = new FilterSecurityInterceptor();
 		securityInterceptor.setSecurityMetadataSource(securityMetadataSource);
 		securityInterceptor.setAccessDecisionManager(accessDecisionManager);
-		securityInterceptor.setAuthenticationManager(authenticationManager);
+		securityInterceptor.setAuthenticationManager(this.authenticationManagerBean());
 		securityInterceptor.afterPropertiesSet();
 		return securityInterceptor;
 	}
