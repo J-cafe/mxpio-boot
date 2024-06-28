@@ -6,6 +6,8 @@ import com.mxpioframework.security.service.RbacCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,6 +29,11 @@ public class ElFuncServiceImpl implements ElFuncService {
             }
         }
         return "";
+    }
+
+    @Override
+    public List<String> string2List(String str) {
+        return Arrays.asList(str.split(","));
     }
 
 }

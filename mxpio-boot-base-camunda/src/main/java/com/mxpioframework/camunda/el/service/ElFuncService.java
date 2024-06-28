@@ -1,5 +1,7 @@
 package com.mxpioframework.camunda.el.service;
 
+import java.util.List;
+
 public interface ElFuncService {
 
     /**
@@ -9,5 +11,7 @@ public interface ElFuncService {
      * @return 审批人
      */
     String deptManager(String deptLevel, String username);
+
+    List<String> string2List(String str);
 
 }
