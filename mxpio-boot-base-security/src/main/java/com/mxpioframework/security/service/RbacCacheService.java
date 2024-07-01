@@ -40,6 +40,10 @@ public interface RbacCacheService {
      */
     public Map<String, Set<String>> getAllDeptIdGroupByUser();
 
+    /**
+     * 获取部门用户关系,含上级部门,ID索引（缓存）
+     * @return 部门用户关系
+     */
     Map<String, Set<String>> getAllDeptIdWithFatherGroupByUser();
 
     /**
