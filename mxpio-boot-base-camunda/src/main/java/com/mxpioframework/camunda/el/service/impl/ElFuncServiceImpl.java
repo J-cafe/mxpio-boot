@@ -32,6 +32,19 @@ public class ElFuncServiceImpl implements ElFuncService {
     }
 
     @Override
+    public Dept dept(String deptLevel, String username) {
+        Map<String, Set<String>> userDepts = rbacCacheService.getAllDeptIdWithFatherGroupByUser();
+        Set<String> deptIds = userDepts.get(username);
+        Map<String, Dept> depts = rbacCacheService.getDeptMap();
+        for(String id : deptIds){
+            Dept dept = depts.get(id);
+            if(deptLevel.equals(dept.getDeptLevel())){
+                return dept;
+            }
+        }
+        return null;
+    }
+    @Override
     public List<String> string2List(String str) {
         return Arrays.asList(str.split(","));
     }
