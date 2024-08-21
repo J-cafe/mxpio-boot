@@ -10,6 +10,8 @@
     </parent>
 
     <artifactId>mxpio-boot-base-websocket</artifactId>
+    <name>WebSocket模块</name>
+    <description>WebSocket模块</description>
 
     <dependencies>
         <dependency>
