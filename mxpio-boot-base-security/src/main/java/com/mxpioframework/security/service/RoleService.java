@@ -23,9 +23,11 @@ public interface RoleService {
 
 	void delete(String key);
 	
-	Page<User> getUsersWithout(Pageable pageAble, Criteria criteria, String roleId);
+	Page<User> pagingUsersWithout(Pageable pageAble, Criteria criteria, String roleId);
 
-	Page<User> getUsersWithin(Pageable pageAble, Criteria criteria, String roleId);
+	Page<User> pagingUsersWithin(Pageable pageAble, Criteria criteria, String roleId);
+
+	List<User> getUsersWithin(Criteria criteria, String roleId);
 
 	void addActors(String id, List<String> usernames);
 
