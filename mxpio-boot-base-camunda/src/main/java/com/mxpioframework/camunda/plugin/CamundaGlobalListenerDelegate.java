@@ -65,10 +65,6 @@ public class CamundaGlobalListenerDelegate implements ExecutionListener, TaskLis
             }*/
         }
         if(!userIds.isEmpty()){
-            Map<String, Object> map = delegateTask.getVariablesLocal();
-            for(Map.Entry<String, Object> entry : map.entrySet()){
-                log.info(entry.getKey()+"===>"+entry.getValue());
-            }
             messageService.sendMessage(new String[]{"innerMsg"},"admin",userIds.toArray(new String[]{}),"流程处理通知:"+props.get(CamundaConstant.BPMN_TITLE),"您有新的流程待处理");
         }
     }
