@@ -12,6 +12,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.delegate.TaskListener;
+import org.camunda.bpm.engine.runtime.ActivityInstance;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.IdentityLink;
 
@@ -25,7 +26,7 @@ public class CamundaGlobalListenerDelegate implements ExecutionListener, TaskLis
 
     @Override
     public void notify(DelegateExecution delegateExecution) {
-        if("end".equals(delegateExecution.getEventName())){
+        if(ExecutionListener.EVENTNAME_START.equals(delegateExecution.getEventName())){
             MessageService messageService = SpringUtil.getBean(MessageService.class);
             Map<String, Object> props = delegateExecution.getVariables();
 
@@ -34,12 +35,12 @@ public class CamundaGlobalListenerDelegate implements ExecutionListener, TaskLis
             ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
                     .processInstanceId(delegateExecution.getProcessInstanceId())
                     .singleResult();
-            if(processInstance == null){
-                messageService.sendMessage(new String[]{"innerMsg"},"admin",new String[]{props.get(CamundaConstant.BPMN_START_USER).toString()},"流程完成通知:"+props.get(CamundaConstant.BPMN_TITLE),"流程【"+props.get(CamundaConstant.BPMN_TITLE)+"】已完成");
-                /*ActivityInstance[] instances = runtimeService.getActivityInstance(processInstance.getId()).getChildActivityInstances();
+            if(processInstance != null){
+                // messageService.sendMessage(new String[]{"innerMsg"},"admin",new String[]{props.get(CamundaConstant.BPMN_START_USER).toString()},"流程完成通知:"+props.get(CamundaConstant.BPMN_TITLE),"流程【"+props.get(CamundaConstant.BPMN_TITLE)+"】已完成");
+                ActivityInstance[] instances = runtimeService.getActivityInstance(processInstance.getId()).getChildActivityInstances();
                 if(instances != null && instances.length == 1 && instances[0].getActivityType().endsWith("EndEvent")){
-
-                }*/
+                    messageService.sendMessage(new String[]{"innerMsg"},"admin",new String[]{props.get(CamundaConstant.BPMN_START_USER).toString()},"流程完成通知:"+props.get(CamundaConstant.BPMN_TITLE),"流程【"+props.get(CamundaConstant.BPMN_TITLE)+"】已完成");
+                }
             }
         }
         // log.info("CamundaGlobalListenerDelegate.notify==>"+delegateExecution.getEventName()+"++"+delegateExecution.getCurrentActivityName());
@@ -54,7 +55,7 @@ public class CamundaGlobalListenerDelegate implements ExecutionListener, TaskLis
 
         List<String> userIds = new ArrayList<>();
 
-        if("create".equals(delegateTask.getEventName())) {
+        if(TaskListener.EVENTNAME_CREATE.equals(delegateTask.getEventName())) {
             if (StringUtils.isEmpty(delegateTask.getAssignee())) {
                 Set<IdentityLink> ids = delegateTask.getCandidates();
                 for (IdentityLink id : ids) {
@@ -63,7 +64,7 @@ public class CamundaGlobalListenerDelegate implements ExecutionListener, TaskLis
             } else {
                 userIds.add(delegateTask.getAssignee());
             }
-        }else if("update".equals(delegateTask.getEventName())&&delegateTask.getAssignee()!=null){
+        }else if(TaskListener.EVENTNAME_UPDATE.equals(delegateTask.getEventName())&&delegateTask.getAssignee()!=null){
             userIds.add(delegateTask.getAssignee());
         }
         if(!userIds.isEmpty()){
