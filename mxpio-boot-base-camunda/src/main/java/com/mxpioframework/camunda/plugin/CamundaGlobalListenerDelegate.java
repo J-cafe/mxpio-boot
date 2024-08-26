@@ -7,10 +7,12 @@ import com.mxpioframework.message.service.MessageService;
 import com.mxpioframework.security.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.delegate.TaskListener;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.IdentityLink;
 
 import java.util.ArrayList;
@@ -22,7 +24,24 @@ import java.util.Set;
 public class CamundaGlobalListenerDelegate implements ExecutionListener, TaskListener {
 
     @Override
-    public void notify(DelegateExecution delegateExecution) throws Exception {
+    public void notify(DelegateExecution delegateExecution) {
+        if("start".equals(delegateExecution.getEventName())){
+            MessageService messageService = SpringUtil.getBean(MessageService.class);
+            Map<String, Object> props = delegateExecution.getVariables();
+
+            RuntimeService runtimeService = delegateExecution.getProcessEngine().getRuntimeService();
+            // 获取流程实例
+            ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                    .processInstanceId(delegateExecution.getProcessInstanceId())
+                    .singleResult();
+            if(processInstance != null){
+                messageService.sendMessage(new String[]{"innerMsg"},"admin",new String[]{props.get(CamundaConstant.BPMN_START_USER).toString()},"流程完成通知:"+props.get(CamundaConstant.BPMN_TITLE),"流程【"+props.get(CamundaConstant.BPMN_TITLE)+"】已完成");
+                /*ActivityInstance[] instances = runtimeService.getActivityInstance(processInstance.getId()).getChildActivityInstances();
+                if(instances != null && instances.length == 1 && instances[0].getActivityType().endsWith("EndEvent")){
+
+                }*/
+            }
+        }
         // log.info("CamundaGlobalListenerDelegate.notify==>"+delegateExecution.getEventName()+"++"+delegateExecution.getCurrentActivityName());
     }
 
