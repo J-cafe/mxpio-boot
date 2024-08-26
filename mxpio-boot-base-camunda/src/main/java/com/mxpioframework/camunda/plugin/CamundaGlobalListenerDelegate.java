@@ -65,23 +65,6 @@ public class CamundaGlobalListenerDelegate implements ExecutionListener, TaskLis
             }
         }else if("update".equals(delegateTask.getEventName())&&delegateTask.getAssignee()!=null){
             userIds.add(delegateTask.getAssignee());
-        }else if("complete".equals(delegateTask.getEventName())){
-            /*
-            // 获取流程引擎服务
-            ProcessEngine processEngine = delegateTask.getProcessEngine();
-            RuntimeService runtimeService = processEngine.getRuntimeService();
-
-            // 获取流程实例ID
-            String processInstanceId = delegateTask.getProcessInstanceId();
-
-            // 检查流程实例是否已经完成
-            ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
-                    .processInstanceId(processInstanceId)
-                    .singleResult();
-
-            if (processInstance == null) {
-                messageService.sendMessage(new String[]{"innerMsg"},"admin",new String[]{props.get(CamundaConstant.BPMN_START_USER).toString()},"流程完成通知:"+props.get(CamundaConstant.BPMN_TITLE),"流程【"+props.get(CamundaConstant.BPMN_TITLE)+"】已完成");
-            }*/
         }
         if(!userIds.isEmpty()){
             messageService.sendMessage(new String[]{"innerMsg"},"admin",userIds.toArray(new String[]{}),"流程处理通知:"+props.get(CamundaConstant.BPMN_TITLE),"您有新的流程待处理");
