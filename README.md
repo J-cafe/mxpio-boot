@@ -6,10 +6,13 @@
 ## 1.简介
 >MxpIO Boot基于Spring Boot研发的开发框架，目前处于孵化中。MxpIO Boot采用宽泛的[MIT](https://gitee.com/i_mxpio/mxpio-boot/blob/master/LICENSE)开源协议，完全开源。
 
-在线文档：[mxpio-boot](https://doc.datazhzh.com/)
+**Vue2前端地址：**[Mxpio-Boot-Antd-Vue](https://gitee.com/i_mxpio/mxpio-boot-antd-vue)
 
-Vue2前端地址：[Mxpio-Boot-Antd-Vue](https://gitee.com/i_mxpio/mxpio-boot-antd-vue)
-## 2.后端技术栈
+## 2.在线文档
+
+**在线文档：**[mxpio-boot](https://doc.datazhzh.com/)
+
+## 3.后端技术栈
 
 * Spring Boot 2.5.14
 * Spring Data Jpa
@@ -23,7 +26,7 @@ Vue2前端地址：[Mxpio-Boot-Antd-Vue](https://gitee.com/i_mxpio/mxpio-boot-an
 * Camunda
 * Quartz
 
-### 2.1模块继承关系
+### 3.1模块继承关系
 
 > MxpIO-Boot采用Spring Boot风格的模块管理。通过mxpio-boot-base-autoconfigure模块管理各个模块的自动装配，具体模块之间的继承关系如下：
 
@@ -50,12 +53,12 @@ mxpio-boot-parent
 
 ```
 
-## 3.中间件技术栈
+## 4.中间件技术栈
 
 * 关系型数据库：Mysql/Oracle/Mssql/Postgresql等
 * 缓存中间件：Redis
 
-## 4.前端技术栈（孵化中）
+## 5.前端技术栈
 
 > 前端项目基于优秀的Vue开源项目[Vue-Antd-Admin](https://gitee.com/iczer/vue-antd-admin)开发。
 
@@ -69,13 +72,13 @@ mxpio-boot-parent
 * Axios
 * Viser
 
-## 5.演示环境
+## 6.演示环境
 
 筹备中.
 
-## 6.快速开始
+## 7.快速开始
 
-### 6.1运行示例项目
+### 7.1运行示例项目
 
 示例代码库：[https://gitee.com/i_mxpio/mxpio-boot-example](https://gitee.com/i_mxpio/mxpio-boot-example)
 
@@ -142,7 +145,7 @@ mvn clean package spring-boot:repackage
 java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.10.jar
 ```
 
-### 6.2新建Maven项目运行
+### 7.2新建Maven项目运行
 
 修改pom.xml文件
 
@@ -269,7 +272,7 @@ mvn clean package spring-boot:repackage
 java -jar target\mxpio-boot-example-1.0.12-beta.10.jar
 ```
 
-### 6.3源码运行
+### 7.3源码运行
 
 检出代码
 
@@ -335,33 +338,6 @@ mvn clean package spring-boot:repackage
 java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.10.jar
 ```
 
-## 7.开发计划
-
-
-| 模块 | 功能 | 后端 | 前端 | 文档 |
-|:-----:|:----:|:----:|:----:|:----:|
-| 权限管理 | 用户权限 | 已完成 | 已完成 | 暂无 |
-|       | 角色管理 | 已完成 | 已完成 | [mxpio-boot-base-security](https://gitee.com/i_mxpio/mxpio-boot/blob/master/mxpio-boot-base-security/README.md) |
-|       | 菜单管理 | 已完成 | 已完成 | 暂无 |
-|       | 部门管理 | 已完成 | 已完成 | 暂无 |
-|       | 数据权限 | 已完成 | 已完成 | 暂无 |
-|       | 组件权限 | 已完成 | 已完成 | 暂无 |
-|       | 字段权限 | 未开始 | 未开始 | 暂无 |
-| 表达式模块 |       | 已完成 | 不涉及 | [mxpio-boot-base-expression](https://gitee.com/i_mxpio/mxpio-boot/blob/master/mxpio-boot-base-expression/README.md) |
-| 系统监控 | 性能监控 | 已完成 | 已完成 | 暂无 |
-|       | 日志监控 | 进行中 | 未开始 | 暂无 |
-| 字典配置 | 字典管理 | 已完成 | 已完成 | 暂无 |
-|       | 字典翻译 | 已完成 | 已完成 | 暂无 |
-|       | 字典缓存 | 未开始 | 不涉及 | 暂无 |
-| JPA工具 | JPA工具 | 已完成 | 不涉及 | [mxpio-boot-base-jpa](https://gitee.com/i_mxpio/mxpio-boot/tree/master/mxpio-boot-base-jpa/README.md) |
-| Excel | 导入管理 | 已完成 | 已完成 | 暂无 |
-|       | 导出管理 | 已完成 | 已完成 | 暂无 |
-| 工作流 |       | 进行中 | 进行中 | 暂无 |
-| 任务调度 |       | 已完成 | 已完成 | 暂无 |
-| 报表模块 |       | 未开始 | 未开始 | 暂无 |
-| 图表模块 |       | 未开始 | 未开始 | 暂无 |
-| 多租户 |       | 进行中 | 未开始 | 暂无 |
-| 代码生成 |       | 进行中 | 未开始 | 暂无 |
 
 ## 8.使用登记
 
@@ -389,9 +365,3 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.10.jar
 ![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E5%AD%97%E5%85%B8.png)
 
 ![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6.png)
-
-## 10.相关开源项目
-
-- [Spring Boot](https://spring.io/projects/spring-boot)
-- [Vue-Antd-Admin](https://gitee.com/iczer/vue-antd-admin)
-- [Camunda](https://github.com/camunda/camunda-bpm-platform)
