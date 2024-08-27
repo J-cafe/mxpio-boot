@@ -1,4 +1,4 @@
-# Mxpio-Boot（孵化中）
+# Mxpio-Boot
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/J-cafe/mxpio-boot?include_prereleases)
 ![GitHub](https://img.shields.io/github/license/J-cafe/mxpio-boot)
 ![GitHub top language](https://img.shields.io/github/languages/top/J-cafe/mxpio-boot)
@@ -139,7 +139,7 @@ mvn clean package spring-boot:repackage
 启动项目
 
 ```bash
-java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.9.jar
+java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.10.jar
 ```
 
 ### 6.2新建Maven项目运行
@@ -151,7 +151,7 @@ java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.9.jar
 <parent>
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-parent</artifactId>
-	<version>1.0.12-beta.9</version>
+	<version>1.0.12-beta.10</version>
 </parent>
 ```
 
@@ -266,7 +266,7 @@ mvn clean package spring-boot:repackage
 启动项目
 
 ```bash
-java -jar target\mxpio-boot-example-1.0.12-beta.9.jar
+java -jar target\mxpio-boot-example-1.0.12-beta.10.jar
 ```
 
 ### 6.3源码运行
@@ -332,7 +332,7 @@ mvn clean package spring-boot:repackage
 启动项目
 
 ```bash
-java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.9.jar
+java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.10.jar
 ```
 
 ## 7.开发计划
@@ -363,7 +363,16 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.9.jar
 | 多租户 |       | 进行中 | 未开始 | 暂无 |
 | 代码生成 |       | 进行中 | 未开始 | 暂无 |
 
-## 8.截图
+## 8.使用登记
+
+以下是一些正在使用此框架的知名公司：
+
+- **河南人才集团** - [人才集团](http://www.hn-talent.com/)
+- **郑州卓臻信息技术有限公司** - [数字卓臻](https://www.datazhzh.com/)
+
+我们非常感谢这些公司对项目的支持和贡献！如果你的公司也在使用此框架，并且愿意被列在这里，请通过[Gitee Issue](https://gitee.com/i_mxpio/mxpio-boot/issues/IAMNUX)与我们联系。
+
+## 9.截图
 
 ![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E7%99%BB%E5%BD%95.png)
 
@@ -381,7 +390,7 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.9.jar
 
 ![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6.png)
 
-## 9.相关开源项目
+## 10.相关开源项目
 
 - [Spring Boot](https://spring.io/projects/spring-boot)
 - [Vue-Antd-Admin](https://gitee.com/iczer/vue-antd-admin)

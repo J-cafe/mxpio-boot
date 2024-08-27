@@ -22,7 +22,7 @@ public class ExcelReportModelGenerater extends AbstractReportModelGenerater {
 
 	public ReportGrid generateReportGridModel(ExportSolution exportSolution, String intercepterBean, String key) throws Exception {
 		ReportGrid gridModel = new ReportGrid();
-		List<ReportGridHeader> gridHeaders = new ArrayList<ReportGridHeader>();
+		List<ReportGridHeader> gridHeaders = new ArrayList<>();
 		this.createGridColumnHeader(exportSolution, gridHeaders, null);
 		gridModel.setGridHeaderModelList(gridHeaders);
 		gridModel.setGridDataModel(this.createGridColumnData(exportSolution, intercepterBean, key));

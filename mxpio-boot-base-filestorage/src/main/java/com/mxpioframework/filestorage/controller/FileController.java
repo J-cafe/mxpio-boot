@@ -37,7 +37,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/file/")
 public class FileController {
 
-	private Map<String, FileStoragePolicy> fileStoragePolicyMap = new HashMap<String, FileStoragePolicy>();
+	private final Map<String, FileStoragePolicy> fileStoragePolicyMap = new HashMap<>();
 
 	@Resource(name = FileStorageService.BEAN_ID)
 	private FileStorageService fileService;

@@ -351,9 +351,9 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	/**
 	 * 从驳回当前节点开始向前找，直到所有前驱都找到一个userTask节点为止
-	 * @param historyActivityList
-	 * @param activityImpl
-	 * @param toActSet
+	 * @param historyActivityList 历史活动清单
+	 * @param activityImpl 活动实体
+	 * @param toActSet 活动ID
 	 */
 	private void findRejectToUserTask(ProcessDefinitionEntity processDefinition,List<HistoricActivityInstanceEntity> HistoricActivityInstanceEntityList,List<String> historyActivityList,ActivityImpl activityImpl,Set<String> toActSet){
 		List<PvmTransition> incomingtTransition = activityImpl.getIncomingTransitions();

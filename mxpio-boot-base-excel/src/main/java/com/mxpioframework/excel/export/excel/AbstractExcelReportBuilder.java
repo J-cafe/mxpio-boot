@@ -31,15 +31,10 @@ public abstract class AbstractExcelReportBuilder {
 		return new SXSSFWorkbook(rowAccessWindowSize);
 	}
 
-	public void writeFile(Workbook workbook, String fileLocation) throws FileNotFoundException, IOException {
-		FileOutputStream out = new FileOutputStream(new File(fileLocation));
-		try {
-			workbook.write(out);
-		} finally {
-			if (out != null) {
-				out.close();
-			}
-		}
+	public void writeFile(Workbook workbook, String fileLocation) throws IOException {
+        try (FileOutputStream out = new FileOutputStream(fileLocation)) {
+            workbook.write(out);
+        }
 	}
 
 	public void writeOutputStream(Workbook workbook, OutputStream out) throws IOException {
@@ -94,7 +89,7 @@ public abstract class AbstractExcelReportBuilder {
 				maxLevel = header.getLevel();
 				gridModel.setMaxHeaderLevel(maxLevel);
 			}
-			if (header.getHeaders().size() > 0) {
+			if (!header.getHeaders().isEmpty()) {
 				this.calculateMaxHeaderLevel(gridModel, header.getHeaders());
 			}
 		}
@@ -104,7 +99,7 @@ public abstract class AbstractExcelReportBuilder {
 		for (ReportGridHeader reportGridHeaderModel : columnHeaderModels) {
 			if (reportGridHeaderModel.getLevel() == level) {
 				result.add(reportGridHeaderModel);
-			} else if (reportGridHeaderModel.getHeaders().size() > 0) {
+			} else if (!reportGridHeaderModel.getHeaders().isEmpty()) {
 				calculateGridHeadersByLevel(reportGridHeaderModel.getHeaders(), level, result);
 			}
 		}
@@ -112,7 +107,7 @@ public abstract class AbstractExcelReportBuilder {
 
 	public void calculateBottomColumnHeader(List<ReportGridHeader> gridHeader, List<ReportGridHeader> result) {
 		for (ReportGridHeader header : gridHeader) {
-			if (header.getHeaders().size() == 0) {
+			if (header.getHeaders().isEmpty()) {
 				result.add(header);
 			} else {
 				this.calculateBottomColumnHeader(header.getHeaders(), result);
@@ -121,10 +116,10 @@ public abstract class AbstractExcelReportBuilder {
 	}
 
 	public int calculateGridHeaderColspan(ReportGridHeader headerModel) {
-		if (headerModel.getHeaders().size() == 0) {
+		if (headerModel.getHeaders().isEmpty()) {
 			return 1;
 		} else {
-			List<ReportGridHeader> result = new ArrayList<ReportGridHeader>();
+			List<ReportGridHeader> result = new ArrayList<>();
 			calculateBottomColumnHeader(headerModel.getHeaders(), result);
 			return result.size();
 		}
