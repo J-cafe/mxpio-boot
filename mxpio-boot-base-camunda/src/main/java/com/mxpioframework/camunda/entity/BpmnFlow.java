@@ -32,6 +32,11 @@ public class BpmnFlow extends BaseEntity {
 	@Column(name = "NAME_")
 	@Schema(description = "流程名称")
 	private String name;
+
+	@Column(name = "BIZ_TYPE_")
+	@Schema(description = "业务分类")
+	@Dict(dicCode = "MB_BPMN_BIZ_TYPE")
+	private String bizType;
 	
 	@Column(name = "STATUS_")
 	@Schema(description = "发布状态")

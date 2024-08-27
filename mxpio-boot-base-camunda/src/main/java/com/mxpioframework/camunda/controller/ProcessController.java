@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.mxpioframework.camunda.CamundaConstant;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -163,6 +165,35 @@ public class ProcessController {
 	public Result<?> restart(@PathVariable(name = "instanceId") String instanceId) {
 		runtimeService.activateProcessInstanceById(instanceId);
 		return Result.OK();
+	}
+
+	@GetMapping("cancel/{instanceId}")
+	@Operation(summary = "取消流程", description = "取消流程", method = "GET")
+	public Result<?> cancel(@PathVariable(name = "instanceId") String instanceId) {
+		if(validatePermissions(instanceId)){
+			runtimeService.deleteProcessInstance(instanceId, "取消流程");
+		}else{
+			return Result.error("无可操作流程！");
+		}
+		return Result.OK();
+	}
+
+	private boolean validatePermissions(String instanceId){
+		// 验证流程实例是否存在
+		ProcessInstanceQuery query = runtimeService.createProcessInstanceQuery();
+		ProcessInstance processInstance = query.processInstanceId(instanceId).singleResult();
+		if (processInstance == null) {
+			return false;
+		}
+
+		// 验证是否为发起人
+		String initiatorUserId = (String) runtimeService.getVariable(instanceId, CamundaConstant.BPMN_START_USER);
+		if (!initiatorUserId.equals(SecurityUtils.getLoginUsername())) {
+			return false;
+		}
+
+		// 所有验证通过
+		return true;
 	}
 
 }
