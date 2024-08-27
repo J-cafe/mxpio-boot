@@ -188,12 +188,7 @@ public class ProcessController {
 
 		// 验证是否为发起人
 		String initiatorUserId = (String) runtimeService.getVariable(instanceId, CamundaConstant.BPMN_START_USER);
-		if (!initiatorUserId.equals(SecurityUtils.getLoginUsername())) {
-			return false;
-		}
-
-		// 所有验证通过
-		return true;
-	}
+        return initiatorUserId.equals(SecurityUtils.getLoginUsername());
+    }
 
 }
