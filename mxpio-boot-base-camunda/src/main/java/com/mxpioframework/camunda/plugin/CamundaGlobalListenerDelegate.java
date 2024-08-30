@@ -52,7 +52,6 @@ public class CamundaGlobalListenerDelegate implements ExecutionListener, TaskLis
     @Override
     public void notify(DelegateTask delegateTask) {
         // 获取Service
-        MessageService messageService = SpringUtil.getBean(MessageService.class);
         RoleService roleService = SpringUtil.getBean(RoleService.class);
         HistoryService historyService = delegateTask.getProcessEngineServices().getHistoryService();
         // 获取流程变量
@@ -71,34 +70,27 @@ public class CamundaGlobalListenerDelegate implements ExecutionListener, TaskLis
                 assignees.add(delegateTask.getAssignee());
             }
             if(!assignees.isEmpty()){
-                messageService.sendMessage(new String[]{"innerMsg"},"admin",assignees.toArray(new String[]{}),"流程处理通知:"+props.get(CamundaConstant.BPMN_TITLE),"您有新的流程待处理");
+                sendMessage(new String[]{"innerMsg"},"admin",assignees.toArray(new String[]{}),"流程处理通知:"+props.get(CamundaConstant.BPMN_TITLE),"您有新的流程待处理");
             }
         }else if(TaskListener.EVENTNAME_DELETE.equals(delegateTask.getEventName())){
-            messageService.sendMessage(new String[]{"innerMsg"},"admin",new String[]{props.get(CamundaConstant.BPMN_START_USER).toString()},"流程未通过通知:"+props.get(CamundaConstant.BPMN_TITLE),"流程【"+props.get(CamundaConstant.BPMN_TITLE)+"】审批未通过");
+            sendMessage(new String[]{"innerMsg"},"admin",new String[]{props.get(CamundaConstant.BPMN_START_USER).toString()},"流程未通过通知:"+props.get(CamundaConstant.BPMN_TITLE),"流程【"+props.get(CamundaConstant.BPMN_TITLE)+"】审批未通过");
         }else if(TaskListener.EVENTNAME_UPDATE.equals(delegateTask.getEventName()) && delegateTask.getAssignee() != null){
             HistoricTaskInstance historicTask = historyService.createHistoricTaskInstanceQuery()
                     .taskId(delegateTask.getId())
                     .orderByHistoricTaskInstanceEndTime().desc()
                     .singleResult();
             if(!delegateTask.getAssignee().equals(historicTask.getAssignee())){
-                messageService.sendMessage(new String[]{"innerMsg"},"admin",new String[]{delegateTask.getAssignee()},"流程处理通知:"+props.get(CamundaConstant.BPMN_TITLE),"您有新的流程待处理");
+                sendMessage(new String[]{"innerMsg"},"admin",new String[]{delegateTask.getAssignee()},"流程处理通知:"+props.get(CamundaConstant.BPMN_TITLE),"您有新的流程待处理");
             }
         }
+    }
 
-        /*if(TaskListener.EVENTNAME_CREATE.equals(delegateTask.getEventName())) {
-            if (StringUtils.isEmpty(delegateTask.getAssignee())) {
-                Set<IdentityLink> ids = delegateTask.getCandidates();
-                for (IdentityLink id : ids) {
-                    assignees.addAll(JpaUtil.collect(roleService.getUsersWithin(null, id.getGroupId().substring(5)),"username"));
-                }
-            } else {
-                assignees.add(delegateTask.getAssignee());
-            }
-        }else if(TaskListener.EVENTNAME_UPDATE.equals(delegateTask.getEventName())&&delegateTask.getAssignee()!=null){
-            assignees.add(delegateTask.getAssignee());
+    private void sendMessage(String[] chanels, String from, String[] to, String title, String content){
+        try {
+            MessageService messageService = SpringUtil.getBean(MessageService.class);
+            messageService.sendMessage(chanels,from,to,title,content);
+        } catch (Exception e) {
+            log.error(e.getMessage(),e);
         }
-        if(!assignees.isEmpty()){
-            messageService.sendMessage(new String[]{"innerMsg"},"admin",assignees.toArray(new String[]{}),"流程处理通知:"+props.get(CamundaConstant.BPMN_TITLE),"您有新的流程待处理");
-        }*/
     }
 }
