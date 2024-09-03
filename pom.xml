@@ -61,7 +61,7 @@
 		<module>mxpio-boot-module-oauth</module>
 		<module>mxpio-boot-module-msal</module>
         <module>mxpio-boot-module-email</module>
-        <!--<module>mxpio-boot-webapp</module>-->
+        <module>mxpio-boot-webapp</module>
     </modules>
 	<dependencies>
 		<dependency>
@@ -298,13 +298,13 @@
 		        <artifactId>knife4j-springdoc-ui</artifactId>
 		        <version>3.0.3</version>
 		    </dependency>
-		    
+
 		    <dependency>
 			    <groupId>org.camunda.bpm.springboot</groupId>
 			    <artifactId>camunda-bpm-spring-boot-starter</artifactId>
 			    <version>${camunda.version}</version>
 			</dependency>
-			
+
 			<dependency>
 			    <groupId>org.camunda.bpm.springboot</groupId>
 			    <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>

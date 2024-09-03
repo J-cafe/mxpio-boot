@@ -148,16 +148,14 @@ public class TaskController {
 	public Result<Page<TaskVO>> allPage(Criteria criteria,
 										  @RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 										  @RequestParam(value="pageNo", defaultValue = "1") Integer pageNo){
-
+		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		Set<String> authorities = SecurityUtils.getAuthorityKeys();
 		String username = SecurityUtils.getLoginUsername();
-		AllTaskRetVO allTaskRetVO = bpmnFlowService.getAllTasks(username,authorities,criteria);
+		AllTaskRetVO allTaskRetVO = bpmnFlowService.getAllTasks(username,authorities,criteria,pageAble);
 		List<TaskVO> taskVOList = allTaskRetVO.getAllTasks();
 		long total = allTaskRetVO.getCount();
 
-		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-
-		if(CollectionUtils.isNotEmpty(taskVOList)){
+		/*if(CollectionUtils.isNotEmpty(taskVOList)){
 			int startIndex = (pageNo-1)*pageSize;
 			if(startIndex< taskVOList.size()){
 				List<TaskVO> returnList = taskVOList.subList(startIndex, Math.min(startIndex + pageSize, taskVOList.size()));
@@ -170,8 +168,11 @@ public class TaskController {
 				Page<TaskVO> page = new PageImpl<>(returnList, pageAble, total);
 				return Result.OK(page);
 			}
+		}*/
+		if(CollectionUtils.isNotEmpty(taskVOList)){
+			Page<TaskVO> page = new PageImpl<>(taskVOList, pageAble, total);
+			return Result.OK(page);
 		}
-
 		return Result.OK(new PageImpl<>(new ArrayList<>(),pageAble,0));
 	}
 

@@ -225,8 +225,9 @@ public interface BpmnFlowService {
 	 * @param username 用户名
 	 * @param authorities 组
 	 * @param criteria 查询构造器
+	 * @param pageAble 分页
 	 * @return 任务列表
 	 */
-	AllTaskRetVO getAllTasks(String username, Set<String> authorities, Criteria criteria);
+	AllTaskRetVO getAllTasks(String username, Set<String> authorities, Criteria criteria,Pageable pageAble);
 
 }

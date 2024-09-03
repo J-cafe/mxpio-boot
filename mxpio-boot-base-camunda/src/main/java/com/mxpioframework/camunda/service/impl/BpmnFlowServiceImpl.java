@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.googlecode.aviator.AviatorEvaluator;
+import com.mxpioframework.camunda.entity.BpmnTask;
 import com.mxpioframework.camunda.vo.*;
 import com.mxpioframework.jpa.query.Order;
 import org.apache.commons.collections.CollectionUtils;
@@ -33,6 +34,7 @@ import org.camunda.bpm.engine.task.Comment;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.task.TaskQuery;
 import org.camunda.bpm.engine.variable.VariableMap;
+import org.springdoc.core.converters.AdditionalModelsConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -78,6 +80,13 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Autowired
 	private HistoryService historyService;
+	private AdditionalModelsConverter additionalModelsConverter;
+
+	/**
+	 * 自引用
+	 */
+	@Autowired
+	private BpmnFlowService bpmnFlowService;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -932,8 +941,46 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public AllTaskRetVO getAllTasks(String username, Set<String> authorities, Criteria criteria){
-		//活动任务
+	public AllTaskRetVO getAllTasks(String username, Set<String> authorities, Criteria criteria,Pageable pageAble){
+
+		criteria = criteria.addCriterion("assignee",Operator.EQ,username)
+				.or()
+				.addCriterion("candidateUser",Operator.EQ,username)
+				.addCriterion("candidateGroup",Operator.IN,authorities)
+				.end();
+
+		Page<BpmnTask> bpmnTaskList = JpaUtil.linq(BpmnTask.class).where(criteria).paging(pageAble);
+
+		AllTaskRetVO retVO = new AllTaskRetVO();
+
+		List<TaskVO> allTasks = new ArrayList<>();
+		for(BpmnTask bpmnTask:bpmnTaskList.getContent()){
+			HistoricProcessInstance historicProcessInstance = this.getHistoricProcessInstanceById(bpmnTask.getProcessInstanceId());
+			TaskVO taskVO = new TaskVO(bpmnTask, historicProcessInstance);
+			if(StringUtils.isNotBlank(bpmnTask.getAssignee())){
+				taskVO.setTaskType("active");
+			}
+			else if(StringUtils.isNotBlank(bpmnTask.getCandidateUser())){
+				taskVO.setTaskType("candidateUser");
+			}
+			else if(StringUtils.isNotBlank(bpmnTask.getCandidateGroup())){
+				taskVO.setTaskType("candidateGroup");
+			}
+			else{
+				continue;
+			}
+			String formKey = this.getTaskFormKey(bpmnTask.getProcessDefinitionId(), bpmnTask.getTaskDefinitionKey());
+			//自引用，防止getTitleByInstanceId的@Cacheable方法失效
+			taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
+			taskVO.setHasForm(StringUtils.isNotEmpty(formKey));
+			allTasks.add(taskVO);
+		}
+
+		retVO.setAllTasks(allTasks);
+		retVO.setCount(bpmnTaskList.getTotalElements());
+		return retVO;
+
+		/*//活动任务
 		TaskQuery activeTaskQuery = taskService.createTaskQuery().active().taskAssignee(username);
 		criteria2TaskQuery(criteria, activeTaskQuery);
 		List<Task> activeTaskList = activeTaskQuery.list();
@@ -973,7 +1020,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		AllTaskRetVO retVO = new AllTaskRetVO();
 		retVO.setAllTasks(allTasks);
 		retVO.setCount((long) allTasks.size());
-		return retVO;
+		return retVO;*/
 	}
 
 	private Task getTaskById(String taskId){
