@@ -943,8 +943,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	@Transactional(readOnly = true)
 	public AllTaskRetVO getAllTasks(String username, Set<String> authorities, Criteria criteria,Pageable pageAble){
 
-		criteria = criteria.addCriterion("assignee",Operator.EQ,username)
-				.or()
+		criteria = criteria.or().addCriterion("assignee",Operator.EQ,username)
 				.addCriterion("candidateUser",Operator.EQ,username)
 				.addCriterion("candidateGroup",Operator.IN,authorities)
 				.end();
