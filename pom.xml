@@ -61,7 +61,7 @@
 		<module>mxpio-boot-module-oauth</module>
 		<module>mxpio-boot-module-msal</module>
         <module>mxpio-boot-module-email</module>
-        <module>mxpio-boot-webapp</module>
+        <!--<module>mxpio-boot-webapp</module>-->
     </modules>
 	<dependencies>
 		<dependency>
