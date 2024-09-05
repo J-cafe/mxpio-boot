@@ -119,9 +119,16 @@ public class BpmnTask implements Serializable {
     @Schema(description = "CANDIDATE_GROUP")
     private String candidateGroup;
 
-    @Column(name = "CREATE_BY_")
-    @Schema(description = "CREATE_BY_")
-    private String createBy;
+    @Column(name = "PROC_START_USER_ID_")
+    @Schema(description = "PROC_START_USER_ID_")
+    private String procStartUserId;
+
+    @Column(name = "BPMN_SORT_FLAG_")
+    @Schema(description = "BPMN_SORT_FLAG_")
+    private String bpmnSortFlag;
+
+
+
 
 
 }

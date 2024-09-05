@@ -53,7 +53,8 @@ CREATE
                                             RES.TENANT_ID_,
                                             '' AS CANDIDATE_USER,
                                             '' AS CANDIDATE_GROUP,
-                                            (SELECT TEXT_ FROM ACT_RU_VARIABLE V WHERE V.EXECUTION_ID_=RES.EXECUTION_ID_ AND V.PROC_INST_ID_=RES.PROC_INST_ID_ AND V.PROC_DEF_ID_=RES.PROC_DEF_ID_ AND V.NAME_='createBy') AS CREATE_BY_
+                                            (SELECT TEXT_ FROM ACT_RU_VARIABLE V WHERE V.EXECUTION_ID_=RES.EXECUTION_ID_ AND V.PROC_INST_ID_=RES.PROC_INST_ID_ AND V.PROC_DEF_ID_=RES.PROC_DEF_ID_ AND V.NAME_='createBy') AS PROC_START_USER_ID_,
+                                            IFNULL((SELECT TEXT_ FROM ACT_RU_VARIABLE V WHERE V.EXECUTION_ID_=RES.EXECUTION_ID_ AND V.PROC_INST_ID_=RES.PROC_INST_ID_ AND V.PROC_DEF_ID_=RES.PROC_DEF_ID_ AND V.NAME_='$BPMN_SORT_FLAG_'),'0') AS BPMN_SORT_FLAG_
                                         FROM
                                             ACT_RU_TASK RES
                                         WHERE
@@ -85,7 +86,8 @@ CREATE
                                             RES.TENANT_ID_,
                                             I.USER_ID_ AS CANDIDATE_USER,
                                             I.GROUP_ID_ AS CANDIDATE_GROUP,
-                                            (SELECT TEXT_ FROM ACT_RU_VARIABLE V WHERE V.EXECUTION_ID_=RES.EXECUTION_ID_ AND V.PROC_INST_ID_=RES.PROC_INST_ID_ AND V.PROC_DEF_ID_=RES.PROC_DEF_ID_ AND V.NAME_='createBy') AS CREATE_BY_
+                                            (SELECT TEXT_ FROM ACT_RU_VARIABLE V WHERE V.EXECUTION_ID_=RES.EXECUTION_ID_ AND V.PROC_INST_ID_=RES.PROC_INST_ID_ AND V.PROC_DEF_ID_=RES.PROC_DEF_ID_ AND V.NAME_='createBy') AS PROC_START_USER_ID_,
+                                            IFNULL((SELECT TEXT_ FROM ACT_RU_VARIABLE V WHERE V.EXECUTION_ID_=RES.EXECUTION_ID_ AND V.PROC_INST_ID_=RES.PROC_INST_ID_ AND V.PROC_DEF_ID_=RES.PROC_DEF_ID_ AND V.NAME_='$BPMN_SORT_FLAG_'),'0') AS BPMN_SORT_FLAG_
                                         FROM
                                             ACT_RU_TASK RES
                                                 LEFT JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = RES.ID_
