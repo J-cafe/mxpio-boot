@@ -78,6 +78,8 @@ public class TaskVO implements Serializable, DictAble {
 
 	private String executionId;
 
+	private String bpmnSortFlag;
+
 	public TaskVO(HistoricTaskInstance task) {
 		this.id = task.getId();
 		this.assignee = task.getAssignee();
@@ -113,6 +115,9 @@ public class TaskVO implements Serializable, DictAble {
 		this.createTime = task.getCreateTime();
 		// this.endTime = task.getEndTime();
 		this.executionId = task.getExecutionId();
+		this.procStartUserId = task.getProcStartUserId();
+		this.processDefinitionName = task.getProcessDefinitionName();
+		this.bpmnSortFlag=task.getBpmnSortFlag();
 	}
 
 	public TaskVO(HistoricTaskInstance task, HistoricProcessInstance historicProcessInstance) {
@@ -134,8 +139,8 @@ public class TaskVO implements Serializable, DictAble {
 	public TaskVO(BpmnTask task, HistoricProcessInstance historicProcessInstance) {
 		this(task);
 		this.procStartTime = historicProcessInstance.getStartTime();
-		this.procStartUserId = historicProcessInstance.getStartUserId();
-		this.processDefinitionName = historicProcessInstance.getProcessDefinitionName();
+		//this.procStartUserId = historicProcessInstance.getStartUserId();
+		//this.processDefinitionName = historicProcessInstance.getProcessDefinitionName();
 		this.processDefinitionKey = historicProcessInstance.getProcessDefinitionKey();
 	}
 
