@@ -368,3 +368,7 @@ We are very grateful for the support and contribution of these companies to the 
 ![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E5%AD%97%E5%85%B8.png)
 
 ![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6.png)
+
+## 10.Others
+
+Thank you [JetBrains] (https://www.jetbrains.com/) provides IDE license
