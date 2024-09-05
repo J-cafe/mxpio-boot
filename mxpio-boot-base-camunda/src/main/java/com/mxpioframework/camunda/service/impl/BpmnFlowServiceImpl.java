@@ -33,6 +33,7 @@ import org.camunda.bpm.engine.task.Comment;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.task.TaskQuery;
 import org.camunda.bpm.engine.variable.VariableMap;
+import org.camunda.bpm.engine.variable.type.ValueType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -681,7 +682,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			query.taskAssignee(username); // 当前处理人
 		}
 		criteria2TaskQuery(criteria, query);
-		return query.orderByTaskCreateTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
+		return query.orderByTaskVariable(CamundaConstant.BPMN_SORT_FLAG, ValueType.NUMBER).desc().orderByTaskCreateTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
 	}
 
 	@Override
@@ -1048,8 +1049,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 						else{
 							comparator = comparator.thenComparing(TaskVO::getId,Comparator.reverseOrder());
 						}
-					}
-					else{
+					}else{
 						if(comparator==null){
 							comparator = Comparator.comparing(TaskVO::getId);
 						}

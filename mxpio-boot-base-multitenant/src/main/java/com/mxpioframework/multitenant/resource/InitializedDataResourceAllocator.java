@@ -27,7 +27,4 @@ public class InitializedDataResourceAllocator implements ResourceAllocator {
 	public void allocate(Organization organization) {
 		scriptService.runScripts(organization.getId(), dataSourceService.getDataSource(organization), resourceScript, "multitenant");
 	}
-	
-	
-	
 }
