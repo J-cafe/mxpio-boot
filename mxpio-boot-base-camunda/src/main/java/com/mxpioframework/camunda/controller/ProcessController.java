@@ -147,7 +147,7 @@ public class ProcessController {
 	public Result<?> start(@PathVariable(name = "key") String key,
 			@RequestParam(value="businessKey", required = false) String businessKey,
 			@RequestBody Map<String, Object> properties) {
-		
+        properties.putIfAbsent(CamundaConstant.BPMN_SORT_FLAG, "0");
 		ProcessInstance processInstance = bpmnFlowService.startWithFormByKey(key, SecurityUtils.getLoginUsername(), businessKey, properties);
 		return Result.OK("启动成功！", processInstance.getId());
 	}
