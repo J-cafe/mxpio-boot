@@ -75,6 +75,10 @@ public class BpmnTask implements Serializable {
     @Schema(description = "PROC_DEF_ID_")
     private String processDefinitionId;
 
+    @Column(name = "PROC_DEF_NAME_")
+    @Schema(description = "PROC_DEF_NAME_")
+    private String processDefinitionName;
+
     @Column(name = "CASE_EXECUTION_ID_")
     @Schema(description = "CASE_EXECUTION_ID_")
     private String caseExecutionId;
@@ -114,4 +118,10 @@ public class BpmnTask implements Serializable {
     @Column(name = "CANDIDATE_GROUP")
     @Schema(description = "CANDIDATE_GROUP")
     private String candidateGroup;
+
+    @Column(name = "CREATE_BY_")
+    @Schema(description = "CREATE_BY_")
+    private String createBy;
+
+
 }
