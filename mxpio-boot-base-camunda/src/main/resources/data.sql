@@ -28,6 +28,7 @@ INSERT INTO mb_url(id_, create_by, create_time, update_by, update_time, componen
 
 CREATE
     OR REPLACE VIEW V_BPMN_ALL_TASKS AS SELECT DISTINCT
+                                            `res`.`ID_` AS `VIEW_ID_`,
                                             RES.REV_,
                                             RES.ID_,
                                             RES.NAME_,
@@ -56,8 +57,10 @@ CREATE
                                         FROM
                                             ACT_RU_TASK RES
                                         WHERE
-                                            RES.SUSPENSION_STATE_ = 1 UNION ALL
+                                            RES.SUSPENSION_STATE_ = 1
+                                        UNION ALL
                                         SELECT DISTINCT
+                                            CONCAT( `res`.`ID_`, `i`.`ID_` ) AS `VIEW_ID_`,
                                             RES.REV_,
                                             RES.ID_,
                                             RES.NAME_,
@@ -89,4 +92,6 @@ CREATE
                                         WHERE
                                             RES.ASSIGNEE_ IS NULL
                                           AND I.TYPE_ = 'candidate'
-                                          AND RES.SUSPENSION_STATE_ = 1
+                                          AND RES.SUSPENSION_STATE_ = 1;
+
+
