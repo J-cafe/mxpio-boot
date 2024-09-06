@@ -1148,6 +1148,13 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 								query.processDefinitionName(((SimpleCriterion) criterion).getValue() + "");
 							}
 							break;
+						case "procStartUserId":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processVariableValueEquals("createBy", ((SimpleCriterion) criterion).getValue());
+							}else{
+								query.processVariableValueLike("createBy", "%" + ((SimpleCriterion) criterion).getValue() + "%");
+							}
+							break;
 						default:
 							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
 								query.processVariableValueEquals(((SimpleCriterion) criterion).getFieldName(), ((SimpleCriterion) criterion).getValue());
