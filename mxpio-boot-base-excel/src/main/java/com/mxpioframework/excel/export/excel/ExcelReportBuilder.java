@@ -84,21 +84,19 @@ public class ExcelReportBuilder extends AbstractExcelReportBuilder {
 		for (ReportGridHeader headerModel : topHeaders) {
 			cell = row.createCell((short) currentCol);
 			cell.setCellValue(headerModel.getLabel());
-			int firstRow = currentRow;
-			int lastRow = currentRow;
-			int firstCol = currentCol;
+            int firstCol = currentCol;
 			int lastCol = currentCol;
 			int colspan = calculateGridHeaderColspan(headerModel);
 			cell.setCellStyle(headerStyle);
-			if (headerModel.getHeaders().size() == 0) {
+			if (headerModel.getHeaders().isEmpty()) {
 				int rowspan = maxHeaderLevel - headerModel.getLevel();
-				cellRangeAddress = new CellRangeAddress(firstRow, lastRow + rowspan, firstCol, lastCol + colspan - 1);
+				cellRangeAddress = new CellRangeAddress(currentRow, currentRow + rowspan, firstCol, lastCol + colspan - 1);
 				if(firstCol != lastCol + colspan - 1){
 					sheet.addMergedRegion(cellRangeAddress);
 				}
 				this.setCellRangeAddressBorder(cellRangeAddress, sheet);
 			} else {
-				cellRangeAddress = new CellRangeAddress(firstRow, lastRow, firstCol, lastCol + colspan - 1);
+				cellRangeAddress = new CellRangeAddress(currentRow, currentRow, firstCol, lastCol + colspan - 1);
 				sheet.addMergedRegion(cellRangeAddress);
 				this.setCellRangeAddressBorder(cellRangeAddress, sheet);
 				this.buildGridExcelHeader(sheet, rowMap, maxHeaderLevel, headerModel.getLevel() + 1, startHeaderRow, firstCol, headerModel.getHeaders(), styles);
@@ -114,7 +112,7 @@ public class ExcelReportBuilder extends AbstractExcelReportBuilder {
 		CellStyle dataAlignRightStyle = styles.get(GridStyleType.dataAlignRightStyle.name());
 		
 		SimpleDateFormat sdf = ExportUtils.getSimpleDateFormat();
-		List<ReportGridHeader> bottomGridExcelHeader = new ArrayList<ReportGridHeader>();
+		List<ReportGridHeader> bottomGridExcelHeader = new ArrayList<>();
 		this.calculateBottomColumnHeader(gridModel.getGridHeaderModelList(), bottomGridExcelHeader);
 		
 		List<Map<String, Object>> excelDatas = gridModel.getGridDataModel().getDatas();
@@ -170,7 +168,7 @@ public class ExcelReportBuilder extends AbstractExcelReportBuilder {
 		int count = 0;
 		for (int i = 0; i < s.length(); i++) {
 			char temp = s.charAt(i);
-			if (temp == '\u0009') {
+			if (temp == '\t') {
 				count++;
 			}
 		}

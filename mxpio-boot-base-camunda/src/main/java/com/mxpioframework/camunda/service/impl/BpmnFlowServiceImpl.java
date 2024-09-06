@@ -35,6 +35,7 @@ import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.task.TaskQuery;
 import org.camunda.bpm.engine.variable.VariableMap;
 import org.springdoc.core.converters.AdditionalModelsConverter;
+import org.camunda.bpm.engine.variable.type.ValueType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -360,9 +361,9 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	/**
 	 * 从驳回当前节点开始向前找，直到所有前驱都找到一个userTask节点为止
-	 * @param historyActivityList
-	 * @param activityImpl
-	 * @param toActSet
+	 * @param historyActivityList 历史活动清单
+	 * @param activityImpl 活动实体
+	 * @param toActSet 活动ID
 	 */
 	private void findRejectToUserTask(ProcessDefinitionEntity processDefinition,List<HistoricActivityInstanceEntity> HistoricActivityInstanceEntityList,List<String> historyActivityList,ActivityImpl activityImpl,Set<String> toActSet){
 		List<PvmTransition> incomingtTransition = activityImpl.getIncomingTransitions();
@@ -690,7 +691,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			query.taskAssignee(username); // 当前处理人
 		}
 		criteria2TaskQuery(criteria, query);
-		return query.orderByTaskCreateTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
+		return query.orderByTaskVariable(CamundaConstant.BPMN_SORT_FLAG, ValueType.NUMBER).desc().orderByTaskCreateTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
 	}
 
 	@Override
@@ -1102,8 +1103,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 						else{
 							comparator = comparator.thenComparing(TaskVO::getId,Comparator.reverseOrder());
 						}
-					}
-					else{
+					}else{
 						if(comparator==null){
 							comparator = Comparator.comparing(TaskVO::getId);
 						}

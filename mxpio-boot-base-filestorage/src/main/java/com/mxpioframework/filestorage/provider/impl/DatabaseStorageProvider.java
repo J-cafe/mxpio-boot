@@ -3,11 +3,12 @@ package com.mxpioframework.filestorage.provider.impl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.annotation.Resource;
 
@@ -46,7 +47,7 @@ public class DatabaseStorageProvider implements FileStorageProvider {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		IOUtils.copy(inputStream, baos);
 		MxpioBlob mxpioBlob = mxpioBlobService.put(baos.toByteArray());
-		return mxpioBlob.getId().toString();
+		return mxpioBlob.getId();
 	}
 
 	@Override
@@ -91,11 +92,11 @@ public class DatabaseStorageProvider implements FileStorageProvider {
 	}
 
 	@Override
-	public InputStream getInputStream(String relativePath) throws FileNotFoundException {
+	public InputStream getInputStream(String relativePath) throws IOException {
 		InputStream inputStream = null;
 		String absolutePath = getAbsolutePath(relativePath);
 		if (absolutePath != null) {
-			inputStream = new FileInputStream(absolutePath);
+			inputStream = Files.newInputStream(Paths.get(absolutePath));
 		} else {
 			MxpioBlob mxpioBlob = mxpioBlobService.get(relativePath);
 			if (mxpioBlob != null) {
@@ -113,7 +114,7 @@ public class DatabaseStorageProvider implements FileStorageProvider {
 		StringBuilder builder = new StringBuilder(builderLength);
 		int start = 0;
 		for (int i : lengths) {
-			builder.append(target.substring(start, start + i)).append(separator);
+			builder.append(target, start, start + i).append(separator);
 			start += i;
 		}
 		builder.append(target.substring(start));

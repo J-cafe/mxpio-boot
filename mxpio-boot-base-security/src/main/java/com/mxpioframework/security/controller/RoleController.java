@@ -89,7 +89,7 @@ public class RoleController {
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Page<User> users = roleService.getUsersWithout(pageAble, criteria, id);
+		Page<User> users = roleService.pagingUsersWithout(pageAble, criteria, id);
 		return Result.OK(users);
 	}
 	
@@ -101,7 +101,7 @@ public class RoleController {
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Page<User> users = roleService.getUsersWithin(pageAble, criteria, id);
+		Page<User> users = roleService.pagingUsersWithin(pageAble, criteria, id);
 		return Result.OK(users);
 	}
 	

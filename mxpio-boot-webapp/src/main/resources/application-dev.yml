@@ -71,3 +71,7 @@ camunda:
       schema-update: true
     history-level: FULL
     auto-deployment-enabled: false # 自动部署 resources 下的 bpmn文件
+    eventing:
+      execution: true
+      history: true
+      task: true

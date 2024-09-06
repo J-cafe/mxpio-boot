@@ -32,6 +32,25 @@ public class ElFuncServiceImpl implements ElFuncService {
     public Dept dept(String deptLevel, String username) {
         return getDeptByUserAndLevel(deptLevel, username);
     }
+
+    @Override
+    public String deptCode(String deptLevel, String username) {
+        Dept dept = dept(deptLevel, username);
+        if(dept != null){
+            return dept.getDeptCode();
+        }
+        return null;
+    }
+
+    @Override
+    public String deptName(String deptLevel, String username) {
+        Dept dept = dept(deptLevel, username);
+        if(dept != null){
+            return dept.getDeptName();
+        }
+        return null;
+    }
+
     @Override
     public List<String> string2List(String str) {
         return Arrays.asList(str.split(","));

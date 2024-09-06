@@ -41,10 +41,15 @@ public interface BpmnEnums {
 	 * @author mxpio
 	 *
 	 */
-	enum Purc{
-		OK("01", "同意"), REFUSE("02", "拒绝"),REJECT("03","驳回");
+	enum OperationStatusEnums{
+		START("Start", "启动"),
+		APPROVE("Approve", "同意"),
+		REJECT("Reject","驳回上一节点"),
+		REFUSE("Refuse", "不同意"),
+		DELEGATE("Delegate", "委托"),
+		CANCEL("Cancel", "撤回");
 
-		Purc(String code, String name) {
+		OperationStatusEnums(String code, String name) {
 			this.code = code;
 			this.name = name;
 		}

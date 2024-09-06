@@ -22,6 +22,10 @@ public interface ElFuncService {
      */
     Dept dept(String deptLevel, String username);
 
+    String deptCode(String deptLevel, String username);
+
+    String deptName(String deptLevel, String username);
+
     List<String> string2List(String str);
 
 }

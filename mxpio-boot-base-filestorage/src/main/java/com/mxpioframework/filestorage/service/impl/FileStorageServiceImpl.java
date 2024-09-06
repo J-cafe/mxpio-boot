@@ -24,7 +24,7 @@ import com.mxpioframework.jpa.JpaUtil;
 @Service(FileStorageService.BEAN_ID)
 public class FileStorageServiceImpl implements FileStorageService {
 
-	private Map<String, FileStorageProvider> fileStorageProviderMap = new HashMap<String, FileStorageProvider>();
+	private final Map<String, FileStorageProvider> fileStorageProviderMap = new HashMap<>();
 
 	@Override
 	public MxpioFileInfo put(InputStream inputStream, String filename,long fileSize,String contentType) throws IOException {
@@ -114,7 +114,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 	}
 
 	@Override
-	public InputStream getInputStream(String fileNo) throws FileNotFoundException {
+	public InputStream getInputStream(String fileNo) throws IOException {
 		MxpioFileInfo fileInfo = get(fileNo);
 		if (fileInfo == null) {
 			return null;
@@ -123,7 +123,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 	}
 
 	@Override
-	public InputStream getInputStream(MxpioFileInfo mxpioFileInfo) throws FileNotFoundException {
+	public InputStream getInputStream(MxpioFileInfo mxpioFileInfo) throws IOException {
 		return getFileStorageProvider(mxpioFileInfo.getFileStorageType())
 				.getInputStream(mxpioFileInfo.getRelativePath());
 	}
