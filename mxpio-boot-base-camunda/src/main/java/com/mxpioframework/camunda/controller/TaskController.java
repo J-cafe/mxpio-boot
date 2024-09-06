@@ -88,7 +88,7 @@ public class TaskController {
 		List<TaskVO> list = new ArrayList<>();
 		String username = SecurityUtils.getLoginUsername();
 		List<HistoricTaskInstance> tasks = bpmnFlowService.pagingHistoricTaskListPageByUser(username, criteria, pageSize, pageNo, true);
-		long total = bpmnFlowService.countHistoricTaskListByUser(username, true);
+		long total = bpmnFlowService.countHistoricTaskListByUser(username, criteria, true);
 		for(HistoricTaskInstance task : tasks){
 			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
 			TaskVO taskVO = new TaskVO(task, historicProcessInstance);

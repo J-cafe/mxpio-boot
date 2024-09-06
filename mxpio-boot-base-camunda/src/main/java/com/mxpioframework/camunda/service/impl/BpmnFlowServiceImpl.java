@@ -749,14 +749,22 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public long countHistoricTaskListByUser(String username, boolean finished) {
-		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
+	public long countHistoricTaskListByUser(String username, Criteria criteria, boolean finished) {
+		/*HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
 		if(finished){
 			query.finished();
 		}else{
 			query.unfinished();
 		}
-		return query.taskAssignee(username).count();
+		return query.taskAssignee(username).count();*/
+		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().taskAssignee(username);
+		if(finished){
+			query.finished();
+		}else{
+			query.unfinished();
+		}
+		criteria2HistoricTaskInstanceQuery(criteria, query);
+		return query.count();
 	}
 
 	@Override
