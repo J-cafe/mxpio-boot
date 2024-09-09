@@ -101,10 +101,11 @@ public interface BpmnFlowService {
 	/**
 	 * 历史任务计数
 	 * @param username 用户名
+	 * @param criteria 查询构造器
 	 * @param finished 完成标识
 	 * @return 任务计数
 	 */
-	long countHistoricTaskListByUser(String username, boolean finished);
+	long countHistoricTaskListByUser(String username, Criteria criteria, boolean finished);
 
 	List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateUser(String username, Criteria criteria,
 			Integer pageSize, Integer pageNo, boolean finished);
@@ -225,9 +226,10 @@ public interface BpmnFlowService {
 	 * @param username 用户名
 	 * @param authorities 组
 	 * @param criteria 查询构造器
+	 * @param pageAble 分页
 	 * @return 任务列表
 	 */
-	AllTaskRetVO getAllTasks(String username, Set<String> authorities, Criteria criteria);
+	AllTaskRetVO getAllTasks(String username, Set<String> authorities, Criteria criteria,Pageable pageAble);
 
 	/**
 	 * 流程加急
