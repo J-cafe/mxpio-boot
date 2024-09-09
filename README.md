@@ -1,6 +1,6 @@
 # Mxpio-Boot
 
-简体中文 | [English](README.en.md)
+简体中文 | [English](https://gitee.com/i_mxpio/mxpio-boot/blob/master/README.en.md)
 
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/J-cafe/mxpio-boot?include_prereleases)
 ![GitHub](https://img.shields.io/github/license/J-cafe/mxpio-boot)
@@ -163,58 +163,60 @@ java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.10.jar
 
 ```xml
 <!-- 添加模块依赖 -->
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-autoconfigure</artifactId>
-</dependency>
-<!-- <dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-module-cache-redis</artifactId>
-</dependency> -->
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-module-cache-caffeine</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-security</artifactId>
-</dependency>
-<!-- <dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-multitenant</artifactId>
-</dependency> -->
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-excel</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-quartz</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-camunda</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-filestorage</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-log</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-expression</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-system</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-dbconsole</artifactId>
-</dependency>
+<dependencies>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-autoconfigure</artifactId>
+    </dependency>
+    <!-- <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-module-cache-redis</artifactId>
+    </dependency> -->
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-module-cache-caffeine</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-security</artifactId>
+    </dependency>
+    <!-- <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-multitenant</artifactId>
+    </dependency> -->
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-excel</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-quartz</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-camunda</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-filestorage</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-log</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-expression</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-system</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-dbconsole</artifactId>
+    </dependency>
+</dependencies>
 ```
 
 修改配置文件resources/application-dev.yml的数据库信息和服务端口等信息
@@ -369,6 +371,6 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.10.jar
 
 ![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6.png)
 
-## 其他
+## 10.其他
 
 感谢[JetBrains](https://www.jetbrains.com/)提供的IDE授权

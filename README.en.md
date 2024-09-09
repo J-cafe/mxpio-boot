@@ -1,6 +1,6 @@
 # Mxpio-Boot
 
-[简体中文](README.md) | English
+[简体中文](https://gitee.com/i_mxpio/mxpio-boot/blob/master/README.md) | English
 
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/J-cafe/mxpio-boot?include_prereleases)
 ![GitHub](https://img.shields.io/github/license/J-cafe/mxpio-boot)
@@ -163,58 +163,60 @@ edit pom.xml file
 
 ```xml
 <!-- dependencies -->
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-autoconfigure</artifactId>
-</dependency>
-<!-- <dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-module-cache-redis</artifactId>
-</dependency> -->
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-module-cache-caffeine</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-security</artifactId>
-</dependency>
-<!-- <dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-multitenant</artifactId>
-</dependency> -->
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-excel</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-quartz</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-camunda</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-filestorage</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-log</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-expression</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-system</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-base-dbconsole</artifactId>
-</dependency>
+<dependencies>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-autoconfigure</artifactId>
+    </dependency>
+    <!-- <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-module-cache-redis</artifactId>
+    </dependency> -->
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-module-cache-caffeine</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-security</artifactId>
+    </dependency>
+    <!-- <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-multitenant</artifactId>
+    </dependency> -->
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-excel</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-quartz</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-camunda</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-filestorage</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-log</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-expression</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-system</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-base-dbconsole</artifactId>
+    </dependency>
+</dependencies>
 ```
 
 edit file:resources/application-dev.yml

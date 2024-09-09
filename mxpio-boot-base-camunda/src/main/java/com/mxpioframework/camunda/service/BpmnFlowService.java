@@ -229,4 +229,10 @@ public interface BpmnFlowService {
 	 */
 	AllTaskRetVO getAllTasks(String username, Set<String> authorities, Criteria criteria);
 
+	/**
+	 * 流程加急
+	 * @param processInstanceId 流程实例ID
+	 * @return 结果
+	 */
+	ResultMessage urgent(String processInstanceId);
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mxpioframework.camunda.CamundaConstant;
+import com.mxpioframework.camunda.dto.ResultMessage;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
@@ -15,13 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.mxpioframework.camunda.service.BpmnFlowService;
 import com.mxpioframework.camunda.vo.ProcessDefVO;
@@ -176,6 +171,18 @@ public class ProcessController {
 			return Result.error("无可操作流程！");
 		}
 		return Result.OK();
+	}
+
+	@PutMapping("urgent/{processInstanceId}")
+	@Operation(summary = "流程加急", description = "流程加急", method = "POST")
+	public Result<?> urgent(@PathVariable(name = "processInstanceId") String processInstanceId){
+
+		ResultMessage msg = bpmnFlowService.urgent(processInstanceId);
+		if(msg.isSuccess()){
+			return Result.OK(msg.getMsg(), null);
+		}else{
+			return Result.error(msg.getMsg());
+		}
 	}
 
 	private boolean validatePermissions(String instanceId){

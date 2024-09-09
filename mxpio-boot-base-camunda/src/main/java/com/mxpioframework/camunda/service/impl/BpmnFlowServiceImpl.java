@@ -977,6 +977,16 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		return retVO;
 	}
 
+	@Override
+	public ResultMessage urgent(String processInstanceId) {
+		try{
+			runtimeService.setVariable(processInstanceId, CamundaConstant.BPMN_SORT_FLAG, "1");
+		}catch (Exception e) {
+			return ResultMessage.error("加急失败！");
+		}
+		return ResultMessage.success("加急成功！");
+	}
+
 	private Task getTaskById(String taskId){
 		return taskService.createTaskQuery().taskId(taskId).singleResult();
 	}
