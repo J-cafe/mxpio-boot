@@ -15,6 +15,13 @@ public interface ElFuncService {
     String deptManager(String deptLevel, String username);
 
     /**
+     * 根据组织编码获取审批人
+     * @param deptCode 组织编码
+     * @return 审批人
+     */
+    String deptManager(String deptCode);
+
+    /**
      * 根据部门级别获取所属部门对象
      * @param deptLevel 级别
      * @param username 用户名

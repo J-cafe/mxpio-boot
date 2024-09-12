@@ -52,6 +52,8 @@ public final class Constants {
 	public final static String USER_POST_CODE_CACHE_KEY = "UserPostCode";
 	
 	public final static String DEPT_CACHE_KEY = "DeptKey";
+
+	public final static String DEPT_CODE_CACHE_KEY = "DeptCodeKey";
 	/**
 
 	 * 特定用户下的树形菜单缓存关键字

@@ -29,6 +29,16 @@ public class ElFuncServiceImpl implements ElFuncService {
     }
 
     @Override
+    public String deptManager(String deptCode) {
+        Dept dept = getDeptByDeptCode(deptCode);
+        if(dept != null){
+            return dept.getDeptManager();
+        }else{
+            return "";
+        }
+    }
+
+    @Override
     public Dept dept(String deptLevel, String username) {
         return getDeptByUserAndLevel(deptLevel, username);
     }
@@ -70,6 +80,12 @@ public class ElFuncServiceImpl implements ElFuncService {
         }
 
         return null;
+    }
+
+    private Dept getDeptByDeptCode(String deptCode){
+        Map<String, Dept> depts = rbacCacheService.getDeptMapByCode();
+
+        return depts.get(deptCode);
     }
 
 }
