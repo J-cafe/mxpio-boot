@@ -15,22 +15,21 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:mysql://113.142.80.172:13310/mboot?characterEncoding=utf-8&useSSL=true&nullCatalogMeansCurrent=true
+    url: jdbc:mysql://localhost:3306/mboot?characterEncoding=utf-8&useSSL=true&nullCatalogMeansCurrent=true
     username: root
-    password: root
+    password: mxp9827459
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
-    host: 113.142.80.172
-    port: 7339
-    password: sideR@123#NCC_1701
-    timeout: 8000
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout:
     lettuce:
       pool:
         maxActive: 8
         maxWait: -1
         maxIdle: 8
         minIdle: 0
-    database: 10
   quartz:
     #持久化到数据库方式
     job-store-type: jdbc
