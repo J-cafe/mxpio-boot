@@ -1,9 +1,6 @@
 package com.mxpioframework.security.captcha.text.impl;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.image.BufferedImage;
@@ -51,7 +48,10 @@ public class DefaultWordRenderer extends Configurable implements WordRenderer
 		FontRenderContext frc = g2D.getFontRenderContext();
 		Random random = new SecureRandom();
 
-		int startPosY = (height - fontSize) / 5 + fontSize;
+		// int startPosY = (height - fontSize) / 5 + fontSize;
+		FontMetrics fm = g2D.getFontMetrics();
+		// int startPosY = (height - fm.getHeight()) / 2 + fm.getAscent();
+		int startPosY = height / 2 + (fm.getAscent() - fm.getDescent()) / 2;
 
 		char[] wordChars = word.toCharArray();
 		Font[] chosenFonts = new Font[wordChars.length];
