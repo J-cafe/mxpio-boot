@@ -26,10 +26,10 @@ public class OracleDialect extends AbstractDialect {
 			isForUpdate = true;
 		}
 
-		StringBuffer pagingSelect = new StringBuffer( sql.length()+100 );
+		StringBuilder pagingSelect = new StringBuilder( sql.length()+100 );
 		pagingSelect.append("select * from ( select row_.*, rownum rownum_ from ( ");
 		pagingSelect.append(sql);
-		pagingSelect.append(" ) row_ where rownum <= "+endNo+") where rownum_ > "+startNo+"");
+		pagingSelect.append(" ) row_ where rownum <= ").append(endNo).append(") where rownum_ > ").append(startNo);
 		if ( isForUpdate ) {
 			pagingSelect.append( " " );
 			pagingSelect.append( forUpdateClause );
@@ -81,13 +81,13 @@ public class OracleDialect extends AbstractDialect {
 		List<String> primaryKeys=newDbColumnInfo.getListPrimaryKey();
 		String cType=this.generateColumnTypeSql(columnType, columnSize);
 		StringBuilder sql=new StringBuilder();
-	    if(!oldColumnName.toLowerCase().equals(newColumnName.toLowerCase())){
-	    	sql.append(" ALTER TABLE "+tableName+" RENAME COLUMN "+oldColumnName+" to "+newColumnName);
+	    if(!oldColumnName.equalsIgnoreCase(newColumnName)){
+	    	sql.append(" ALTER TABLE ").append(tableName).append(" RENAME COLUMN ").append(oldColumnName).append(" to ").append(newColumnName);
 	    	sql.append(";");
 	    }
-	    sql.append("ALTER TABLE  "+tableName+" modify   "+newColumnName+cType);
+	    sql.append("ALTER TABLE  ").append(tableName).append(" modify   ").append(newColumnName).append(cType);
 	    if(isprimaryKey!=oldPrimaryKey){
-	    	if(primaryKeys.size()==1&&isprimaryKey==true){
+	    	if(primaryKeys.size()==1&& isprimaryKey){
 	    		sql.append(";");
 	    		sql.append(this.generateAlertPrimaryKeySql(tableName, primaryKeys));
 	    	}else {
@@ -97,12 +97,12 @@ public class OracleDialect extends AbstractDialect {
 	    		sql.append(this.generateAlertPrimaryKeySql(tableName, primaryKeys));
 	    	}
 		}
-		if (isnullAble && oldNullAble == false) {
+		if (isnullAble && !oldNullAble) {
 			sql.append(";");
-			sql.append("ALTER TABLE  " + tableName + " modify  "+ newColumnName + cType + "  NULL ");
-		} else if (!isnullAble && oldNullAble == true) {
+			sql.append("ALTER TABLE  ").append(tableName).append(" modify  ").append(newColumnName).append(cType).append("  NULL ");
+		} else if (!isnullAble && oldNullAble) {
 			sql.append(";");
-			sql.append("ALTER TABLE  " + tableName + " modify "+ newColumnName + cType + " NOT NULL ");
+			sql.append("ALTER TABLE  ").append(tableName).append(" modify ").append(newColumnName).append(cType).append(" NOT NULL ");
 		}
 		return sql.toString();
 	}

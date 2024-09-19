@@ -74,14 +74,12 @@ public class HsqlDialect extends AbstractDialect {
 		String definition = this.generateCreateDefinitionSql(isnullAble);
 		StringBuilder sql = new StringBuilder();
 		if (!oldColumnName.equals(newColumnName)) {
-			sql.append("ALTER TABLE " + tableName + " CHANGE " + oldColumnName
-					+ " " + newColumnName + cType + definition);
+			sql.append("ALTER TABLE ").append(tableName).append(" CHANGE ").append(oldColumnName).append(" ").append(newColumnName).append(cType).append(definition);
 		} else {
-			sql.append("ALTER TABLE  " + tableName + " MODIFY  "
-					+ newColumnName + cType + definition);
+			sql.append("ALTER TABLE  ").append(tableName).append(" MODIFY  ").append(newColumnName).append(cType).append(definition);
 		}
 		if (isprimaryKey != oldPrimaryKey) {
-			if (primaryKeys.size() == 1 && isprimaryKey == true) {
+			if (primaryKeys.size() == 1 && isprimaryKey) {
 				sql.append(";");
 				sql.append(this.generateAlertPrimaryKeySql(tableName,
 						primaryKeys));
@@ -94,8 +92,7 @@ public class HsqlDialect extends AbstractDialect {
 			}
 			if (isnullAble) {
 				sql.append(";");
-				sql.append("ALTER TABLE  " + tableName + " MODIFY  "
-						+ newColumnName + cType + definition);
+				sql.append("ALTER TABLE  ").append(tableName).append(" MODIFY  ").append(newColumnName).append(cType).append(definition);
 			}
 		}
 		return sql.toString();
@@ -103,11 +100,10 @@ public class HsqlDialect extends AbstractDialect {
 
 	public String getPaginationSql(String sql, int pageNo, int pageSize) {
 		int startNo = (pageNo - 1) * pageSize;
-		String str = new StringBuffer(sql.length() + 10)
+        return new StringBuffer(sql.length() + 10)
 				.append(sql)
 				.insert(sql.toLowerCase().indexOf("select") + 6,
-						" limit " + startNo + " " + pageSize + "").toString();
-		return str;
+						" limit " + startNo + " " + pageSize).toString();
 	}
 
 }

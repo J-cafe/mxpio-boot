@@ -62,7 +62,7 @@ public class PostgreSqlDialect extends AbstractDialect {
 		List<String> primaryKeys=newDbColumnInfo.getListPrimaryKey();
 		String cType=this.generateColumnTypeSql(columnType, columnSize);
 		StringBuilder sql=new StringBuilder();
-	    if(!oldColumnName.toLowerCase().equals(newColumnName.toLowerCase())){
+	    if(!oldColumnName.equalsIgnoreCase(newColumnName)){
 	    	sql.append(" ALTER TABLE ").append(tableName).append(" RENAME COLUMN ").append(oldColumnName).append(" to ").append(newColumnName);
 	    	sql.append(";");
 	    }
