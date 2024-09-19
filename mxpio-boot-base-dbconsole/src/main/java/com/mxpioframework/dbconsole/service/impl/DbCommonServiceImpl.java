@@ -58,7 +58,7 @@ public class DbCommonServiceImpl implements IDbCommonService {
 
 	@Override
 	public List<TableInfo> findTableInfos(String dbInfoId) throws Exception {
-		List<TableInfo> tablesList = new ArrayList<TableInfo>();
+		List<TableInfo> tablesList = new ArrayList<>();
 		DataSource ds = this.getDataSourceByDbInfoId(dbInfoId);
 		Connection conn = null;
 		ResultSet rs = null;
@@ -126,7 +126,7 @@ public class DbCommonServiceImpl implements IDbCommonService {
 	
 	@Override
 	public List<ProcInfo> findProcInfos(String dbInfoId) throws Exception {
-		List<ProcInfo> procsList = new ArrayList<ProcInfo>();
+		List<ProcInfo> procsList = new ArrayList<>();
 		DataSource ds = this.getDataSourceByDbInfoId(dbInfoId);
 		Connection conn = null;
 		ResultSet rs = null;
@@ -170,14 +170,14 @@ public class DbCommonServiceImpl implements IDbCommonService {
 	}
 
 	public List<ColumnInfo> findColumnInfos(String dbInfoId, String tableName) throws Exception {
-		List<ColumnInfo> list = new ArrayList<ColumnInfo>();
+		List<ColumnInfo> list = new ArrayList<>();
 		if (StringUtils.hasText(tableName) && StringUtils.hasText(dbInfoId)) {
 			list = this.findMultiColumnInfos(dbInfoId, "select * from " + tableName);
 			List<String> primaryKeys = this.findTablePrimaryKeys(dbInfoId, tableName);
 			for (ColumnInfo ci : list) {
 				ci.setIsprimaryKey(false);
 				for (String key : primaryKeys) {
-					if (key.toLowerCase().equals(ci.getColumnName().toLowerCase())) {
+					if (key.equalsIgnoreCase(ci.getColumnName())) {
 						ci.setIsprimaryKey(true);
 					}
 				}

@@ -77,7 +77,7 @@ public class DbService extends DbCommonServiceImpl {
 	 * @throws Exception
 	 */
 	public List<DbInfo> findDbInfos() throws Exception {
-		List<DbInfo> list = new ArrayList<DbInfo>();
+		List<DbInfo> list;
 		list = this.getConsoleDbInfoManager().findDbInfos();
 		list.add(this.initDefaultDbInfo());
 		return list;

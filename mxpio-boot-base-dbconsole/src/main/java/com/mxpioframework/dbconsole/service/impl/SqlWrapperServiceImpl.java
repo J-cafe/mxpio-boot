@@ -15,7 +15,7 @@ public class SqlWrapperServiceImpl implements ISqlWrapperService {
 	public SqlWrapper getInsertTableSql(String tableName, Map<String, Object> map) throws Exception {
 		StringBuilder columnName = new StringBuilder();
 		StringBuilder values = new StringBuilder();
-		List<Object> list = new ArrayList<Object>();
+		List<Object> list = new ArrayList<>();
 		int i = 1;
 		for (Map.Entry<String, Object> entry : map.entrySet()) {
 			String key = entry.getKey();
@@ -25,7 +25,7 @@ public class SqlWrapperServiceImpl implements ISqlWrapperService {
 				columnName.append(key);
 				values.append("?");
 			} else {
-				columnName.append(key + ",");
+				columnName.append(key).append(",");
 				values.append("?,");
 			}
 			i++;
@@ -43,9 +43,9 @@ public class SqlWrapperServiceImpl implements ISqlWrapperService {
 			Object value = entry.getValue();
 			list.add(value);
 			if (i == map.size()) {
-				newParameter.append(key + "=?");
+				newParameter.append(key).append("=?");
 			} else {
-				newParameter.append(key + "=?,");
+				newParameter.append(key).append("=?,");
 			}
 			i++;
 		}
@@ -56,7 +56,7 @@ public class SqlWrapperServiceImpl implements ISqlWrapperService {
 	}
 
 	public SqlWrapper getDeleteTableSql(String tableName, Map<String, Object> oldMap) throws Exception {
-		List<Object> list = new ArrayList<Object>();
+		List<Object> list = new ArrayList<>();
 		String whereParameter = this.generateWhereSql(list, oldMap);
 		String sql = "delete from  " + tableName + " where " + whereParameter;
 		return new SqlWrapper(sql, list.toArray());
@@ -71,7 +71,7 @@ public class SqlWrapperServiceImpl implements ISqlWrapperService {
 
 			if (value != null) {
 				list.add(value);
-				sql.append(" and " + key + "=? ");
+				sql.append(" and ").append(key).append("=? ");
 			}
 		}
 		return sql.toString();
