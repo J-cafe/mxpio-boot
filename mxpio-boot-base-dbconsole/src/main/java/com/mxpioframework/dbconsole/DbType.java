@@ -5,5 +5,5 @@ package com.mxpioframework.dbconsole;
  * 
  */
 public enum DbType {
-	H2, MySQL, Oracle, SqlServer, DB2
+	H2, MySQL, Oracle, SqlServer, DB2, PostgreSQL
 }
