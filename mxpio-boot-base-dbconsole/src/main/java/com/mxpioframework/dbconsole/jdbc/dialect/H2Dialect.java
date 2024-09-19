@@ -61,15 +61,15 @@ public class H2Dialect extends AbstractDialect {
 		String cType=this.generateColumnTypeSql(columnType, columnSize);
 		StringBuilder sql=new StringBuilder();
 	    if(!oldColumnName.equals(newColumnName)){
-	    	sql.append(" ALTER TABLE "+tableName+" ALTER COLUMN  "+oldColumnName+" RENAME to "+newColumnName);
+	    	sql.append(" ALTER TABLE ").append(tableName).append(" ALTER COLUMN  ").append(oldColumnName).append(" RENAME to ").append(newColumnName);
 	    }
 	    sql.append(";");
-	    sql.append("ALTER TABLE  "+tableName+" ALTER COLUMN   "+newColumnName+cType);   
+	    sql.append("ALTER TABLE  ").append(tableName).append(" ALTER COLUMN   ").append(newColumnName).append(cType);
 	    if (!isnullAble) {
 	    	sql.append(" NOT NULL ");
 		}
 	    if(isprimaryKey!=oldPrimaryKey){
-	    	if(primaryKeys.size()==1&&isprimaryKey==true){
+	    	if(primaryKeys.size()==1&& isprimaryKey){
 	    		sql.append(";");
 	    		sql.append(this.generateAlertPrimaryKeySql(tableName, primaryKeys));
 	    	}else {
@@ -82,7 +82,7 @@ public class H2Dialect extends AbstractDialect {
 		}
 	    if(isnullAble){
 	    	sql.append(";");
-	    	sql.append("ALTER TABLE  "+tableName+" ALTER COLUMN   "+newColumnName+" SET NULL");   
+	    	sql.append("ALTER TABLE  ").append(tableName).append(" ALTER COLUMN   ").append(newColumnName).append(" SET NULL");
 	    }
 		return sql.toString();
 	}
