@@ -2,6 +2,7 @@ package com.mxpioframework.security.service.impl;
 
 import com.mxpioframework.security.entity.Dept;
 import com.mxpioframework.security.entity.UserDept;
+import com.mxpioframework.security.entity.UserProfile;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,6 +53,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 					}
 				}
 			}
+			List<UserProfile> profiles = JpaUtil.linq(UserProfile.class).equal("userId", user.getUsername()).list();
+			user.setProfiles(profiles);
 			List<Dept> depts = JpaUtil.linq(Dept.class)
 					.exists(UserDept.class)
 					.equalProperty("deptId", "id")
