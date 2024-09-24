@@ -34,9 +34,16 @@ public class UserProfileController {
 
 	@GetMapping("list")
 	@Operation(summary = "个性化列表", description = "获取个性化列表", method = "GET")
-	public Result<List<UserProfile>> page(Criteria criteria) throws Exception {
-		List<UserProfile> posts = userProfileService.list(UserProfile.class, criteria);
-		return Result.OK(posts);
+	public Result<List<UserProfile>> list(Criteria criteria) throws Exception {
+		List<UserProfile> profiles = userProfileService.list(UserProfile.class, criteria);
+		return Result.OK(profiles);
+	}
+
+	@GetMapping("list/page/{pageKey}")
+	@Operation(summary = "个性化列表", description = "获取个性化列表", method = "GET")
+	public Result<List<UserProfile>> page(@PathVariable(name = "pageKey") String pageKey) throws Exception {
+		List<UserProfile> profiles = userProfileService.listByPageKey(pageKey);
+		return Result.OK(profiles);
 	}
 
 	@PostMapping("add")
