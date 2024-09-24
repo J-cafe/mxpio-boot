@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
@@ -55,6 +56,8 @@ public class DbCommonServiceImpl implements IDbCommonService {
 	@Autowired
 	@Qualifier(IConsoleDbInfoManager.BEAN_ID)
 	private IConsoleDbInfoManager consoleDbInfoManager;
+
+	private final Map<String, DataSource> dataSourceMap = new ConcurrentHashMap<>();
 
 	@Override
 	public List<TableInfo> findTableInfos(String dbInfoId) throws Exception {
@@ -202,8 +205,14 @@ public class DbCommonServiceImpl implements IDbCommonService {
 		if (dbInfoId.equals(DbConstants.DEFAULTDATASOURCE)) {
 			return dataSource;
 		}
+		DataSource ds = dataSourceMap.get(dbInfoId);
+		if(ds != null){
+			return ds;
+		}
 		DbInfo dbInfo = consoleDbInfoManager.findDbInfosById(dbInfoId);
-		return this.createDataSource(dbInfo.getUrl(), dbInfo.getDriverClass(), dbInfo.getUsername(), dbInfo.getPassword());
+		ds = this.createDataSource(dbInfo.getUrl(), dbInfo.getDriverClass(), dbInfo.getUsername(), dbInfo.getPassword());
+		dataSourceMap.put(dbInfoId, ds);
+		return ds;
 	}
 
 	@Override
