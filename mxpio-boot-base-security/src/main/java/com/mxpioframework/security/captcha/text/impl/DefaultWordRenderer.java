@@ -51,7 +51,8 @@ public class DefaultWordRenderer extends Configurable implements WordRenderer
 		// int startPosY = (height - fontSize) / 5 + fontSize;
 		FontMetrics fm = g2D.getFontMetrics();
 		// int startPosY = (height - fm.getHeight()) / 2 + fm.getAscent();
-		int startPosY = height / 2 + (fm.getAscent() - fm.getDescent()) / 2;
+		int startPosY = height / 2 + (fm.getAscent() - fm.getDescent()) / 2+10;
+		//System.out.println("===>"+startPosY);
 
 		char[] wordChars = word.toCharArray();
 		Font[] chosenFonts = new Font[wordChars.length];
