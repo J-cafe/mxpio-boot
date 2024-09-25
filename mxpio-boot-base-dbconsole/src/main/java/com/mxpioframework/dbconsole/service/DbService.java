@@ -47,7 +47,7 @@ public class DbService extends DbCommonServiceImpl {
 	 * 初始化默认数据库配置信息
 	 * 
 	 * @return 返回DbInfo对象
-	 * @throws Exception
+	 * @throws Exception 失败异常
 	 */
 	public DbInfo initDefaultDbInfo() throws Exception {
 		DbInfo dbInfo = new DbInfo();
@@ -74,7 +74,7 @@ public class DbService extends DbCommonServiceImpl {
 	 * 查询用户的所有数据库连接信息
 	 * 
 	 * @return 返回DbInfo的集合
-	 * @throws Exception
+	 * @throws Exception 失败异常
 	 */
 	public List<DbInfo> findDbInfos() throws Exception {
 		List<DbInfo> list;
@@ -208,9 +208,9 @@ public class DbService extends DbCommonServiceImpl {
 	/**
 	 * 创建表
 	 * 
-	 * @param dbInfoId
-	 * @param tableName
-	 * @throws Exception
+	 * @param dbInfoId 数据库ID
+	 * @param tableName 表名
+	 * @throws Exception 失败异常
 	 */
 	public void createTable(String dbInfoId, String tableName) throws Exception {
 		IDialect dBDialect = getDBDialectByDbInfoId(dbInfoId);
@@ -225,7 +225,7 @@ public class DbService extends DbCommonServiceImpl {
 	 * @return 返回支持的数据库类型的集合
 	 */
 	public List<String> loadDbTypes() {
-		List<String> dbInfoList = new ArrayList<String>();
+		List<String> dbInfoList = new ArrayList<>();
 		try {
 			for (DbType type : DbType.values()) {
 				dbInfoList.add(type.name());
@@ -240,10 +240,10 @@ public class DbService extends DbCommonServiceImpl {
 	/**
 	 * 批处理更新操作
 	 * 
-	 * @param dbInfoId
-	 * @param sqls
+	 * @param dbInfoId 数据库ID
+	 * @param sqls 执行SQL
 	 * @return 返回更新的列的数量
-	 * @throws Exception
+	 * @throws Exception 失败异常
 	 */
 	public int[] updateSql(String dbInfoId, String[] sqls) throws Exception {
 		final String[] fsqls = this.getFormatArrays(sqls);
@@ -266,11 +266,11 @@ public class DbService extends DbCommonServiceImpl {
 	/**
 	 * 更新表操作
 	 * 
-	 * @param dbInfoId
-	 * @param sql
-	 * @param args
+	 * @param dbInfoId 数据库ID
+	 * @param sql 执行SQL
+	 * @param args 参数
 	 * @return 返回更新的列的数量
-	 * @throws Exception
+	 * @throws Exception 失败异常
 	 */
 	public int updateSql(String dbInfoId, final String sql, final Object[] args) throws Exception {
 		log.debug(sql);
@@ -283,10 +283,10 @@ public class DbService extends DbCommonServiceImpl {
 	/**
 	 * 对sqlwrapper进行更新
 	 * 
-	 * @param dbInfoId
-	 * @param listSqlWrapper
+	 * @param dbInfoId 数据库ID
+	 * @param listSqlWrapper SQLWrapper
 	 * @return 返回更新的数量
-	 * @throws Exception
+	 * @throws Exception 失败异常
 	 */
 	public int[] updateSql(String dbInfoId, final List<SqlWrapper> listSqlWrapper) throws Exception {
 		if (log.isDebugEnabled()) {
@@ -306,8 +306,7 @@ public class DbService extends DbCommonServiceImpl {
 						list.add(i);
 					}
 				}
-				int[] ints = ArrayUtils.toPrimitive((Integer[]) list.toArray(new Integer[list.size()]));
-				return ints;
+                return ArrayUtils.toPrimitive((Integer[]) list.toArray(new Integer[list.size()]));
 			}
 		});
 	}
@@ -327,10 +326,10 @@ public class DbService extends DbCommonServiceImpl {
 	/**
 	 * 查找sqlserver的主键索引
 	 * 
-	 * @param dbInofId
-	 * @param tableName
+	 * @param dbInofId 数据库ID
+	 * @param tableName 表名
 	 * @return 返回主键索引的值
-	 * @throws Exception
+	 * @throws Exception 失败异常
 	 */
 	public String findSqlServerPKIndex(String dbInofId, final String tableName) throws Exception {
 		DataSource ds = getDataSourceByDbInfoId(dbInofId);

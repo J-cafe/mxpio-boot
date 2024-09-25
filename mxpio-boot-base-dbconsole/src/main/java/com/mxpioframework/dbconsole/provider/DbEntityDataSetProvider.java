@@ -48,8 +48,7 @@ public class DbEntityDataSetProvider extends AbstractEntityDataSetProvider {
 	public Page<?> getPagingResult(DataSet dataSet, Pageable page) {
 		if(dataSet instanceof DbDataSet){
 			try {
-				Page<Map<String, Object>> result =  dbService.pagingSqlData(((DbDataSet) dataSet).getDbId(), ((DbDataSet) dataSet).getSqlStr(), page);
-				return result;
+                return dbService.pagingSqlData(((DbDataSet) dataSet).getDbId(), ((DbDataSet) dataSet).getSqlStr(), page);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

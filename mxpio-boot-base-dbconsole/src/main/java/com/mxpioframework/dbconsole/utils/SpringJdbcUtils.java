@@ -10,22 +10,19 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class SpringJdbcUtils {
 	public static TransactionTemplate getTransactionTemplate(DataSource dataSource) {  
         PlatformTransactionManager txManager = new DataSourceTransactionManager(  
-        		dataSource);  
-        TransactionTemplate txTemplate = new TransactionTemplate(txManager);  
-        return txTemplate;  
+        		dataSource);
+        return new TransactionTemplate(txManager);
     }  
   
     public static JdbcTemplate getJdbcTemplate(TransactionTemplate txTemplate) {  
         DataSourceTransactionManager txManager = (DataSourceTransactionManager) txTemplate  
                 .getTransactionManager();  
-        DataSource dataSource = txManager.getDataSource();  
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);  
-        return jdbcTemplate;  
+        DataSource dataSource = txManager.getDataSource();
+        return new JdbcTemplate(dataSource);
     }  
   
-    public static JdbcTemplate getJdbcTemplate(DataSource dataSource) {  
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);  
-        return jdbcTemplate;  
+    public static JdbcTemplate getJdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }  
   
 

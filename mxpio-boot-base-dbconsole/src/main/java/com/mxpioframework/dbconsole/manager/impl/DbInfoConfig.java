@@ -41,7 +41,7 @@ public class DbInfoConfig {
 	 * 读取用户目录下的数据库配置文件信息
 	 * 
 	 * @return 返回DbInfo的集合
-	 * @throws Exception
+	 * @throws Exception 失败异常
 	 */
 	@SuppressWarnings("rawtypes")
 	public static Vector<DbInfo> readConfig() {
@@ -55,7 +55,8 @@ public class DbInfoConfig {
 			} catch (DocumentException e) {
 				e.printStackTrace();
 			}
-			Element root = document.getRootElement();
+            assert document != null;
+            Element root = document.getRootElement();
 			List elements = root.elements("dbinfo");
 			DbInfo dbInfo = null;
 			for (Iterator it = elements.iterator(); it.hasNext();) {
@@ -80,9 +81,8 @@ public class DbInfoConfig {
 	/**
 	 * 对数据库文件信息写入用户目录
 	 * 
-	 * @param dbInfos
-	 * @throws Exception
-	 */
+	 * @param dbInfos 数据库信息
+     */
 	public static void writeConfig(Vector<DbInfo> dbInfos) {
 		XMLWriter writer = null;
 		OutputFormat format = OutputFormat.createPrettyPrint();
@@ -117,7 +117,8 @@ public class DbInfoConfig {
 			e.printStackTrace();
 		} finally {
 			try {
-				writer.close();
+                assert writer != null;
+                writer.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

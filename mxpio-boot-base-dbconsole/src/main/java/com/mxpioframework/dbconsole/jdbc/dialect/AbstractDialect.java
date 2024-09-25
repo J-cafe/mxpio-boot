@@ -7,7 +7,28 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-public abstract class AbstractDialect implements IDialect{
+public abstract class
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+AbstractDialect implements IDialect{
 	/**
 	 * 判断是否是支持的数据库类型
 	 * @param connection 数据连接

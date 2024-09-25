@@ -14,41 +14,41 @@ import com.mxpioframework.jpa.JpaUtil;
 
 @Component(IConsoleDbInfoManager.BEAN_ID)
 public class DefaultConsoleDbInfoManager implements IConsoleDbInfoManager, InitializingBean, DisposableBean {
-	private Vector<DbInfo> listDbInfo = new Vector<DbInfo>();
+	private Vector<DbInfo> listDbInfo = new Vector<>();
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<DbInfo> findDbInfos() throws Exception {
+	public List<DbInfo> findDbInfos() {
 		
 		return JpaUtil.linq(DbInfo.class).list();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public DbInfo findDbInfosById(String id) throws Exception {
+	public DbInfo findDbInfosById(String id) {
 		return JpaUtil.linq(DbInfo.class).idEqual(id).findOne();
 	}
 
 	@Override
-	@Transactional(readOnly = false)
-	public void insertDbInfo(DbInfo dbInfo) throws Exception {
+	@Transactional
+	public void insertDbInfo(DbInfo dbInfo) {
 		JpaUtil.save(dbInfo);
 	}
 
 	@Override
-	@Transactional(readOnly = false)
-	public void updateDbInfo(DbInfo dbInfo) throws Exception {
+	@Transactional
+	public void updateDbInfo(DbInfo dbInfo) {
 		JpaUtil.update(dbInfo);
 	}
 
 	@Override
-	@Transactional(readOnly = false)
-	public void deleteDbInfoById(String id) throws Exception {
+	@Transactional
+	public void deleteDbInfoById(String id) {
 		JpaUtil.lind(DbInfo.class).idEqual(id).delete();
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception {
+	public void afterPropertiesSet() {
 		listDbInfo = DbInfoConfig.readConfig();
 	}
 
