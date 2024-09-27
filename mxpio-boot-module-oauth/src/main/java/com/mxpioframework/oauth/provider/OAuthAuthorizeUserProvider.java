@@ -63,7 +63,7 @@ public class OAuthAuthorizeUserProvider implements ThirdAuthorizeUserProvider {
         //根据三方id获取对应本系统的用户
         String sub = tokenInfo.getString("sub");
         List<User> user = JpaUtil.linq(User.class).equal("thirdId", sub).list();
-        if (user==null||user.size()==0){
+        if (user==null|| user.isEmpty()){
             String msg = "三方用户ID未能在应用系统中匹配到用户，请检查用户管理第三方账号信息是否已绑定或者有效";
             throw new ThirdAuthorizeException(msg);
         }
