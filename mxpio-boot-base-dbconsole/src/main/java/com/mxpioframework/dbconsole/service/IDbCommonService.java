@@ -88,8 +88,10 @@ public interface IDbCommonService {
 	 * @throws Exception 失败异常
 	 */
 	public DataGridWrapper queryTableData(String dbInfoId, String tableName, String sql, int pageSize, int pageNo) throws Exception;
-	
-	/**
+
+    List<Map<String, Object>> queryListBySql(String dbInfoId, String sql) throws Exception;
+
+    /**
 	 * 查询Sql分页数据
 	 * 
 	 * @param dbInfoId 数据库ID
