@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.mxpioframework.security.access.datascope.provider.DataScapeProvider;
 import com.mxpioframework.security.service.RbacCacheService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,5 +45,9 @@ public class SecurityUtils {
 	public static Set<String> getAuthorityKeys(){
 		return getAuthorities().stream()
 			     .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+	}
+
+	public static Map<String, DataScapeProvider> getDataScapeProviderMap(){
+		return ApplicationContextProvider.getApplicationContextSpring().getBeansOfType(DataScapeProvider.class);
 	}
 }

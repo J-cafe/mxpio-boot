@@ -1,7 +1,9 @@
 package com.mxpioframework.security.controller;
 
 import java.util.List;
+import java.util.Set;
 
+import com.mxpioframework.security.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,11 +68,18 @@ public class DataFilterController {
 	@DeleteMapping("remove/{id}")
 	@Operation(summary = "删除数据过滤", description = "根据数据过滤名id删除数据过滤信息", method = "DELETE")
 	public Result<DataFilter> delete(@PathVariable(name = "id", required = true) String id) throws Exception {
-		String ids[] = id.split(",");
+		String[] ids = id.split(",");
 		for(String key : ids){
 			dataFilterService.delete(dataFilterService.getById(key));
 		}
 		return Result.OK("删除成功",null);
+	}
+
+	@GetMapping("datascope/servers")
+	@Operation(summary = "服务列表", description = "数据权限过滤服务列表", method = "GET")
+	public Result<Set<String>> servers() {
+		Set<String> servers = SecurityUtils.getDataScapeProviderMap().keySet();
+		return Result.OK(servers);
 	}
 	
 }

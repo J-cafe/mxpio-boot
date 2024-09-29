@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.mxpioframework.security.access.datascope.provider.DataScapeContext;
 import com.mxpioframework.security.service.*;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -54,7 +55,7 @@ public class ParamUtil {
 			if (securityDecisionManager.decide(dataResource)) {
 				if (dataResource != null && dataResource.isHasFilter()) {
 					Map<String, CriteriaFilterPreProcessor> criteriaFilterPreProcessors = ApplicationContextProvider.getBeansOfType(CriteriaFilterPreProcessor.class);
-					Map<String, DataScapeProvider> dataScapeProviderMap = ApplicationContextProvider.getApplicationContextSpring().getBeansOfType(DataScapeProvider.class);
+					Map<String, DataScapeProvider> dataScapeProviderMap = SecurityUtils.getDataScapeProviderMap();
 					GrantedAuthorityService grantedAuthorityService = ApplicationContextProvider.getApplicationContextSpring().getBean(GrantedAuthorityService.class);
 					Map<String, List<DataFilter>> roleDataFilterMap = rbacCacheService.findAllDataFilter();
 					Collection<? extends GrantedAuthority> roleGrantedAuthorities = grantedAuthorityService.getGrantedAuthorities(SecurityUtils.getLoginUser());
@@ -102,9 +103,10 @@ public class ParamUtil {
 									
 								} else if (com.mxpioframework.security.Constants.DatascopeEnum.SERVICE.getCode()
 										.equals(dataFilter.getDataScope()) && dataScapeProviderMap != null) {
+									DataScapeContext context = DataScapeContext.initContext();
 									for (Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()) {
 										if (entry.getKey().equals(dataFilter.getService())) {
-											List<Criterion> criterions = entry.getValue().provide();
+											List<Criterion> criterions = entry.getValue().provide(context);
 											Junction subJunction = new Junction(JunctionType.AND);
 											for (Criterion criterion : criterions) {
 												subJunction.addCriterion(criterion);

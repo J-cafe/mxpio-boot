@@ -387,12 +387,12 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		}
 	}
 	/**
-	 * 网关汇聚端，根据历史表寻找真是的网关路径
+	 * 网关汇聚端，根据历史表寻找真实的网关路径
 	 * @param incomingtTransition
 	 * @param processDefinition
 	 * @param HistoricActivityInstanceEntityList
 	 * @param activityImpl
-	 * @return
+	 * @return 真实网关路径
 	 */
 	private List<PvmTransition> getGatewayPath(List<PvmTransition> incomingtTransition,ProcessDefinitionEntity processDefinition,List<HistoricActivityInstanceEntity> HistoricActivityInstanceEntityList,ActivityImpl activityImpl){
 		List<PvmTransition> realTransition = new ArrayList<>();
@@ -450,8 +450,8 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	/**
 	 * 获取所有的HistoricActivityInstance，并转换成HistoricActivityInstanceEntity
-	 * @param processInstanceId
-	 * @return
+	 * @param processInstanceId 流程实例ID
+	 * @return 历史节点实例
 	 */
 	private List<HistoricActivityInstanceEntity> getHistoricActivityInstanceEntityList(String processInstanceId){
 		List<HistoricActivityInstance> instances =historyService
@@ -473,8 +473,8 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	/**
 	 * 获取历史执行UserTask的activityId数据
-	 * @param processInstanceId
-	 * @return
+	 * @param processInstanceId 流程实例ID
+	 * @return 历史执行UserTask的activityId数据
 	 */
 	private List<String> gethistoricUserTaskActIdList(String processInstanceId){
         /*List<HistoricActivityInstance> instances =historyService
@@ -498,8 +498,8 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	/**
 	 * 获取ACT_RU_EXECTION数据
-	 * @param processInstanceId
-	 * @return
+	 * @param processInstanceId 流程实例ID
+	 * @return ACT_RU_EXECTION数据
 	 */
 	private List<ExecutionEntity> getExecutionListByProcessInstanceId(String processInstanceId){
 		List<Execution> executionList = runtimeService.createExecutionQuery().processInstanceId(processInstanceId).list();
