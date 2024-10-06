@@ -11,23 +11,23 @@ import com.mxpioframework.multitenant.strategy.CurrentOrganizationStrategy;
 
 public abstract class MultitenantUtils {
 	
-	private static ThreadLocal<Stack<Organization>> threadLocal = new ThreadLocal<Stack<Organization>>();
+	private static final ThreadLocal<Stack<Organization>> threadLocal = new ThreadLocal<Stack<Organization>>();
 	private static CommandService commandService;
 	private static CurrentOrganizationStrategy currentOrganizationStrategy;
 
 	
-	public static final void pushOrganization(String organizationId) {
+	public static void pushOrganization(String organizationId) {
 		Organization organization = new Organization();
 		organization.setId(organizationId);
 		pushOrganization(organization);
 	}
 	
-	public static final void pushMasterSecurityContext() {
+	public static void pushMasterSecurityContext() {
 		pushOrganization(Constants.MASTER);
 	}
 
 	
-	public static final void pushOrganization(Organization organization) {
+	public static void pushOrganization(Organization organization) {
 		Organization tempOrganization = new Organization();
 		tempOrganization.setId(organization.getId());
 		Stack<Organization> stack = threadLocal.get();
@@ -38,18 +38,16 @@ public abstract class MultitenantUtils {
 		stack.push(organization);
 	}
 	
-	public static final Organization popOrganization() {
+	public static Organization popOrganization() {
 		Stack<Organization> stack = threadLocal.get();
 		if (!stack.isEmpty()) {
 			return stack.pop();
 		}
-		if (stack != null && stack.isEmpty()) {
-			threadLocal.remove();
-		}
-		return getCurrentOrganizationStrategy().getCurrent();
+        threadLocal.remove();
+        return getCurrentOrganizationStrategy().getCurrent();
 	}
 	
-	public static final Organization peekOrganization() {
+	public static Organization peekOrganization() {
 		Stack<Organization> stack = threadLocal.get();
 		if (stack == null || stack.isEmpty()) {
 			try {
@@ -138,11 +136,5 @@ public abstract class MultitenantUtils {
 		}
 		return currentOrganizationStrategy;
 	}
-
-
-
-
-
-
 
 }

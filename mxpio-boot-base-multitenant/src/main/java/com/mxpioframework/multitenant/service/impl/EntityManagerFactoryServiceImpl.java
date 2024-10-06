@@ -27,6 +27,7 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.SchemaManagementProvider;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder.Builder;
@@ -70,9 +71,9 @@ public class EntityManagerFactoryServiceImpl implements
 	
 	@Value("${mxpio.multitenant.dataScript:}")
 	private String dataScript;
-	
+
 	@Autowired
-	private EntityManagerFactory emf;
+	private EntityManagerFactory entityManagerFactory;
 	
 	@Autowired(required = false)
 	private JtaTransactionManager jtaTransactionManager;
@@ -406,7 +407,7 @@ public class EntityManagerFactoryServiceImpl implements
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		emfMap.put(Constants.MASTER, emf);
+		emfMap.put(Constants.MASTER, entityManagerFactory);
 		if (listeners != null) {
 			AnnotationAwareOrderComparator.sort(listeners);
 		}

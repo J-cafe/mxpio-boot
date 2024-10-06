@@ -40,6 +40,4 @@ public class MultitenantJpaTransactionManager extends JpaTransactionManager {
 		return super.getDataSource();
 	}	
 
-	
-
 }
