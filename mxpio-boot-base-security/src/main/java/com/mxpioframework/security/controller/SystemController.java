@@ -7,6 +7,7 @@ import java.util.*;
 
 import javax.imageio.ImageIO;
 
+import com.mxpioframework.common.CommonConstant;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -90,6 +91,7 @@ public class SystemController {
 	@Operation(summary = "获取后端资源配置", description = "获取后端资源配置", method = "GET")
 	public Result<Map<String,Object>> loadConfigResource() {
 		Map<String,Object> returnMap = new HashMap<>();
+		returnMap.put("isMultitenant", CommonConstant.isIncludeModule("Multitenant"));
 		if (StringUtils.equals("true",captchaOpenFlag)){
 			returnMap.put("captchaOpenFlag",Boolean.TRUE);
 		}else{

@@ -2,6 +2,7 @@ package com.mxpioframework.autoconfigure.multitenant;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.mxpioframework.multitenant.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -39,12 +40,20 @@ public class MultitenantUserDetailsService implements UserDetailsService {
 			throws UsernameNotFoundException {			
 		try {
 			Organization organization = loadOrganization();
-			return MultitenantUtils.doQuery(organization.getId(), () ->  {
-				User user = JpaUtil.getOne(User.class, username);
-				user.setOrganization(organization);
-				user.setAuthorities(grantedAuthorityService.getGrantedAuthorities(user));
-				return user;
-			});
+			if (organization == null) {
+				return MultitenantUtils.doQuery(() ->  {
+					User user = JpaUtil.getOne(User.class, username);
+					user.setAuthorities(grantedAuthorityService.getGrantedAuthorities(user));
+					return user;
+				});
+			}else {
+				return MultitenantUtils.doQuery(organization.getId(), () ->  {
+					User user = JpaUtil.getOne(User.class, username);
+					user.setOrganization(organization);
+					user.setAuthorities(grantedAuthorityService.getGrantedAuthorities(user));
+					return user;
+				});
+			}
 		} catch (Exception e) {
 			throw new UsernameNotFoundException(e.getMessage());
 		}
@@ -56,8 +65,11 @@ public class MultitenantUserDetailsService implements UserDetailsService {
 		Organization organization = null;
 		if (user == null) {
 			String organizationId = request.getParameter("organization");
+			if(organizationId == null) {
+				organizationId = Constants.MASTER;
+			}
 			organization = organizationService.get(organizationId);
-			Assert.notNull(organization, "Organization is not exists.");
+			// Assert.notNull(organization, "Organization is not exists.");
 		} else {
 			organization = user.getOrganization();
 		}
