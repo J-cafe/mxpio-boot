@@ -42,6 +42,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 		for (ResourceAllocator allocator : allocators) {
 			allocator.allocate(organization);
 		}
+		JpaUtil.merge(organization);
 	}
 
 	@Override
@@ -50,6 +51,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 		for (ResourceReleaser releaser : releasers) {
 			releaser.release(organization);
 		}
+		JpaUtil.remove(organization);
 	}
 
 }

@@ -26,9 +26,9 @@ public class ThirdAuthorizeProvider implements AuthenticationProvider {
 	/**
 	 * 鉴权具体逻辑
 	 *
-	 * @param authentication
-	 * @return
-	 * @throws AuthenticationException
+	 * @param authentication 身份凭证
+	 * @return 身份凭证（已认证）
+	 * @throws AuthenticationException 认证异常
 	 */
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -54,8 +54,8 @@ public class ThirdAuthorizeProvider implements AuthenticationProvider {
 	/**
 	 * 是否支持当前类
 	 *
-	 * @param authentication
-	 * @return
+	 * @param authentication 身份凭证
+	 * @return 是否支持
 	 */
 	public boolean supports(Class<?> authentication) {
 		return (ThirdAuthorizeToken.class.isAssignableFrom(authentication));
