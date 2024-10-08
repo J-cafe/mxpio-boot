@@ -2,6 +2,8 @@ package com.mxpioframework.autoconfigure.multitenant;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.mxpioframework.multitenant.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +19,11 @@ import com.mxpioframework.multitenant.service.OrganizationService;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.GrantedAuthorityService;
 import com.mxpioframework.security.util.SecurityUtils;
+import org.springframework.util.StreamUtils;
+import org.springframework.util.StringUtils;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Spring Security的{@link org.springframework.security.core.userdetails.UserDetailsService}接口的默认实现
@@ -40,20 +47,12 @@ public class MultitenantUserDetailsService implements UserDetailsService {
 			throws UsernameNotFoundException {			
 		try {
 			Organization organization = loadOrganization();
-			if (organization == null) {
-				return MultitenantUtils.doQuery(() ->  {
-					User user = JpaUtil.getOne(User.class, username);
-					user.setAuthorities(grantedAuthorityService.getGrantedAuthorities(user));
-					return user;
-				});
-			}else {
-				return MultitenantUtils.doQuery(organization.getId(), () ->  {
-					User user = JpaUtil.getOne(User.class, username);
-					user.setOrganization(organization);
-					user.setAuthorities(grantedAuthorityService.getGrantedAuthorities(user));
-					return user;
-				});
-			}
+			return MultitenantUtils.doQuery(organization.getId(), () ->  {
+				User user = JpaUtil.getOne(User.class, username);
+				user.setOrganization(organization);
+				user.setAuthorities(grantedAuthorityService.getGrantedAuthorities(user));
+				return user;
+			});
 		} catch (Exception e) {
 			throw new UsernameNotFoundException(e.getMessage());
 		}
@@ -65,11 +64,12 @@ public class MultitenantUserDetailsService implements UserDetailsService {
 		Organization organization = null;
 		if (user == null) {
 			String organizationId = request.getParameter("organization");
+
 			if(organizationId == null) {
 				organizationId = Constants.MASTER;
 			}
 			organization = organizationService.get(organizationId);
-			// Assert.notNull(organization, "Organization is not exists.");
+			Assert.notNull(organization, "Organization is not exists.");
 		} else {
 			organization = user.getOrganization();
 		}

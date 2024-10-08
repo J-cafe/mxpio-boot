@@ -15,9 +15,9 @@ public class InitializedDataResourceAllocator implements ResourceAllocator {
 	@Autowired
 	private DataSourceService dataSourceService;
 	
-	@Value("${resourceScript:}")
+	@Value("${mxpio.multitenant.resourceScript:}")
 	private String resourceScript;
-	
+
 	@Autowired
 	private ScriptService scriptService;
 	

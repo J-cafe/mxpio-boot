@@ -22,9 +22,9 @@ public class CommonConstant {
 		return modules;
 	}
 
-	public static boolean isIncludeModule(String moduleName) {
+	public static boolean isIncludeModule(String moduleKey) {
 		for (ModuleVO module : modules) {
-			if (module.getModuleName().equals(moduleName)) {
+			if (module.getModuleKey().equals(moduleKey)) {
 				return true;
 			}
 		}
