@@ -55,6 +55,11 @@ public class SystemController {
 	private String appSystemAbbr;
 	@Value("${app.user.company}")
 	private String appUserCompany;
+	@Value("${mxpio.token.time:1800000}")
+	private long tokenTime;
+	@Value("${mxpio.refresh.token.time:7200000}")
+	private long refreshTokenTime;
+
 	@GetMapping("captcha")
 	@Operation(summary = "加载验证码", description = "获取登录验证码", method = "GET")
 	public Result<CaptchaDTO> captcha() throws IOException {
@@ -101,6 +106,8 @@ public class SystemController {
 		returnMap.put("appSystemDesc",appSystemDesc);
 		returnMap.put("appSystemAbbr",appSystemAbbr);
 		returnMap.put("appUserCompany",appUserCompany);
+		returnMap.put("tokenTime",tokenTime);
+		returnMap.put("refreshTokenTime",refreshTokenTime);
 		if (StringUtils.isNotBlank(passwordStrategy)){
 			String[] split = passwordStrategy.split(",");
 			List<Map<String,Object>> configRegexs = new ArrayList<>();

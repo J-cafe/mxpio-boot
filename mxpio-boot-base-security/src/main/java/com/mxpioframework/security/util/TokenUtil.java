@@ -1,6 +1,7 @@
 package com.mxpioframework.security.util;
 
 import java.util.Date;
+import java.util.Objects;
 
 import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.JWT;
@@ -13,10 +14,11 @@ import com.mxpioframework.security.entity.User;
 public class TokenUtil {
 	
 	public static String createAccessToken(User jwtUserDetails) {
+        long tokenTime = Long.parseLong(Objects.requireNonNull(ApplicationContextProvider.getEnvironment().getProperty("mxpio.token.time")));
 		String json = JSON.toJSONString(jwtUserDetails);
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
-        long expMillis = nowMillis + Constants.DEFAULT_ACCESS_TOKEN_TIME_MS;
+        long expMillis = nowMillis + tokenTime;
         Date exp = new Date(expMillis);
         Algorithm algorithm = Algorithm.HMAC256(Constants.JWT_TOKEN_SALT);
         String token = JWT.create()
@@ -28,9 +30,10 @@ public class TokenUtil {
 	}
 	
 	public static String createRefreshToken(String accessToken) {
+        long refreshTokenTime = Long.parseLong(Objects.requireNonNull(ApplicationContextProvider.getEnvironment().getProperty("mxpio.refresh.token.time")));
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
-        long expMillis = nowMillis + Constants.DEFAULT_REFRESH_TOKEN_TIME_MS;
+        long expMillis = nowMillis + refreshTokenTime;
         Date exp = new Date(expMillis);
         Algorithm algorithm = Algorithm.HMAC256(Constants.JWT_TOKEN_SALT);
         String token = JWT.create()
