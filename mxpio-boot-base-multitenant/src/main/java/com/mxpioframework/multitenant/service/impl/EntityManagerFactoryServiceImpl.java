@@ -123,14 +123,15 @@ public class EntityManagerFactoryServiceImpl implements
 	@Autowired(required = false)
 	private PersistenceUnitManager persistenceUnitManager;
 	
-	@Value("${mxpio.multitenant.packagesToScan:"
+	/*@Value("${mxpio.multitenant.packagesToScan:"
 			+ "com.mxpioframework.excel.importer.model,"
 			+ "com.mxpioframework.filestorage.entity,"
 			+ "com.mxpioframework.camunda.entity,"
 			+ "com.mxpioframework.log.entity,"
 			+ "com.mxpioframework.quartz.entity,"
 			+ "com.mxpioframework.system.entity,"
-			+ "com.mxpioframework.security.entity}")
+			+ "com.mxpioframework.security.entity}")*/
+	@Value("${mxpio.multitenant.packagesToScan:com.mxpioframework.**.entity}")
 	private String packagesToScan;
 	
 	@Value("${mxpio.multitenant.customPackagesToScan:}")

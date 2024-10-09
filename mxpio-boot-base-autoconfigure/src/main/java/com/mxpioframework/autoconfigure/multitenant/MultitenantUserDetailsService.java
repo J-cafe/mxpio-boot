@@ -64,10 +64,6 @@ public class MultitenantUserDetailsService implements UserDetailsService {
 		Organization organization = null;
 		if (user == null) {
 			String organizationId = request.getParameter("organization");
-
-			if(organizationId == null) {
-				organizationId = Constants.MASTER;
-			}
 			organization = organizationService.get(organizationId);
 			Assert.notNull(organization, "Organization is not exists.");
 		} else {

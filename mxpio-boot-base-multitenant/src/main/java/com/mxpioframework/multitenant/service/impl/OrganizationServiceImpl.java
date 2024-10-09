@@ -3,6 +3,7 @@ package com.mxpioframework.multitenant.service.impl;
 import java.util.List;
 
 import com.mxpioframework.jpa.JpaUtil;
+import com.mxpioframework.multitenant.Constants;
 import com.mxpioframework.multitenant.domain.Organization;
 import com.mxpioframework.multitenant.resource.ResourceAllocator;
 import com.mxpioframework.multitenant.resource.ResourceReleaser;
@@ -24,6 +25,13 @@ public class OrganizationServiceImpl implements OrganizationService {
 	
 	@Override
 	public Organization get(String id) {
+		if(Constants.MASTER.equals(id)) {
+			Organization organization = new Organization();
+			organization.setId(id);
+			organization.setName(Constants.MASTER);
+			organization.setDataSourceInfoId(Constants.MASTER);
+			return organization;
+		}
 		return JpaUtil.getOne(Organization.class, id);
 	}
 
