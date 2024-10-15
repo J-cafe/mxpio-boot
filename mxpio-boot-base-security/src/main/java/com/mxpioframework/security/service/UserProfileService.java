@@ -8,4 +8,6 @@ public interface UserProfileService extends BaseService<UserProfile> {
 
 
     List<UserProfile> listByPageKey(String pageKey);
+
+    List<UserProfile> listByLoginUser();
 }

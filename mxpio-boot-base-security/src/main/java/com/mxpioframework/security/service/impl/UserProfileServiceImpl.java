@@ -18,4 +18,13 @@ public class UserProfileServiceImpl extends BaseServiceImpl<UserProfile> impleme
     public List<UserProfile> listByPageKey(String pageKey) {
         return JpaUtil.linq(UserProfile.class).equal("pageKey", pageKey).equal("userId", SecurityUtils.getLoginUsername()).list();
     }
+
+    @Override
+    public List<UserProfile> listByLoginUser() {
+        String username = SecurityUtils.getLoginUsername();
+        if(username != null) {
+            return JpaUtil.linq(UserProfile.class).equal("userId", username).list();
+        }
+        return Collections.emptyList();
+    }
 }

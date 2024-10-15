@@ -53,8 +53,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 					}
 				}
 			}
-			List<UserProfile> profiles = JpaUtil.linq(UserProfile.class).equal("userId", user.getUsername()).list();
-			user.setProfiles(profiles);
+
 			List<Dept> depts = JpaUtil.linq(Dept.class)
 					.exists(UserDept.class)
 					.equalProperty("deptId", "id")

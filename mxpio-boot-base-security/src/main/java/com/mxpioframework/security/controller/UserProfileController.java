@@ -1,6 +1,7 @@
 package com.mxpioframework.security.controller;
 
 import com.mxpioframework.common.vo.Result;
+import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.security.entity.UserProfile;
 import com.mxpioframework.security.service.UserProfileService;
@@ -43,6 +44,13 @@ public class UserProfileController {
 	@Operation(summary = "个性化列表", description = "获取个性化列表", method = "GET")
 	public Result<List<UserProfile>> page(@PathVariable(name = "pageKey") String pageKey) throws Exception {
 		List<UserProfile> profiles = userProfileService.listByPageKey(pageKey);
+		return Result.OK(profiles);
+	}
+
+	@GetMapping("list/personal")
+	@Operation(summary = "个人个性化配置", description = "获取个人个性化配置列表", method = "GET")
+	public Result<List<UserProfile>> personal(Criteria criteria) throws Exception {
+		List<UserProfile> profiles = userProfileService.listByLoginUser();
 		return Result.OK(profiles);
 	}
 
