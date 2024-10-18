@@ -319,9 +319,6 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		String processDefinitionId = task.getProcessDefinitionId();
 		String processInstanceId = task.getProcessInstanceId();
 		List<HistoricActivityInstanceEntity> histActInstList = getHistoricActivityInstanceEntityList(processInstanceId);
-		if(CollectionUtils.isEmpty(histActInstList)){
-			return ResultMessage.error("第一个用户节点无法驳回！");
-		}
 
 		if(!task.getAssignee().equals(loginUsername)){
 			return ResultMessage.error("非当前审批人！");
@@ -335,6 +332,9 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		//需要回退到的节点
 		Set<String> toActSet = new HashSet<>();
 		findRejectToUserTask(processDefinition,histActInstList,histUserTaskActIdList,activityImpl,toActSet);
+		if(CollectionUtils.isEmpty(toActSet)){
+			return ResultMessage.error("第一个用户节点无法驳回！");
+		}
 
 		//获取所有未执行task
 		List<ExecutionEntity> executionEntityList = getExecutionListByProcessInstanceId(processInstanceId);
