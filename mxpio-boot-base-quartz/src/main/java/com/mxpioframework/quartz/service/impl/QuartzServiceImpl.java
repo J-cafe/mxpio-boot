@@ -41,7 +41,7 @@ public class QuartzServiceImpl implements QuartzService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public boolean addJob(QuartzJob quartzJob) {
 		if("RUNNING".equals(quartzJob.getStatus())) {
 			addScheduler(quartzJob.getJobClassName(), quartzJob.getJobCron(), quartzJob.getJobParams());
@@ -51,7 +51,7 @@ public class QuartzServiceImpl implements QuartzService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public boolean editJob(QuartzJob quartzJob) {
 		if("RUNNING".equals(quartzJob.getStatus())) {
 			removeScheduler(quartzJob.getJobClassName());
@@ -66,7 +66,7 @@ public class QuartzServiceImpl implements QuartzService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public boolean deleteJob(String jobId) {
 		QuartzJob job = JpaUtil.linq(QuartzJob.class).idEqual(jobId).findOne();
 		removeScheduler(job.getJobClassName());
@@ -75,7 +75,7 @@ public class QuartzServiceImpl implements QuartzService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public boolean resume(String jobId) {
 		QuartzJob quartzJob = JpaUtil.linq(QuartzJob.class).idEqual(jobId).findOne();
 		removeScheduler(quartzJob.getJobClassName());
@@ -86,7 +86,7 @@ public class QuartzServiceImpl implements QuartzService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public boolean pause(String jobId) {
 		QuartzJob quartzJob = JpaUtil.linq(QuartzJob.class).idEqual(jobId).findOne();
 		removeScheduler(quartzJob.getJobClassName());
@@ -122,7 +122,7 @@ public class QuartzServiceImpl implements QuartzService {
 			scheduler.start();
 			return true;
 		}catch (Exception e){
-			e.printStackTrace();
+			e.fillInStackTrace();
 			return false;
 		}
 	}
@@ -144,7 +144,7 @@ public class QuartzServiceImpl implements QuartzService {
 			}
 			
 		}catch (Exception e) {
-			e.printStackTrace();
+			e.fillInStackTrace();
 			return false;
 		}
 	}
@@ -157,11 +157,8 @@ public class QuartzServiceImpl implements QuartzService {
 			scheduler.deleteJob(JobKey.jobKey(jobClassName));
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.fillInStackTrace();
 			return false;
 		}
 	}
-	
-	
-
 }
