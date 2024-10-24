@@ -3,6 +3,8 @@ package com.mxpioframework.camunda.el.service.impl;
 import com.mxpioframework.camunda.el.service.ElFuncService;
 import com.mxpioframework.security.entity.Dept;
 import com.mxpioframework.security.service.RbacCacheService;
+import com.mxpioframework.security.util.SecurityUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -67,13 +69,23 @@ public class ElFuncServiceImpl implements ElFuncService {
     }
 
     private Dept getDeptByUserAndLevel(String deptLevel, String username){
-        Map<String, Set<String>> userDepts = rbacCacheService.getAllDeptIdWithFatherGroupByUser();
-        Set<String> deptIds = userDepts.get(username);
+
+        Map<String, Set<String>> userDepts;
         Map<String, Dept> depts = rbacCacheService.getDeptMap();
+
+        if(StringUtils.isEmpty(deptLevel)){
+            userDepts = rbacCacheService.getAllDeptIdGroupByUser();
+        }else{
+            userDepts = rbacCacheService.getAllDeptIdWithFatherGroupByUser();
+        }
+        Set<String> deptIds = userDepts.get(username);
+
         if(!CollectionUtils.isEmpty(deptIds)){
             for(String id : deptIds){
                 Dept dept = depts.get(id);
-                if(deptLevel.equals(dept.getDeptLevel())){
+                if(StringUtils.isEmpty(deptLevel)){
+                    return dept;
+                }else if(deptLevel.equals(dept.getDeptLevel())){
                     return dept;
                 }
             }
