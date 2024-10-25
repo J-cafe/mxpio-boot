@@ -3,10 +3,11 @@ package com.mxpioframework.filestorage.provider.impl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
@@ -30,7 +31,7 @@ public class FileSystemStorageProvider implements FileStorageProvider {
 	public String put(InputStream inputStream, String fileName, long fileSize, String contentType) throws IOException {
 		String relativePath = getRelativPath();
 		File targetFile = getTargetFile(fileSystemStorageLocation, relativePath);
-		OutputStream os = new FileOutputStream(targetFile);
+		OutputStream os = Files.newOutputStream(targetFile.toPath());
 		IOUtils.copy(inputStream, os);
 		IOUtils.closeQuietly(os);
 		return relativePath;
@@ -38,7 +39,7 @@ public class FileSystemStorageProvider implements FileStorageProvider {
 
 	@Override
 	public String put(MultipartFile file) throws IllegalStateException, IOException {
-		String relativePath = getRelativPath() + getFileSuffix(file.getOriginalFilename());
+		String relativePath = getRelativPath() + getFileSuffix(Objects.requireNonNull(file.getOriginalFilename()));
 		File targetFile = getTargetFile(fileSystemStorageLocation, relativePath);
 		file.transferTo(targetFile);
 
@@ -58,9 +59,9 @@ public class FileSystemStorageProvider implements FileStorageProvider {
 	}
 
 	@Override
-	public InputStream getInputStream(String relativePath) throws FileNotFoundException {
+	public InputStream getInputStream(String relativePath) throws IOException {
 		File targetFile = getTargetFile(fileSystemStorageLocation, relativePath);
-		return new FileInputStream(targetFile);
+		return Files.newInputStream(targetFile.toPath());
 	}
 
 	public static String getRelativPath() {

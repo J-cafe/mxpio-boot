@@ -140,8 +140,8 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 
     /**
      * 添加条件：ID等于
-     * @param id
-     * @return
+     * @param id ID
+     * @return 添加ID等于条件
      */
     T idEqual(Object id);
     
@@ -149,7 +149,7 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
      * 添加条件：等于
      * @param x 属性名
      * @param y 对比值
-     * @return
+     * @return 添加属性值等于条件
      */
 	T equal(String x, Object y);
 
@@ -318,7 +318,7 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	/**
 	 * 分组
 	 * @param grouping 分组字段
-	 * @return
+	 * @return 分组语句
 	 */
 	T groupBy(String... grouping);
 

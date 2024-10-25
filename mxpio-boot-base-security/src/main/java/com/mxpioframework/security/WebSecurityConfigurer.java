@@ -111,7 +111,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 		jwtLoginFilter.setAuthenticationFailureHandler(new AuthenticationFailureHandler(){
 			@Override
 			public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-				//exception.printStackTrace();
+				exception.fillInStackTrace();
 				response.setContentType("application/json;charset=UTF-8");
 				if(exception instanceof UsernameNotFoundException){
 					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101(exception.getMessage())));
@@ -147,6 +147,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 				.antMatchers(mergeAnonymous()).permitAll()
 				// 添加SWAGGER地址
 				.antMatchers(Constants.SWAGGER_WHITELIST).permitAll()
+				.antMatchers(Constants.MULTITENANT_WHITELIST).permitAll()
                 .anyRequest().authenticated()  // 所有请求需要身份认证
                 .and()
                 .exceptionHandling()

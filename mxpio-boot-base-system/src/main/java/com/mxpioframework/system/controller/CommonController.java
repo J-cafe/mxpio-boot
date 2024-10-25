@@ -22,7 +22,7 @@ public class CommonController {
 	private SnRuleService snRuleService;
 	@GetMapping("duplicate/{tableName}/{column}/{key}")
 	@Operation(summary = "重复校验", description = "重复校验", method = "GET")
-	public Result<Long> duplicate(@PathVariable(name = "tableName", required = true) String tableName,
+	public Result<Long> duplicate(@PathVariable(name = "tableName") String tableName,
 			@PathVariable(name = "column", required = true) String column,
 			@PathVariable(name = "key", required = true) String key,
 			@RequestParam(name = "exclude", required = false) String exclude) {

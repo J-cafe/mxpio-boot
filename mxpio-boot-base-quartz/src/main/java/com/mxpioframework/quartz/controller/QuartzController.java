@@ -97,8 +97,8 @@ public class QuartzController {
 
 	/**
 	 * 立即执行
-	 * @param id
-	 * @return
+	 * @param id 任务ID
+	 * @return 执行结果
 	 */
 	@GetMapping("execute")
 	@Operation(summary = "立即执行", description = "立即执行", method = "GET")
@@ -121,7 +121,7 @@ public class QuartzController {
 		Criteria criteria = Criteria.create();
 		criteria.addCriterion("jobClassName", Operator.EQ,jobClassName);
 		List<QuartzJob> quartzJobList = quartzService.list(criteria);
-		if(quartzJobList==null||quartzJobList.size()==0) {
+		if(quartzJobList==null|| quartzJobList.isEmpty()) {
 			return Result.error("未找到对应实体");
 		}
 		if(quartzJobList.size() > 1) {

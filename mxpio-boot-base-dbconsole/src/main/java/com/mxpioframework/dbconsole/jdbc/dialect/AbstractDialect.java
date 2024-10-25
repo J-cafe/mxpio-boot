@@ -7,7 +7,28 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-public abstract class AbstractDialect implements IDialect{
+public abstract class
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+AbstractDialect implements IDialect{
 	/**
 	 * 判断是否是支持的数据库类型
 	 * @param connection 数据连接
@@ -25,7 +46,7 @@ public abstract class AbstractDialect implements IDialect{
 			boolean containsMysql = StringUtils.containsIgnoreCase(
 					databaseProductName,dbProductName);
 			if(StringUtils.isNotEmpty(dbMajorVersion)){
-				return containsMysql&&Integer.valueOf(dbMajorVersion)==databaseMajorVersion;
+				return containsMysql&&Integer.parseInt(dbMajorVersion)==databaseMajorVersion;
 			}
 			return containsMysql;
 		} catch (SQLException e) {
@@ -43,9 +64,9 @@ public abstract class AbstractDialect implements IDialect{
 		} else {
 			String[] cs = columnSize.split(",");
 			if (cs.length == 2) {
-				cType.append(columnType + "(" + cs[0] + "," + cs[1] + ")");
+				cType.append(columnType).append("(").append(cs[0]).append(",").append(cs[1]).append(")");
 			} else if (cs.length == 1) {
-				cType.append(columnType + "(" + cs[0] + ")");
+				cType.append(columnType).append("(").append(cs[0]).append(")");
 			}
 		}
 		cType.append(" ");
@@ -64,11 +85,11 @@ public abstract class AbstractDialect implements IDialect{
 			if (primaryKeys.size() == i) {
 				sb.append(s);
 			} else {
-				sb.append(s + ",");
+				sb.append(s).append(",");
 			}
 			i++;
 		}
-		if (primaryKeys.size() > 0) {
+		if (!primaryKeys.isEmpty()) {
 			sql.append(" ALTER TABLE ");
 			sql.append(tableName);
 			sql.append(" ADD CONSTRAINT PK_");

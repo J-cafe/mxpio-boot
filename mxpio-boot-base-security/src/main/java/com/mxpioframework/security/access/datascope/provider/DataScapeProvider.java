@@ -6,6 +6,6 @@ import com.mxpioframework.jpa.query.Criterion;
 
 public interface DataScapeProvider {
 	
-	List<Criterion> provide();
+	List<Criterion> provide(DataScapeContext context);
 	
 }

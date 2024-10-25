@@ -2,16 +2,14 @@ package com.mxpioframework.camunda.service.impl;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.googlecode.aviator.AviatorEvaluator;
-import com.mxpioframework.camunda.vo.ProcessInstanceVO;
+import com.mxpioframework.camunda.entity.BpmnTask;
+import com.mxpioframework.camunda.vo.*;
+import com.mxpioframework.jpa.query.Order;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.FormService;
@@ -21,14 +19,23 @@ import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.history.*;
+import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import org.camunda.bpm.engine.impl.persistence.entity.HistoricActivityInstanceEntity;
+import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.camunda.bpm.engine.impl.pvm.PvmTransition;
+import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ActivityInstance;
+import org.camunda.bpm.engine.runtime.Execution;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.runtime.ProcessInstanceModificationBuilder;
 import org.camunda.bpm.engine.task.Comment;
 import org.camunda.bpm.engine.task.Task;
 import org.camunda.bpm.engine.task.TaskQuery;
 import org.camunda.bpm.engine.variable.VariableMap;
+import org.springdoc.core.converters.AdditionalModelsConverter;
+import org.camunda.bpm.engine.variable.type.ValueType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -43,8 +50,6 @@ import com.mxpioframework.camunda.entity.FormModelDef;
 import com.mxpioframework.camunda.enums.BpmnEnums;
 import com.mxpioframework.camunda.service.BpmnFlowService;
 import com.mxpioframework.camunda.service.FormModelService;
-import com.mxpioframework.camunda.vo.BpmnResource;
-import com.mxpioframework.camunda.vo.TaskDetailVO;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
 import com.mxpioframework.jpa.query.Operator;
@@ -76,6 +81,13 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Autowired
 	private HistoryService historyService;
+	private AdditionalModelsConverter additionalModelsConverter;
+
+	/**
+	 * 自引用
+	 */
+	@Autowired
+	private BpmnFlowService bpmnFlowService;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -134,7 +146,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 		BpmnFlow flow = JpaUtil.linq(BpmnFlow.class).idEqual(key).findOne();
 		String title;
-		if (flow.getTitle()!=null){
+		if (StringUtils.isNotBlank(flow.getTitle())){
 			title = AviatorEvaluator.execute(flow.getTitle(),properties).toString();
 		}else{
 			title = flow.getName() + "---" + loginUsername;
@@ -178,7 +190,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		} catch (Exception e) {
 			return null;
 		}
-		
+
 	}
 
 	@Override
@@ -225,7 +237,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			return ResultMessage.error("无权审批！");
 		}
 	}
-	
+
 	@Override
 	@Transactional
 	public ResultMessage delegate(String taskId, String username, String loginUsername) {
@@ -240,12 +252,13 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			return ResultMessage.error("无权审批！");
 		}
 	}
-	
+
 	@Override
 	@Transactional
 	public ResultMessage rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername) {
 		Task task = getTaskById(taskId);
 		String processInstanceId = task.getProcessInstanceId();
+		taskService.createComment(task.getId(), processInstanceId, "用户"+loginUsername+"进行了驳回操作，驳回原因:" + properties.get(CamundaConstant.BPMN_COMMENT));
 		HistoricProcessInstance inst = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
 		runtimeService.deleteProcessInstance(processInstanceId, "不同意！");
 		return ResultMessage.success("不同意！", inst);
@@ -264,12 +277,12 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		}
 		//获取流程定义
 		ProcessDefinition procDef = repositoryService.createProcessDefinitionQuery().processDefinitionId(processDefinitionId).singleResult();*/
-		
+
 		/*ProcessInstance newProcInst = startWithFormByKey(procDef.getKey(), startUser, businessKey, startDatas);*/
 
 	}
-	
-	@Override
+
+	/*@Override
 	@Transactional
 	public ResultMessage rejectToLast(String taskId, Map<String, Object> properties, String loginUsername) {
 		Task task = getTaskById(taskId);
@@ -280,11 +293,11 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			log.error("第一个用户节点无法驳回！");
             return ResultMessage.error("第一个用户节点无法驳回！");
         }
-		
+
 		if(!task.getAssignee().equals(loginUsername)){
 			return ResultMessage.error("非当前审批人！");
 		}
-		
+
 		//得到上一个任务节点的ActivityId和待办人
         Map<String,String> lastNode = getLastNode(resultList,task.getTaskDefinitionKey());
         if(null == lastNode){
@@ -298,8 +311,226 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
                 .setAnnotation("进行了驳回到上一个任务节点操作")
                 .startBeforeActivity(toActId)//启动目标活动节点
                 .execute();
-		
+
 		return ResultMessage.success("进行了驳回到上一个任务节点操作");
+	}*/
+	public ResultMessage rejectToLast(String taskId, Map<String, Object> properties, String loginUsername) {
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		String processDefinitionId = task.getProcessDefinitionId();
+		String processInstanceId = task.getProcessInstanceId();
+		List<HistoricActivityInstanceEntity> histActInstList = getHistoricActivityInstanceEntityList(processInstanceId);
+
+		if(!task.getAssignee().equals(loginUsername)){
+			return ResultMessage.error("非当前审批人！");
+		}
+
+		ProcessDefinitionEntity processDefinition = (ProcessDefinitionEntity)repositoryService.getProcessDefinition(processDefinitionId);
+		ActivityImpl activityImpl = processDefinition.getChildActivity(task.getTaskDefinitionKey());
+
+		List<String> histUserTaskActIdList = gethistoricUserTaskActIdList(processInstanceId);
+
+		//需要回退到的节点
+		Set<String> toActSet = new HashSet<>();
+		findRejectToUserTask(processDefinition,histActInstList,histUserTaskActIdList,activityImpl,toActSet);
+		if(CollectionUtils.isEmpty(toActSet)){
+			return ResultMessage.error("第一个用户节点无法驳回！");
+		}
+
+		//获取所有未执行task
+		List<ExecutionEntity> executionEntityList = getExecutionListByProcessInstanceId(processInstanceId);
+
+		//从回退节点开始向后寻找在act_ru_execution表中需要取消的execution
+		Set<ExecutionEntity> cancelSet = new HashSet<>();
+		for (String actId : toActSet) {
+			ActivityImpl act = processDefinition.getChildActivity(actId);
+			findNeedCanceledUserTask(executionEntityList, act, cancelSet);
+		}
+		//更改工作流
+		taskService.createComment(task.getId(), processInstanceId, "用户"+loginUsername+"进行了驳回操作，驳回原因:" + properties.get(CamundaConstant.BPMN_COMMENT));
+		ProcessInstanceModificationBuilder builder = runtimeService.createProcessInstanceModification(processInstanceId);
+		for(ExecutionEntity e:cancelSet){
+			builder.cancelActivityInstance(e.getActivityInstanceId())//关闭相关任务
+					.setAnnotation("用户"+loginUsername+"进行了驳回到上一个任务节点操作");
+		}
+		for(String toActId:toActSet){
+			builder.startBeforeActivity(toActId);
+		}
+		builder.execute();
+		return ResultMessage.success("进行了驳回到上一个任务节点操作");
+	}
+
+	/**
+	 * 从驳回当前节点开始向前找，直到所有前驱都找到一个userTask节点为止
+	 * @param historyActivityList 历史活动清单
+	 * @param activityImpl 活动实体
+	 * @param toActSet 活动ID
+	 */
+	private void findRejectToUserTask(ProcessDefinitionEntity processDefinition,List<HistoricActivityInstanceEntity> HistoricActivityInstanceEntityList,List<String> historyActivityList,ActivityImpl activityImpl,Set<String> toActSet){
+		List<PvmTransition> incomingtTransition = activityImpl.getIncomingTransitions();
+		if(CollectionUtils.isEmpty(incomingtTransition)){
+			return;
+		}
+		List<PvmTransition> realTransition = getGatewayPath(incomingtTransition,processDefinition,HistoricActivityInstanceEntityList,activityImpl);
+
+		for(PvmTransition pvmTransition:realTransition){
+			ActivityImpl sourceActivityImpl = (ActivityImpl)pvmTransition.getSource();
+			String sourceTaskType = String.valueOf(sourceActivityImpl.getProperty("type"));
+			if("userTask".equals(sourceTaskType)){
+				if(historyActivityList.contains(sourceActivityImpl.getActivityId())){
+					toActSet.add(sourceActivityImpl.getActivityId());
+				}
+			}
+			else{
+				findRejectToUserTask(processDefinition,HistoricActivityInstanceEntityList,historyActivityList,sourceActivityImpl,toActSet);
+			}
+
+		}
+	}
+	/**
+	 * 网关汇聚端，根据历史表寻找真实的网关路径
+	 * @param incomingtTransition
+	 * @param processDefinition
+	 * @param HistoricActivityInstanceEntityList
+	 * @param activityImpl
+	 * @return 真实网关路径
+	 */
+	private List<PvmTransition> getGatewayPath(List<PvmTransition> incomingtTransition,ProcessDefinitionEntity processDefinition,List<HistoricActivityInstanceEntity> HistoricActivityInstanceEntityList,ActivityImpl activityImpl){
+		List<PvmTransition> realTransition = new ArrayList<>();
+		String taskType = String.valueOf(activityImpl.getProperty("type"));
+		Set<String> betweenGatewayActivity = new HashSet<>();
+		//Gateway汇聚端
+		if(taskType.endsWith("Gateway")&&CollectionUtils.size(incomingtTransition)>1){
+			if("parallelGateway".equals(taskType)){
+				realTransition=incomingtTransition;
+			}
+			else{
+				int gatewayNestedNum = 0;
+				String actId = activityImpl.getActivityId();
+				int begin=-1,end=-1;
+				for(int i=0;i<HistoricActivityInstanceEntityList.size();i++){
+					HistoricActivityInstanceEntity entity = HistoricActivityInstanceEntityList.get(i);
+					if(entity.getActivityId().equals(actId)&&entity.getActivityType().equals(taskType)){
+						begin = i;
+						continue;
+					}
+					//找分散端
+					if(entity.getActivityType().equals(taskType)){
+						ActivityImpl gatewayFirst = processDefinition.getChildActivity(entity.getActivityId());
+						//如果又找到一个汇聚端
+						if(CollectionUtils.size(gatewayFirst.getIncomingTransitions())>1){
+							gatewayNestedNum++;
+						}
+						if(CollectionUtils.size(gatewayFirst.getOutgoingTransitions())>1){
+							if(gatewayNestedNum>0){
+								gatewayNestedNum--;
+							}
+							else{
+								end = i;
+								break;
+							}
+						}
+					}
+				}
+				for(int i=begin;i<end+1;i++){
+					betweenGatewayActivity.add(HistoricActivityInstanceEntityList.get(i).getActivityId());
+				}
+				for(PvmTransition pvmTransition:incomingtTransition){
+					ActivityImpl sourceActivityImpl = (ActivityImpl)pvmTransition.getSource();
+					if(betweenGatewayActivity.contains(sourceActivityImpl.getActivityId())){
+						realTransition.add(pvmTransition);
+					}
+				}
+			}
+		}
+		else{
+			realTransition=incomingtTransition;
+		}
+		return realTransition;
+	}
+
+	/**
+	 * 获取所有的HistoricActivityInstance，并转换成HistoricActivityInstanceEntity
+	 * @param processInstanceId 流程实例ID
+	 * @return 历史节点实例
+	 */
+	private List<HistoricActivityInstanceEntity> getHistoricActivityInstanceEntityList(String processInstanceId){
+		List<HistoricActivityInstance> instances =historyService
+				.createHistoricActivityInstanceQuery()
+				.processInstanceId(processInstanceId)
+				.finished()
+				.orderByHistoricActivityInstanceEndTime()
+				.desc()
+				.orderByHistoricActivityInstanceStartTime()
+				.desc()
+				.list();
+		List<HistoricActivityInstanceEntity> entities = new ArrayList<>();
+		for(HistoricActivityInstance instance:instances){
+			HistoricActivityInstanceEntity entity = (HistoricActivityInstanceEntity)instance;
+			entities.add(entity);
+		}
+		return entities;
+	}
+
+	/**
+	 * 获取历史执行UserTask的activityId数据
+	 * @param processInstanceId 流程实例ID
+	 * @return 历史执行UserTask的activityId数据
+	 */
+	private List<String> gethistoricUserTaskActIdList(String processInstanceId){
+        /*List<HistoricActivityInstance> instances =historyService
+                .createHistoricActivityInstanceQuery()
+                .processInstanceId(processInstanceId)
+                .activityType("userTask")
+                .finished()
+                .orderByHistoricActivityInstanceEndTime()
+                .asc()
+                .list();
+        List<HistoricActivityInstanceEntity> entities = new ArrayList<>();
+        for(HistoricActivityInstance instance:instances){
+            HistoricActivityInstanceEntity entity = (HistoricActivityInstanceEntity)instance;
+            if(entity.getActivityInstanceState()==4){
+                entities.add(entity);
+            }
+        }*/
+		List<HistoricActivityInstanceEntity> entityList = getHistoricActivityInstanceEntityList(processInstanceId);
+		return entityList.stream().filter(p->StringUtils.equals(p.getActivityType(),"userTask")).filter(p->p.getActivityInstanceState()==4).map(HistoricActivityInstanceEntity::getActivityId).collect(Collectors.toList());
+	}
+
+	/**
+	 * 获取ACT_RU_EXECTION数据
+	 * @param processInstanceId 流程实例ID
+	 * @return ACT_RU_EXECTION数据
+	 */
+	private List<ExecutionEntity> getExecutionListByProcessInstanceId(String processInstanceId){
+		List<Execution> executionList = runtimeService.createExecutionQuery().processInstanceId(processInstanceId).list();
+		List<ExecutionEntity> execEntityList = new ArrayList<>();
+		for(Execution e:executionList){
+			execEntityList.add((ExecutionEntity)e);
+		}
+		return execEntityList;
+	}
+
+
+	/**
+	 * 从需要回退的节点向后找,根据ACT_RU_EXECUTION表，找到所有待执行状态的userTask
+	 * @param executionEntityList
+	 * @param act
+	 * @param cancelSet
+	 */
+	public void findNeedCanceledUserTask(List<ExecutionEntity> executionEntityList,ActivityImpl act, Set<ExecutionEntity> cancelSet){
+		List<PvmTransition> outgoingList = act.getOutgoingTransitions();
+		if(CollectionUtils.isEmpty(outgoingList)){
+			return;
+		}
+		for(PvmTransition pvmTransition:outgoingList) {
+			ActivityImpl destinationActivityImpl = (ActivityImpl) pvmTransition.getDestination();
+			for(ExecutionEntity e:executionEntityList){
+				if(StringUtils.equals(destinationActivityImpl.getActivityId(),e.getActivityId())){
+					cancelSet.add(e);
+				}
+			}
+			findNeedCanceledUserTask(executionEntityList,destinationActivityImpl,cancelSet);
+		}
 	}
 
 	@Override
@@ -350,7 +581,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		}
 
 		if(finished == null){
-			
+
 		}else if(finished){
 			query.finished();
 		}else{
@@ -368,7 +599,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			query.startedBy(username);
 		}
 		if(finished == null){
-			
+
 		}else if(finished){
 			query.finished();
 		}else{
@@ -397,7 +628,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		criteria2HistoricTaskInstanceQuery(criteria, query);
 		return query.orderByHistoricActivityInstanceStartTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<HistoricTaskInstance> pagingHistoricTaskListPageByCandidateUser(String username, Criteria criteria,
@@ -411,7 +642,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		criteria2HistoricTaskInstanceQuery(criteria, query);
 		return query.orderByHistoricActivityInstanceStartTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public long countHistoricTaskListByCandidateUser(String username, Criteria criteria, boolean finished) {
@@ -424,7 +655,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		criteria2HistoricTaskInstanceQuery(criteria, query);
 		return query.count();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<Task> pagingCandidateGroupTasks(Set<String> authorities,
@@ -434,7 +665,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		criteria2TaskQuery(criteria, taskQuery);
 		return taskQuery.orderByTaskCreateTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public long countCandidateGroupTasks(Set<String> authorities, Criteria criteria) {
@@ -460,7 +691,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			query.taskAssignee(username); // 当前处理人
 		}
 		criteria2TaskQuery(criteria, query);
-		return query.orderByTaskCreateTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
+		return query.orderByTaskVariable(CamundaConstant.BPMN_SORT_FLAG, ValueType.NUMBER).desc().orderByTaskCreateTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
 	}
 
 	@Override
@@ -494,7 +725,13 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 	public String getTitleByInstanceId(String id) {
 		String title = null;
 		try{
-			title = runtimeService.getVariable(id, CamundaConstant.BPMN_TITLE).toString();
+			//title = runtimeService.getVariable(id, CamundaConstant.BPMN_TITLE).toString();
+			HistoricVariableInstanceQuery hisVarQuery = historyService.createHistoricVariableInstanceQuery().processInstanceId(id).variableName(CamundaConstant.BPMN_TITLE);
+			List<HistoricVariableInstance> hisVarList = hisVarQuery.list();
+			if(CollectionUtils.isNotEmpty(hisVarList)){
+				title = hisVarList.get(0).getValue().toString();
+			}
+
 		} catch (Exception ignored){
 
 		}
@@ -513,14 +750,22 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public long countHistoricTaskListByUser(String username, boolean finished) {
-		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
+	public long countHistoricTaskListByUser(String username, Criteria criteria, boolean finished) {
+		/*HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery();
 		if(finished){
 			query.finished();
 		}else{
 			query.unfinished();
 		}
-		return query.taskAssignee(username).count();
+		return query.taskAssignee(username).count();*/
+		HistoricTaskInstanceQuery query = historyService.createHistoricTaskInstanceQuery().taskAssignee(username);
+		if(finished){
+			query.finished();
+		}else{
+			query.unfinished();
+		}
+		criteria2HistoricTaskInstanceQuery(criteria, query);
+		return query.count();
 	}
 
 	@Override
@@ -529,7 +774,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
         return historyService.createHistoricTaskInstanceQuery()
 				.processInstanceId(processInstanceId).finished().orderByHistoricTaskInstanceEndTime().asc().list();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<HistoricActivityInstance> getHistoricActivityByProcessInstanceId(String processInstanceId) {
@@ -586,7 +831,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		}
 		taskDetail.setStartDatas(startDatas);
 	}
-	
+
 	/**
      * 获取上一节点信息
      * 分两种情况：
@@ -647,7 +892,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
         }
         return null;
     }
-    
+
     private String getInstanceIdForActivity(ActivityInstance activityInstance, String activityId) {
         ActivityInstance instance = getChildInstanceForActivity(activityInstance, activityId);
         if (instance != null) {
@@ -696,6 +941,106 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		return ResultMessage.success("领取成功！");
 	}
 
+	/**
+	 * 获取所有任务，包括组任务，候选任务，活动任务
+	 * @param username 用户名
+	 * @param authorities 组
+	 * @param criteria 查询构造器
+	 * @return 任务列表
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public AllTaskRetVO getAllTasks(String username, Set<String> authorities, Criteria criteria,Pageable pageAble){
+
+		criteria = criteria.or().addCriterion("assignee",Operator.EQ,username)
+				.addCriterion("candidateUser",Operator.EQ,username)
+				.addCriterion("candidateGroup",Operator.IN,authorities)
+				.end();
+
+		Page<BpmnTask> bpmnTaskList = JpaUtil.linq(BpmnTask.class).where(criteria).paging(pageAble);
+
+		AllTaskRetVO retVO = new AllTaskRetVO();
+
+		List<TaskVO> allTasks = new ArrayList<>();
+		for(BpmnTask bpmnTask:bpmnTaskList.getContent()){
+			HistoricProcessInstance historicProcessInstance = this.getHistoricProcessInstanceById(bpmnTask.getProcessInstanceId());
+			TaskVO taskVO = new TaskVO(bpmnTask, historicProcessInstance);
+			if(StringUtils.isNotBlank(bpmnTask.getAssignee())){
+				taskVO.setTaskType("active");
+			}
+			else if(StringUtils.isNotBlank(bpmnTask.getCandidateUser())){
+				taskVO.setTaskType("candidateUser");
+			}
+			else if(StringUtils.isNotBlank(bpmnTask.getCandidateGroup())){
+				taskVO.setTaskType("candidateGroup");
+			}
+			else{
+				continue;
+			}
+			String formKey = this.getTaskFormKey(bpmnTask.getProcessDefinitionId(), bpmnTask.getTaskDefinitionKey());
+			//自引用，防止getTitleByInstanceId的@Cacheable方法失效
+			taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
+			taskVO.setHasForm(StringUtils.isNotEmpty(formKey));
+			allTasks.add(taskVO);
+		}
+
+		retVO.setAllTasks(allTasks);
+		retVO.setCount(bpmnTaskList.getTotalElements());
+		return retVO;
+
+		/*//活动任务
+		TaskQuery activeTaskQuery = taskService.createTaskQuery().active().taskAssignee(username);
+		criteria2TaskQuery(criteria, activeTaskQuery);
+		List<Task> activeTaskList = activeTaskQuery.list();
+		//候选任务
+		TaskQuery candidateUserTaskQuery = taskService.createTaskQuery().taskCandidateUser(username).active().taskUnassigned();
+		criteria2TaskQuery(criteria, candidateUserTaskQuery);
+		List<Task> candidateUserTaskList = candidateUserTaskQuery.list();
+		//组任务
+		TaskQuery candidateGroupTaskQuery = taskService.createTaskQuery().active().taskCandidateGroupIn(new ArrayList<>(authorities)).taskUnassigned();
+		criteria2TaskQuery(criteria, candidateGroupTaskQuery);
+		List<Task> candidateGroupTaskList = candidateGroupTaskQuery.list();
+
+		List<TaskVO> allTasks = new ArrayList<>();
+		for(Task t:activeTaskList){
+			HistoricProcessInstance historicProcessInstance = this.getHistoricProcessInstanceById(t.getProcessInstanceId());
+			TaskVO taskVO = new TaskVO(t, historicProcessInstance);
+			taskVO.setTaskType("active");
+			allTasks.add(taskVO);
+		}
+		for(Task t:candidateUserTaskList){
+			HistoricProcessInstance historicProcessInstance = this.getHistoricProcessInstanceById(t.getProcessInstanceId());
+			TaskVO taskVO = new TaskVO(t, historicProcessInstance);
+			taskVO.setTaskType("candidateUser");
+			allTasks.add(taskVO);
+		}
+		for(Task t:candidateGroupTaskList){
+			HistoricProcessInstance historicProcessInstance = this.getHistoricProcessInstanceById(t.getProcessInstanceId());
+			TaskVO taskVO = new TaskVO(t, historicProcessInstance);
+			taskVO.setTaskType("candidateGroup");
+			allTasks.add(taskVO);
+		}
+
+		Comparator<TaskVO> comparator = criteria2Comparator(criteria);
+		if(comparator!=null){
+			allTasks=allTasks.stream().sorted(comparator).collect(Collectors.toList());
+		}
+		AllTaskRetVO retVO = new AllTaskRetVO();
+		retVO.setAllTasks(allTasks);
+		retVO.setCount((long) allTasks.size());
+		return retVO;*/
+	}
+
+	@Override
+	public ResultMessage urgent(String processInstanceId) {
+		try{
+			runtimeService.setVariable(processInstanceId, CamundaConstant.BPMN_SORT_FLAG, "1");
+		}catch (Exception e) {
+			return ResultMessage.error("加急失败！");
+		}
+		return ResultMessage.success("加急成功！");
+	}
+
 	private Task getTaskById(String taskId){
 		return taskService.createTaskQuery().taskId(taskId).singleResult();
 	}
@@ -721,6 +1066,21 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 							if (Operator.EQ == ((SimpleCriterion) criterion).getOperator()) {
 								query.processDefinitionName(((SimpleCriterion) criterion).getValue() + "");
 							}
+							else if(Operator.LIKE == ((SimpleCriterion) criterion).getOperator()) {
+								query.processDefinitionNameLike("%" + ((SimpleCriterion) criterion).getValue() + "%");
+							}
+							break;
+						case "processDefinitionKey":
+							if (Operator.EQ == ((SimpleCriterion) criterion).getOperator()) {
+								String values = ((SimpleCriterion) criterion).getValue() + "";
+								String [] valueArray = values.split(",");
+								query.processDefinitionKeyIn(valueArray);
+							}
+							break;
+						case "taskId":
+							if (Operator.EQ == ((SimpleCriterion) criterion).getOperator()) {
+								query.taskId(((SimpleCriterion) criterion).getValue()+ "");
+							}
 							break;
 						default:
 							if (Operator.EQ == ((SimpleCriterion) criterion).getOperator()) {
@@ -734,6 +1094,60 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			}
 		}
 	}
+
+	private Comparator<TaskVO>  criteria2Comparator(Criteria criteria){
+		List<Order> orderList = criteria.getOrders();
+		if(CollectionUtils.isEmpty(orderList)){
+			return null;
+		}
+		Comparator<TaskVO> comparator = null;
+		for(Order order:orderList){
+			String orderField = order.getFieldName();
+			boolean desc = order.isDesc();
+			switch (orderField){
+				case "id":
+					if(desc){
+						if(comparator==null){
+							comparator = Comparator.comparing(TaskVO::getId,Comparator.reverseOrder());
+						}
+						else{
+							comparator = comparator.thenComparing(TaskVO::getId,Comparator.reverseOrder());
+						}
+					}else{
+						if(comparator==null){
+							comparator = Comparator.comparing(TaskVO::getId);
+						}
+						else{
+							comparator = comparator.thenComparing(TaskVO::getId);
+						}
+					}
+					break;
+				case "createTime":
+					if(desc){
+						if(comparator==null){
+							comparator = Comparator.comparing(TaskVO::getCreateTime,Comparator.reverseOrder());
+						}
+						else{
+							comparator = comparator.thenComparing(TaskVO::getCreateTime,Comparator.reverseOrder());
+						}
+					}
+					else{
+						if(comparator==null){
+							comparator = Comparator.comparing(TaskVO::getCreateTime);
+						}
+						else{
+							comparator = comparator.thenComparing(TaskVO::getCreateTime);
+						}
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		return comparator;
+	}
+
+
 
 	private void criteria2HistoricTaskInstanceQuery(Criteria criteria, HistoricTaskInstanceQuery query){
 		if(criteria != null){
@@ -750,6 +1164,13 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 						case "processDefinitionName":
 							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
 								query.processDefinitionName(((SimpleCriterion) criterion).getValue() + "");
+							}
+							break;
+						case "procStartUserId":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processVariableValueEquals("createBy", ((SimpleCriterion) criterion).getValue());
+							}else{
+								query.processVariableValueLike("createBy", "%" + ((SimpleCriterion) criterion).getValue() + "%");
 							}
 							break;
 						default:

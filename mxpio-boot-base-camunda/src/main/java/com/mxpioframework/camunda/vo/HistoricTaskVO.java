@@ -24,6 +24,7 @@ public class HistoricTaskVO implements Serializable, DictAble {
 		this.canceled = activity.isCanceled();
 		this.activityType = activity.getActivityType();
 		this.activityId = activity.getActivityId();
+		this.startTime = activity.getStartTime();
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -43,7 +44,9 @@ public class HistoricTaskVO implements Serializable, DictAble {
 	@Schema(description = "操作人")
 	@Dict(dicCode = "username", dicEntity = User.class, dicText = "nickname")
 	private String assignee;
-	
+
+	@Schema(description = "开始时间")
+	private Date startTime;
 	@Schema(description = "结束时间")
 	private Date endTime;
 	

@@ -38,7 +38,7 @@ public class ScriptServiceImpl implements ScriptService {
 	@Autowired
 	private DatabaseNameService databaseNameService;
 	
-	@Value("${spring.sql.init.platform:all}")
+	@Value("${spring.sql.init.platform:mysql}")
 	private String platform;
 	
 	@Value("${spring.sql.init.continue-on-error:true}")
@@ -67,7 +67,7 @@ public class ScriptServiceImpl implements ScriptService {
 	}
 
 	private List<Resource> getScripts(String locations, String fallback) {
-		if (StringUtils.hasLength(locations)) {
+		if (!StringUtils.hasLength(locations)) {
 			// String platform = this.properties.getPlatform();
 			locations = "classpath*:" + fallback + "-" + platform + ".sql,";
 			locations += "classpath*:" + fallback + ".sql";

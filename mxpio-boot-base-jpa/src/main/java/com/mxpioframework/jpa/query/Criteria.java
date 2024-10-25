@@ -10,28 +10,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Criteria {
 
 	@JsonProperty(value = "criterions")
-	private List<Object> criterions = new ArrayList<Object>();
+	private List<Object> criterions = new ArrayList<>();
 
 	@JsonProperty(value = "orders")
-	private List<Order> orders = new ArrayList<Order>();
+	private List<Order> orders = new ArrayList<>();
 	
 	@JsonIgnore
 	private Stack<JunctionStack> stack;
 
 	/**
 	 * 构建查询构造器对象
-	 * @return
+	 * @return 构造器
 	 */
 	public static Criteria create() {
 		Criteria c = new Criteria();
-		c.setStack(new Stack<JunctionStack>());
-		return c;
+        return create(c);
 	}
 	
 	/**
 	 * 构建查询构造器对象
-	 * @param c
-	 * @return
+	 * @param c 源构造器
+	 * @return 构造器
 	 */
 	public static Criteria create(Criteria c) {
 		c.setStack(new Stack<JunctionStack>());
@@ -40,7 +39,7 @@ public class Criteria {
 	
 	/**
 	 * 添加Or联合条件
-	 * @return
+	 * @return 构造器
 	 */
 	public Criteria or() {
 		JunctionStack junctionStack = JunctionStack.create(JunctionType.OR);
@@ -50,7 +49,7 @@ public class Criteria {
 	
 	/**
 	 * 添加and联合条件
-	 * @return
+	 * @return 构造器
 	 */
 	public Criteria and() {
 		JunctionStack junctionStack = JunctionStack.create(JunctionType.AND);
@@ -60,7 +59,7 @@ public class Criteria {
 	
 	/**
 	 * 结束联合添加
-	 * @return
+	 * @return 构造器
 	 */
 	public Criteria end() {
 		JunctionStack junctionStack = stack.pop();
@@ -77,8 +76,8 @@ public class Criteria {
 	/**
 	 * 增加简单条件表达式
 	 * 
-	 * @param criterion
-	 * @return
+	 * @param criterion 条件
+	 * @return 构造器
 	 */
 	public Criteria addCriterion(Object criterion) {
 		if (criterion != null) {
@@ -93,10 +92,10 @@ public class Criteria {
 	
 	/**
 	 * 增加简单条件表达式
-	 * @param propertyName
-	 * @param filterOperator
-	 * @param value
-	 * @return
+	 * @param propertyName 属性名
+	 * @param filterOperator 过滤类别
+	 * @param value 属性值
+	 * @return 构造器
 	 */
 	public Criteria addCriterion(String propertyName, Operator filterOperator, Object value) {
 		if(stack.empty()) {
@@ -126,8 +125,8 @@ public class Criteria {
 	
 	/**
 	 * 添加Order
-	 * @param order
-	 * @return
+	 * @param order 排序对象
+	 * @return 构造器
 	 */
 	public Criteria addOrder(Order order) {
 		if (order != null) {

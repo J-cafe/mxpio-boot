@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sql.DataSource;
 
@@ -48,7 +49,7 @@ public class DbCommonServiceImpl implements IDbCommonService {
 	@Autowired
 	private Collection<IDialect> dialects;
 
-	
+
 	@Autowired
 	private DataSource dataSource;
 
@@ -56,9 +57,10 @@ public class DbCommonServiceImpl implements IDbCommonService {
 	@Qualifier(IConsoleDbInfoManager.BEAN_ID)
 	private IConsoleDbInfoManager consoleDbInfoManager;
 
+	private final Map<String, DataSource> dataSourceMap = new ConcurrentHashMap<>();
 	@Override
 	public List<TableInfo> findTableInfos(String dbInfoId) throws Exception {
-		List<TableInfo> tablesList = new ArrayList<TableInfo>();
+		List<TableInfo> tablesList = new ArrayList<>();
 		DataSource ds = this.getDataSourceByDbInfoId(dbInfoId);
 		Connection conn = null;
 		ResultSet rs = null;
@@ -89,7 +91,7 @@ public class DbCommonServiceImpl implements IDbCommonService {
 			JdbcUtils.closeConnection(conn);
 		}
 	}
-	
+
 	@Override
 	public List<TableInfo> findViewInfos(String dbInfoId) throws Exception {
 		List<TableInfo> tablesList = new ArrayList<TableInfo>();
@@ -123,10 +125,10 @@ public class DbCommonServiceImpl implements IDbCommonService {
 			JdbcUtils.closeConnection(conn);
 		}
 	}
-	
+
 	@Override
 	public List<ProcInfo> findProcInfos(String dbInfoId) throws Exception {
-		List<ProcInfo> procsList = new ArrayList<ProcInfo>();
+		List<ProcInfo> procsList = new ArrayList<>();
 		DataSource ds = this.getDataSourceByDbInfoId(dbInfoId);
 		Connection conn = null;
 		ResultSet rs = null;
@@ -155,7 +157,7 @@ public class DbCommonServiceImpl implements IDbCommonService {
 			rs1 = metaData.getProcedureColumns(null, schema, "test111", "%");
 			ResultSetMetaData rsmd1 = rs1.getMetaData();
 			int count = rsmd1.getColumnCount();
-			
+
 			while (rs1.next()) {
 				for(int i=1; i<=count; i++){
 					System.out.println(rsmd1.getColumnLabel(i)+":"+rs1.getString(i));
@@ -170,14 +172,14 @@ public class DbCommonServiceImpl implements IDbCommonService {
 	}
 
 	public List<ColumnInfo> findColumnInfos(String dbInfoId, String tableName) throws Exception {
-		List<ColumnInfo> list = new ArrayList<ColumnInfo>();
+		List<ColumnInfo> list = new ArrayList<>();
 		if (StringUtils.hasText(tableName) && StringUtils.hasText(dbInfoId)) {
 			list = this.findMultiColumnInfos(dbInfoId, "select * from " + tableName);
 			List<String> primaryKeys = this.findTablePrimaryKeys(dbInfoId, tableName);
 			for (ColumnInfo ci : list) {
 				ci.setIsprimaryKey(false);
 				for (String key : primaryKeys) {
-					if (key.toLowerCase().equals(ci.getColumnName().toLowerCase())) {
+					if (key.equalsIgnoreCase(ci.getColumnName())) {
 						ci.setIsprimaryKey(true);
 					}
 				}
@@ -202,8 +204,14 @@ public class DbCommonServiceImpl implements IDbCommonService {
 		if (dbInfoId.equals(DbConstants.DEFAULTDATASOURCE)) {
 			return dataSource;
 		}
+		DataSource ds = dataSourceMap.get(dbInfoId);
+		if(ds != null){
+			return ds;
+		}
 		DbInfo dbInfo = consoleDbInfoManager.findDbInfosById(dbInfoId);
-		return this.createDataSource(dbInfo.getUrl(), dbInfo.getDriverClass(), dbInfo.getUsername(), dbInfo.getPassword());
+		ds = this.createDataSource(dbInfo.getUrl(), dbInfo.getDriverClass(), dbInfo.getUsername(), dbInfo.getPassword());
+		dataSourceMap.put(dbInfoId, ds);
+		return ds;
 	}
 
 	@Override
@@ -358,7 +366,17 @@ public class DbCommonServiceImpl implements IDbCommonService {
 		}
 		return null;
 	}
-	
+
+	@Override
+	public List<Map<String, Object>> queryListBySql(String dbInfoId, String sql) throws Exception {
+		if (StringUtils.hasText(dbInfoId)) {
+			DataSource ds = this.getDataSourceByDbInfoId(dbInfoId);
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(ds);
+			return jdbcTemplate.queryForList(sql);
+		}
+		return null;
+	}
+
 	@Override
 	public Page<Map<String, Object>> pagingSqlData(String dbInfoId, String sql, Pageable page) throws Exception {
 		if (StringUtils.hasText(dbInfoId)) {
@@ -367,11 +385,11 @@ public class DbCommonServiceImpl implements IDbCommonService {
 
 			selectSql.append(sql.replace(";", " "));
 			countSql.append("select count(*) from (" + selectSql + ") A");
-			
+
 			DataSource ds = this.getDataSourceByDbInfoId(dbInfoId);
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(ds);
 			IDialect dialect = this.getDBDialectByDbInfoId(jdbcTemplate);
-			
+
 			List<Map<String, Object>> listData;
 			if (page.getPageSize() != -1 && page.getPageNumber() != -1) {
 				String paginationSql = dialect.getPaginationSql(selectSql.toString(), page.getPageNumber(), page.getPageSize());
@@ -380,9 +398,9 @@ public class DbCommonServiceImpl implements IDbCommonService {
 				listData = jdbcTemplate.queryForList(selectSql.toString());
 			}
 			long totalCount = jdbcTemplate.queryForObject(countSql.toString(),Long.class);
-			
+
 			Page<Map<String, Object>> result = new PageImpl<Map<String, Object>>(listData, page, totalCount);
-			
+
 			return result;
 		}
 		return null;
@@ -397,7 +415,7 @@ public class DbCommonServiceImpl implements IDbCommonService {
 		}
 		return null;
 	}
-	
+
 	protected IDialect getDialect(JdbcTemplate jdbcTemplate){
 		return jdbcTemplate.execute(new ConnectionCallback<IDialect>(){
 			public IDialect doInConnection(Connection connection) throws SQLException,
@@ -424,7 +442,7 @@ public class DbCommonServiceImpl implements IDbCommonService {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(ds);
 		return this.getDBDialectByDbInfoId(jdbcTemplate);
 	}
-	
+
 	public IConsoleDbInfoManager getConsoleDbInfoManager() {
 		return consoleDbInfoManager;
 	}

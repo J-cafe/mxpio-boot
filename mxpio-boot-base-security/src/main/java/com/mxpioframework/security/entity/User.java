@@ -122,11 +122,17 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 	private boolean pwdExpiredFlag = false;
 
 	@Transient
+	@Schema(description = "租户")
 	private Object organization;
 
 	@Transient
 	@Schema(description = "用户部门")
 	private Dept dept;
+
+	@Transient
+	@Schema(description = "个性化配置")
+	private Collection<UserProfile> profiles;
+
 	@Transient
 	private Collection<? extends GrantedAuthority> authorities;
 
@@ -342,5 +348,13 @@ public class User extends BaseEntity implements UserDetails, OrganizationSupport
 
 	public void setConcurrentPostIds(String concurrentPostIds) {
 		this.concurrentPostIds = concurrentPostIds;
+	}
+
+	public Collection<UserProfile> getProfiles() {
+		return profiles;
+	}
+
+	public void setProfiles(Collection<UserProfile> profiles) {
+		this.profiles = profiles;
 	}
 }

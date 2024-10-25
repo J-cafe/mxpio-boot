@@ -23,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Configuration
-@AutoConfigureBefore({JpaRepositoriesAutoConfiguration.class})
 @ConditionalOnClass(MultitenantConfiguration.class)
 @AutoConfigureAfter({SecurityAutoConfiguration.class})
 @Import({MultitenantConfiguration.class})

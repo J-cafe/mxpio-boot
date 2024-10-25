@@ -19,6 +19,14 @@ spring:
     username: root
     password: mxp9827459
     driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      continue-on-error: true
+      mode: always
+      encoding: UTF-8
+      platform: mysql
+      schema-locations: classpath*:schema-${spring.sql.init.platform}.sql
+      data-locations: classpath*:data-${spring.sql.init.platform}.sql,classpath*:data.sql
   redis:
     host: 127.0.0.1
     port: 6379
@@ -53,11 +61,6 @@ spring:
             threadCount: 10
             threadPriority: 5
             threadsInheritContextClassLoaderOfInitializingThread: true
-  sql:
-    init:
-      continue-on-error: true
-      mode: always
-      encoding: UTF-8
 management:
   endpoints:
     web:
@@ -70,3 +73,7 @@ camunda:
       schema-update: true
     history-level: FULL
     auto-deployment-enabled: false # 自动部署 resources 下的 bpmn文件
+    eventing:
+      execution: true
+      history: true
+      task: true

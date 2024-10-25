@@ -30,9 +30,4 @@ public class MysqlDataSourceCreateListener implements DataSourceCreateListener {
 		}
 		
 	}
-
-	
-
-	
-
 }

@@ -16,15 +16,15 @@ public interface BaseService<T extends BaseEntity> {
 	
 	/**
 	 * 通用智能保存（智能保存默认会处理@Transient属性）
-	 * @param entity
-	 * @return
+	 * @param entity 实体
+	 * @return 保存后实体对象
 	 */
 	public T save(T entity);
 	
 	/**
 	 * 通用智能保存（智能保存默认会处理@Transient属性）
-	 * @param entities
-	 * @return
+	 * @param entities 实体集合
+	 * @return 保存后实体对象集合
 	 */
 	public Collection<T> save(Collection<T> entities);
 	

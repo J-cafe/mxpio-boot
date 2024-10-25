@@ -27,6 +27,7 @@ import com.mxpioframework.security.common.Constants;
 				Constants.USER_POST_CODE_CACHE_KEY,
 				Constants.USER_DEPT_ID_CACHE_KEY,
 				Constants.DEPT_CACHE_KEY,
+				Constants.DEPT_CODE_CACHE_KEY,
 				Constants.DATA_FILTER_ROLE_CACHE_KEY,
 		}, keyGenerator = Constants.KEY_GENERATOR_BEAN_NAME)
 })

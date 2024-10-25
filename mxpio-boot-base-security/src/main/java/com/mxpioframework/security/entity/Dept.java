@@ -45,6 +45,7 @@ public class Dept extends BaseEntity implements Actor {
 
 	@Schema(description = "部门负责人")
 	@Column(name = "DEPT_MANAGER_")
+	@Dict(dicCode = "username", dicEntity = User.class,dicText = "nickname")
 	private String deptManager;
 
 	@Schema(description = "部门级别")

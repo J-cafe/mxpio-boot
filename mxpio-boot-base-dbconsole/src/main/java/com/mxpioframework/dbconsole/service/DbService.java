@@ -47,7 +47,7 @@ public class DbService extends DbCommonServiceImpl {
 	 * 初始化默认数据库配置信息
 	 * 
 	 * @return 返回DbInfo对象
-	 * @throws Exception
+	 * @throws Exception 失败异常
 	 */
 	public DbInfo initDefaultDbInfo() throws Exception {
 		DbInfo dbInfo = new DbInfo();
@@ -74,10 +74,10 @@ public class DbService extends DbCommonServiceImpl {
 	 * 查询用户的所有数据库连接信息
 	 * 
 	 * @return 返回DbInfo的集合
-	 * @throws Exception
+	 * @throws Exception 失败异常
 	 */
 	public List<DbInfo> findDbInfos() throws Exception {
-		List<DbInfo> list = new ArrayList<DbInfo>();
+		List<DbInfo> list;
 		list = this.getConsoleDbInfoManager().findDbInfos();
 		list.add(this.initDefaultDbInfo());
 		return list;
@@ -86,10 +86,10 @@ public class DbService extends DbCommonServiceImpl {
 	/**
 	 * 修改表名称
 	 * 
-	 * @param dbInfoId
-	 * @param tableName
-	 * @param newTableName
-	 * @throws Exception
+	 * @param dbInfoId 数据库ID
+	 * @param tableName 表名
+	 * @param newTableName 新表名
+	 * @throws Exception 修改失败异常
 	 */
 	public void alertTableName(String dbInfoId, String tableName, String newTableName) throws Exception {
 		IDialect dialect = getDBDialectByDbInfoId(dbInfoId);
@@ -102,9 +102,9 @@ public class DbService extends DbCommonServiceImpl {
 	/**
 	 * 删除表
 	 * 
-	 * @param dbInfoId
-	 * @param tableName
-	 * @throws Exception
+	 * @param dbInfoId 数据库ID
+	 * @param tableName 表名
+	 * @throws Exception 失败异常
 	 */
 	public void deleteTable(String dbInfoId, String tableName) throws Exception {
 		String sql = " drop table " + tableName;
@@ -115,9 +115,9 @@ public class DbService extends DbCommonServiceImpl {
 	/**
 	 * 删除表内数据
 	 * 
-	 * @param dbInfoId
-	 * @param tableName
-	 * @throws Exception
+	 * @param dbInfoId 数据库ID
+	 * @param tableName 表名
+	 * @throws Exception 失败异常
 	 */
 	public void deleteTableData(String dbInfoId, String tableName) throws Exception {
 		String sql = " delete from " + tableName;
@@ -128,10 +128,10 @@ public class DbService extends DbCommonServiceImpl {
 	/**
 	 * 删除表列
 	 * 
-	 * @param dbInfoId
-	 * @param tableName
-	 * @param columnName
-	 * @throws Exception
+	 * @param dbInfoId 数据库ID
+	 * @param tableName 表名
+	 * @param columnName 字段名
+	 * @throws Exception 失败异常
 	 */
 	public void deleteColumn(String dbInfoId, String tableName, String columnName) throws Exception {
 		String sql = "alter table " + tableName + "  drop column " + columnName;
@@ -142,9 +142,9 @@ public class DbService extends DbCommonServiceImpl {
 	/**
 	 * 插入表新列
 	 * 
-	 * @param dbInfoId
-	 * @param columnInfo
-	 * @throws Exception
+	 * @param dbInfoId 数据库ID
+	 * @param columnInfo 字段信息
+	 * @throws Exception 失败异常
 	 */
 	public void insertColumn(String dbInfoId, ColumnInfo columnInfo) throws Exception {
 		com.mxpioframework.dbconsole.jdbc.dialect.ColumnInfo dbColumnInfo = new com.mxpioframework.dbconsole.jdbc.dialect.ColumnInfo();
@@ -157,7 +157,7 @@ public class DbService extends DbCommonServiceImpl {
 			primaryKeys.add(columnName);
 			dbColumnInfo.setListPrimaryKey(primaryKeys);
 			String pkName = this.findSqlServerPKIndex(dbInfoId, tableName);
-			log.debug("pkName:" + pkName);
+            log.debug("pkName:{}", pkName);
 			if (StringUtils.hasText(pkName)) {
 				dbColumnInfo.setPkName(pkName);
 			}
@@ -172,10 +172,10 @@ public class DbService extends DbCommonServiceImpl {
 	/**
 	 * 更新表列
 	 * 
-	 * @param dbInfoId
-	 * @param oldColumnInfo
-	 * @param newColumnInfo
-	 * @throws Exception
+	 * @param dbInfoId 数据库ID
+	 * @param oldColumnInfo 原字段信息
+	 * @param newColumnInfo 新字段信息
+	 * @throws Exception 失败异常
 	 */
 	public void updateColumn(String dbInfoId, ColumnInfo oldColumnInfo, ColumnInfo newColumnInfo) throws Exception {
 		com.mxpioframework.dbconsole.jdbc.dialect.ColumnInfo oldDbColumnInfo = new com.mxpioframework.dbconsole.jdbc.dialect.ColumnInfo();
@@ -208,9 +208,9 @@ public class DbService extends DbCommonServiceImpl {
 	/**
 	 * 创建表
 	 * 
-	 * @param dbInfoId
-	 * @param tableName
-	 * @throws Exception
+	 * @param dbInfoId 数据库ID
+	 * @param tableName 表名
+	 * @throws Exception 失败异常
 	 */
 	public void createTable(String dbInfoId, String tableName) throws Exception {
 		IDialect dBDialect = getDBDialectByDbInfoId(dbInfoId);
@@ -225,7 +225,7 @@ public class DbService extends DbCommonServiceImpl {
 	 * @return 返回支持的数据库类型的集合
 	 */
 	public List<String> loadDbTypes() {
-		List<String> dbInfoList = new ArrayList<String>();
+		List<String> dbInfoList = new ArrayList<>();
 		try {
 			for (DbType type : DbType.values()) {
 				dbInfoList.add(type.name());
@@ -240,10 +240,10 @@ public class DbService extends DbCommonServiceImpl {
 	/**
 	 * 批处理更新操作
 	 * 
-	 * @param dbInfoId
-	 * @param sqls
+	 * @param dbInfoId 数据库ID
+	 * @param sqls 执行SQL
 	 * @return 返回更新的列的数量
-	 * @throws Exception
+	 * @throws Exception 失败异常
 	 */
 	public int[] updateSql(String dbInfoId, String[] sqls) throws Exception {
 		final String[] fsqls = this.getFormatArrays(sqls);
@@ -266,15 +266,15 @@ public class DbService extends DbCommonServiceImpl {
 	/**
 	 * 更新表操作
 	 * 
-	 * @param dbInfoId
-	 * @param sql
-	 * @param args
+	 * @param dbInfoId 数据库ID
+	 * @param sql 执行SQL
+	 * @param args 参数
 	 * @return 返回更新的列的数量
-	 * @throws Exception
+	 * @throws Exception 失败异常
 	 */
 	public int updateSql(String dbInfoId, final String sql, final Object[] args) throws Exception {
 		log.debug(sql);
-		List<SqlWrapper> list = new ArrayList<SqlWrapper>();
+		List<SqlWrapper> list = new ArrayList<>();
 		list.add(new SqlWrapper(sql, args));
 		int[] ints = updateSql(dbInfoId, list);
 		return ints.length > 0 ? ints[0] : 0;
@@ -283,10 +283,10 @@ public class DbService extends DbCommonServiceImpl {
 	/**
 	 * 对sqlwrapper进行更新
 	 * 
-	 * @param dbInfoId
-	 * @param listSqlWrapper
+	 * @param dbInfoId 数据库ID
+	 * @param listSqlWrapper SQLWrapper
 	 * @return 返回更新的数量
-	 * @throws Exception
+	 * @throws Exception 失败异常
 	 */
 	public int[] updateSql(String dbInfoId, final List<SqlWrapper> listSqlWrapper) throws Exception {
 		if (log.isDebugEnabled()) {
@@ -298,7 +298,7 @@ public class DbService extends DbCommonServiceImpl {
 		final TransactionTemplate transactionTemplate = SpringJdbcUtils.getTransactionTemplate(ds);
 		return transactionTemplate.execute(new TransactionCallback<int[]>() {
 			public int[] doInTransaction(TransactionStatus status) {
-				List<Integer> list = new ArrayList<Integer>();
+				List<Integer> list = new ArrayList<>();
 				JdbcTemplate jdbcTemplate = SpringJdbcUtils.getJdbcTemplate(transactionTemplate);
 				for (SqlWrapper sw : listSqlWrapper) {
 					if (StringUtils.hasText(sw.getSql().trim())) {
@@ -306,15 +306,14 @@ public class DbService extends DbCommonServiceImpl {
 						list.add(i);
 					}
 				}
-				int[] ints = ArrayUtils.toPrimitive((Integer[]) list.toArray(new Integer[list.size()]));
-				return ints;
+                return ArrayUtils.toPrimitive((Integer[]) list.toArray(new Integer[list.size()]));
 			}
 		});
 	}
 
 	private String[] getFormatArrays(String[] args) {
-		String[] newString = new String[] {};
-		List<String> list = new ArrayList<String>();
+		String[] newString;
+		List<String> list = new ArrayList<>();
 		for (String s : args) {
 			if (org.apache.commons.lang3.StringUtils.isNotEmpty(s.trim())) {
 				list.add(s);
@@ -327,10 +326,10 @@ public class DbService extends DbCommonServiceImpl {
 	/**
 	 * 查找sqlserver的主键索引
 	 * 
-	 * @param dbInofId
-	 * @param tableName
+	 * @param dbInofId 数据库ID
+	 * @param tableName 表名
 	 * @return 返回主键索引的值
-	 * @throws Exception
+	 * @throws Exception 失败异常
 	 */
 	public String findSqlServerPKIndex(String dbInofId, final String tableName) throws Exception {
 		DataSource ds = getDataSourceByDbInfoId(dbInofId);

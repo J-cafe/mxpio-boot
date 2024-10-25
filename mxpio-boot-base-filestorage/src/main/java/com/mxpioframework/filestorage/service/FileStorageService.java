@@ -27,9 +27,9 @@ public interface FileStorageService {
 
 	String getAbsolutePath(String fileNo) throws FileNotFoundException;
 
-	InputStream getInputStream(String fileNo) throws FileNotFoundException;
+	InputStream getInputStream(String fileNo) throws IOException;
 
-	InputStream getInputStream(MxpioFileInfo cokeFileInfo) throws FileNotFoundException;
+	InputStream getInputStream(MxpioFileInfo cokeFileInfo) throws IOException;
 
 	int remove(String fileNo) throws FileNotFoundException;
 }

@@ -1,10 +1,10 @@
 package com.mxpioframework.security;
 
 public class Constants {
-
+/*
 	public static final long DEFAULT_ACCESS_TOKEN_TIME_MS = 30 * 60 * 1000L;
 	
-	public static final long DEFAULT_REFRESH_TOKEN_TIME_MS = 4 * 30 * 60 * 1000L;
+	public static final long DEFAULT_REFRESH_TOKEN_TIME_MS = 4 * 30 * 60 * 1000L;*/
 	
 	public static final String JWT_TOKEN_SALT = "MXPIO";
 	
@@ -25,6 +25,10 @@ public class Constants {
             "/webjars/**",
             "/doc.html"
     };
+
+	public static final String[] MULTITENANT_WHITELIST = {
+			"/multitenant/register/*"
+	};
     
     public enum DatascopeEnum {
 		DEPT("DEPT", "部门过滤"), USER("USER", "用户过滤"),DEPT_AND_CHILD("DEPT_AND_CHILD", "部门及子部门过滤"),SERVICE("SERVICE", "服务");

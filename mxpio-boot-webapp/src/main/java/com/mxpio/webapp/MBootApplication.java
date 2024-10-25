@@ -24,7 +24,7 @@ public class MBootApplication {
         String path = env.getProperty("server.servlet.context-path");
         StringBuffer s = new StringBuffer();
         CommonConstant.getModules().forEach(item -> {
-        	s.append("\t--" + item.getModuleKey() + "：" + item.getModuleName() + "\n");
+        	s.append("\t--").append(item.getModuleKey()).append("：").append(item.getModuleName()).append("\n");
 		});
         log.info("\n----------------------------------------------------------\n\t" +
                 "Application MxpIO-Boot is running! Access URLs:\n\t" +

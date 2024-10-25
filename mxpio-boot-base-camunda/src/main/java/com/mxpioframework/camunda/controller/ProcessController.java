@@ -4,22 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.mxpioframework.camunda.CamundaConstant;
+import com.mxpioframework.camunda.dto.ResultMessage;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.mxpioframework.camunda.service.BpmnFlowService;
 import com.mxpioframework.camunda.vo.ProcessDefVO;
@@ -145,7 +142,7 @@ public class ProcessController {
 	public Result<?> start(@PathVariable(name = "key") String key,
 			@RequestParam(value="businessKey", required = false) String businessKey,
 			@RequestBody Map<String, Object> properties) {
-		
+        properties.putIfAbsent(CamundaConstant.BPMN_SORT_FLAG, "0");
 		ProcessInstance processInstance = bpmnFlowService.startWithFormByKey(key, SecurityUtils.getLoginUsername(), businessKey, properties);
 		return Result.OK("启动成功！", processInstance.getId());
 	}
@@ -164,5 +161,41 @@ public class ProcessController {
 		runtimeService.activateProcessInstanceById(instanceId);
 		return Result.OK();
 	}
+
+	@GetMapping("cancel/{instanceId}")
+	@Operation(summary = "取消流程", description = "取消流程", method = "GET")
+	public Result<?> cancel(@PathVariable(name = "instanceId") String instanceId) {
+		if(validatePermissions(instanceId)){
+			runtimeService.deleteProcessInstance(instanceId, "取消流程");
+		}else{
+			return Result.error("无可操作流程！");
+		}
+		return Result.OK();
+	}
+
+	@PutMapping("urgent/{processInstanceId}")
+	@Operation(summary = "流程加急", description = "流程加急", method = "POST")
+	public Result<?> urgent(@PathVariable(name = "processInstanceId") String processInstanceId){
+
+		ResultMessage msg = bpmnFlowService.urgent(processInstanceId);
+		if(msg.isSuccess()){
+			return Result.OK(msg.getMsg(), null);
+		}else{
+			return Result.error(msg.getMsg());
+		}
+	}
+
+	private boolean validatePermissions(String instanceId){
+		// 验证流程实例是否存在
+		ProcessInstanceQuery query = runtimeService.createProcessInstanceQuery();
+		ProcessInstance processInstance = query.processInstanceId(instanceId).singleResult();
+		if (processInstance == null) {
+			return false;
+		}
+
+		// 验证是否为发起人
+		String initiatorUserId = (String) runtimeService.getVariable(instanceId, CamundaConstant.BPMN_START_USER);
+        return initiatorUserId.equals(SecurityUtils.getLoginUsername());
+    }
 
 }

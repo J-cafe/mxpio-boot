@@ -63,7 +63,7 @@ public class SQLServer2005Dialect extends AbstractDialect{
 
 		// Wrap the query within a with statement:
 		sb.insert(0, "WITH query AS (").append(") SELECT * FROM query ");
-		sb.append("WHERE __hibernate_row_nr__ BETWEEN "+startNo+" AND "+endNo+"");
+		sb.append("WHERE __hibernate_row_nr__ BETWEEN ").append(startNo).append(" AND ").append(endNo);
 		return sb.toString();
 	}
 
@@ -87,7 +87,7 @@ public class SQLServer2005Dialect extends AbstractDialect{
 		sql.append(columnTypeSql);
 		if(!isnullAble){
 			sql.append(";");
-			sql.append("ALTER TABLE  "+tableName+" ALTER COLUMN "+columnName+columnTypeSql+ " NOT NULL ");;
+			sql.append("ALTER TABLE  ").append(tableName).append(" ALTER COLUMN ").append(columnName).append(columnTypeSql).append(" NOT NULL ");;
 		}
 		if(isprimaryKey){
 			if(primaryKeys.size()==1){
@@ -119,16 +119,16 @@ public class SQLServer2005Dialect extends AbstractDialect{
 		String cType=this.generateColumnTypeSql(columnType, columnSize);
 		StringBuilder sql=new StringBuilder();
 		 if(!oldColumnName.equals(newColumnName)){
-		    	sql.append(" sp_rename '"+tableName+"."+oldColumnName+"','"+newColumnName+"','column'");
+		    	sql.append(" sp_rename '").append(tableName).append(".").append(oldColumnName).append("','").append(newColumnName).append("','column'");
 		 }
 		 sql.append(";");
-		 if(isnullAble&&oldNullAble==false&&isprimaryKey!=true){
-				sql.append("ALTER TABLE  "+tableName+" ALTER COLUMN "+newColumnName+cType+ " NOT NULL ");
+		 if(isnullAble&& !oldNullAble && !isprimaryKey){
+				sql.append("ALTER TABLE  ").append(tableName).append(" ALTER COLUMN ").append(newColumnName).append(cType).append(" NOT NULL ");
 		 }else{
-				sql.append("ALTER TABLE  "+tableName+" ALTER COLUMN "+newColumnName+cType+this.generateCreateDefinitionSql(isnullAble));
+				sql.append("ALTER TABLE  ").append(tableName).append(" ALTER COLUMN ").append(newColumnName).append(cType).append(this.generateCreateDefinitionSql(isnullAble));
 		 }
 		if (isprimaryKey != oldPrimaryKey) {
-			if (primaryKeys.size() == 1 && isprimaryKey == true) {
+			if (primaryKeys.size() == 1 && isprimaryKey) {
 				sql.append(";");
 	    		sql.append(this.generateAlertPrimaryKeySql(tableName, primaryKeys));
 			} else {

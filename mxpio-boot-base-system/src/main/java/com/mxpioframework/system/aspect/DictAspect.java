@@ -15,21 +15,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class DictAspect {
 
-  @Autowired
-  private PojoDictParseService dictService;
+    @Autowired
+    private PojoDictParseService dictService;
 
-  // 定义切点Pointcut
-  @Pointcut("execution(public * *..*.*Controller.*(..))")
-  public void excudeService() {
-  }
-
-  @SuppressWarnings("rawtypes")
-  @Around("excudeService()")
-  public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
-    Object result = pjp.proceed();
-    if (result instanceof Result) {
-      dictService.parseDictResult((Result) result);
+    // 定义切点Pointcut
+    @Pointcut("execution(public * *..*.*Controller.*(..))")
+    public void excudeService() {
     }
-    return result;
-  }
+
+    @SuppressWarnings("rawtypes")
+    @Around("excudeService()")
+    public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
+        Object result = pjp.proceed();
+        if (result instanceof Result) {
+            dictService.parseDictResult((Result) result);
+        }
+        return result;
+    }
 }

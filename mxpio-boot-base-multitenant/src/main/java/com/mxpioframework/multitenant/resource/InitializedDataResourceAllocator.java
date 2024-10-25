@@ -15,9 +15,9 @@ public class InitializedDataResourceAllocator implements ResourceAllocator {
 	@Autowired
 	private DataSourceService dataSourceService;
 	
-	@Value("${resourceScript:}")
+	@Value("${mxpio.multitenant.resourceScript:}")
 	private String resourceScript;
-	
+
 	@Autowired
 	private ScriptService scriptService;
 	
@@ -27,7 +27,4 @@ public class InitializedDataResourceAllocator implements ResourceAllocator {
 	public void allocate(Organization organization) {
 		scriptService.runScripts(organization.getId(), dataSourceService.getDataSource(organization), resourceScript, "multitenant");
 	}
-	
-	
-	
 }

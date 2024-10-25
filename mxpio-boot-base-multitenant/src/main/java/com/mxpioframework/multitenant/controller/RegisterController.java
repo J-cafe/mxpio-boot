@@ -1,7 +1,6 @@
 package com.mxpioframework.multitenant.controller;
 
-import java.util.Map;
-
+import com.mxpioframework.multitenant.domain.dto.OrganizationUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,10 +27,11 @@ public class RegisterController {
 	
 	@PostMapping("organization")
 	@Operation(summary = "企业注册", description = "企业注册", method = "POST")
-	public Result<User> registerOrganization(@RequestBody Map<String, Object> info) throws Exception {
+	public Result<User> registerOrganization(@RequestBody OrganizationUserDTO organizationUser) {
 		Organization organization = new Organization();
-		organization.setId((String)info.get("organizationId"));
-		organization.setName((String)info.get("organizationName"));
+		organization.setId(organizationUser.getOrganizationId());
+		organization.setName(organizationUser.getOrganizationName());
+		organization.setDataSourceInfoId(organizationUser.getDataSourceInfoId());
 		User user = new User();
 		user.setOrganization(organization);
 		user.setAdministrator(true);
@@ -39,24 +39,24 @@ public class RegisterController {
 		user.setAccountNonLocked(true);
 		user.setCredentialsNonExpired(true);
 		user.setCredentialsNonExpired(true);
-		user.setUsername((String)info.get("username"));
-		user.setNickname((String)info.get("nickname"));
-		user.setPassword((String)info.get("password"));
+		user.setUsername(organizationUser.getUsername());
+		user.setNickname(organizationUser.getNickname());
+		user.setPassword(organizationUser.getPassword());
 		registerService.registerOrganization(user);
 		return Result.OK(user);
 	}
 	
 	@PostMapping("user")
 	@Operation(summary = "用户注册", description = "用户注册", method = "POST")
-	public Result<User> registerUser(@RequestBody Map<String, Object> info) throws Exception {
+	public Result<User> registerUser(@RequestBody OrganizationUserDTO organizationUser) {
 		Organization organization = new Organization();
-		organization.setId((String)info.get("organizationId"));
-		organization.setName((String)info.get("organizationName"));
+		organization.setId(organizationUser.getOrganizationId());
+		organization.setName(organizationUser.getOrganizationName());
 		User user = new User();
 		user.setOrganization(organization);
-		user.setUsername((String)info.get("username"));
-		user.setNickname((String)info.get("nickname"));
-		user.setPassword((String)info.get("password"));
+		user.setUsername(organizationUser.getUsername());
+		user.setNickname(organizationUser.getNickname());
+		user.setPassword(organizationUser.getPassword());
 		user.setAdministrator(false);
 		user.setAccountNonExpired(true);
 		user.setAccountNonLocked(true);
@@ -68,19 +68,19 @@ public class RegisterController {
 	
 	@GetMapping("exist/user/{organizationId}/{username}")
 	@Operation(summary = "判断用户是否存在", description = "判断用户是否存在", method = "GET")
-	public Result<Boolean> isExistUser(@PathVariable String organizationId, @PathVariable String username) throws Exception {
+	public Result<Boolean> isExistUser(@PathVariable String organizationId, @PathVariable String username) {
 		return Result.OK(registerService.isExistUser(organizationId, username));
 	}
 	
 	@GetMapping("exist/organization/{organizationId}")
 	@Operation(summary = "判断企业是否存在", description = "判断企业是否存在", method = "GET")
-	public Result<Boolean> isExistOrganization(@PathVariable String organizationId) throws Exception {
+	public Result<Boolean> isExistOrganization(@PathVariable String organizationId) {
 		return  Result.OK(registerService.isExistOrganization(organizationId));
 	}
 	
 	@GetMapping("organization/{organizationId}")
 	@Operation(summary = "查询企业名称", description = "查询企业名称", method = "GET")
-	public Result<String> getOrganizationName(@PathVariable String organizationId) throws Exception {
+	public Result<String> getOrganizationName(@PathVariable String organizationId) {
 		return Result.OK(registerService.getOrganization(organizationId).getName());
 	}
 

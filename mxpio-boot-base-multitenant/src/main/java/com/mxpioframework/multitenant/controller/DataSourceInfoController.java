@@ -32,9 +32,9 @@ public class DataSourceInfoController {
 	
 	@PostMapping("add")
 	@Operation(summary = "新增数据源", description = "新增数据源", method = "POST")
-	public Result<List<DataSourceInfo>> save(List<DataSourceInfo> organizations) {
-		dataSourceInfoService.save(organizations);
-		return Result.OK(organizations);
+	public Result<List<DataSourceInfo>> save(List<DataSourceInfo> dataSourceInfos) {
+		dataSourceInfoService.save(dataSourceInfos);
+		return Result.OK(dataSourceInfos);
 	}
 	
 	@GetMapping("check/{dataSourceInfoId}")
@@ -45,6 +45,5 @@ public class DataSourceInfoController {
 		}
 		return Result.OK();
 	}
-	
 
 }

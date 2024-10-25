@@ -32,4 +32,5 @@ com.mxpioframework.autoconfigure.dbconsole.DbconsoleAutoConfiguration,\
 com.mxpioframework.autoconfigure.module.datav.DatavAutoConfiguration,\
 com.mxpioframework.autoconfigure.dingtalk.DingTalkAutoConfiguration,\
 com.mxpioframework.autoconfigure.oauth.OAuthAutoConfiguration,\
-com.mxpioframework.autoconfigure.msal.MSALAutoConfiguration
+com.mxpioframework.autoconfigure.msal.MSALAutoConfiguration,\
+com.mxpioframework.autoconfigure.email.EmailAutoConfiguration
