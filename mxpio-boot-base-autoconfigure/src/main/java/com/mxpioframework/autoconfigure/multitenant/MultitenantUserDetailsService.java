@@ -2,9 +2,6 @@ package com.mxpioframework.autoconfigure.multitenant;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.mxpioframework.multitenant.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,11 +16,6 @@ import com.mxpioframework.multitenant.service.OrganizationService;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.GrantedAuthorityService;
 import com.mxpioframework.security.util.SecurityUtils;
-import org.springframework.util.StreamUtils;
-import org.springframework.util.StringUtils;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Spring Security的{@link org.springframework.security.core.userdetails.UserDetailsService}接口的默认实现
