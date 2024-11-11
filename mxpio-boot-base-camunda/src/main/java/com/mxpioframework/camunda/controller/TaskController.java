@@ -150,14 +150,27 @@ public class TaskController {
 		return Result.OK(page);
 	}
 
-	@GetMapping("all/page")
+	@GetMapping("all/page/{username}")
 	@Operation(summary = "所有任务列表(分页)", description = "所有任务列表(分页)", method = "GET")
-	public Result<Page<TaskVO>> allPage(Criteria criteria,
+	public Result<Page<TaskVO>> allPage(@PathVariable(name = "username", required = false) String username,
+										  Criteria criteria,
 										  @RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 										  @RequestParam(value="pageNo", defaultValue = "1") Integer pageNo){
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Set<String> authorities = SecurityUtils.getAuthorityKeys();
-		String username = SecurityUtils.getLoginUsername();
+		Set<String> authorities = null;
+		if (StringUtils.isBlank(username)){
+			authorities = SecurityUtils.getAuthorityKeys();
+			username = SecurityUtils.getLoginUsername();
+		}else{
+			User user = userService.findByName(username);
+			if (user==null){
+				return Result.error("用户不存在");
+			}
+			username = user.getUsername();
+			authorities = grantedAuthorityService.getGrantedAuthorities(user).stream()
+					.map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+		}
+
 		AllTaskRetVO allTaskRetVO = bpmnFlowService.getAllTasks(username,authorities,criteria,pageAble);
 		List<TaskVO> taskVOList = allTaskRetVO.getAllTasks();
 		long total = allTaskRetVO.getCount();
@@ -176,29 +189,6 @@ public class TaskController {
 				return Result.OK(page);
 			}
 		}*/
-		if(CollectionUtils.isNotEmpty(taskVOList)){
-			Page<TaskVO> page = new PageImpl<>(taskVOList, pageAble, total);
-			return Result.OK(page);
-		}
-		return Result.OK(new PageImpl<>(new ArrayList<>(),pageAble,0));
-	}
-
-	@GetMapping("user_all/page/{username}")
-	@Operation(summary = "查询username对应所有任务列表(分页)", description = "查询username对应所有任务列表(分页)", method = "GET")
-	public Result<Page<TaskVO>> userAllPage(@PathVariable(name = "username", required = true) String username,Criteria criteria,
-										@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
-										@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo){
-		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		User user = userService.findByName(username);
-		if (user==null){
-			return Result.error("用户不存在");
-		}
-		Collection<? extends GrantedAuthority> grantedAuthorities = grantedAuthorityService.getGrantedAuthorities(user);
-		Set<String> authorities = grantedAuthorities.stream()
-				.map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
-		AllTaskRetVO allTaskRetVO = bpmnFlowService.getAllTasks(username,authorities,criteria,pageAble);
-		List<TaskVO> taskVOList = allTaskRetVO.getAllTasks();
-		long total = allTaskRetVO.getCount();
 		if(CollectionUtils.isNotEmpty(taskVOList)){
 			Page<TaskVO> page = new PageImpl<>(taskVOList, pageAble, total);
 			return Result.OK(page);
