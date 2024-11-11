@@ -1,11 +1,12 @@
 package com.mxpioframework.camunda.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.mxpioframework.camunda.vo.*;
+import com.mxpioframework.security.entity.User;
+import com.mxpioframework.security.service.GrantedAuthorityService;
+import com.mxpioframework.security.service.UserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.history.HistoricActivityInstance;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,6 +47,11 @@ public class TaskController {
 	@Autowired
 	private BpmnFlowService bpmnFlowService;
 
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private GrantedAuthorityService grantedAuthorityService;
 	@GetMapping("list")
 	@Operation(summary = "待办任务列表", description = "待办任务列表", method = "GET")
 	public Result<List<TaskVO>> list() {
@@ -176,6 +183,28 @@ public class TaskController {
 		return Result.OK(new PageImpl<>(new ArrayList<>(),pageAble,0));
 	}
 
+	@GetMapping("user_all/page/{username}")
+	@Operation(summary = "查询username对应所有任务列表(分页)", description = "查询username对应所有任务列表(分页)", method = "GET")
+	public Result<Page<TaskVO>> userAllPage(@PathVariable(name = "username", required = true) String username,Criteria criteria,
+										@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
+										@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo){
+		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
+		User user = userService.findByName(username);
+		if (user==null){
+			return Result.error("用户不存在");
+		}
+		Collection<? extends GrantedAuthority> grantedAuthorities = grantedAuthorityService.getGrantedAuthorities(user);
+		Set<String> authorities = grantedAuthorities.stream()
+				.map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+		AllTaskRetVO allTaskRetVO = bpmnFlowService.getAllTasks(username,authorities,criteria,pageAble);
+		List<TaskVO> taskVOList = allTaskRetVO.getAllTasks();
+		long total = allTaskRetVO.getCount();
+		if(CollectionUtils.isNotEmpty(taskVOList)){
+			Page<TaskVO> page = new PageImpl<>(taskVOList, pageAble, total);
+			return Result.OK(page);
+		}
+		return Result.OK(new PageImpl<>(new ArrayList<>(),pageAble,0));
+	}
 
 
 	@PostMapping("claim/{taskId}")
