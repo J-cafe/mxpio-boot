@@ -150,7 +150,7 @@ public class TaskController {
 		return Result.OK(page);
 	}
 
-	@GetMapping("all/page/{username}")
+	@GetMapping(value={"all/page/{username}","all/page"})
 	@Operation(summary = "所有任务列表(分页)", description = "所有任务列表(分页)", method = "GET")
 	public Result<Page<TaskVO>> allPage(@PathVariable(name = "username", required = false) String username,
 										  Criteria criteria,
