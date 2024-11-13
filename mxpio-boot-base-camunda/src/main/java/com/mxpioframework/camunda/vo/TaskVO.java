@@ -118,6 +118,8 @@ public class TaskVO implements Serializable, DictAble {
 		this.procStartUserId = task.getProcStartUserId();
 		this.processDefinitionName = task.getProcessDefinitionName();
 		this.bpmnSortFlag=task.getBpmnSortFlag();
+		this.procStartTime=task.getProcStartTime();
+		this.processDefinitionKey = task.getProcessDefinitionKey();
 	}
 
 	public TaskVO(HistoricTaskInstance task, HistoricProcessInstance historicProcessInstance) {

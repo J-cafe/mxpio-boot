@@ -964,7 +964,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		List<TaskVO> allTasks = new ArrayList<>();
 		for(BpmnTask bpmnTask:bpmnTaskList.getContent()){
 			HistoricProcessInstance historicProcessInstance = this.getHistoricProcessInstanceById(bpmnTask.getProcessInstanceId());
-			TaskVO taskVO = new TaskVO(bpmnTask, historicProcessInstance);
+			TaskVO taskVO = new TaskVO(bpmnTask);
 			if(StringUtils.isNotBlank(bpmnTask.getAssignee())){
 				taskVO.setTaskType("active");
 			}
