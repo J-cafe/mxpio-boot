@@ -979,7 +979,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			}
 			String formKey = this.getTaskFormKey(bpmnTask.getProcessDefinitionId(), bpmnTask.getTaskDefinitionKey());
 			//自引用，防止getTitleByInstanceId的@Cacheable方法失效
-			taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
+			//taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
 			taskVO.setHasForm(StringUtils.isNotEmpty(formKey));
 			allTasks.add(taskVO);
 		}

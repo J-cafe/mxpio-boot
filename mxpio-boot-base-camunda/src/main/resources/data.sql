@@ -30,7 +30,8 @@ CREATE OR REPLACE VIEW V_BPMN_ALL_TASKS AS
 select
     t.* ,
     p.START_TIME_ as proc_start_time_,
-    p.PROC_DEF_KEY_ as process_definition_key_
+    p.PROC_DEF_KEY_ as process_definition_key_,
+    v.TEXT_ as proc_title_
 from
     (
         select
@@ -135,6 +136,9 @@ from
           and I.TYPE_ = 'candidate'
           and RES.SUSPENSION_STATE_ = 1)t
         left join ACT_HI_PROCINST p on
-        t.PROC_INST_ID_ = p.PROC_INST_ID_;
+        t.PROC_INST_ID_ = p.PROC_INST_ID_
+        left join act_hi_varinst v on
+        t.PROC_INST_ID_ = v.PROC_INST_ID_
+            and v.NAME_ = '$BPMN_TITLE_';
 
 
