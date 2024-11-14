@@ -130,11 +130,14 @@ public class RbacCacheServiceImpl implements RbacCacheService {
     }
 
     private void addFaDept(Set<String> deptIds, String deptId, Map<String, Dept> deptMap) {
-        String faDeptId = deptMap.get(deptId).getFaDeptId();
-        if (StringUtils.isNotEmpty(faDeptId)){
-            addFaDept(deptIds, faDeptId, deptMap);
-            deptIds.add(faDeptId);
-        }
+    	if(deptMap.containsKey(deptId)&&deptMap.get(deptId)!=null) {
+    		String faDeptId = deptMap.get(deptId).getFaDeptId();
+            if (StringUtils.isNotEmpty(faDeptId)){
+                addFaDept(deptIds, faDeptId, deptMap);
+                deptIds.add(faDeptId);
+            }
+    	}
+        
     }
 
     @Override
