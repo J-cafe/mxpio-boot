@@ -964,7 +964,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		List<TaskVO> allTasks = new ArrayList<>();
 		for(BpmnTask bpmnTask:bpmnTaskList.getContent()){
 			HistoricProcessInstance historicProcessInstance = this.getHistoricProcessInstanceById(bpmnTask.getProcessInstanceId());
-			TaskVO taskVO = new TaskVO(bpmnTask, historicProcessInstance);
+			TaskVO taskVO = new TaskVO(bpmnTask);
 			if(StringUtils.isNotBlank(bpmnTask.getAssignee())){
 				taskVO.setTaskType("active");
 			}
@@ -979,7 +979,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			}
 			String formKey = this.getTaskFormKey(bpmnTask.getProcessDefinitionId(), bpmnTask.getTaskDefinitionKey());
 			//自引用，防止getTitleByInstanceId的@Cacheable方法失效
-			taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
+			//taskVO.setTitle(bpmnFlowService.getTitleByInstanceId(historicProcessInstance.getId()));
 			taskVO.setHasForm(StringUtils.isNotEmpty(formKey));
 			allTasks.add(taskVO);
 		}

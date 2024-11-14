@@ -127,8 +127,16 @@ public class BpmnTask implements Serializable {
     @Schema(description = "BPMN_SORT_FLAG_")
     private String bpmnSortFlag;
 
+    @Column(name = "PROC_START_TIME_")
+    @Schema(description = "流程发起时间")
+    private Date procStartTime;
 
+    @Column(name = "PROCESS_DEFINITION_KEY_")
+    @Schema(description = "流程定义Key")
+    private String processDefinitionKey;
 
-
+    @Column(name = "PROC_TITLE_")
+    @Schema(description = "流程标题")
+    private String procTitle;
 
 }
