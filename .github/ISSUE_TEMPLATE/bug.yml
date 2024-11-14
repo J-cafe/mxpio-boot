@@ -1,0 +1,102 @@
+name: Bug反馈
+description: 报告你在项目中发现的bug
+title: "[Bug]: "
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你的bug报告！请按照以下格式提供详细信息，以便我们更快地定位和修复问题。
+ 
+  - type: input
+    id: bug-summary
+    attributes:
+      label: Bug摘要
+      description: 简短描述bug的现象或问题
+      placeholder: 例如：“登录按钮点击无反应”
+      value: ""
+    validations:
+      required: true
+ 
+  - type: textarea
+    id: detailed-description
+    attributes:
+      label: 详细描述
+      description: 请详细描述bug的表现，包括你执行了什么操作、期望的结果是什么、实际的结果是什么
+      value: ""
+    validations:
+      required: true
+ 
+  - type: input
+    id: steps-to-reproduce
+    attributes:
+      label: 重现步骤
+      description: 提供详细的步骤，以便其他人能够重现这个bug
+      placeholder: 例如：“1. 打开登录页面 2. 输入用户名和密码 3. 点击登录按钮”
+      value: ""
+    validations:
+      required: true
+ 
+  - type: input
+    id: expected-behavior
+    attributes:
+      label: 预期行为
+      description: 描述你期望发生的情况
+      placeholder: 例如：“登录成功后跳转到主页”
+      value: ""
+    validations:
+      required: true
+ 
+  - type: input
+    id: actual-behavior
+    attributes:
+      label: 实际行为
+      description: 描述实际发生的情况
+      placeholder: 例如：“点击登录按钮后页面没有反应”
+      value: ""
+    validations:
+      required: true
+ 
+  - type: input
+    id: affected-version
+    attributes:
+      label: 受影响的版本
+      description: 请提供bug出现的项目版本或提交哈希
+      placeholder: 例如：“v1.2.3” 或 “commit hash”
+      value: ""
+    validations:
+      required: false
+ 
+  - type: dropdown
+    id: operating-system
+    attributes:
+      label: 操作系统
+      description: 请选择你发现bug时使用的操作系统
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - 其他（请在下方说明）
+      value: ""
+    validations:
+      required: true
+ 
+  - type: input
+    id: other-os-info
+    attributes:
+      label: 其他操作系统信息
+      description: 如果你选择了“其他”，请在这里提供详细的操作系统信息
+      value: ""
+    validations:
+      required: false
+      condition: "operating-system == '其他（请在下方说明）'"
+ 
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: 附加信息
+      description: 任何其他有助于定位或修复bug的信息，如日志、截图等
+      value: ""
+    validations:
+      required: false

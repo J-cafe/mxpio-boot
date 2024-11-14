@@ -1,0 +1,58 @@
+name: 问题反馈
+description: 提出你在使用项目中遇到的问题或疑问
+title: "[Question]: "
+labels: ["question"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你的提问！请按照以下格式提供详细信息，以便我们更好地帮助你。
+
+  - type: input
+    id: question-summary
+    attributes:
+      label: 问题摘要
+      description: 简短描述你的问题或疑问
+      placeholder: 例如：“如何配置项目的环境变量？”
+      value: ""
+    validations:
+      required: true
+
+  - type: textarea
+    id: detailed-description
+    attributes:
+      label: 详细描述
+      description: 请详细描述你的问题，包括你已经尝试过的解决方法和遇到的具体困难
+      value: ""
+    validations:
+      required: true
+
+  - type: input
+    id: affected-component
+    attributes:
+      label: 受影响的组件
+      description: 如果问题涉及特定的项目组件或模块，请在这里说明
+      placeholder: 例如：“登录模块”、“数据库连接”
+      value: ""
+    validations:
+      required: false
+
+  - type: input
+    id: expected-solution
+    attributes:
+      label: 期望的解决方案
+      description: 描述你期望如何解决这个问题，或者提供你想要的答案
+      placeholder: 例如：“希望提供详细的配置步骤”
+      value: ""
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: 附加信息
+      description: 任何其他有助于理解或解决问题的信息，如相关日志、截图、代码片段等
+      value: ""
+    validations:
+      required: false
