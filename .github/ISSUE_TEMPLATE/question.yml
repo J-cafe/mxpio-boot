@@ -56,13 +56,3 @@ body:
       value: ""
     validations:
       required: false
-
-  - type: checkboxes
-    id: attachments
-    attributes:
-      label: 附件
-      description: 如果你有与问题相关的文件，如日志文件、屏幕截图或代码片段，请勾选此框并准备上传
-      options:
-        - label: 我将上传相关文件作为附件
-    validations:
-      required: false

@@ -100,13 +100,3 @@ body:
       value: ""
     validations:
       required: false
- 
-  - type: checkboxes
-    id: attachments
-    attributes:
-      label: 附件
-      description: 请上传与bug相关的任何文件，如日志文件、屏幕截图等
-      options:
-        - label: 我将上传相关文件作为附件
-    validations:
-      required: false
