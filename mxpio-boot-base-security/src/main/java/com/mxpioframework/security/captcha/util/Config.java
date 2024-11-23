@@ -66,8 +66,7 @@ public class Config
 	{
 		String paramName = Constants.CAPTCHA_PRODUCER_IMPL;
 		String paramValue = this.properties.getProperty(paramName);
-		Producer producer = (Producer) this.helper.getClassInstance(paramName, paramValue, new DefaultCaptcha(), this);
-		return producer;
+        return (Producer) this.helper.getClassInstance(paramName, paramValue, new DefaultCaptcha(), this);
 	}
 
 	/** */
@@ -75,9 +74,8 @@ public class Config
 	{
 		String paramName = Constants.CAPTCHA_TEXTPRODUCER_IMPL;
 		String paramValue = this.properties.getProperty(paramName);
-		TextProducer textProducer = (TextProducer) this.helper.getClassInstance(paramName, paramValue,
+        return (TextProducer) this.helper.getClassInstance(paramName, paramValue,
 				new DefaultTextCreator(), this);
-		return textProducer;
 	}
 
 	/** */
@@ -135,9 +133,8 @@ public class Config
 	{
 		String paramName = Constants.CAPTCHA_NOISE_IMPL;
 		String paramValue = this.properties.getProperty(paramName);
-		NoiseProducer noiseProducer = (NoiseProducer) this.helper.getClassInstance(paramName, paramValue,
+        return (NoiseProducer) this.helper.getClassInstance(paramName, paramValue,
 				new DefaultNoise(), this);
-		return noiseProducer;
 	}
 
 	/** */
@@ -153,8 +150,7 @@ public class Config
 	{
 		String paramName = Constants.CAPTCHA_OBSCURIFICATOR_IMPL;
 		String paramValue = this.properties.getProperty(paramName);
-		GimpyEngine gimpyEngine = (GimpyEngine) this.helper.getClassInstance(paramName, paramValue, new WaterRipple(), this);
-		return gimpyEngine;
+        return (GimpyEngine) this.helper.getClassInstance(paramName, paramValue, new WaterRipple(), this);
 	}
 
 	/** */
@@ -162,9 +158,8 @@ public class Config
 	{
 		String paramName = Constants.CAPTCHA_WORDRENDERER_IMPL;
 		String paramValue = this.properties.getProperty(paramName);
-		WordRenderer wordRenderer = (WordRenderer) this.helper.getClassInstance(paramName, paramValue,
+        return (WordRenderer) this.helper.getClassInstance(paramName, paramValue,
 				new DefaultWordRenderer(), this);
-		return wordRenderer;
 	}
 
 	/** */
@@ -172,9 +167,8 @@ public class Config
 	{
 		String paramName = Constants.CAPTCHA_BACKGROUND_IMPL;
 		String paramValue = this.properties.getProperty(paramName);
-		BackgroundProducer backgroundProducer = (BackgroundProducer) this.helper.getClassInstance(paramName, paramValue,
+        return (BackgroundProducer) this.helper.getClassInstance(paramName, paramValue,
 				new DefaultBackground(), this);
-		return backgroundProducer;
 	}
 
 	/** */

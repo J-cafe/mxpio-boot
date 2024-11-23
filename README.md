@@ -145,7 +145,7 @@ mvn clean package spring-boot:repackage
 启动项目
 
 ```bash
-java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.10.jar
+java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.11.jar
 ```
 
 ### 7.2新建Maven项目运行
@@ -157,7 +157,7 @@ java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.10.jar
 <parent>
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-parent</artifactId>
-	<version>1.0.12-beta.10</version>
+	<version>1.0.12-beta.11</version>
 </parent>
 ```
 
@@ -274,7 +274,7 @@ mvn clean package spring-boot:repackage
 启动项目
 
 ```bash
-java -jar target\mxpio-boot-example-1.0.12-beta.10.jar
+java -jar target\mxpio-boot-example-1.0.12-beta.11.jar
 ```
 
 ### 7.3源码运行
@@ -340,7 +340,7 @@ mvn clean package spring-boot:repackage
 启动项目
 
 ```bash
-java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.10.jar
+java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.11.jar
 ```
 
 
@@ -350,6 +350,7 @@ java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.10.jar
 
 - **河南人才集团** - [人才集团](http://www.hn-talent.com/)
 - **郑州卓臻信息技术有限公司** - [数字卓臻](https://www.datazhzh.com/)
+- **山东禾美网络科技有限公司** - [山东禾美](http://www.unidbg.cn/)
 
 我们非常感谢这些公司对项目的支持和贡献！如果你的公司也在使用此框架，并且愿意被列在这里，请通过[Gitee Issue](https://gitee.com/i_mxpio/mxpio-boot/issues/IAMNUX)与我们联系。
 

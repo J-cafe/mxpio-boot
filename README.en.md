@@ -145,7 +145,7 @@ mvn clean package spring-boot:repackage
 Start
 
 ```bash
-java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.10.jar
+java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.11.jar
 ```
 
 ### 7.2 Run as a new maven project
@@ -157,7 +157,7 @@ edit pom.xml file
 <parent>
 	<groupId>com.mxpio</groupId>
 	<artifactId>mxpio-boot-parent</artifactId>
-	<version>1.0.12-beta.10</version>
+	<version>1.0.12-beta.11</version>
 </parent>
 ```
 
@@ -274,7 +274,7 @@ mvn clean package spring-boot:repackage
 Start
 
 ```bash
-java -jar target\mxpio-boot-example-1.0.12-beta.10.jar
+java -jar target\mxpio-boot-example-1.0.12-beta.11.jar
 ```
 
 ### 7.3 Run from source code
@@ -340,7 +340,7 @@ mvn clean package spring-boot:repackage
 Start
 
 ```bash
-java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.10.jar
+java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.11.jar
 ```
 
 
@@ -350,6 +350,7 @@ Here are some well-known companies currently using this framework:
 
 - **Henan Talent Group** - [人才集团](http://www.hn-talent.com/)
 - **Zhengzhou Zhuozhen Information Technology Co., Ltd** - [数字卓臻](https://www.datazhzh.com/)
+- **Shandong Hemei Network Technology Co., Ltd** - [山东禾美](http://www.unidbg.cn/)
 
 We are very grateful for the support and contribution of these companies to the project! If your company is also using this framework and willing to be listed here, please use [Gitee Issue]（ https://gitee.com/i_mxpio/mxpio-boot/issues/IAMNUX ）Contact us.
 
@@ -373,4 +374,4 @@ We are very grateful for the support and contribution of these companies to the 
 
 ## 10.Others
 
-Thank you [JetBrains] (https://www.jetbrains.com/) provides IDE license
+Thank you [JetBrains](https://www.jetbrains.com/) provides IDE license

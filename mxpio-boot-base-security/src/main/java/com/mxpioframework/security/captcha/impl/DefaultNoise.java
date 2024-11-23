@@ -25,10 +25,10 @@ public class DefaultNoise extends Configurable implements NoiseProducer
 	 * 
 	 * @param image
 	 *            the image to add the noise to
-	 * @param factorOne
-	 * @param factorTwo
-	 * @param factorThree
-	 * @param factorFour
+	 * @param factorOne 因子1
+	 * @param factorTwo 因子2
+	 * @param factorThree 因子3
+	 * @param factorFour 因子4
 	 */
 	public void makeNoise(BufferedImage image, float factorOne,
 			float factorTwo, float factorThree, float factorFour)
@@ -52,7 +52,7 @@ public class DefaultNoise extends Configurable implements NoiseProducer
 
 		// creates an iterator to define the boundary of the flattened curve
 		PathIterator pi = cc.getPathIterator(null, 2);
-		Point2D tmp[] = new Point2D[200];
+		Point2D[] tmp = new Point2D[200];
 		int i = 0;
 
 		// while pi is iterating the curve, adds points to tmp array
