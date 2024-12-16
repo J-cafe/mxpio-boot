@@ -237,4 +237,8 @@ public interface BpmnFlowService {
 	 * @return 结果
 	 */
 	ResultMessage urgent(String processInstanceId);
+
+	List<HistoricProcessInstance> pagingHistoricProcessInstances(Criteria criteria, int i, int pageSize, String username, Boolean finished);
+
+	long countHistoricProcessInstances(Criteria criteria, String username, Boolean finished);
 }

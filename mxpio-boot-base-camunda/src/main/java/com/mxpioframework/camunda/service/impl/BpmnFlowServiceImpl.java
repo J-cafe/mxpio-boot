@@ -593,8 +593,45 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	@Override
 	@Transactional(readOnly = true)
+	public List<HistoricProcessInstance> pagingHistoricProcessInstances(Criteria criteria,int firstResult, int maxResults, String username, Boolean finished) {
+		HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
+		if(username != null){
+			query.startedBy(username);
+		}
+		criteria2HistoricProcessInstanceQuery(criteria,query);
+		if(finished == null){
+
+		}else if(finished){
+			query.finished();
+		}else{
+			query.unfinished();
+		}
+		return query.orderByProcessInstanceStartTime().desc()
+				.listPage(firstResult, maxResults);
+	}
+
+
+	@Override
+	@Transactional(readOnly = true)
 	public long countHistoricProcessInstances(String username, Boolean finished) {
 		HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
+		if(username != null){
+			query.startedBy(username);
+		}
+		if(finished == null){
+
+		}else if(finished){
+			query.finished();
+		}else{
+			query.unfinished();
+		}
+		return query.count();
+	}
+	@Override
+	@Transactional(readOnly = true)
+	public long countHistoricProcessInstances(Criteria criteria,String username, Boolean finished) {
+		HistoricProcessInstanceQuery query = historyService.createHistoricProcessInstanceQuery();
+		criteria2HistoricProcessInstanceQuery(criteria,query);
 		if(username != null){
 			query.startedBy(username);
 		}
@@ -1178,6 +1215,54 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 								query.processVariableValueEquals(((SimpleCriterion) criterion).getFieldName(), ((SimpleCriterion) criterion).getValue());
 							}else{
 								query.processVariableValueLike(((SimpleCriterion) criterion).getFieldName(), "%" + ((SimpleCriterion) criterion).getValue() + "%");
+							}
+
+							break;
+					}
+				}
+			}
+		}
+	}
+
+	private void criteria2HistoricProcessInstanceQuery(Criteria criteria, HistoricProcessInstanceQuery query){
+		if(criteria != null){
+			for(Object criterion : criteria.getCriterions()){
+				if(criterion instanceof SimpleCriterion){
+					switch(((SimpleCriterion) criterion).getFieldName()){
+						case "processInstanceId":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processInstanceId(((SimpleCriterion) criterion).getValue() + "");
+							}
+							break;
+						case "processDefinitionId":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processDefinitionId(((SimpleCriterion) criterion).getValue() + "");
+							}
+							break;
+						case "processDefinitionKey":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processDefinitionKey(((SimpleCriterion) criterion).getValue() + "");
+							}
+							break;
+						case "processInstanceBusinessKey":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processInstanceBusinessKey(((SimpleCriterion) criterion).getValue() + "");
+							}else{
+								query.processInstanceBusinessKeyLike("%" + ((SimpleCriterion) criterion).getValue() + "%");
+							}
+							break;
+						case "processDefinitionName":
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.processDefinitionName(((SimpleCriterion) criterion).getValue() + "");
+							}else{
+								query.processDefinitionNameLike("%" + ((SimpleCriterion) criterion).getValue() + "%");
+							}
+							break;
+						default:
+							if(Operator.EQ == ((SimpleCriterion) criterion).getOperator()){
+								query.variableValueEquals(((SimpleCriterion) criterion).getFieldName(), ((SimpleCriterion) criterion).getValue());
+							}else{
+								query.variableValueLike(((SimpleCriterion) criterion).getFieldName(), "%" + ((SimpleCriterion) criterion).getValue() + "%");
 							}
 
 							break;
