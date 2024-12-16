@@ -1259,14 +1259,14 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 							}
 							break;
 						case "state":
-							String fieldName = ((SimpleCriterion) criterion).getFieldName();
-							if(StringUtils.equals(fieldName,"ACTIVE")){
+							String value = ((SimpleCriterion) criterion).getValue().toString();
+							if(StringUtils.equals(value,"ACTIVE")){
 								query.active();
-							}else if(StringUtils.equals(fieldName,"SUSPENDED")){
+							}else if(StringUtils.equals(value,"SUSPENDED")){
 								query.suspended();
-							}else if(StringUtils.equals(fieldName,"COMPLETED")){
+							}else if(StringUtils.equals(value,"COMPLETED")){
 								query.completed();
-							}else if(StringUtils.equals(fieldName,"INTERNALLY_TERMINATED")){
+							}else if(StringUtils.equals(value,"INTERNALLY_TERMINATED")){
 								query.internallyTerminated();
 							}
 							break;
