@@ -1,9 +1,7 @@
 package com.mxpioframework.autoconfigure.multitenant;
 
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.cache.interceptor.SimpleKeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Configuration
-@AutoConfigureBefore({JpaRepositoriesAutoConfiguration.class})
 @ConditionalOnClass(MultitenantConfiguration.class)
 @AutoConfigureAfter({SecurityAutoConfiguration.class})
 @Import({MultitenantConfiguration.class})

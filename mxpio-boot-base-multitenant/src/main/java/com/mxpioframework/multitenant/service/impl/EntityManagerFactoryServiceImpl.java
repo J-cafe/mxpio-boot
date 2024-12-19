@@ -27,6 +27,7 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.SchemaManagementProvider;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder.Builder;
@@ -72,7 +73,7 @@ public class EntityManagerFactoryServiceImpl implements
 	private String dataScript;
 
 	@Autowired
-	private EntityManagerFactory emf;
+	private EntityManagerFactory entityManagerFactory;
 
 	@Autowired(required = false)
 	private JtaTransactionManager jtaTransactionManager;
@@ -122,14 +123,15 @@ public class EntityManagerFactoryServiceImpl implements
 	@Autowired(required = false)
 	private PersistenceUnitManager persistenceUnitManager;
 
-	@Value("${mxpio.multitenant.packagesToScan:"
+	/*@Value("${mxpio.multitenant.packagesToScan:"
 			+ "com.mxpioframework.excel.importer.model,"
 			+ "com.mxpioframework.filestorage.entity,"
 			+ "com.mxpioframework.camunda.entity,"
 			+ "com.mxpioframework.log.entity,"
 			+ "com.mxpioframework.quartz.entity,"
 			+ "com.mxpioframework.system.entity,"
-			+ "com.mxpioframework.security.entity}")
+			+ "com.mxpioframework.security.entity}")*/
+	@Value("${mxpio.multitenant.packagesToScan:com.mxpioframework.**.entity}")
 	private String packagesToScan;
 
 	@Value("${mxpio.multitenant.customPackagesToScan:}")
@@ -406,7 +408,7 @@ public class EntityManagerFactoryServiceImpl implements
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		emfMap.put(Constants.MASTER, emf);
+		emfMap.put(Constants.MASTER, entityManagerFactory);
 		if (listeners != null) {
 			AnnotationAwareOrderComparator.sort(listeners);
 		}

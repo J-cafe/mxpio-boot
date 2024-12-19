@@ -78,8 +78,7 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 	@Override
 	@Transactional(readOnly = true)
 	public DictItem getItemByCode(String code, String value) {
-		DictItem item = JpaUtil.linq(DictItem.class).equal("itemValue", value).exists(Dict.class).equal("dictCode", code).equalProperty("id", "dictId").end().findOne();
-		return item;
+        return JpaUtil.linq(DictItem.class).equal("itemValue", value).exists(Dict.class).equal("dictCode", code).equalProperty("id", "dictId").end().findOne();
 	}
 
 	@Override
@@ -123,11 +122,11 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 
 	/**
 	 * 对于动态数据字典，根据value反查text
-	 * @param dicCode
-	 * @param clazz
-	 * @param dicText
-	 * @param textValue
-	 * @return
+	 * @param dicCode 字典编码
+	 * @param clazz 来源实体
+	 * @param dicText 字典文本字段
+	 * @param textValue 字段文本值
+	 * @return 文本值
 	 */
 	@Override
 	@Transactional

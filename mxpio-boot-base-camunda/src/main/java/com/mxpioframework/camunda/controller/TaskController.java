@@ -1,11 +1,12 @@
 package com.mxpioframework.camunda.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.mxpioframework.camunda.vo.*;
+import com.mxpioframework.security.entity.User;
+import com.mxpioframework.security.service.GrantedAuthorityService;
+import com.mxpioframework.security.service.UserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.camunda.bpm.engine.history.HistoricActivityInstance;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,6 +47,11 @@ public class TaskController {
 	@Autowired
 	private BpmnFlowService bpmnFlowService;
 
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private GrantedAuthorityService grantedAuthorityService;
 	@GetMapping("list")
 	@Operation(summary = "待办任务列表", description = "待办任务列表", method = "GET")
 	public Result<List<TaskVO>> list() {
@@ -88,7 +95,7 @@ public class TaskController {
 		List<TaskVO> list = new ArrayList<>();
 		String username = SecurityUtils.getLoginUsername();
 		List<HistoricTaskInstance> tasks = bpmnFlowService.pagingHistoricTaskListPageByUser(username, criteria, pageSize, pageNo, true);
-		long total = bpmnFlowService.countHistoricTaskListByUser(username, true);
+		long total = bpmnFlowService.countHistoricTaskListByUser(username, criteria, true);
 		for(HistoricTaskInstance task : tasks){
 			HistoricProcessInstance historicProcessInstance = bpmnFlowService.getHistoricProcessInstanceById(task.getProcessInstanceId());
 			TaskVO taskVO = new TaskVO(task, historicProcessInstance);
@@ -143,21 +150,32 @@ public class TaskController {
 		return Result.OK(page);
 	}
 
-	@GetMapping("all/page")
+	@GetMapping(value={"all/page/{username}","all/page"})
 	@Operation(summary = "所有任务列表(分页)", description = "所有任务列表(分页)", method = "GET")
-	public Result<Page<TaskVO>> allPage(Criteria criteria,
+	public Result<Page<TaskVO>> allPage(@PathVariable(name = "username", required = false) String username,
+										  Criteria criteria,
 										  @RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 										  @RequestParam(value="pageNo", defaultValue = "1") Integer pageNo){
+		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
+		Set<String> authorities = null;
+		if (StringUtils.isBlank(username)){
+			authorities = SecurityUtils.getAuthorityKeys();
+			username = SecurityUtils.getLoginUsername();
+		}else{
+			User user = userService.findByName(username);
+			if (user==null){
+				return Result.error("用户不存在");
+			}
+			username = user.getUsername();
+			authorities = grantedAuthorityService.getGrantedAuthorities(user).stream()
+					.map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+		}
 
-		Set<String> authorities = SecurityUtils.getAuthorityKeys();
-		String username = SecurityUtils.getLoginUsername();
-		AllTaskRetVO allTaskRetVO = bpmnFlowService.getAllTasks(username,authorities,criteria);
+		AllTaskRetVO allTaskRetVO = bpmnFlowService.getAllTasks(username,authorities,criteria,pageAble);
 		List<TaskVO> taskVOList = allTaskRetVO.getAllTasks();
 		long total = allTaskRetVO.getCount();
 
-		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-
-		if(CollectionUtils.isNotEmpty(taskVOList)){
+		/*if(CollectionUtils.isNotEmpty(taskVOList)){
 			int startIndex = (pageNo-1)*pageSize;
 			if(startIndex< taskVOList.size()){
 				List<TaskVO> returnList = taskVOList.subList(startIndex, Math.min(startIndex + pageSize, taskVOList.size()));
@@ -170,11 +188,13 @@ public class TaskController {
 				Page<TaskVO> page = new PageImpl<>(returnList, pageAble, total);
 				return Result.OK(page);
 			}
+		}*/
+		if(CollectionUtils.isNotEmpty(taskVOList)){
+			Page<TaskVO> page = new PageImpl<>(taskVOList, pageAble, total);
+			return Result.OK(page);
 		}
-
 		return Result.OK(new PageImpl<>(new ArrayList<>(),pageAble,0));
 	}
-
 
 
 	@PostMapping("claim/{taskId}")

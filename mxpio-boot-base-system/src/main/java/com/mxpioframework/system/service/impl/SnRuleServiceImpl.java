@@ -59,7 +59,7 @@ public class SnRuleServiceImpl extends BaseServiceImpl<SerialNumber> implements 
 		// 当前记录计数值
 		String no = currentRecord.substring(snExpression.indexOf('#'), snExpression.indexOf('#') + index);
 
-		StringBuffer sbPlaceHolder = new StringBuffer("");
+		StringBuilder sbPlaceHolder = new StringBuilder();
 		for (int i = 0; i < index; i++) {
 			sbPlaceHolder.append("#");
 		}
@@ -69,7 +69,7 @@ public class SnRuleServiceImpl extends BaseServiceImpl<SerialNumber> implements 
 			no = "0";
 		}
 
-		StringBuffer newNo = new StringBuffer((Long.parseLong(no) + 1) + "");
+		StringBuilder newNo = new StringBuilder((Long.parseLong(no) + 1) + "");
 		if (newNo.length() > index) {
 			return null;
 		} else {

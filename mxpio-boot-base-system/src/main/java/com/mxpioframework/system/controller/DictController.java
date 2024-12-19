@@ -153,7 +153,7 @@ public class DictController {
 	@DeleteMapping("remove/{id}")
 	@Operation(summary = "删除字典", description = "删除字典", method = "DELETE")
 	public Result<Dict> remove(@PathVariable(name = "id", required = true) String id) {
-		String ids[] = id.split(",");
+		String[] ids = id.split(",");
 		for(String key : ids){
 			dictSerivce.delete(Dict.class, key, new SmartCrudPolicyAdapter() {
 				@Override
@@ -176,7 +176,7 @@ public class DictController {
 	@DeleteMapping("remove/item/{id}")
 	@Operation(summary = "删除字典项", description = "删除字典项", method = "DELETE")
 	public Result<DictItem> removeItem(@PathVariable(name = "id", required = true) String id) {
-		String ids[] = id.split(",");
+		String[] ids = id.split(",");
 		for(String key : ids){
 			dictSerivce.deleteItem(key);
 		}

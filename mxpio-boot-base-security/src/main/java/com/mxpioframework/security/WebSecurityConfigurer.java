@@ -144,7 +144,7 @@ public class WebSecurityConfigurer{
 		jwtLoginFilter.setAuthenticationFailureHandler(new AuthenticationFailureHandler(){
 			@Override
 			public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-				//exception.printStackTrace();
+				exception.fillInStackTrace();
 				response.setContentType("application/json;charset=UTF-8");
 				if(exception instanceof UsernameNotFoundException){
 					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101(exception.getMessage())));

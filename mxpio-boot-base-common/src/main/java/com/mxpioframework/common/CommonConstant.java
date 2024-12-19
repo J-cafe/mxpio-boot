@@ -16,10 +16,19 @@ public class CommonConstant {
 	
 	public static final String DICT_TEXT_SUFFIX = "$DICT_TEXT_";
 	
-	private static List<ModuleVO> modules = new ArrayList<>();
+	private static final List<ModuleVO> modules = new ArrayList<>();
 
 	public static List<ModuleVO> getModules() {
 		return modules;
+	}
+
+	public static boolean isIncludeModule(String moduleKey) {
+		for (ModuleVO module : modules) {
+			if (module.getModuleKey().equals(moduleKey)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static void addModule(ModuleVO module) {

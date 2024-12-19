@@ -20,7 +20,7 @@ public class DefaultTextCreator extends Configurable implements TextProducer
 		int length = getConfig().getTextProducerCharLength();
 		char[] chars = getConfig().getTextProducerCharString();
 		Random rand = new SecureRandom();
-		StringBuffer text = new StringBuffer();
+		StringBuilder text = new StringBuilder();
 		for (int i = 0; i < length; i++)
 		{
 			text.append(chars[rand.nextInt(chars.length)]);

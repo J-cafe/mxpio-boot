@@ -36,7 +36,7 @@ public class MxpioJob implements Job {
 				}
 			}
 		}catch (Exception e) {
-			e.printStackTrace();
+			e.fillInStackTrace();
 		}
 		return job;
 	}
@@ -46,7 +46,7 @@ public class MxpioJob implements Job {
 		try {
 			method.invoke(bean, paramsAry);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
+			e.fillInStackTrace();
 		}
 	}
 

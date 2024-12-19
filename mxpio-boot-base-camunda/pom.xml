@@ -17,6 +17,11 @@
 
 		<dependency>
 			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-boot-base-message</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-base-expression</artifactId>
 		</dependency>
 

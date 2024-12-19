@@ -40,9 +40,9 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 	/**
 	 * 鉴权具体逻辑
 	 *
-	 * @param authentication
-	 * @return
-	 * @throws AuthenticationException
+	 * @param authentication 身份凭证
+	 * @return 已认证身份认证
+	 * @throws AuthenticationException 认证异常
 	 */
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -62,8 +62,8 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 	/**
 	 * 是否支持当前类
 	 *
-	 * @param authentication
-	 * @return
+	 * @param authentication 身份凭证
+	 * @return 是否支持
 	 */
 	public boolean supports(Class<?> authentication) {
 		return (JwtLoginToken.class.isAssignableFrom(authentication));
@@ -72,7 +72,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 	/**
 	 * 一些默认信息的检查
 	 *
-	 * @param user
+	 * @param user 用户对象
 	 */
 	private void defaultCheck(UserDetails user) {
 		if (!user.isAccountNonLocked()) {
@@ -91,9 +91,9 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 	/**
 	 * 检查密码是否正确
 	 *
-	 * @param userDetails
-	 * @param authentication
-	 * @throws AuthenticationException
+	 * @param userDetails 用户对象
+	 * @param authentication 身份凭证
+	 * @throws AuthenticationException 认证异常
 	 */
 	private void additionalAuthenticationChecks(UserDetails userDetails, JwtLoginToken authentication)
 			throws AuthenticationException {

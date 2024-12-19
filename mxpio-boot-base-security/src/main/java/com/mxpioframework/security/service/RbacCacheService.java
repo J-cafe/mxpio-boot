@@ -35,11 +35,21 @@ public interface RbacCacheService {
     public Map<String, Dept> getDeptMap();
 
     /**
+     * 获取部门索引,按Code（缓存）
+     * @return code部门对应关系
+     */
+    public Map<String, Dept> getDeptMapByCode();
+
+    /**
      * 获取部门用户关系,ID索引（缓存）
      * @return 部门用户关系
      */
     public Map<String, Set<String>> getAllDeptIdGroupByUser();
 
+    /**
+     * 获取部门用户关系,含上级部门,ID索引（缓存）
+     * @return 部门用户关系
+     */
     Map<String, Set<String>> getAllDeptIdWithFatherGroupByUser();
 
     /**

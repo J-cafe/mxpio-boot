@@ -1,5 +1,6 @@
 package com.mxpioframework.multitenant.resource;
 
+import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.multitenant.domain.DataSourceInfo;
 import com.mxpioframework.multitenant.domain.Organization;
 import com.mxpioframework.multitenant.service.DataSourceInfoService;
@@ -19,6 +20,8 @@ public class DataSourceResourceAllocator implements ResourceAllocator {
 		DataSourceInfo dataSourceInfo = dataSourceInfoService.allocate(organization);
 		organization.setDataSourceInfoId(dataSourceInfo.getId());
 		dataSourceInfo.setDepletionIndex(dataSourceInfo.getDepletionIndex() + 1);
+		JpaUtil.persist(organization);
+		JpaUtil.persist(dataSourceInfo);
 	}
 
 }

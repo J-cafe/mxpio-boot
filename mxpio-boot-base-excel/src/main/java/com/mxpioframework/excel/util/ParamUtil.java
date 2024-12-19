@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.mxpioframework.security.access.datascope.provider.DataScapeContext;
 import com.mxpioframework.security.service.*;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -54,7 +55,7 @@ public class ParamUtil {
 			if (securityDecisionManager.decide(dataResource)) {
 				if (dataResource != null && dataResource.isHasFilter()) {
 					Map<String, CriteriaFilterPreProcessor> criteriaFilterPreProcessors = ApplicationContextProvider.getBeansOfType(CriteriaFilterPreProcessor.class);
-					Map<String, DataScapeProvider> dataScapeProviderMap = ApplicationContextProvider.getApplicationContextSpring().getBeansOfType(DataScapeProvider.class);
+					Map<String, DataScapeProvider> dataScapeProviderMap = SecurityUtils.getDataScapeProviderMap();
 					GrantedAuthorityService grantedAuthorityService = ApplicationContextProvider.getApplicationContextSpring().getBean(GrantedAuthorityService.class);
 					Map<String, List<DataFilter>> roleDataFilterMap = rbacCacheService.findAllDataFilter();
 					Collection<? extends GrantedAuthority> roleGrantedAuthorities = grantedAuthorityService.getGrantedAuthorities(SecurityUtils.getLoginUser());
@@ -68,6 +69,7 @@ public class ParamUtil {
 						}
 					}
 					if(!dataFilters.isEmpty()){
+						//多数据权限之间取并集
 						Junction juntion = new Junction(JunctionType.OR);
 						for(DataFilter dataFilter : dataFilters){
 							if(!dataResource.getId().equals(dataFilter.getDataResourceId())){
@@ -102,9 +104,10 @@ public class ParamUtil {
 									
 								} else if (com.mxpioframework.security.Constants.DatascopeEnum.SERVICE.getCode()
 										.equals(dataFilter.getDataScope()) && dataScapeProviderMap != null) {
+									DataScapeContext context = DataScapeContext.initContext();
 									for (Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()) {
 										if (entry.getKey().equals(dataFilter.getService())) {
-											List<Criterion> criterions = entry.getValue().provide();
+											List<Criterion> criterions = entry.getValue().provide(context);
 											Junction subJunction = new Junction(JunctionType.AND);
 											for (Criterion criterion : criterions) {
 												subJunction.addCriterion(criterion);
@@ -119,45 +122,6 @@ public class ParamUtil {
 						c.addCriterion(juntion);
 					}
 				}
-				/*if(dataResource.getDataScope() != null){
-					Map<String, CriteriaFilterPreProcessor> criteriaFilterPreProcessors = ApplicationContextProvider.getBeansOfType(CriteriaFilterPreProcessor.class);
-					Map<String, DataScapeProvider> dataScapeProviderMap = ApplicationContextProvider.getApplicationContextSpring().getBeansOfType(DataScapeProvider.class);
-					boolean filterAble = true;
-					if(criteriaFilterPreProcessors != null && dataResource.getPreProcess() != null){
-						CriteriaFilterPreProcessor processor = criteriaFilterPreProcessors.get(dataResource.getPreProcess());
-						if(processor != null){
-							filterAble = processor.process();
-						}
-					}
-					
-					if(filterAble){
-						if(com.mxpioframework.security.Constants.DatascopeEnum.DEPT.getCode().equals(dataResource.getDataScope())){
-							DeptService deptService = ApplicationContextProvider.getBean(DeptService.class);
-							Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(),"code");
-							c.addCriterion("createDept", Operator.IN, deptCodes);
-						}else if(com.mxpioframework.security.Constants.DatascopeEnum.USER.getCode().equals(dataResource.getDataScope())) {
-							c.addCriterion("createBy", Operator.EQ, SecurityUtils.getLoginUsername());
-						}else if(com.mxpioframework.security.Constants.DatascopeEnum.DEPT_AND_CHILD.getCode().equals(dataResource.getDataScope())){
-							DeptService deptService = ApplicationContextProvider.getBean(DeptService.class);
-							Set<String> deptCodes = deptService.getDeptKeysByUser(SecurityUtils.getLoginUsername(), "code");
-							if(deptCodes.size()>0){
-								c.addCriterion("createDept", Operator.LIKE_START, deptCodes.toArray()[0]);
-							}else{
-								c.addCriterion("createDept", Operator.EQ, "");
-							}
-						}else if(com.mxpioframework.security.Constants.DatascopeEnum.SERVICE.getCode().equals(dataResource.getDataScope())&&dataScapeProviderMap!=null){
-							for(Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()){
-								if(entry.getKey().equals(dataResource.getService())){
-									List<Criterion> criterions = entry.getValue().provide();
-									for(Criterion criterion : criterions){
-										c.addCriterion(criterion);
-									}
-									break;
-								}
-							}
-						}
-					}
-				}*/
 				decide = true;
 			}
 			if(!decide){

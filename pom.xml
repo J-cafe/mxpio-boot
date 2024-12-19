@@ -27,9 +27,10 @@
 		<mxpio.version>2.0.0</mxpio.version>
 		<java.version>21</java.version>
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
-		<swagger.version>1.6.11</swagger.version>
+		<springdoc.version>1.7.0</springdoc.version>
+		<knife4j.version>3.0.3</knife4j.version>
 		<fastjson.version>1.2.83</fastjson.version>
-		<druid.version>1.2.6</druid.version>
+		<druid.version>1.2.23</druid.version>
 		<jackson.version>2.17.0</jackson.version>
 		<poi.version>5.2.0</poi.version>
 		<liquibase.version>4.8.0</liquibase.version>
@@ -37,6 +38,8 @@
 		<minio.version>8.2.1</minio.version>
 		<camunda.version>7.21.0</camunda.version>
 		<burningwave.core.version>12.65.1</burningwave.core.version>
+		<aviator.version>4.2.7</aviator.version>
+		<hutool.version>5.8.32</hutool.version>
 	</properties>
 	<modules>
 		<module>mxpio-boot-base-autoconfigure</module>
@@ -287,17 +290,17 @@
 			<dependency>
 			   <groupId>org.springdoc</groupId>
 			   <artifactId>springdoc-openapi-ui</artifactId>
-			   <version>${swagger.version}</version>
+			   <version>${springdoc.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springdoc</groupId>
 				<artifactId>springdoc-openapi-webmvc-core</artifactId>
-				<version>${swagger.version}</version>
+				<version>${springdoc.version}</version>
 			</dependency>
 			<dependency>
 		        <groupId>com.github.xiaoymin</groupId>
 		        <artifactId>knife4j-springdoc-ui</artifactId>
-		        <version>3.0.3</version>
+		        <version>${knife4j.version}</version>
 		    </dependency>
 
 		    <dependency>
@@ -382,12 +385,17 @@
 			<dependency>
 				<groupId>com.googlecode.aviator</groupId>
 				<artifactId>aviator</artifactId>
-				<version>4.2.7</version>
+				<version>${aviator.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.assertj</groupId>
 				<artifactId>assertj-core</artifactId>
 				<version>3.23.1</version>
+			</dependency>
+			<dependency>
+				<groupId>cn.hutool</groupId>
+				<artifactId>hutool-http</artifactId>
+				<version>${hutool.version}</version>
 			</dependency>
 
 			<dependency>

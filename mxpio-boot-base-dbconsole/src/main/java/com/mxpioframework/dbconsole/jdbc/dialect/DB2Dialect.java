@@ -11,7 +11,7 @@ public class DB2Dialect extends AbstractDialect {
 	}
 	
 	private String getRowNumber(String sql) {
-		StringBuffer rownumber = new StringBuffer(50)
+		StringBuilder rownumber = new StringBuilder(50)
 			.append("rownumber() over(");
 
 		int orderByIndex = sql.toLowerCase().indexOf("order by");
@@ -26,7 +26,7 @@ public class DB2Dialect extends AbstractDialect {
 	}
 	
 	private static boolean hasDistinct(String sql) {
-		return sql.toLowerCase().indexOf("select distinct")>=0;
+		return sql.toLowerCase().contains("select distinct");
 	}
 
 	public  String getPaginationSql(String sql, int pageNo, int pageSize) {
@@ -35,8 +35,8 @@ public class DB2Dialect extends AbstractDialect {
 		
 		int startOfSelect = sql.toLowerCase().indexOf("select");
 
-		StringBuffer pagingSelect = new StringBuffer( sql.length()+100 )
-				.append( sql.substring(0, startOfSelect) )	// add the comment
+		StringBuilder pagingSelect = new StringBuilder( sql.length()+100 )
+				.append(sql, 0, startOfSelect)	// add the comment
 				.append("select * from ( select ") 			// nest the main query in an outer select
 				.append( getRowNumber(sql) ); 				// add the rownnumber bit into the outer query select list
 
@@ -52,7 +52,7 @@ public class DB2Dialect extends AbstractDialect {
 		pagingSelect.append(" ) as temp_ where rownumber_ ");
 
 		//add the restriction to the outer select
-		pagingSelect.append("between "+startNo+" and "+endNo+"");
+		pagingSelect.append("between ").append(startNo).append(" and ").append(endNo);
 		return pagingSelect.toString();
 	}
 
@@ -72,7 +72,7 @@ public class DB2Dialect extends AbstractDialect {
 		sql.append(this.generateCreateDefinitionSql(isnullAble));
 		if(!isnullAble){
 			sql.append(";");
-			sql.append("alter table "+tableName+" alter column "+columnName+" set not null");;
+			sql.append("alter table ").append(tableName).append(" alter column ").append(columnName).append(" set not null");;
 		}
 		return sql.toString();
 	}

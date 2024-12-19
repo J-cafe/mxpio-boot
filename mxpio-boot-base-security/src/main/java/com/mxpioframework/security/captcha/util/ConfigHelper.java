@@ -56,19 +56,11 @@ public class ConfigHelper
 						"Color can only have 3 (RGB) or 4 (RGB with Alpha) values.");
 			}
 		}
-		catch (NumberFormatException nfe)
-		{
-			throw new ConfigException(paramName, paramValue, nfe);
-		}
-		catch (ArrayIndexOutOfBoundsException aie)
-		{
-			throw new ConfigException(paramName, paramValue, aie);
-		}
-		catch (IllegalArgumentException iae)
+		catch (IllegalArgumentException | ArrayIndexOutOfBoundsException iae)
 		{
 			throw new ConfigException(paramName, paramValue, iae);
 		}
-		return color;
+        return color;
 	}
 
 	/** */
@@ -80,19 +72,11 @@ public class ConfigHelper
 			Field field = Class.forName("java.awt.Color").getField(paramValue);
 			color = (Color) field.get(null);
 		}
-		catch (NoSuchFieldException nsfe)
+		catch (NoSuchFieldException | ClassNotFoundException | IllegalAccessException nsfe)
 		{
 			throw new ConfigException(paramName, paramValue, nsfe);
 		}
-		catch (ClassNotFoundException cnfe)
-		{
-			throw new ConfigException(paramName, paramValue, cnfe);
-		}
-		catch (IllegalAccessException iae)
-		{
-			throw new ConfigException(paramName, paramValue, iae);
-		}
-		return color;
+        return color;
 	}
 
 	/** */
@@ -110,19 +94,11 @@ public class ConfigHelper
 			{
 				instance = Class.forName(paramValue).newInstance();
 			}
-			catch (IllegalAccessException iae)
+			catch (IllegalAccessException | ClassNotFoundException | InstantiationException iae)
 			{
 				throw new ConfigException(paramName, paramValue, iae);
 			}
-			catch (ClassNotFoundException cnfe)
-			{
-				throw new ConfigException(paramName, paramValue, cnfe);
-			}
-			catch (InstantiationException ie)
-			{
-				throw new ConfigException(paramName, paramValue, ie);
-			}
-		}
+        }
 
 		setConfigurable(instance, config);
 

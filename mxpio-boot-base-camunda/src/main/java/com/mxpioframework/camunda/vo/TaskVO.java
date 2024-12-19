@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mxpioframework.camunda.entity.BpmnTask;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
 import org.camunda.bpm.engine.history.HistoricTaskInstance;
 import org.camunda.bpm.engine.task.Task;
@@ -77,6 +78,8 @@ public class TaskVO implements Serializable, DictAble {
 
 	private String executionId;
 
+	private String bpmnSortFlag;
+
 	public TaskVO(HistoricTaskInstance task) {
 		this.id = task.getId();
 		this.assignee = task.getAssignee();
@@ -102,6 +105,24 @@ public class TaskVO implements Serializable, DictAble {
 		this.executionId = task.getExecutionId();
 	}
 
+	public TaskVO(BpmnTask task) {
+		this.id = task.getId();
+		this.assignee = task.getAssignee();
+		this.name = task.getName();
+		this.taskDefinitionKey = task.getTaskDefinitionKey();
+		this.processInstanceId = task.getProcessInstanceId();
+		this.processDefinitionId = task.getProcessDefinitionId();
+		this.createTime = task.getCreateTime();
+		// this.endTime = task.getEndTime();
+		this.executionId = task.getExecutionId();
+		this.procStartUserId = task.getProcStartUserId();
+		this.processDefinitionName = task.getProcessDefinitionName();
+		this.bpmnSortFlag=task.getBpmnSortFlag();
+		this.procStartTime=task.getProcStartTime();
+		this.processDefinitionKey = task.getProcessDefinitionKey();
+		this.title = task.getProcTitle();
+	}
+
 	public TaskVO(HistoricTaskInstance task, HistoricProcessInstance historicProcessInstance) {
 		this(task);
 		this.procStartTime = historicProcessInstance.getStartTime();
@@ -115,6 +136,14 @@ public class TaskVO implements Serializable, DictAble {
 		this.procStartTime = historicProcessInstance.getStartTime();
 		this.procStartUserId = historicProcessInstance.getStartUserId();
 		this.processDefinitionName = historicProcessInstance.getProcessDefinitionName();
+		this.processDefinitionKey = historicProcessInstance.getProcessDefinitionKey();
+	}
+
+	public TaskVO(BpmnTask task, HistoricProcessInstance historicProcessInstance) {
+		this(task);
+		this.procStartTime = historicProcessInstance.getStartTime();
+		//this.procStartUserId = historicProcessInstance.getStartUserId();
+		//this.processDefinitionName = historicProcessInstance.getProcessDefinitionName();
 		this.processDefinitionKey = historicProcessInstance.getProcessDefinitionKey();
 	}
 

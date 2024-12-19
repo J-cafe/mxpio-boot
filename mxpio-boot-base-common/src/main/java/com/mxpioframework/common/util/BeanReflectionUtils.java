@@ -52,8 +52,8 @@ public final class BeanReflectionUtils {
 	/**
 	 * 加载Clazz及其父类的Fields
 	 *
-	 * @param clazz
-	 * @return
+	 * @param clazz 目标类
+	 * @return 属性Field集合
 	 */
 	public static List<Field> loadClassFields(Class<?> clazz) {
 		List<Field> fields = new ArrayList<Field>();

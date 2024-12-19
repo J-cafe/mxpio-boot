@@ -1,7 +1,9 @@
 package com.mxpioframework.security.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 
+import com.mxpioframework.jpa.lin.Linq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -63,7 +65,7 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Page<User> getUsersWithout(Pageable pageAble, Criteria criteria, String roleId) {
+	public Page<User> pagingUsersWithout(Pageable pageAble, Criteria criteria, String roleId) {
 		return JpaUtil
 				.linq(User.class)
 				.where(criteria)
@@ -76,7 +78,7 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Page<User> getUsersWithin(Pageable pageAble, Criteria criteria, String roleId) {
+	public Page<User> pagingUsersWithin(Pageable pageAble, Criteria criteria, String roleId) {
 		return JpaUtil
 				.linq(User.class)
 				.where(criteria)
@@ -85,6 +87,21 @@ public class RoleServiceImpl implements RoleService {
 					.equal("roleId", roleId)
 				.end()
 				.paging(pageAble);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<User> getUsersWithin(Criteria criteria, String roleId) {
+		Linq linq = JpaUtil.linq(User.class);
+		/*if(criteria != null){
+			linq.where(criteria);
+		}*/
+		return linq.exists(RoleGrantedAuthority.class)
+					.equalProperty("actorId", "username")
+					.equal("roleId", roleId)
+					.where(criteria)
+				.end()
+				.list();
 	}
 
 	@Override

@@ -44,12 +44,12 @@ public class DingTalkAuthorizeUserProvider implements ThirdAuthorizeUserProvider
         try {
             response = client.execute(request, access_token);
         } catch (ApiException e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
             throw new ThirdAuthorizeException( "获取钉钉用户UserId失败："+e.getMessage());
         }
         String userId = response.getUserid();
         List<User> user = JpaUtil.linq(User.class).equal("thirdId", userId).list();
-        if (user==null||user.size()==0){
+        if (user==null|| user.isEmpty()){
             String msg = "三方用户ID未能在应用系统中匹配到用户";
             if (StringUtils.isNotBlank(response.getErrmsg())){
                 msg += "，原因："+response.getErrmsg();

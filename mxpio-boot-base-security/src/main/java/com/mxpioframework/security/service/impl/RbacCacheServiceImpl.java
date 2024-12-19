@@ -80,6 +80,14 @@ public class RbacCacheServiceImpl implements RbacCacheService {
         return JpaUtil.index(depts);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    @Cacheable(cacheNames = Constants.DEPT_CODE_CACHE_KEY, keyGenerator = Constants.KEY_GENERATOR_BEAN_NAME)
+    public Map<String, Dept> getDeptMapByCode() {
+        List<Dept> depts = JpaUtil.linq(Dept.class).list();
+        return JpaUtil.index(depts,"deptCode");
+    }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -122,11 +130,14 @@ public class RbacCacheServiceImpl implements RbacCacheService {
     }
 
     private void addFaDept(Set<String> deptIds, String deptId, Map<String, Dept> deptMap) {
-        String faDeptId = deptMap.get(deptId).getFaDeptId();
-        if (StringUtils.isNotEmpty(faDeptId)){
-            addFaDept(deptIds, faDeptId, deptMap);
-            deptIds.add(faDeptId);
-        }
+    	if(deptMap.containsKey(deptId)&&deptMap.get(deptId)!=null) {
+    		String faDeptId = deptMap.get(deptId).getFaDeptId();
+            if (StringUtils.isNotEmpty(faDeptId)){
+                addFaDept(deptIds, faDeptId, deptMap);
+                deptIds.add(faDeptId);
+            }
+    	}
+        
     }
 
     @Override

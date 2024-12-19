@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.mxpioframework.security.access.datascope.provider.DataScapeContext;
 import com.mxpioframework.security.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -35,12 +36,6 @@ import com.mxpioframework.security.util.SecurityUtils;
 @Component
 public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
-	@Autowired
-	private DataResourceService dataResourceService;
-	
-	@Autowired
-	private RoleDataFilterService roleDataFilterService;
-	
 	@Autowired
 	private GrantedAuthorityService grantedAuthorityService;
 	
@@ -129,9 +124,10 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 								
 							} else if (com.mxpioframework.security.Constants.DatascopeEnum.SERVICE.getCode()
 									.equals(dataFilter.getDataScope()) && dataScapeProviderMap != null) {
+								DataScapeContext context = DataScapeContext.initContext();
 								for (Entry<String, DataScapeProvider> entry : dataScapeProviderMap.entrySet()) {
 									if (entry.getKey().equals(dataFilter.getService())) {
-										List<Criterion> criterions = entry.getValue().provide();
+										List<Criterion> criterions = entry.getValue().provide(context);
 										Junction subJunction = new Junction(JunctionType.AND);
 										for (Criterion criterion : criterions) {
 											subJunction.addCriterion(criterion);

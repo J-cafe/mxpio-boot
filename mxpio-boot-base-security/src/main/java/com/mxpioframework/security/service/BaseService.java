@@ -26,26 +26,26 @@ public interface BaseService<T> {
 	
 	/**
 	 * 通用查询
-	 * @param clazz
-	 * @param c
-	 * @return
+	 * @param clazz 领域类
+	 * @param c 查询构造器
+	 * @return 查询结果
 	 */
 	public List<T> list(Class<T> clazz, Criteria c);
 	
 	/**
 	 * 根据ID查询
-	 * @param clazz
-	 * @param id
-	 * @return
+	 * @param clazz 领域类
+	 * @param id ID
+	 * @return 查询结果
 	 */
 	public <ID extends Serializable> T getById(Class<T> clazz, ID id);
 	
 	/**
 	 * 分页查询
-	 * @param clazz
-	 * @param page
-	 * @param c
-	 * @return
+	 * @param clazz 领域类
+	 * @param page 分页对象
+	 * @param c 查询构造器
+	 * @return 分页结果
 	 */
 	public Page<T> listPage(Class<T> clazz, Pageable page, Criteria c);
 }

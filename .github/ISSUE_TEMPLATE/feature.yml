@@ -1,0 +1,79 @@
+name: 功能建议
+description: 对本项目提出一个功能建议
+title: "[功能建议]: "
+labels: ["enhancement"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你的功能建议！请按照以下格式填写详细信息，以便我们更好地理解和评估你的建议。
+ 
+  - type: input
+    id: suggestion-title
+    attributes:
+      label: 功能建议标题
+      description: 简短描述你的功能建议
+      placeholder: 例如：“添加用户注销功能”
+      value: ""
+    validations:
+      required: true
+ 
+  - type: textarea
+    id: detailed-description
+    attributes:
+      label: 详细描述
+      description: 请详细描述你建议的功能，包括它的用途、预期效果以及它如何改进项目
+      value: ""
+    validations:
+      required: true
+ 
+  - type: input
+    id: user-story
+    attributes:
+      label: 用户故事
+      description: 描述一个使用该功能的用户故事（作为...我想要...以便...）
+      placeholder: 例如：“作为用户，我想要能够注销我的账户，以便保护我的个人信息安全”
+      value: ""
+    validations:
+      required: false
+ 
+  - type: checkboxes
+    id: benefits
+    attributes:
+      label: 该功能带来的好处
+      description: 选择或添加该功能可能带来的好处
+      options:
+        - label: 提升用户体验
+        - label: 增加项目功能
+        - label: 提高安全性
+        - label: 优化性能
+        - label: 其他（请在下方说明）
+      value: []
+ 
+  - type: textarea
+    id: additional-benefits
+    attributes:
+      label: 其他好处
+      description: 如果上面没有列出，请在这里描述该功能可能带来的其他好处
+      value: ""
+    validations:
+      required: false
+ 
+  - type: textarea
+    id: possible-implementation
+    attributes:
+      label: 可能的实现方案
+      description: 如果你有关于如何实现这个功能的想法，请在这里分享
+      value: ""
+    validations:
+      required: false
+ 
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: 附加信息
+      description: 任何其他有助于理解或评估这个功能建议的信息
+      value: ""
+    validations:
+      required: false

@@ -21,7 +21,7 @@ public interface UrlService extends BaseService<Url> {
 	
 	/**
 	 * 获取所有菜单及资源
-	 * @return
+	 * @return 所有菜单及资源
 	 */
 	public List<Resource> findAllResource();
 	

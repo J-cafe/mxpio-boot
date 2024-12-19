@@ -55,6 +55,4 @@ public class OrganizationController {
 		}
 		return Result.OK();
 	}
-	
-
 }

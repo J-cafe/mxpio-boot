@@ -24,3 +24,121 @@ INSERT INTO mb_dict_item(id_, create_by, create_time, update_by, update_time, di
 
 -- 流程待办按流程编码传参查询待办菜单
 INSERT INTO mb_url(id_, create_by, create_time, update_by, update_time, component_, description_, icon_, keep_alive_, name_, navigable_, order_, parent_id_, path_, title_, outside_, create_dept, rul_type_) VALUES ('e8082677-c319-4388-96cd-d19b486e821b', 'admin', '2024-06-04 11:11:30.591000', NULL, NULL, 'flow/task/MyTaskList', NULL, NULL, 1, NULL, 0, 4, '043e2b6d-7b72-4223-9706-10c50cb4bcb4', '/flowInstance/myTaskListByCode/:code', '我的待办', 0, 'QS01', 'C');
+
+drop table if exists V_BPMN_ALL_TASKS;
+CREATE OR REPLACE VIEW V_BPMN_ALL_TASKS AS
+select
+    t.* ,
+    p.START_TIME_ as proc_start_time_,
+    p.PROC_DEF_KEY_ as process_definition_key_,
+    v.TEXT_ as proc_title_
+from
+    (
+        select
+            distinct
+            `res`.`ID_` as `VIEW_ID_`,
+            RES.REV_,
+            RES.ID_,
+            RES.NAME_,
+            RES.PARENT_TASK_ID_,
+            RES.DESCRIPTION_,
+            RES.PRIORITY_,
+            RES.CREATE_TIME_,
+            RES.OWNER_,
+            RES.ASSIGNEE_,
+            RES.DELEGATION_,
+            RES.EXECUTION_ID_,
+            RES.PROC_INST_ID_,
+            RES.PROC_DEF_ID_,
+            (
+                select
+                    NAME_
+                from
+                    ACT_RE_PROCDEF F
+                where
+                    F.ID_ = RES.PROC_DEF_ID_ ) PROC_DEF_NAME_,
+            RES.CASE_EXECUTION_ID_,
+            RES.CASE_INST_ID_,
+            RES.CASE_DEF_ID_,
+            RES.TASK_DEF_KEY_,
+            RES.DUE_DATE_,
+            RES.FOLLOW_UP_DATE_,
+            RES.SUSPENSION_STATE_,
+            RES.TENANT_ID_,
+            '' as CANDIDATE_USER,
+            '' as CANDIDATE_GROUP,
+            (
+                select
+                    TEXT_
+                from
+                    ACT_RU_VARIABLE V
+                where
+                    V.EXECUTION_ID_ = RES.EXECUTION_ID_
+                  and V.PROC_INST_ID_ = RES.PROC_INST_ID_
+                  and V.PROC_DEF_ID_ = RES.PROC_DEF_ID_
+                  and V.NAME_ = 'createBy') as PROC_START_USER_ID_,
+            IFNULL((select TEXT_ from ACT_RU_VARIABLE V where V.EXECUTION_ID_ = RES.EXECUTION_ID_ and V.PROC_INST_ID_ = RES.PROC_INST_ID_ and V.PROC_DEF_ID_ = RES.PROC_DEF_ID_ and V.NAME_ = '$BPMN_SORT_FLAG_'), '0') as BPMN_SORT_FLAG_
+        from
+            ACT_RU_TASK RES
+        where
+            RES.SUSPENSION_STATE_ = 1
+        union all
+        select
+            distinct
+            CONCAT( `res`.`ID_`, `i`.`ID_` ) as `VIEW_ID_`,
+            RES.REV_,
+            RES.ID_,
+            RES.NAME_,
+            RES.PARENT_TASK_ID_,
+            RES.DESCRIPTION_,
+            RES.PRIORITY_,
+            RES.CREATE_TIME_,
+            RES.OWNER_,
+            RES.ASSIGNEE_,
+            RES.DELEGATION_,
+            RES.EXECUTION_ID_,
+            RES.PROC_INST_ID_,
+            RES.PROC_DEF_ID_,
+            (
+                select
+                    NAME_
+                from
+                    ACT_RE_PROCDEF F
+                where
+                    F.ID_ = RES.PROC_DEF_ID_ ) PROC_DEF_NAME_,
+            RES.CASE_EXECUTION_ID_,
+            RES.CASE_INST_ID_,
+            RES.CASE_DEF_ID_,
+            RES.TASK_DEF_KEY_,
+            RES.DUE_DATE_,
+            RES.FOLLOW_UP_DATE_,
+            RES.SUSPENSION_STATE_,
+            RES.TENANT_ID_,
+            I.USER_ID_ as CANDIDATE_USER,
+            I.GROUP_ID_ as CANDIDATE_GROUP,
+            (
+                select
+                    TEXT_
+                from
+                    ACT_RU_VARIABLE V
+                where
+                    V.EXECUTION_ID_ = RES.EXECUTION_ID_
+                  and V.PROC_INST_ID_ = RES.PROC_INST_ID_
+                  and V.PROC_DEF_ID_ = RES.PROC_DEF_ID_
+                  and V.NAME_ = 'createBy') as PROC_START_USER_ID_,
+            IFNULL((select TEXT_ from ACT_RU_VARIABLE V where V.EXECUTION_ID_ = RES.EXECUTION_ID_ and V.PROC_INST_ID_ = RES.PROC_INST_ID_ and V.PROC_DEF_ID_ = RES.PROC_DEF_ID_ and V.NAME_ = '$BPMN_SORT_FLAG_'), '0') as BPMN_SORT_FLAG_
+        from
+            ACT_RU_TASK RES
+                left join ACT_RU_IDENTITYLINK I on
+                I.TASK_ID_ = RES.ID_
+        where
+            RES.ASSIGNEE_ is null
+          and I.TYPE_ = 'candidate'
+          and RES.SUSPENSION_STATE_ = 1)t
+        left join ACT_HI_PROCINST p on
+        t.PROC_INST_ID_ = p.PROC_INST_ID_
+        left join act_hi_varinst v on
+        t.PROC_INST_ID_ = v.PROC_INST_ID_
+            and v.NAME_ = '$BPMN_TITLE_';
+
+

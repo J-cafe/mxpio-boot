@@ -17,6 +17,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -56,11 +57,11 @@ public class MinIOStorageProvider implements FileStorageProvider {
 
     @Override
     public String put(MultipartFile file) throws IllegalStateException, IOException {
-        return put(file.getInputStream(), file.getOriginalFilename(), file.getSize(),file.getContentType());
+        return put(file.getInputStream(), Objects.requireNonNull(file.getOriginalFilename()), file.getSize(),file.getContentType());
     }
 
     @Override
-    public InputStream getInputStream(String relativePath) throws FileNotFoundException {
+    public InputStream getInputStream(String relativePath) throws IOException {
         String bucketName = StringUtils.substring(relativePath,0,StringUtils.indexOf(relativePath,"/"));
         String objectPath = StringUtils.substring(relativePath,StringUtils.indexOf(relativePath,"/")+1);
         GetObjectArgs objectArgs = GetObjectArgs.builder().bucket(bucketName).object(objectPath).build();

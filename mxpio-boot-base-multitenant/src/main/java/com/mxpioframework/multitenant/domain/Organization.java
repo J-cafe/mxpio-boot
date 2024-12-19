@@ -1,5 +1,7 @@
 package com.mxpioframework.multitenant.domain;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.io.Serializable;
 
 import jakarta.persistence.Column;
@@ -9,6 +11,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
 @Entity
+@Schema(description="租户")
 @Table(name = "MB_ORGANIZATION")
 public class Organization implements Serializable {
 
@@ -19,12 +22,15 @@ public class Organization implements Serializable {
 	private String id;
 
 	@Column(name = "NAME_")
+	@Schema(description="租户名称")
 	private String name;
 
 	@Column(name = "DATA_SOURCE_INFO_ID_")
+	@Schema(description="数据源ID")
 	private String dataSourceInfoId;
 
 	@Transient
+	@Schema(description="数据源信息")
 	private DataSourceInfo dataSourceInfo;
 
 	public String getId() {
