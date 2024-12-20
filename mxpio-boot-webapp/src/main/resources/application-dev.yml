@@ -27,17 +27,18 @@ spring:
       platform: mysql
       schema-locations: classpath*:schema-${spring.sql.init.platform}.sql
       data-locations: classpath*:data-${spring.sql.init.platform}.sql,classpath*:data.sql
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    password:
-    timeout:
-    lettuce:
-      pool:
-        maxActive: 8
-        maxWait: -1
-        maxIdle: 8
-        minIdle: 0
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password:
+      timeout:
+      lettuce:
+        pool:
+          maxActive: 8
+          maxWait: -1
+          maxIdle: 8
+          minIdle: 0
   quartz:
     #持久化到数据库方式
     job-store-type: jdbc
@@ -61,6 +62,8 @@ spring:
             threadCount: 10
             threadPriority: 5
             threadsInheritContextClassLoaderOfInitializingThread: true
+  main:
+    allow-circular-references: true
 management:
   endpoints:
     web:

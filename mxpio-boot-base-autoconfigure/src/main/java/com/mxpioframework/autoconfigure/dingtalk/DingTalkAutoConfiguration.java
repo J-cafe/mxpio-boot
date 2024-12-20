@@ -8,13 +8,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-/**
- * @Author : wpp
- * @Datetime : 2023/10/7 16:22
- * @Desc :
- * @Modor :  Modifytime:
- * @modDesc :
- */
 @Configuration
 @ConditionalOnClass(DingTalkConfiguration.class)
 @Import(DingTalkConfiguration.class)
