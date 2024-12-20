@@ -22,8 +22,6 @@ import lombok.ToString;
 @ToString
 public class FormModel extends BaseEntity {
 
-	private static final long serialVersionUID = 1L;
-
 	@Id
 	@Column(name = "CODE_")
 	@Schema(description = "表单编码")

@@ -7,8 +7,6 @@ import lombok.Data;
 @Data
 public class ResultMessage implements Serializable {
 	
-	private static final long serialVersionUID = 1L;
-
 	private boolean success;
 	
 	private String msg;

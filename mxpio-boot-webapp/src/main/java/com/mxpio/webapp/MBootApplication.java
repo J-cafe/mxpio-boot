@@ -11,9 +11,11 @@ import org.springframework.core.env.Environment;
 import com.mxpioframework.common.CommonConstant;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 @Slf4j
 @SpringBootApplication
+@EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 public class MBootApplication {
 
 	public static void main(String[] args) throws UnknownHostException {

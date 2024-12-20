@@ -16,7 +16,6 @@ import java.util.Date;
 @Table(name = "V_BPMN_ALL_TASKS")
 @Schema(description="任务")
 public class BpmnTask implements Serializable {
-    private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "VIEW_ID_")

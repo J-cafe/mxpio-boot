@@ -13,6 +13,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.io.Serial;
+
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Entity
@@ -20,8 +22,6 @@ import lombok.ToString;
 @Schema(description="流程表单定义信息")
 @ToString
 public class FormModelDef extends BaseEntity {
-
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "KEY_")

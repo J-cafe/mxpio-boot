@@ -28,9 +28,6 @@ import lombok.Data;
 @MappedSuperclass
 public class BaseEntity implements DictAble, Serializable, MxpioEntity {
 
-  private static final long serialVersionUID = 1L;
-
-
   @Generator(policy = CreatorPolicy.class)
   @Column(name = "CREATE_BY", updatable = false)
   @Schema(description = "创建人")

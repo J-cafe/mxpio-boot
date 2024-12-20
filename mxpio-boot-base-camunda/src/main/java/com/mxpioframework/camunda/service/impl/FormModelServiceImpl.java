@@ -34,6 +34,7 @@ public class FormModelServiceImpl implements FormModelService {
 	public FormModel deploy(String code) {
 		FormModel formModel = JpaUtil.linq(FormModel.class).idEqual(code).findOne();
 		Long count = JpaUtil.linq(FormModelDef.class).equal("code", formModel.getCode()).count();
+
 		FormModelDef def = new FormModelDef();
 		def.setCode(formModel.getCode());
 		def.setModel(formModel.getModel());

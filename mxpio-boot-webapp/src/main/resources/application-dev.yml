@@ -15,7 +15,7 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    url: jdbc:mysql://localhost:3306/mboot?characterEncoding=utf-8&useSSL=true&nullCatalogMeansCurrent=true
+    url: jdbc:mysql://localhost:3306/mboot_boot3?characterEncoding=utf-8&useSSL=true&nullCatalogMeansCurrent=true
     username: root
     password: mxp9827459
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -74,8 +74,11 @@ camunda:
     database:
       type: mysql
       schema-update: true
-    history-level: FULL
-    auto-deployment-enabled: false # 自动部署 resources 下的 bpmn文件
+    historyLevel: FULL
+    generic-properties:
+      properties:
+        enforceHistoryTimeToLive: false
+    autoDeploymentEnabled: false # 自动部署 resources 下的 bpmn文件
     eventing:
       execution: true
       history: true
