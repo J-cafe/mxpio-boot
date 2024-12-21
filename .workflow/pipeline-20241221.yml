@@ -1,0 +1,25 @@
+version: '1.0'
+name: pipeline-20241221
+displayName: pipeline-20241221
+triggers:
+  trigger: auto
+  push:
+    branches:
+      prefix:
+        - ''
+stages:
+  - name: stage-a529506f
+    displayName: 扫描
+    strategy: naturally
+    trigger: auto
+    executor: []
+    steps:
+      - step: sc@opensca
+        name: open_sca
+        displayName: OpenSCA 开源组件检测
+        detectPath: ./
+        notify: []
+        strategy:
+          retry: '0'
+strategy:
+  blocking: true
