@@ -1,12 +1,10 @@
 package com.mxpioframework.jpa.query;
 
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,9 +17,9 @@ import com.mxpioframework.jpa.lin.Linq;
 public class CriteriaUtils {
 	
 	static ObjectMapper objectMapper = new ObjectMapper();
-	
+
 	private static String YMD_HMS = "yyyy-MM-dd HH:mm:ss";
-	
+
 	private static String YMD = "yyyy-MM-dd";
 	
 	/**
@@ -156,6 +154,8 @@ public class CriteriaUtils {
 		} else if (Operator.IN.equals(operator)) {
 			if(value instanceof String) {
 				linq.in(property, (Object[]) ((String) value).split(","));
+			}else if (value instanceof Collection<?>) {
+				linq.in(property, ((Collection<?>) value).toArray());
 			}else {
 				linq.in(property, value);
 			}
@@ -178,10 +178,9 @@ public class CriteriaUtils {
 	public static StringBuilder parseQL(SimpleCriterion criterion) {
 		StringBuilder c = new StringBuilder();
 		String p = criterion.getFieldName();
-		String property = p;
-		Object value = criterion.getValue();
+        Object value = criterion.getValue();
 		Operator operator = criterion.getOperator();
-		c.append(property);
+		c.append(p);
 		if (Operator.LIKE_END.equals(operator)) {
 			c.append(" like ");
 			criterion.setValue("%" + value);
@@ -219,7 +218,7 @@ public class CriteriaUtils {
 			c.append(" is not null ");
 			criterion.setValue(value);
 		}
-		c.append(":" + property);
+		c.append(":").append(p);
 		return c;
 	}
 
@@ -245,7 +244,7 @@ public class CriteriaUtils {
 			Criteria c = Criteria.create();
 			if (StringUtils.isNotEmpty(json)) {
 				if (json.startsWith("%")) {
-					json = URLDecoder.decode(json, "utf-8");
+					json = URLDecoder.decode(json, StandardCharsets.UTF_8);
 				}
 				c = Criteria.create(objectMapper.readValue(json, Criteria.class));
 				if(c.getCriterions() != null) {

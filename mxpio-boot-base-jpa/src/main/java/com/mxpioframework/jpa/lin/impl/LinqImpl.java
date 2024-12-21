@@ -40,6 +40,7 @@ import com.mxpioframework.jpa.transform.impl.Transformers;
 import net.sf.cglib.beans.BeanMap;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.hibernate.query.criteria.JpaCriteriaQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -314,8 +315,9 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 	}
 
 	protected TypedQuery<Long> getCountQuery() {
+		return em.createQuery(((JpaCriteriaQuery<?>) criteria).createCountQuery());
 
-		CriteriaBuilder cb = em.getCriteriaBuilder();
+		/*CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Long> criteria = cb.createQuery(Long.class);
 		criteria.getRoots().add(root);
 		applyPredicateToCriteria(criteria);
@@ -325,7 +327,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		} else {
 			criteria.select(cb.count(root));
 		}
-		return em.createQuery(criteria);
+		return em.createQuery(criteria);*/
 	}
 
 	protected void applyPredicateToCriteria(AbstractQuery<?> query) {

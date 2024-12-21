@@ -35,12 +35,12 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 	protected Q criteria;
 	protected Subquery<?> sq;
 	protected Root<?> root;
-	protected Stack<Junction> junctions = new Stack<Junction>();
+	protected Stack<Junction> junctions = new Stack<>();
 	protected Junction junction;
 	protected T parent;
 	protected Junction having;
-	protected List<String> aliases = new ArrayList<String>();
-	private Stack<Boolean> ifResult = new Stack<Boolean>();
+	protected List<String> aliases = new ArrayList<>();
+	private Stack<Boolean> ifResult = new Stack<>();
 
 	public LinImpl(Class<?> domainClass) {
 		this(domainClass, null);
@@ -71,33 +71,25 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 
 	@Override
 	public T addIf(Object target) {
-		boolean result;
-		if (target instanceof Boolean) {
-			result = (Boolean) target;
-		} else if (target instanceof Collection) {
-			result = !CollectionUtils.isEmpty((Collection<?>) target);
-		} else if (target instanceof String) {
-			result = !StringUtils.hasText((String) target);
-		} else {
-			result = !ObjectUtils.isEmpty(target);
-		}
-		ifResult.push(result);
+		boolean result = switch (target) {
+            case Boolean b -> b;
+            case Collection collection -> !CollectionUtils.isEmpty(collection);
+            case String s -> !StringUtils.hasText(s);
+            case null, default -> !ObjectUtils.isEmpty(target);
+        };
+        ifResult.push(result);
 		return (T) this;
 	}
 
 	@Override
 	public T addIfNot(Object target) {
-		boolean result;
-		if (target instanceof Boolean) {
-			result = !(Boolean) target;
-		} else if (target instanceof Collection) {
-			result = CollectionUtils.isEmpty((Collection<?>) target);
-		} else if (target instanceof String) {
-			result = StringUtils.hasText((String) target);
-		} else {
-			result = ObjectUtils.isEmpty(target);
-		}
-		ifResult.push(result);
+		boolean result = switch (target) {
+            case Boolean b -> !b;
+            case Collection collection -> CollectionUtils.isEmpty(collection);
+            case String s -> StringUtils.hasText(s);
+            case null, default -> ObjectUtils.isEmpty(target);
+        };
+        ifResult.push(result);
 		return (T) this;
 	}
 

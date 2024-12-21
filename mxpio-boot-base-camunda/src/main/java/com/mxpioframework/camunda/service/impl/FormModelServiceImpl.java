@@ -2,6 +2,7 @@ package com.mxpioframework.camunda.service.impl;
 
 import java.util.List;
 
+import com.mxpioframework.jpa.query.Operator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,10 @@ public class FormModelServiceImpl implements FormModelService {
 	@Transactional(readOnly = false)
 	public FormModel deploy(String code) {
 		FormModel formModel = JpaUtil.linq(FormModel.class).idEqual(code).findOne();
-		Long count = JpaUtil.linq(FormModelDef.class).equal("code", formModel.getCode()).count();
+		Criteria criteria = Criteria.create();
+		criteria.addCriterion("code", Operator.EQ, formModel.getCode());
+		Long count = JpaUtil.linq(FormModelDef.class).where(criteria).count();
+		// Long count = JpaUtil.linq(FormModelDef.class).equal("code", formModel.getCode()).count();
 
 		FormModelDef def = new FormModelDef();
 		def.setCode(formModel.getCode());
