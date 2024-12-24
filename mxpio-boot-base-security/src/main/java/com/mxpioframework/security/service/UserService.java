@@ -72,6 +72,10 @@ public interface UserService {
      */
     Page<User> queryAll(Criteria criteria, Pageable pageable);
 
+    Page<User> queryAllWithDept(Criteria criteria, Pageable pageable);
+
+    List<User> queryAllWithDept(Criteria criteria);
+
     /**
      * 查询全部不分页
      * @param criteria 条件

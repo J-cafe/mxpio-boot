@@ -50,7 +50,7 @@ public class UserController {
 			@RequestParam(value="pageSize", defaultValue = "10") Integer pageSize,
 			@RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) throws Exception {
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
-		Page<User> page = userService.queryAll(criteria, pageAble);
+		Page<User> page = userService.queryAllWithDept(criteria, pageAble);
 		return Result.OK(page);
 	}
 	
