@@ -128,5 +128,6 @@ public interface DeptService extends BaseService<Dept> {
 	 * @return 查询结果集合
 	 */
 	Set<String> getDeptKeysByUser(String username, String key);
-	
+
+	Dept getLevelOneDept(String deptCode);
 }

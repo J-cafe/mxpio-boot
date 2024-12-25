@@ -128,4 +128,15 @@ public class DeptController {
 	}
 
 
+	@GetMapping("getLevelOneDept/{deptCode}")
+	@Operation(summary = "根据部门编码查询对应一级部门", description = "根据部门编码查询对应一级部门", method = "GET")
+	public Result<Dept> getTopDept(@PathVariable(name = "deptCode", required = true) String deptCode) {
+		Dept dept = deptService.getLevelOneDept(deptCode);
+		if(dept==null){
+			return Result.error("未匹配到对应一级部门");
+		}
+		return Result.OK(dept);
+	}
+
+
 }

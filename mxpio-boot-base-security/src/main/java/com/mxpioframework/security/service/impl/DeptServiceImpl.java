@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.mxpioframework.security.enums.SecurityEnums;
 import com.mxpioframework.security.service.RbacCacheService;
 import com.mxpioframework.security.util.SecurityUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -370,7 +371,28 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 
 	}
 
-	private void getDeptCode(Dept dept,List<String> deptCodes){
+
+	@Override
+	@Transactional(readOnly = true)
+	public Dept getLevelOneDept(String deptCode) {
+		return getOneLevel(deptCode);
+	}
+
+	private Dept getOneLevel(String deptCode) {
+		Dept dept = JpaUtil.linq(Dept.class).equal("deptCode", deptCode).findOne();
+		if (dept != null){
+			if (dept.getDeptLevel().equals(SecurityEnums.DeptLevel.ONE.getCode())){
+				return dept;
+			}else if(StringUtils.isNotBlank(dept.getFaDeptId())){
+				Dept parent = JpaUtil.linq(Dept.class).equal("id", dept.getFaDeptId()).findOne();
+				return getOneLevel(parent.getDeptCode());
+			}
+		}
+		return null;
+	}
+
+
+	private void getDeptCode(Dept dept, List<String> deptCodes){
 		deptCodes.add(dept.getDeptCode());
 		if (dept.getChildren()!=null&& !dept.getChildren().isEmpty()){
 			for (Dept per:dept.getChildren()){
