@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.mxpioframework.system.service.DictCacheService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +19,13 @@ import com.mxpioframework.security.entity.Dict;
 import com.mxpioframework.security.entity.DictItem;
 import com.mxpioframework.system.service.DictService;
 
+import javax.annotation.Resource;
+
 @Service("mxpio.system.dictService")
 public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictService {
+
+	@Resource(name = "mxpio.system.dictCacheService")
+	private DictCacheService cacheService;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -97,13 +103,18 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 
 	@Override
 	@Transactional(readOnly = false)
-	public void saveItem(DictItem item) {
+	public void saveItem(DictItem item,Dict dict) {
+		String code = dict.getDictCode();
+		Map<String, String> dictMapping = this.getDictMappingByCode(code);
+		cacheService.put("DictCache:" + code, dictMapping);//刷新缓存值
 		JpaUtil.save(item);
 	}
 
 	@Override
 	@Transactional(readOnly = false)
-	public void updateItem(DictItem item) {
+	public void updateItem(DictItem item,String code) {
+		Map<String, String> dictMapping = this.getDictMappingByCode(code);
+		cacheService.put("DictCache:" + code, dictMapping);//刷新缓存值
 		JpaUtil.update(item);
 	}
 
