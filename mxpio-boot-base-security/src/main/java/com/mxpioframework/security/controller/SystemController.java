@@ -136,6 +136,11 @@ public class SystemController {
 						patternMap.put("message",Constants.RegexEnum.MINLENGTH12.getName());
 						configRegexs.add(patternMap);
 						break;
+					case "MINLENGTH8":
+						patternMap.put("min",Integer.parseInt(Constants.RegexEnum.MINLENGTH8.getCode()));
+						patternMap.put("message",Constants.RegexEnum.MINLENGTH8.getName());
+						configRegexs.add(patternMap);
+						break;
 					case "MINLENGTH6":
 						patternMap.put("min",Integer.parseInt(Constants.RegexEnum.MINLENGTH6.getCode()));
 						patternMap.put("message",Constants.RegexEnum.MINLENGTH6.getName());
