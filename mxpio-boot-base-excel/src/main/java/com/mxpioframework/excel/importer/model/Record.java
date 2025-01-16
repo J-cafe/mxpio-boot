@@ -7,7 +7,7 @@ public class Record {
 	
 	private int row = -1;
 
-	private Map<Integer, Cell> cellMap = new HashMap<>();
+	private final Map<Integer, Cell> cellMap = new HashMap<>();
 	
 	public boolean addCellIfNeed(Cell cell) {
 		if (row == -1) {

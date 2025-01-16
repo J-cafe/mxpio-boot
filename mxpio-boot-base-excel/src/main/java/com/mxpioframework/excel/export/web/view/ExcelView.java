@@ -67,10 +67,8 @@ public class ExcelView extends AbstractView {
 		} finally {
 			IOUtils.closeQuietly(input);
 			IOUtils.closeQuietly(out);
-			if (file != null) {
-				deletePreviousDayTempFile();
-			}
-		}
+            deletePreviousDayTempFile();
+        }
 	}
 	
 	private void deletePreviousDayTempFile() throws IOException {
@@ -78,7 +76,8 @@ public class ExcelView extends AbstractView {
 		File file = new File(location);
 		if (file.isDirectory()) {
 			File[] files = file.listFiles();
-			for (File f : files) {
+            assert files != null;
+            for (File f : files) {
 				long time = f.lastModified();
 				Calendar cal = Calendar.getInstance();
 				cal.setTimeInMillis(time);

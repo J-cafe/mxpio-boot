@@ -93,7 +93,7 @@ public abstract class AbstractPdfReportBuilder {
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				cell.setHorizontalAlignment(header.getAlign());
 				cell.setColspan(header.getColspan());
-				if (header.getColumnHeaders().size() == 0) {
+				if (header.getColumnHeaders().isEmpty()) {
 					int rowspan = maxHeaderLevel - (header.getLevel() - 1);
 					if (rowspan > 0) {
 						cell.setRowspan(rowspan);
@@ -116,7 +116,7 @@ public abstract class AbstractPdfReportBuilder {
 	private void generateGridColumnWidths(Collection<ColumnHeader> topHeaders, List<Integer> widths) {
 		for (ColumnHeader header : topHeaders) {
 			Collection<ColumnHeader> children = header.getColumnHeaders();
-			if (children.size() == 0) {
+			if (children.isEmpty()) {
 				widths.add(header.getWidth());
 			}
 			generateGridColumnWidths(children, widths);
@@ -146,7 +146,7 @@ public abstract class AbstractPdfReportBuilder {
 		for (int i = 1; i < 50; i++) {
 			List<ColumnHeader> result = new ArrayList<ColumnHeader>();
 			generateGridHeadersByLevel(topHeaders, i, result);
-			if (result.size() == 0) {
+			if (result.isEmpty()) {
 				max = i - 1;
 				break;
 			}
@@ -166,7 +166,7 @@ public abstract class AbstractPdfReportBuilder {
 		int count = 0;
 		for (int i = 0; i < s.length(); i++) {
 			char temp = s.charAt(i);
-			if (temp == '\u0009') {
+			if (temp == '\t') {
 				count++;
 			}
 		}

@@ -1,9 +1,9 @@
 package com.mxpioframework.excel.export.web.view;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +67,7 @@ public class PdfView extends AbstractView {
 		OutputStream output = response.getOutputStream();
 		InputStream input = null;
 		try {
-			input = new FileInputStream(file);
+			input = Files.newInputStream(file.toPath());
 			IOUtils.copy(input, output);
 			output.flush();
 		} finally {

@@ -49,11 +49,11 @@ public class PdfToSwfConverter {
 		File pdf = new File(sourcePdf);
 		long pdfSize = pdf.length() / (1024 * 1024);// 单位M
 		if (isWindows()) {
-			StringBuffer command = new StringBuffer(pdfToSwfPath + " " + sourcePdf);
+			StringBuilder command = new StringBuilder(pdfToSwfPath + " " + sourcePdf);
 			if (pdfSize > 1) {// 文件大于1M时，添加该参数增加转换效率
 				command.append(" -s poly2bitmap");
 			}
-			command.append(" -s languagedir=" + xpdfPath + "" + " -T 9 -o " + targetSwf);
+			command.append(" -s languagedir=").append(xpdfPath).append(" -T 9 -o ").append(targetSwf);
 			process = Runtime.getRuntime().exec(command.toString());
 		} else {
 			String[] cmd = null;
@@ -74,7 +74,7 @@ public class PdfToSwfConverter {
 				cmd[0] = pdfToSwfPath;
 				cmd[1] = sourcePdf;
 				cmd[2] = "-s";
-				cmd[3] = "languagedir=" + xpdfPath + "";
+				cmd[3] = "languagedir=" + xpdfPath;
 				cmd[4] = "-T";
 				cmd[5] = "9";
 				cmd[6] = "-o";
@@ -91,7 +91,7 @@ public class PdfToSwfConverter {
 
 	private boolean isWindows() {
 		String p = System.getProperty("os.name");
-		return p.toLowerCase().indexOf("windows") >= 0 ? true : false;
+		return p.toLowerCase().contains("windows");
 	}
 
 	public String getPdfToSwfPath() {
@@ -130,14 +130,12 @@ public class PdfToSwfConverter {
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			} finally {
-				if (br != null) {
-					try {
-						br.close();
-					} catch (IOException e) {
-						throw new RuntimeException(e);
-					}
-				}
-			}
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
 		}
 	}
 }

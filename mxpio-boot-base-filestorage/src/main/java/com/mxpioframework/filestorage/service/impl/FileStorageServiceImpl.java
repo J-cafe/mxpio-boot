@@ -38,7 +38,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public MxpioFileInfo put(String fileStorageType, InputStream inputStream, String filename,long fileSize,String contentType) throws IOException {
 		String relativePath = getFileStorageProvider(fileStorageType).put(inputStream,filename,fileSize,contentType);
 		return saveFile(fileStorageType, relativePath, filename);
@@ -135,7 +135,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public int remove(String fileNo) throws FileNotFoundException {
 		MxpioFileInfo mxpioFileInfo = get(fileNo);
 		

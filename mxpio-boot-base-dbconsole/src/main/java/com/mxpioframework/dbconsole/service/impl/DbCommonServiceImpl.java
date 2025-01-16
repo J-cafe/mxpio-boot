@@ -94,7 +94,7 @@ public class DbCommonServiceImpl implements IDbCommonService {
 
 	@Override
 	public List<TableInfo> findViewInfos(String dbInfoId) throws Exception {
-		List<TableInfo> tablesList = new ArrayList<TableInfo>();
+		List<TableInfo> tablesList = new ArrayList<>();
 		DataSource ds = this.getDataSourceByDbInfoId(dbInfoId);
 		Connection conn = null;
 		ResultSet rs = null;
@@ -339,11 +339,11 @@ public class DbCommonServiceImpl implements IDbCommonService {
 			StringBuilder selectSql = new StringBuilder();
 			StringBuilder countSql = new StringBuilder();
 			if (StringUtils.hasText(tableName)) {
-				selectSql.append("select * from " + tableName);
-				countSql.append("select count(*) from " + tableName);
+				selectSql.append("select * from ").append(tableName);
+				countSql.append("select count(*) from ").append(tableName);
 			} else if (StringUtils.hasText(sql)) {
 				selectSql.append(sql.replace(";", " "));
-				countSql.append("select count(*) from (" + selectSql + ") A");
+				countSql.append("select count(*) from (").append(selectSql).append(") A");
 			} else {
 				return dgw;
 			}
@@ -384,7 +384,7 @@ public class DbCommonServiceImpl implements IDbCommonService {
 			StringBuilder countSql = new StringBuilder();
 
 			selectSql.append(sql.replace(";", " "));
-			countSql.append("select count(*) from (" + selectSql + ") A");
+			countSql.append("select count(*) from (").append(selectSql).append(") A");
 
 			DataSource ds = this.getDataSourceByDbInfoId(dbInfoId);
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(ds);
@@ -399,9 +399,7 @@ public class DbCommonServiceImpl implements IDbCommonService {
 			}
 			long totalCount = jdbcTemplate.queryForObject(countSql.toString(),Long.class);
 
-			Page<Map<String, Object>> result = new PageImpl<Map<String, Object>>(listData, page, totalCount);
-
-			return result;
+            return new PageImpl<>(listData, page, totalCount);
 		}
 		return null;
 	}
@@ -409,30 +407,25 @@ public class DbCommonServiceImpl implements IDbCommonService {
 	@Override
 	public List<ColumnInfo> querySqlColumns(String dbInfoId, String sql) throws Exception {
 		if (StringUtils.hasText(dbInfoId)) {
-			StringBuilder selectSql = new StringBuilder();
-			selectSql.append(sql.replace(";", " "));
-			return this.findMultiColumnInfos(dbInfoId, selectSql.toString());
+            return this.findMultiColumnInfos(dbInfoId, sql.replace(";", " "));
 		}
 		return null;
 	}
 
 	protected IDialect getDialect(JdbcTemplate jdbcTemplate){
-		return jdbcTemplate.execute(new ConnectionCallback<IDialect>(){
-			public IDialect doInConnection(Connection connection) throws SQLException,
-					DataAccessException {
-				IDialect result=null;
-				for(IDialect dialect : dialects){
-					if(dialect.support(connection)){
-						result=dialect;
-						break;
-					}
-				}
-				return result;
-			}
-		});
+		return jdbcTemplate.execute((ConnectionCallback<IDialect>) connection -> {
+            IDialect result=null;
+            for(IDialect dialect : dialects){
+                if(dialect.support(connection)){
+                    result=dialect;
+                    break;
+                }
+            }
+            return result;
+        });
 	}
 
-	public IDialect getDBDialectByDbInfoId(JdbcTemplate jdbcTemplate) throws Exception {
+	public IDialect getDBDialectByDbInfoId(JdbcTemplate jdbcTemplate) {
 		return this.getDialect(jdbcTemplate);
 	}
 
@@ -454,29 +447,29 @@ public class DbCommonServiceImpl implements IDbCommonService {
 			StringBuilder selectSql = new StringBuilder();
 			StringBuilder countSql = new StringBuilder();
 			if (org.apache.commons.lang3.StringUtils.isNotEmpty(tableName)){
-				selectSql.append("select * from " + tableName + " WHERE 1=1");
-				countSql.append("select count(*) from " + tableName + " WHERE 1=1");
+				selectSql.append("select * from ").append(tableName).append(" WHERE 1=1");
+				countSql.append("select count(*) from ").append(tableName).append(" WHERE 1=1");
 			}else if (org.apache.commons.lang3.StringUtils.isNotEmpty(sql)){
 				selectSql.append(sql.replace(";", " "));
-				countSql.append("select count(*) from (" + selectSql + ") A");
+				countSql.append("select count(*) from (").append(selectSql).append(") A");
 			}else {
 				return dgw;
 			}
 			// 拼接where条件
 			if (!whereMap.isEmpty()){
-				String where = "";
+				StringBuilder where = new StringBuilder();
 				int count = 0;
 				for (Map.Entry<String, Object> entry : whereMap.entrySet()){
 					// 如果不是最后一个条件，加上AND
 					if (count == whereMap.size() - 2){
-						where += entry.getKey() + "=\'" + entry.getValue() + "\' AND ";
+						where.append(entry.getKey()).append("='").append(entry.getValue()).append("' AND ");
 					}else {
 						// 如果是最后一次循环，去掉AND "
 //						where += entry.getKey() + "=\'" + entry.getValue() + "";
 						if (count == whereMap.size() - 1){
-							where += entry.getKey() + "=\'" + entry.getValue() + "\'";
+							where.append(entry.getKey()).append("='").append(entry.getValue()).append("'");
 						}else {
-							where += entry.getKey() + "=\'" + entry.getValue() + "\' AND ";
+							where.append(entry.getKey()).append("='").append(entry.getValue()).append("' AND ");
 						}
 					}
 					count++;

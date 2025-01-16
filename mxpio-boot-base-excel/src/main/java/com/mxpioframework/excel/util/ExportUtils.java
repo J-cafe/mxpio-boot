@@ -34,8 +34,7 @@ public class ExportUtils {
 
 	public static SimpleDateFormat getSimpleDateFormat() {
 		String format = "yyyy-MM-dd HH:mm:ss";
-		SimpleDateFormat sdf = new SimpleDateFormat(format);
-		return sdf;
+        return new SimpleDateFormat(format);
 	}
 
 }

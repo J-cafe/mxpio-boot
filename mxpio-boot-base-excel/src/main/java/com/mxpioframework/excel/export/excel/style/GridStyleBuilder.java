@@ -230,7 +230,7 @@ public class GridStyleBuilder extends AbstractStyleBuilder {
 		dataStyle1.setFont(dataFont);
 		dataStyle1.setVerticalAlignment(VerticalAlignment.CENTER);
 		dataStyle1.setAlignment(HorizontalAlignment.LEFT);
-		dataStyle1.setIndention(Short.valueOf(String.valueOf((s))));
+		dataStyle1.setIndention(Short.parseShort(String.valueOf((s))));
 		return dataStyle1;
 	}
 

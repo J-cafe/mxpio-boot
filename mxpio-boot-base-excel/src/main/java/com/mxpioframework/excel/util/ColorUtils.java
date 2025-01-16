@@ -13,10 +13,9 @@ public class ColorUtils {
 		}
 		try {
 			convertedColor = new Color(Integer.parseInt(c, 16));
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException ignored) {
 		}
-		int[] rgb = new int[] { convertedColor.getRed(), convertedColor.getGreen(), convertedColor.getBlue() };
-		return rgb;
+        return new int[] { convertedColor.getRed(), convertedColor.getGreen(), convertedColor.getBlue() };
 	}
 
 }

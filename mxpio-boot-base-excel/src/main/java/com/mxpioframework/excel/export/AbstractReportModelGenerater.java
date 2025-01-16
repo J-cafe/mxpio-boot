@@ -29,8 +29,8 @@ public abstract class AbstractReportModelGenerater {
 		if (parameter == null) {
 			return reportTitle;
 		}
-		Boolean showTitle = parameter.isShowTitle();
-		if (showTitle != null && showTitle) {
+		boolean showTitle = parameter.isShowTitle();
+		if (showTitle) {
 			reportTitle.setShowTitle(true);
 			reportTitle.setTitle(parameter.getTitle());
 			reportTitle.setStyle(createTitleStyle(parameter));

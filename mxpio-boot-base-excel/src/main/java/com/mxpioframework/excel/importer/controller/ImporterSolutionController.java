@@ -45,9 +45,9 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	private static final Logger logger = LoggerFactory.getLogger(ImporterSolutionController.class);
 
 	private Collection<String> entityManagerFactoryNames;
-	private Map<String, List<String>> entityClassNameMap = new HashMap<>();
-	private Collection<Map<String,String>> cellPreParsers = new ArrayList<>();
-	private Collection<Map<String,String>> cellPostParsers = new ArrayList<>();
+	private final Map<String, List<String>> entityClassNameMap = new HashMap<>();
+	private final Collection<Map<String,String>> cellPreParsers = new ArrayList<>();
+	private final Collection<Map<String,String>> cellPostParsers = new ArrayList<>();
 
 	@Autowired
 	private AutoCreateMappingRulePolicy autoCreateMappingRulePolicy;
@@ -85,7 +85,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	@DeleteMapping("rule/remove/{ruleId}")
 	@Operation(summary = "删除规则", description = "删除规则", method = "DELETE")
 	public Result<MappingRule> removeRule(@PathVariable(name = "ruleId", required = true) String ruleId) {
-		String ids[] = ruleId.split(",");
+		String[] ids = ruleId.split(",");
 		importerSolutionService.deleteRule(ids);
 		return Result.OK("删除成功！",null);
 	}
@@ -145,7 +145,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 	@DeleteMapping("/remove/{id}")
 	@Operation(summary = "删除方案", description = "删除方案信息", method = "DELETE")
 	public Result<ImporterSolution> delete(@PathVariable(name = "id", required = true) String id) throws Exception {
-		String ids[] = id.split(",");
+		String[] ids = id.split(",");
 		importerSolutionService.deleteBatch(ids);
 		return Result.OK("删除成功",null);
 	}
@@ -185,7 +185,7 @@ public class ImporterSolutionController implements ApplicationContextAware {
 			}
 			entityClassNameMap.put(entry.getKey(), entityClassNames);
 		}
-		entityManagerFactoryNames = new ArrayList<String>(entityManagerFactoryMap.keySet());
+		entityManagerFactoryNames = new ArrayList<>(entityManagerFactoryMap.keySet());
 
 		Map<String, CellPreParser> cellPreParserMap = applicationContext.getBeansOfType(CellPreParser.class);
 		for (Entry<String, CellPreParser> entry : cellPreParserMap.entrySet()) {

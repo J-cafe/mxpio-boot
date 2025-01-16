@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -178,15 +179,12 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 	}
 
 	private void generateOtherFile(String extension, ReportTitle reportTitle, ExportSolution exportSolution, String fileName, String interceptorName, String key) throws Exception {
-		FileOutputStream out = new FileOutputStream(fileName);
-		try {
-			ReportBuilder builder = this.getReportBuilder(extension);
-			Assert.notNull(builder, "ReportBuilder is null.");
-			ReportGrid report = commonReportGenerater.generateReportGridModel(exportSolution, interceptorName, key);
-			builder.execute(out, report);
-		} finally {
-			out.close();
-		}
+        try (FileOutputStream out = new FileOutputStream(fileName)) {
+            ReportBuilder builder = this.getReportBuilder(extension);
+            Assert.notNull(builder, "ReportBuilder is null.");
+            ReportGrid report = commonReportGenerater.generateReportGridModel(exportSolution, interceptorName, key);
+            builder.execute(out, report);
+        }
 	}
 
 	public void afterPropertiesSet() throws Exception {
@@ -264,10 +262,8 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 		} finally {
 			IOUtils.closeQuietly(input);
 			IOUtils.closeQuietly(out);
-			if (file != null) {
-				deletePreviousDayTempFile();
-			}
-		}
+            deletePreviousDayTempFile();
+        }
 	}
 
 	private void deletePreviousDayTempFile() throws IOException {
@@ -275,7 +271,8 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 		File file = new File(location);
 		if (file.isDirectory()) {
 			File[] files = file.listFiles();
-			for (File f : files) {
+            assert files != null;
+            for (File f : files) {
 				long time = f.lastModified();
 				Calendar cal = Calendar.getInstance();
 				cal.setTimeInMillis(time);
@@ -336,14 +333,12 @@ public class Export2ReportController implements InitializingBean, ApplicationCon
 		OutputStream output = response.getOutputStream();
 		InputStream input = null;
 		try {
-			input = new FileInputStream(file);
+			input = Files.newInputStream(file.toPath());
 			IOUtils.copy(input, output);
 			output.flush();
 		} finally {
 			IOUtils.closeQuietly(input);
 			IOUtils.closeQuietly(output);
 		}
-
 	}
-
 }

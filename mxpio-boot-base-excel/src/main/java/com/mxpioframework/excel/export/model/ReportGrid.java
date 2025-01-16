@@ -30,7 +30,7 @@ public class ReportGrid {
 
 	private void calculateBottomColumnHeader(List<ReportGridHeader> gridHeader, List<ReportGridHeader> result) {
 		for (ReportGridHeader header : gridHeader) {
-			if (header.getHeaders().size() == 0) {
+			if (header.getHeaders().isEmpty()) {
 				result.add(header);
 			} else {
 				this.calculateBottomColumnHeader(header.getHeaders(), result);

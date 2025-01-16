@@ -85,28 +85,28 @@ public class ExportSolutionController {
 	
 	@PutMapping("edit")
 	@Operation(summary = "更新导出方案", description = "更新导出方案", method = "PUT")
-	public Result<ExportSolution> edit(@RequestBody ExportSolution exportSolution) throws Exception {
+	public Result<ExportSolution> edit(@RequestBody ExportSolution exportSolution) {
 		exportSolutionService.update(exportSolution);
 		return Result.OK("更新导出方案",exportSolution);
 	}
 	
 	@PostMapping("column/create/{solutionId}")
 	@Operation(summary = "生成字段", description = "生成字段", method = "POST")
-	public Result<ImporterSolution> autoCreateColumns(@PathVariable("solutionCode") String solutionCode) {
-		exportSolutionService.createColumnsByCode(solutionCode);
+	public Result<ImporterSolution> autoCreateColumns(@PathVariable("solutionId") String solutionId) {
+		exportSolutionService.createColumnsByCode(solutionId);
 		return Result.OK();
 	}
 	
 	@DeleteMapping("remove/{solutionIds}")
 	@Operation(summary = "删除导出方案", description = "删除导出方案", method = "DELETE")
-	public Result<List<ExportSolution>> remove(@PathVariable(name = "solutionIds", required = true) String solutionIds) throws Exception {
+	public Result<List<ExportSolution>> remove(@PathVariable(name = "solutionIds") String solutionIds) throws Exception {
 		exportSolutionService.deleteBatch(solutionIds);
 		return Result.OK("删除导出方案成功",null);
 	}
 	
 	@DeleteMapping("column/remove/{columnIds}")
 	@Operation(summary = "删除导出字段", description = "删除导出字段", method = "DELETE")
-	public Result<List<ExportSolution>> removeColumn(@PathVariable(name = "columnIds", required = true) String columnIds) throws Exception {
+	public Result<List<ExportSolution>> removeColumn(@PathVariable(name = "columnIds") String columnIds) throws Exception {
 		exportColumnService.deleteBatch(columnIds);
 		return Result.OK("删除导出字段成功",null);
 	}

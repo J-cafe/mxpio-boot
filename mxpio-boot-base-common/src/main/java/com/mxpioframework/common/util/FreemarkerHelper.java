@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class FreemarkerHelper {
-    private static Configuration configuration = new Configuration(Configuration.VERSION_2_3_28);
+    private static final Configuration configuration = new Configuration(Configuration.VERSION_2_3_28);
 
     public static String process(String templatePath, String encode, Map<String, Object> data) {
         try {

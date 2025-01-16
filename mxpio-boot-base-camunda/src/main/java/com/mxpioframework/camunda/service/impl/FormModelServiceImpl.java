@@ -30,7 +30,7 @@ public class FormModelServiceImpl implements FormModelService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public FormModel deploy(String code) {
 		FormModel formModel = JpaUtil.linq(FormModel.class).idEqual(code).findOne();
 		Long count = JpaUtil.linq(FormModelDef.class).equal("code", formModel.getCode()).count();
@@ -49,13 +49,13 @@ public class FormModelServiceImpl implements FormModelService {
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public void save(FormModel formModel) {
 		JpaUtil.save(formModel);
 	}
 
 	@Override
-	@Transactional(readOnly = false)
+	@Transactional
 	public void update(FormModel formModel) {
 		JpaUtil.update(formModel);
 	}

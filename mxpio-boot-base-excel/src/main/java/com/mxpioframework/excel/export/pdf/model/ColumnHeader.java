@@ -9,7 +9,7 @@ public class ColumnHeader extends TextChunk implements java.io.Serializable {
 	private int width;
 	private int[] bgColor;
 	private int level;
-	private List<ColumnHeader> columnHeaders = new ArrayList<ColumnHeader>();
+	private final List<ColumnHeader> columnHeaders = new ArrayList<>();
 	public ColumnHeader(int level) {
 		this.level = level;
 	}
@@ -18,7 +18,7 @@ public class ColumnHeader extends TextChunk implements java.io.Serializable {
 	}
 
 	public int getColspan() {
-		if (columnHeaders.size() == 0) {
+		if (columnHeaders.isEmpty()) {
 			return 1;
 		}
 		return calculateColspan(0, this.columnHeaders);
@@ -27,7 +27,7 @@ public class ColumnHeader extends TextChunk implements java.io.Serializable {
 		if (start == 0)
 			start += columnHeaders.size();
 		for (ColumnHeader header : columnHeaders) {
-			if (header.getColumnHeaders().size() > 0) {
+			if (!header.getColumnHeaders().isEmpty()) {
 				start += (header.getColumnHeaders().size() - 1);
 				start = calculateColspan(start, header.getColumnHeaders());
 			}

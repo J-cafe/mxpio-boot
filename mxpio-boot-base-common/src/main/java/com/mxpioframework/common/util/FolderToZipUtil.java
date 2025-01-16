@@ -38,11 +38,11 @@ public class FolderToZipUtil {
     }
 
     /**
-     * 文件压缩
-     * @param out
-     * @param bos
-     * @param sourceFile
-     * @param base
+     * 压缩文件或文件夹到ZIP文件
+     * @param out ZIP输出流
+     * @param bos 缓冲输出流
+     * @param sourceFile 源文件或文件夹
+     * @param base 压缩的基本路径
      */
     public static void compress(ZipOutputStream out, BufferedOutputStream bos, File sourceFile, String base){
         FileInputStream fos = null;
@@ -55,8 +55,8 @@ public class FolderToZipUtil {
                 if (flist.length == 0) {//如果文件夹为空，则只需在目的地zip文件中写入一个目录进入点
                     out.putNextEntry(new ZipEntry(base + "/"));
                 } else {//如果文件夹不为空，则递归调用compress，文件夹中的每一个文件（或文件夹）进行压缩
-                    for (int i = 0; i < flist.length; i++) {
-                        compress(out, bos, flist[i], base + "/" + flist[i].getName());
+                    for (File file : flist) {
+                        compress(out, bos, file, base + "/" + file.getName());
                     }
                 }
             } else {//如果不是目录（文件夹），即为文件，则先写入目录进入点，之后将文件写入zip文件中

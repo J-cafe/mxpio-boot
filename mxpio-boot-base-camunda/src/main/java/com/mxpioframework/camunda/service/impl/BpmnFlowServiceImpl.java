@@ -386,13 +386,14 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 		}
 	}
+
 	/**
-	 * 网关汇聚端，根据历史表寻找真实的网关路径
-	 * @param incomingtTransition
-	 * @param processDefinition
-	 * @param HistoricActivityInstanceEntityList
-	 * @param activityImpl
-	 * @return 真实网关路径
+	 * 获取网关的路径
+	 * @param incomingtTransition 进入的转移
+	 * @param processDefinition 流程定义
+	 * @param HistoricActivityInstanceEntityList 历史活动实例实体列表
+	 * @param activityImpl 活动实现
+	 * @return 网关的路径
 	 */
 	private List<PvmTransition> getGatewayPath(List<PvmTransition> incomingtTransition,ProcessDefinitionEntity processDefinition,List<HistoricActivityInstanceEntity> HistoricActivityInstanceEntityList,ActivityImpl activityImpl){
 		List<PvmTransition> realTransition = new ArrayList<>();
@@ -513,9 +514,9 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 	/**
 	 * 从需要回退的节点向后找,根据ACT_RU_EXECUTION表，找到所有待执行状态的userTask
-	 * @param executionEntityList
-	 * @param act
-	 * @param cancelSet
+	 * @param executionEntityList 执行实体列表
+	 * @param act 活动实现
+	 * @param cancelSet 取消集合
 	 */
 	public void findNeedCanceledUserTask(List<ExecutionEntity> executionEntityList,ActivityImpl act, Set<ExecutionEntity> cancelSet){
 		List<PvmTransition> outgoingList = act.getOutgoingTransitions();

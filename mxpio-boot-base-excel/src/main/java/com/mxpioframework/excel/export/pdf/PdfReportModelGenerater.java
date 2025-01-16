@@ -23,7 +23,7 @@ public class PdfReportModelGenerater extends AbstractReportModelGenerater {
 	public static final String BEAN_ID="mxpio.PdfReportModelGenerater";
 
 
-	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	public ReportDataModel generateReportGridModel(ExportSolution exportSolution, String intercepterBean, String key) throws Exception {
 		List<ExportColumn> columnInfos = exportSolution.getColumns();
@@ -36,9 +36,8 @@ public class PdfReportModelGenerater extends AbstractReportModelGenerater {
 
 		List<Map<String, Object>> dataMapList = getGridModelData(exportSolution, intercepterBean, key);
 		List<ReportData> reportDataList = createGridColumnData(dataMapList, topColumnHeaders, exportSolution, columDataAlignMap);
-		ReportDataModel dataModel = new ReportDataModel(topColumnHeaders, reportDataList);
-		
-		return dataModel;
+
+        return new ReportDataModel(topColumnHeaders, reportDataList);
 	}
 
 	private List<ReportData> createGridColumnData(List<Map<String, Object>> dataList, List<ColumnHeader> parentColumnHeaders, ExportSolution exportSolution, Map<String, Integer> dataColumnAlign) {
@@ -50,7 +49,7 @@ public class PdfReportModelGenerater extends AbstractReportModelGenerater {
 				Object data = dataMap.get(name);
 				TextChunk textChunk = new TextChunk();
 				String value = "";
-				if (data != null && data instanceof Date) {
+				if (data instanceof Date) {
 					value = simpleDateFormat.format((Date) data);
 					if (value.endsWith("00:00:00")) {
 						value = value.substring(0, 11);
@@ -60,7 +59,7 @@ public class PdfReportModelGenerater extends AbstractReportModelGenerater {
 						value = data.toString();
 					}
 				}
-				int dataAlign = (Integer) dataColumnAlign.get(name);
+				int dataAlign = dataColumnAlign.get(name);
 				textChunk.setFontSize(exportSolution.getDataFontSize());
 				textChunk.setFontColor(this.createRGB(exportSolution.getDataFontColor()));
 				textChunk.setText(value);
@@ -125,7 +124,7 @@ public class PdfReportModelGenerater extends AbstractReportModelGenerater {
 	
 	private void calculateBottomColumnNames(List<ColumnHeader> parentColumnHeaders, List<String> result) {
 		for (ColumnHeader header : parentColumnHeaders) {
-			if (header.getColumnHeaders().size() == 0) {
+			if (header.getColumnHeaders().isEmpty()) {
 				result.add(header.getName());
 			} else {
 				calculateBottomColumnNames(header.getColumnHeaders(), result);

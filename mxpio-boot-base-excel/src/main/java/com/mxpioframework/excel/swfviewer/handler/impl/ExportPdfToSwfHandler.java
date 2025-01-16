@@ -1,6 +1,7 @@
 package com.mxpioframework.excel.swfviewer.handler.impl;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +29,7 @@ public class ExportPdfToSwfHandler implements ISwfFileHandler {
 	public File execute(Map<String, String> varMap) throws Exception {
 		String id = varMap.get("id");
 		String name = varMap.get("name");
-		name = new String(name.getBytes("ISO-8859-1"), "UTF-8");
+		name = new String(name.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 		if (!StringUtils.isNotEmpty(id) || !id.matches("[a-z0-9-]+")) {
 			throw new IllegalArgumentException("illegal id");
 		}

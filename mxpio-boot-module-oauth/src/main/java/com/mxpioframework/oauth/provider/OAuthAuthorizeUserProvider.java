@@ -15,12 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 /**
- * @Author : wpp
- * @Datetime : 2023/10/25 17:17
- * @Desc :
- * @Modor :  Modifytime:
- * @modDesc :
+ * 三方授权用户获取
  */
 @Component
 public class OAuthAuthorizeUserProvider implements ThirdAuthorizeUserProvider {

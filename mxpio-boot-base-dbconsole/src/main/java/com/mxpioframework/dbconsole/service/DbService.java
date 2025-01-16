@@ -254,13 +254,10 @@ public class DbService extends DbCommonServiceImpl {
 		}
 		DataSource ds = getDataSourceByDbInfoId(dbInfoId);
 		final TransactionTemplate transactionTemplate = SpringJdbcUtils.getTransactionTemplate(ds);
-		return transactionTemplate.execute(new TransactionCallback<int[]>() {
-			public int[] doInTransaction(TransactionStatus status) {
-				JdbcTemplate jdbcTemplate = SpringJdbcUtils.getJdbcTemplate(transactionTemplate);
-				int[] i = jdbcTemplate.batchUpdate(fsqls);
-				return i;
-			}
-		});
+		return transactionTemplate.execute(status -> {
+            JdbcTemplate jdbcTemplate = SpringJdbcUtils.getJdbcTemplate(transactionTemplate);
+			return jdbcTemplate.batchUpdate(fsqls);
+        });
 	}
 
 	/**
@@ -296,19 +293,17 @@ public class DbService extends DbCommonServiceImpl {
 		}
 		DataSource ds = getDataSourceByDbInfoId(dbInfoId);
 		final TransactionTemplate transactionTemplate = SpringJdbcUtils.getTransactionTemplate(ds);
-		return transactionTemplate.execute(new TransactionCallback<int[]>() {
-			public int[] doInTransaction(TransactionStatus status) {
-				List<Integer> list = new ArrayList<>();
-				JdbcTemplate jdbcTemplate = SpringJdbcUtils.getJdbcTemplate(transactionTemplate);
-				for (SqlWrapper sw : listSqlWrapper) {
-					if (StringUtils.hasText(sw.getSql().trim())) {
-						Integer i = jdbcTemplate.update(sw.getSql(), sw.getArgs());
-						list.add(i);
-					}
-				}
-                return ArrayUtils.toPrimitive((Integer[]) list.toArray(new Integer[list.size()]));
-			}
-		});
+		return transactionTemplate.execute(status -> {
+            List<Integer> list = new ArrayList<>();
+            JdbcTemplate jdbcTemplate = SpringJdbcUtils.getJdbcTemplate(transactionTemplate);
+            for (SqlWrapper sw : listSqlWrapper) {
+                if (StringUtils.hasText(sw.getSql().trim())) {
+                    Integer i = jdbcTemplate.update(sw.getSql(), sw.getArgs());
+                    list.add(i);
+                }
+            }
+			return ArrayUtils.toPrimitive(list.toArray(new Integer[0]));
+        });
 	}
 
 	private String[] getFormatArrays(String[] args) {
@@ -319,7 +314,7 @@ public class DbService extends DbCommonServiceImpl {
 				list.add(s);
 			}
 		}
-		newString = list.toArray(new String[list.size()]);
+		newString = list.toArray(new String[0]);
 		return newString;
 	}
 
@@ -334,21 +329,18 @@ public class DbService extends DbCommonServiceImpl {
 	public String findSqlServerPKIndex(String dbInofId, final String tableName) throws Exception {
 		DataSource ds = getDataSourceByDbInfoId(dbInofId);
 		JdbcTemplate jdbcTemplate = SpringJdbcUtils.getJdbcTemplate(ds);
-		String s = jdbcTemplate.execute(new ConnectionCallback<String>() {
-			public String doInConnection(Connection con) throws SQLException, DataAccessException {
-				String pkName = null;
-				if (con.getMetaData().getURL().toLowerCase().contains("sqlserver")) {
-					CallableStatement call = con.prepareCall("{call sp_pkeys(?)}");
-					call.setString(1, tableName);
-					ResultSet rs = call.executeQuery();
-					while (rs.next()) {
-						pkName = rs.getString("PK_NAME");
-					}
-				}
-				return pkName;
-
-			}
-		});
+		String s = jdbcTemplate.execute((ConnectionCallback<String>) con -> {
+            String pkName = null;
+            if (con.getMetaData().getURL().toLowerCase().contains("sqlserver")) {
+                CallableStatement call = con.prepareCall("{call sp_pkeys(?)}");
+                call.setString(1, tableName);
+                ResultSet rs = call.executeQuery();
+                while (rs.next()) {
+                    pkName = rs.getString("PK_NAME");
+                }
+            }
+            return pkName;
+        });
 		return s;
 	}
 

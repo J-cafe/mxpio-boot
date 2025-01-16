@@ -12,7 +12,7 @@ import com.mxpioframework.dbconsole.service.ISqlWrapperService;
 @Component(ISqlWrapperService.BEAN_ID)
 public class SqlWrapperServiceImpl implements ISqlWrapperService {
 
-	public SqlWrapper getInsertTableSql(String tableName, Map<String, Object> map) throws Exception {
+	public SqlWrapper getInsertTableSql(String tableName, Map<String, Object> map) {
 		StringBuilder columnName = new StringBuilder();
 		StringBuilder values = new StringBuilder();
 		List<Object> list = new ArrayList<>();
@@ -34,7 +34,7 @@ public class SqlWrapperServiceImpl implements ISqlWrapperService {
 		return new SqlWrapper(sql, list.toArray());
 	}
 
-	public SqlWrapper getUpdateTableSql(String tableName, Map<String, Object> map, Map<String, Object> oldMap) throws Exception {
+	public SqlWrapper getUpdateTableSql(String tableName, Map<String, Object> map, Map<String, Object> oldMap) {
 		StringBuilder newParameter = new StringBuilder();
 		List<Object> list = new ArrayList<Object>();
 		int i = 1;
@@ -55,7 +55,7 @@ public class SqlWrapperServiceImpl implements ISqlWrapperService {
 
 	}
 
-	public SqlWrapper getDeleteTableSql(String tableName, Map<String, Object> oldMap) throws Exception {
+	public SqlWrapper getDeleteTableSql(String tableName, Map<String, Object> oldMap) {
 		List<Object> list = new ArrayList<>();
 		String whereParameter = this.generateWhereSql(list, oldMap);
 		String sql = "delete from  " + tableName + " where " + whereParameter;

@@ -83,6 +83,12 @@ public interface DataSetProvider {
 	 */
 	public <T extends DataSet> void updateDataSet(T dataSet);
 
+	/**
+	 * 将 JSON 字符串反序列化为指定类型的对象
+	 *
+	 * @param json JSON 字符串
+	 * @return 反序列化后的对象
+	 */
 	public <T extends DataSet> T unserialize(String json);
 
 

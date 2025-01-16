@@ -44,20 +44,20 @@ public class CvsReportBuilder implements ReportBuilder {
 	}
 	
 	private String getLineSeparator(){
-		return System.getProperty("line.separator");
+		return System.lineSeparator();
 	}
 
 	public boolean support(String extension) {
-		return extension.equals(FileExtension.csv) ? true : false;
+		return extension.equals(FileExtension.csv);
 	}
 
 	public void fillData(OutputStream out, ReportGrid gridModel) throws Exception {
 		List<ReportGridHeader> headers = gridModel.getColumnHeaders();
 		List<Map<String, Object>> datas = gridModel.getGridDataModel().getDatas();
-		StringBuffer rowStr = null;
+		StringBuilder rowStr = null;
 		//output header
 		if (gridModel.isShowHeader()){
-			rowStr = new StringBuffer();
+			rowStr = new StringBuilder();
 			int cellIndex = -1;
 			for (ReportGridHeader header : headers) {
 				cellIndex++;
@@ -65,7 +65,7 @@ public class CvsReportBuilder implements ReportBuilder {
 				if (StringUtils.isEmpty(value)){
 					value = header.getColumnName();
 				}
-				if (value.indexOf(delimiter)>-1){
+				if (value.contains(delimiter)){
 					value = StringUtils.replace(value, delimiter, " ");
 				}
 				rowStr.append(cellWrapSymbol).append(value).append(cellWrapSymbol);
@@ -79,7 +79,7 @@ public class CvsReportBuilder implements ReportBuilder {
 		}
 		//output data
 		for (Map<String, Object> currentRowData : datas) {
-			rowStr = new StringBuffer();
+			rowStr = new StringBuilder();
 			int cellIndex = -1;
 			for (ReportGridHeader header : headers) {
 				cellIndex++;

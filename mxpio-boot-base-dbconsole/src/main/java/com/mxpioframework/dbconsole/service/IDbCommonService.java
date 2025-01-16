@@ -89,6 +89,14 @@ public interface IDbCommonService {
 	 */
 	public DataGridWrapper queryTableData(String dbInfoId, String tableName, String sql, int pageSize, int pageNo) throws Exception;
 
+	/**
+	 * 根据数据库信息ID和SQL语句查询结果列表
+	 *
+	 * @param dbInfoId 数据库信息ID
+	 * @param sql SQL语句
+	 * @return 查询结果列表
+	 * @throws Exception 如果发生错误
+	 */
     List<Map<String, Object>> queryListBySql(String dbInfoId, String sql) throws Exception;
 
     /**
@@ -158,5 +166,17 @@ public interface IDbCommonService {
 	 */
 	public List<String> findDefaultColumnType(String dbInfoId) throws Exception;
 
+	/**
+	 * 查询某张表的所有列和数据
+	 *
+	 * @param dbInfoId 数据库ID
+	 * @param sql 执行SQL
+	 * @param tableName 表名
+	 * @param pageSize 每页条数
+	 * @param pageNo 页码
+	 * @param map 额外参数
+	 * @return 列和数据
+	 * @throws Exception 失败异常
+	 */
     public DataGridWrapper queryTableData(String dbInfoId, String sql, String tableName, int pageSize, Integer pageNo, Map<String, Object> map) throws Exception;
 }

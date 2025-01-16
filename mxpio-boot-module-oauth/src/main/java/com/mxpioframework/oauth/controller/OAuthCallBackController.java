@@ -7,12 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
 /**
- * @Author : wpp
- * @Datetime : 2023/10/25 17:22
- * @Desc :
- * @Modor :  Modifytime:
- * @modDesc :
+ * 认证回调
  */
 @Tag(name = "Auth2CallBackController", description = "Auth2CallBackController")
 @RestController("mxpio.auth2.Auth2CallBackController")

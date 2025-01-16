@@ -118,7 +118,7 @@ public class XSSFSheetHandler extends DefaultHandler {
                 break;
 
             default:
-            	throw new RuntimeException("Unexpected type: " + context.getNextDataType() + "");
+            	throw new RuntimeException("Unexpected type: " + context.getNextDataType());
             }
             
             context.getCurrentCell().setValue(thisStr);

@@ -86,15 +86,12 @@ public class FileController {
 
 		InputStream inputStream = fileService.getInputStream(mxpioFileInfo);
 		response.setHeader("Content-Length", "" + inputStream.available());//返回文件长度（下载进度）
-		if (inputStream == null) {
-			findNotFound(response, fileNo);
-		}
 
-		OutputStream outputStream = null;
+        OutputStream outputStream = null;
 		try {
 			outputStream = response.getOutputStream();
 			IOUtils.copy(inputStream, outputStream);
-		} catch (FileNotFoundException fne) {
+		} catch (FileNotFoundException ignored) {
 		} finally {
 			IOUtils.closeQuietly(inputStream);
 			IOUtils.closeQuietly(outputStream);

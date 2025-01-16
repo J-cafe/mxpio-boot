@@ -4,7 +4,7 @@ import com.mxpioframework.excel.importer.policy.Context;
 
 public interface CellPreParser {
 	
-	final String DEFAULT = "importer.defaultCellPreParser";
+	String DEFAULT = "importer.defaultCellPreParser";
 
 	
 	String getName();

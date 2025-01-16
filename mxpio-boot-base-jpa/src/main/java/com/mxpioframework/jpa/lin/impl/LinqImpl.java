@@ -51,15 +51,15 @@ import org.springframework.util.CollectionUtils;
 public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 
 	private LinqContext linqContext = new LinqContext();
-	private List<CollectInfo> collectInfos = new ArrayList<CollectInfo>();
-	private Map<Class<?>, String[]> projectionMap = new HashMap<Class<?>, String[]>();
+	private List<CollectInfo> collectInfos = new ArrayList<>();
+	private Map<Class<?>, String[]> projectionMap = new HashMap<>();
 	private Filter filter;
 	private boolean disableBackFillFilter;
-	private List<CriterionParser> criterionParsers = new ArrayList<CriterionParser>();
+	private List<CriterionParser> criterionParsers = new ArrayList<>();
 	private Criteria c;
 	private boolean disableSmartSubQueryCriterion;
 
-	protected List<Order> orders = new ArrayList<Order>();
+	protected List<Order> orders = new ArrayList<>();
 	protected boolean distinct;
 	protected Class<?> resultClass;
 	protected ResultTransformer resultTransformer;
@@ -129,7 +129,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		if (!beforeMethodInvoke()) {
 			return this;
 		}
-		List<Expression<?>> expressions = new ArrayList<Expression<?>>();
+		List<Expression<?>> expressions = new ArrayList<>();
 		for (String property : grouping) {
 			expressions.add(root.get(property));
 		}
@@ -194,7 +194,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		}
 		beforeExecute(criteria);
 		List<T> list = transform(em.createQuery(criteria), true);
-		if(list.size() > 0){
+		if(!list.isEmpty()){
 			return list.get(0);
 		}else{
 			return null;

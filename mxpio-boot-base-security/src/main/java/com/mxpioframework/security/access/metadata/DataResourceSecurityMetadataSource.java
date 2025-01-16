@@ -33,7 +33,7 @@ public class DataResourceSecurityMetadataSource implements SecurityMetadataSourc
 
 	@Override
 	public Collection<ConfigAttribute> getAllConfigAttributes() {
-		Set<ConfigAttribute> allAttributes = new HashSet<ConfigAttribute>();
+		Set<ConfigAttribute> allAttributes = new HashSet<>();
 
 		for (Map.Entry<String, Collection<ConfigAttribute>> entry : getDataResourceMap().entrySet()) {
 			allAttributes.addAll(entry.getValue());
