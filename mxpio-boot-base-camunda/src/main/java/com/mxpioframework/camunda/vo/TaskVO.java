@@ -80,6 +80,8 @@ public class TaskVO implements Serializable, DictAble {
 
 	private String bpmnSortFlag;
 
+	private String bizType;
+
 	public TaskVO(HistoricTaskInstance task) {
 		this.id = task.getId();
 		this.assignee = task.getAssignee();
@@ -121,6 +123,7 @@ public class TaskVO implements Serializable, DictAble {
 		this.procStartTime=task.getProcStartTime();
 		this.processDefinitionKey = task.getProcessDefinitionKey();
 		this.title = task.getProcTitle();
+		this.bizType = task.getBizType();
 	}
 
 	public TaskVO(HistoricTaskInstance task, HistoricProcessInstance historicProcessInstance) {
