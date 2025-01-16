@@ -5,10 +5,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
 import com.mxpioframework.common.vo.Result;
+import com.mxpioframework.security.entity.Dept;
+import com.mxpioframework.security.entity.UserDept;
 import com.mxpioframework.security.vo.UpatePassVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +101,47 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	public Page<User> queryAll(Criteria criteria, Pageable pageable) {
 		return JpaUtil.linq(User.class).where(criteria).paging(pageable);
 	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public Page<User> queryAllWithDept(Criteria criteria, Pageable pageable) {
+		Page<User> paging = JpaUtil.linq(User.class).where(criteria).paging(pageable);
+		if (paging.getContent().isEmpty()){
+			return paging;
+		}
+		List<User> userList = paging.getContent();
+		List<String> username = userList.stream().map(User::getUsername).collect(Collectors.toList());
+		List<UserDept> userDeptList = JpaUtil.linq(UserDept.class).collect("id",Dept.class,"deptId").in("userId", username).list();
+		if (!userDeptList.isEmpty()){
+			Map<String, UserDept> userDeptMap = JpaUtil.index(userDeptList, "userId");
+			for (User user:userList){
+				if (userDeptMap.containsKey(user.getUsername())){
+					user.setDept(userDeptMap.get(user.getUsername()).getDept());
+				}
+			}
+		}
+		return paging;
+	}
+	@Transactional(readOnly = true)
+	@Override
+	public List<User> queryAllWithDept(Criteria criteria) {
+		List<User> userList = JpaUtil.linq(User.class).where(criteria).list();
+		if (userList.isEmpty()){
+			return userList;
+		}
+		List<String> username = userList.stream().map(User::getUsername).collect(Collectors.toList());
+		List<UserDept> userDeptList = JpaUtil.linq(UserDept.class).collect("id",Dept.class,"deptId").in("userId", username).list();
+		if (!userDeptList.isEmpty()){
+			Map<String, UserDept> userDeptMap = JpaUtil.index(userDeptList, "userId");
+			for (User user:userList){
+				if (userDeptMap.containsKey(user.getUsername())){
+					user.setDept(userDeptMap.get(user.getUsername()).getDept());
+				}
+			}
+		}
+		return userList;
+	}
+
 
 	@Override
 	@Transactional(readOnly = true)

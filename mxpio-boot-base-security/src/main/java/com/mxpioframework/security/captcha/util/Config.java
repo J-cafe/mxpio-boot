@@ -83,7 +83,7 @@ public class Config
 	{
 		String paramName = Constants.CAPTCHA_TEXTPRODUCER_CHAR_STRING;
 		String paramValue = this.properties.getProperty(paramName);
-		return this.helper.getChars(paramName, paramValue, "abcde2345678gfynmnpwx".toCharArray());
+		return this.helper.getChars(paramName, paramValue, "1234567890".toCharArray());//abcde2345678gfynmnpwx
 	}
 
 	/** */

@@ -64,7 +64,7 @@ public class Constants {
 		DIGANDLETTER("^(?=.*[0-9])(?=.*[a-zA-Z]).+$", "包含数字和字母"),
 		CONTINUOUS("(?!.*(?<re1>[a-zA-Z0-9])\\k<re1>{3})(?<!.*(?<re2>[a-zA-Z0-9])\\k<re2>{3})", "不能是连续的数字、字母"),
 		MINLENGTH12("12", "最短长度12"),
-
+		MINLENGTH8("8", "最短长度8"),
 		MINLENGTH6("6", "最短长度6");
 		RegexEnum(String code, String name) {
 			this.code = code;

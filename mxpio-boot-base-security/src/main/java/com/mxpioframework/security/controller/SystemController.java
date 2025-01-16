@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.*;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.mxpioframework.common.CommonConstant;
 import org.apache.commons.lang3.StringUtils;
@@ -94,7 +96,7 @@ public class SystemController {
 
 	@GetMapping("loadConfigResource")
 	@Operation(summary = "获取后端资源配置", description = "获取后端资源配置", method = "GET")
-	public Result<Map<String,Object>> loadConfigResource() {
+	public Result<Map<String,Object>> loadConfigResource(HttpServletRequest request, HttpServletResponse response) {
 		Map<String,Object> returnMap = new HashMap<>();
 		returnMap.put("isMultitenant", CommonConstant.isIncludeModule("Multitenant"));
 		if (StringUtils.equals("true",captchaOpenFlag)){
@@ -134,6 +136,11 @@ public class SystemController {
 						patternMap.put("message",Constants.RegexEnum.MINLENGTH12.getName());
 						configRegexs.add(patternMap);
 						break;
+					case "MINLENGTH8":
+						patternMap.put("min",Integer.parseInt(Constants.RegexEnum.MINLENGTH8.getCode()));
+						patternMap.put("message",Constants.RegexEnum.MINLENGTH8.getName());
+						configRegexs.add(patternMap);
+						break;
 					case "MINLENGTH6":
 						patternMap.put("min",Integer.parseInt(Constants.RegexEnum.MINLENGTH6.getCode()));
 						patternMap.put("message",Constants.RegexEnum.MINLENGTH6.getName());
@@ -142,6 +149,10 @@ public class SystemController {
 				}
 			}
 			returnMap.put("passwordStrategy",configRegexs);
+		}
+		Object licenseContent = request.getAttribute("licenseContent");//拦截器中获取到的证书数据
+		if (licenseContent != null) {
+			returnMap.put("licenseContent",licenseContent);
 		}
 		return Result.OK(returnMap);
 	}

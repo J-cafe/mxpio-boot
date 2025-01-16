@@ -121,7 +121,7 @@ public class DictController {
 			,@RequestBody DictItem item) {
 		Dict dict = dictSerivce.getByCode(code);
 		item.setDictId(dict.getId());
-		dictSerivce.saveItem(item);
+		dictSerivce.saveItem(item,dict);
 		return Result.OK(item);
 	}
 	
@@ -129,7 +129,7 @@ public class DictController {
 	@Operation(summary = "更新字典项", description = "更新字典项", method = "PUT")
 	public Result<DictItem> editItem(@PathVariable(name = "code", required = true) String code
 			,@RequestBody DictItem item) {
-		dictSerivce.updateItem(item);
+		dictSerivce.updateItem(item,code);
 		return Result.OK(item);
 	}
 	

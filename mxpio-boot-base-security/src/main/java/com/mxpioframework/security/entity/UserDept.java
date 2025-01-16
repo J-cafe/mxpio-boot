@@ -1,9 +1,6 @@
 package com.mxpioframework.security.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.mxpioframework.jpa.annotation.Generator;
 
@@ -29,7 +26,10 @@ public class UserDept extends BaseEntity {
 	@Schema(description = "DEPT_ID")
 	@Column(name = "DEPT_ID_")
 	private String deptId;
-	
+
+	@Transient
+	@Schema(description = "部门")
+	private Dept dept;
 
 	public String getUserId() {
 		return userId;
@@ -54,5 +54,12 @@ public class UserDept extends BaseEntity {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
+	public Dept getDept() {
+		return dept;
+	}
+
+	public void setDept(Dept dept) {
+		this.dept = dept;
+	}
 }

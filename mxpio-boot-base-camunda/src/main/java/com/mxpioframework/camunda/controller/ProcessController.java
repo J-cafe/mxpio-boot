@@ -88,8 +88,8 @@ public class ProcessController {
 		List<ProcessInstanceVO> list = new ArrayList<>();
 		String username = SecurityUtils.getLoginUsername();
 		
-		List<HistoricProcessInstance> procInsts = bpmnFlowService.pagingHistoricProcessInstances((pageNo-1) * pageSize, pageSize, username, finished);
-		long total = bpmnFlowService.countHistoricProcessInstances(username, finished);
+		List<HistoricProcessInstance> procInsts = bpmnFlowService.pagingHistoricProcessInstances(criteria,(pageNo-1) * pageSize, pageSize, username, finished);
+		long total = bpmnFlowService.countHistoricProcessInstances(criteria,username, finished);
 		
 		Pageable pageAble = PageRequest.of(pageNo-1, pageSize);
 		for(HistoricProcessInstance procInst : procInsts){

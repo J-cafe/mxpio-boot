@@ -97,9 +97,9 @@ public interface DictService extends BaseService<Dict> {
 	 * 保存字典项
 	 * @param item
 	 */
-	public void saveItem(DictItem item);
+	public void saveItem(DictItem item,Dict dict);
 
-	public void updateItem(DictItem item);
+	public void updateItem(DictItem item,String code);
 
 	/**
 	 * 表字典翻译
