@@ -16,6 +16,8 @@ public class CamundaConstant {
 
 	public static final String BPMN_SORT_FLAG = "$BPMN_SORT_FLAG_";
 
+	public static final String BPMN_BIZ_TYPE = "$BPMN_BIZ_TYPE_";
+
 	public static final String BPMN_OPERATION_TYPE = "$BPMN_OPERATION_TYPE_";
 
 	public static final String BPMN_TITLE_CACHE_KEY = "bpmnTitle";

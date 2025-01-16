@@ -151,6 +151,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		}else{
 			title = flow.getName() + "---" + loginUsername;
 		}
+		properties.put(CamundaConstant.BPMN_BIZ_TYPE,flow.getBizType());
 
 		properties.put(CamundaConstant.BPMN_TITLE, title);
 		properties.put(CamundaConstant.BPMN_START_USER, loginUsername);

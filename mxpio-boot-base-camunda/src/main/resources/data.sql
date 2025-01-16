@@ -31,7 +31,8 @@ select
     t.* ,
     p.START_TIME_ as proc_start_time_,
     p.PROC_DEF_KEY_ as process_definition_key_,
-    v.TEXT_ as proc_title_
+    v.TEXT_ as proc_title_,
+    w.TEXT_ as biz_type_
 from
     (
         select
@@ -134,11 +135,15 @@ from
         where
             RES.ASSIGNEE_ is null
           and I.TYPE_ = 'candidate'
-          and RES.SUSPENSION_STATE_ = 1)t
+          and RES.SUSPENSION_STATE_ = 1
+    ) t
         left join ACT_HI_PROCINST p on
         t.PROC_INST_ID_ = p.PROC_INST_ID_
         left join act_hi_varinst v on
         t.PROC_INST_ID_ = v.PROC_INST_ID_
-            and v.NAME_ = '$BPMN_TITLE_';
+            and v.NAME_ = '$BPMN_TITLE_'
+        left join act_hi_varinst w on
+        t.PROC_INST_ID_ = w.PROC_INST_ID_
+            and w.NAME_ = '$BPMN_BIZ_TYPE_';
 
 

@@ -139,4 +139,8 @@ public class BpmnTask implements Serializable {
     @Schema(description = "流程标题")
     private String procTitle;
 
+    @Column(name = "BIZ_TYPE_")
+    @Schema(description = "流程类别")
+    private String bizType;
+
 }
