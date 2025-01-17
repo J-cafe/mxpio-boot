@@ -36,7 +36,7 @@ select
     p.PROC_DEF_KEY_ as process_definition_key_,
     v.TEXT_ as proc_title_,
     w.TEXT_ as biz_type_,
-    TIMESTAMPDIFF(day,t.create_time_,now()) as create_days
+    TIMESTAMPDIFF(day,t.create_time_,now()) as create_days_
 from
     (
         select
