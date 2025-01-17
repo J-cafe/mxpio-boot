@@ -35,12 +35,13 @@ select
     p.START_TIME_ as proc_start_time_,
     p.PROC_DEF_KEY_ as process_definition_key_,
     v.TEXT_ as proc_title_,
-    w.TEXT_ as biz_type_
+    w.TEXT_ as biz_type_,
+    TIMESTAMPDIFF(day,t.create_time_,now()) as create_days
 from
     (
         select
             distinct
-            `res`.`ID_` as `VIEW_ID_`,
+            res.ID_ as VIEW_ID_,
             RES.REV_,
             RES.ID_,
             RES.NAME_,
@@ -89,7 +90,7 @@ from
         union all
         select
             distinct
-            CONCAT( `res`.`ID_`, `i`.`ID_` ) as `VIEW_ID_`,
+            CONCAT( res.ID_, i.ID_ ) as VIEW_ID_,
             RES.REV_,
             RES.ID_,
             RES.NAME_,

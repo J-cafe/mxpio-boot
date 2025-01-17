@@ -80,7 +80,12 @@ public class TaskVO implements Serializable, DictAble {
 
 	private String bpmnSortFlag;
 
+	@Schema(description = "业务分类")
+	@Dict(dicCode = "MB_BPMN_BIZ_TYPE")
 	private String bizType;
+
+	@Schema(description = "任务创建天数")
+	private Integer createDays;
 
 	public TaskVO(HistoricTaskInstance task) {
 		this.id = task.getId();
@@ -124,6 +129,7 @@ public class TaskVO implements Serializable, DictAble {
 		this.processDefinitionKey = task.getProcessDefinitionKey();
 		this.title = task.getProcTitle();
 		this.bizType = task.getBizType();
+		this.createDays = task.getCreateDays();
 	}
 
 	public TaskVO(HistoricTaskInstance task, HistoricProcessInstance historicProcessInstance) {

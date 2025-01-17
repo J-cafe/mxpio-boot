@@ -143,4 +143,8 @@ public class BpmnTask implements Serializable {
     @Schema(description = "流程类别")
     private String bizType;
 
+    @Column(name = "CREATE_DAYS_")
+    @Schema(description = "创建天数")
+    private Integer createDays;
+
 }
