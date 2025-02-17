@@ -39,6 +39,11 @@ public class DeptController {
 	public Result<List<Dept>> tree(Criteria criteria) throws Exception {
 		return Result.OK(deptService.getDeptTree(criteria));
 	}
+	@GetMapping("tree_disable_filter")
+	@Operation(summary = "部门列表(过滤禁用部门)", description = "获取部门列表(过滤禁用部门)", method = "GET")
+	public Result<List<Dept>> treeWithDisableFilter(Criteria criteria) throws Exception {
+		return Result.OK(deptService.getDeptTreeWithDisableFilter(criteria));
+	}
 
 	@GetMapping("role/without/{roleId}")
 	@Operation(summary = "未绑定部门", description = "分页获取未绑定角色ID的部门", method = "GET")
@@ -137,6 +142,15 @@ public class DeptController {
 		}
 		return Result.OK(dept);
 	}
+	@GetMapping("disable/{deptId}")
+	@Operation(summary = "禁用部门", description = "禁用部门", method = "GET")
+	public Result<Dept> disableById(@PathVariable(name = "deptId", required = true) String deptId) {
+		return deptService.disableById(deptId);
+	}
 
-
+	@GetMapping("enable/{deptId}")
+	@Operation(summary = "启用部门", description = "启用部门", method = "GET")
+	public Result<Dept> enableById(@PathVariable(name = "deptId", required = true) String deptId) {
+		return deptService.enableById(deptId);
+	}
 }

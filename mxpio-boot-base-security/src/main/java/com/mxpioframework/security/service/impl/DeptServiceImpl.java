@@ -1,13 +1,9 @@
 package com.mxpioframework.security.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
+import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.enums.SecurityEnums;
 import com.mxpioframework.security.service.RbacCacheService;
 import com.mxpioframework.security.util.SecurityUtils;
@@ -399,5 +395,115 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 				getDeptCode(per,deptCodes);
 			}
 		}
+	}
+
+	@Override
+	@Transactional
+	public Result<Dept> disableById(String deptId) {
+		Dept dept = this.getById(Dept.class, deptId);
+		if (dept==null){
+			return Result.error("部门不存在");
+		}
+		if (dept.getDisabled()!=null && dept.getDisabled()){
+			return Result.error("部门已经为禁用状态");
+		}
+		//存在生效的子部门
+		Dept deptWithBranchByCode = getDeptWithBranchByCode(dept.getDeptCode());
+		boolean existsEnableSubDept = existsEnableSubDept(deptWithBranchByCode);
+		if (existsEnableSubDept){
+			return Result.error("存在生效的子部门，请先禁用子部门");
+		}
+		//部门下存在人员
+		Long count = JpaUtil.linq(UserDept.class).equal("deptId", deptId).count();
+		if (count>0){
+			return Result.error("部门下存在人员，请先删除人员");
+		}
+		dept.setDisabled(Boolean.TRUE);
+		JpaUtil.update(dept);
+		return Result.OK(dept);
+	}
+
+	@Override
+	@Transactional
+	public Result<Dept> enableById(String deptId) {
+		Dept dept = this.getById(Dept.class, deptId);
+		if (dept==null){
+			return Result.error("部门不存在");
+		}
+		if (dept.getDisabled()!=null && !dept.getDisabled()){
+			return Result.error("部门已经为启用状态");
+		}
+		//存在未生效的父部门
+		boolean existsDisableParentDept = existsDisableParentDept(dept);
+		if (existsDisableParentDept){
+			return Result.error("存在未启用的父部门，请先启用");
+		}
+		dept.setDisabled(Boolean.FALSE);
+		JpaUtil.update(dept);
+		return Result.OK(dept);
+	}
+
+	@Override
+	@Transactional
+	public List<Dept> getDeptTreeWithDisableFilter(Criteria criteria) {
+		List<Dept> result = new ArrayList<>();
+		Map<String, List<Dept>> childrenMap = new ConcurrentHashMap<>();
+		List<Dept> depts = JpaUtil.linq(Dept.class).where(criteria).list();
+
+		for (Dept dept : depts) {
+			if (dept.getDisabled()!=null && dept.getDisabled()) {
+				continue;
+			}
+			// Initialize children list for this department
+			List<Dept> children = childrenMap.computeIfAbsent(dept.getId(), k -> new ArrayList<>());
+			dept.setChildren(children);
+
+			if (dept.getFaDeptId() == null) {
+				result.add(dept);
+			} else {
+				// Ensure the parent department's children list is initialized
+				List<Dept> parentChildren = childrenMap.computeIfAbsent(dept.getFaDeptId(), k -> new ArrayList<>());
+				parentChildren.add(dept);
+			}
+		}
+
+		return result;
+	}
+
+	private boolean existsEnableSubDept(Dept dept) {
+		List<Dept> children = dept.getChildren();
+		if (children == null) {
+			return false;
+		}
+
+		for (Dept child : children) {
+			if (!Boolean.TRUE.equals(child.getDisabled())) {
+				return true;
+			} else if (existsEnableSubDept(child)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	private boolean existsDisableParentDept(Dept dept) {
+		String faDeptId = dept.getFaDeptId();
+		if (StringUtils.isNotBlank(faDeptId)) {
+			Dept currentDept = dept;
+			while (StringUtils.isNotBlank(currentDept.getFaDeptId())) {
+				String parentId = currentDept.getFaDeptId();
+				Dept parent = JpaUtil.linq(Dept.class).equal("id", parentId).findOne();
+				if (parent == null) {
+					// 处理找不到父部门的情况
+					return false;
+				}
+				if (parent.getDisabled() != null && parent.getDisabled()) {
+					return true;
+				}
+				currentDept = parent;
+			}
+		}
+		return false;
 	}
 }

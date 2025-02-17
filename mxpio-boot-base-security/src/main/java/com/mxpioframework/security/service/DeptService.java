@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.mxpioframework.common.vo.Result;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -130,4 +131,10 @@ public interface DeptService extends BaseService<Dept> {
 	Set<String> getDeptKeysByUser(String username, String key);
 
 	Dept getLevelOneDept(String deptCode);
+
+	Result<Dept> disableById(String deptId);
+
+	Result<Dept> enableById(String deptId);
+
+	List<Dept> getDeptTreeWithDisableFilter(Criteria criteria);
 }

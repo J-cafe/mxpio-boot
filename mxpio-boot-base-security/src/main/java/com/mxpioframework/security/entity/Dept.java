@@ -61,7 +61,11 @@ public class Dept extends BaseEntity implements Actor {
 	@Column(name = "FA_DEPT_ID_")
 	//@com.mxpioframework.security.annotation.Dict(dicCode = "id", dicEntity= Dept.class, dicText= "faDeptName")
 	private String faDeptId;
-	
+
+	@Schema(description = "禁用标识")
+	@Column(name = "DISABLED_",columnDefinition = "bit(1) DEFAULT b'0' COMMENT '禁用标识'")
+	private Boolean disabled;
+
 	@Transient
 	@Schema(description = "父部门名称")
 	private String faDeptName;
