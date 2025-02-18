@@ -64,7 +64,13 @@ public class CamundaGlobalListenerDelegate implements ExecutionListener, TaskLis
             if (StringUtils.isEmpty(delegateTask.getAssignee())) {
                 Set<IdentityLink> ids = delegateTask.getCandidates();
                 for (IdentityLink id : ids) {
-                    assignees.addAll(JpaUtil.collect(roleService.getUsersWithin(null, id.getGroupId().substring(5)),"username"));
+                    if (StringUtils.isBlank(id.getGroupId())){
+                        if(StringUtils.isNotBlank(id.getUserId())){
+                            assignees.add(id.getUserId());
+                        }
+                    }else{
+                        assignees.addAll(JpaUtil.collect(roleService.getUsersWithin(null, id.getGroupId().substring(5)),"username"));
+                    }
                 }
             } else {
                 assignees.add(delegateTask.getAssignee());
