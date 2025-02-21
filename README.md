@@ -13,7 +13,7 @@
 
 ## 2.在线文档
 
-**在线文档：**[mxpio-boot](https://doc.datazhzh.com/)
+**在线文档：**[mxpio-boot](https://mxpio.com/)
 
 ## 3.后端技术栈
 
