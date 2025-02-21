@@ -6,8 +6,12 @@ import java.util.Map;
 
 import com.mxpioframework.camunda.CamundaConstant;
 import com.mxpioframework.camunda.dto.ResultMessage;
+import org.apache.commons.collections.CollectionUtils;
+import org.camunda.bpm.engine.HistoryService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.history.HistoricProcessInstance;
+import org.camunda.bpm.engine.history.HistoricVariableInstance;
+import org.camunda.bpm.engine.history.HistoricVariableInstanceQuery;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.runtime.ProcessInstanceQuery;
@@ -39,6 +43,9 @@ public class ProcessController {
 
 	@Autowired
 	private BpmnFlowService bpmnFlowService;
+
+	@Autowired
+	private HistoryService historyService;
 
 	@GetMapping("list")
 	@Operation(summary = "流程列表", description = "流程列表", method = "GET")
@@ -96,6 +103,12 @@ public class ProcessController {
 			String title = bpmnFlowService.getTitleByInstanceId(procInst.getId());
 			ProcessInstanceVO instVO = new ProcessInstanceVO(procInst);
 			instVO.setTitle(title);
+
+			HistoricVariableInstanceQuery historicVariableInstanceQuery = historyService.createHistoricVariableInstanceQuery().processInstanceId(procInst.getId()).variableName(CamundaConstant.BPMN_SORT_FLAG);
+			List<HistoricVariableInstance> hisVarList = historicVariableInstanceQuery.list();
+			if(CollectionUtils.isNotEmpty(hisVarList)){
+				instVO.setBpmnSortFlag(hisVarList.get(0).getValue().toString());
+			}
 			list.add(instVO);
 		}
 		Page<ProcessInstanceVO> page = new PageImpl<>(list, pageAble, total);

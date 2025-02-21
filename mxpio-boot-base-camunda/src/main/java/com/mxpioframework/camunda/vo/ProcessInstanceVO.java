@@ -26,7 +26,10 @@ public class ProcessInstanceVO implements Serializable, DictAble {
 
 	@Schema(description = "流程标题")
 	private String title;
-	
+
+	@Schema(description = "加急")
+	private String bpmnSortFlag;
+
 	@Schema(description = "流程定义ID")
 	private String processDefinitionId;
 	
