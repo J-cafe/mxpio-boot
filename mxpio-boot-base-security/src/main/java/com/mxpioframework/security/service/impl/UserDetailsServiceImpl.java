@@ -44,14 +44,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			if(StringUtils.equals("on",expiredswitch)){
 				Date pwdEffectDate = user.getPwdUpdateTime();
 				if (pwdEffectDate==null){
-					//throw new UsernameNotFoundException("获取用户创建时间失败，请检查数据");
-					user.setPwdExpiredFlag(true);
-				}else{
-					int days = (int) ((new Date().getTime() - pwdEffectDate.getTime()) / (1000*3600*24));
-					if (days>=Integer.parseInt(expireddays)){
-						user.setPwdExpiredFlag(true);
-					}
+					pwdEffectDate = user.getCreateTime();
 				}
+				user.setPwdExpiredFlag(checkDateExpired(pwdEffectDate,expireddays));
 			}
 
 			List<Dept> depts = JpaUtil.linq(Dept.class)
@@ -67,5 +62,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		} catch (Exception e) {
 			throw new UsernameNotFoundException("用户名未找到");
 		}
+	}
+
+	private boolean checkDateExpired(Date date,String expireddays){
+		if (date==null){
+			return true;
+		}
+		int days = (int) ((new Date().getTime() - date.getTime()) / (1000*3600*24));
+		if (days>=Integer.parseInt(expireddays)){
+			return true;
+		}
+		return false;
 	}
 }
