@@ -63,7 +63,7 @@ public class Dept extends BaseEntity implements Actor {
 	private String faDeptId;
 
 	@Schema(description = "禁用标识")
-	@Column(name = "DISABLED_",columnDefinition = "bit(1) DEFAULT b'0' COMMENT '禁用标识'")
+	@Column(name = "DISABLED_",columnDefinition = "bit DEFAULT 0")
 	private Boolean disabled;
 
 	@Transient
