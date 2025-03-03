@@ -608,6 +608,10 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		}else{
 			query.unfinished();
 		}
+		if (criteria.getOrders()!=null&&criteria.getOrders().size()>0){
+			criteria2HistoricProcessInstanceQueryOrder(criteria,query);
+			return query.listPage(firstResult, maxResults);
+		}
 		return query.orderByProcessInstanceStartTime().desc()
 				.listPage(firstResult, maxResults);
 	}
@@ -644,6 +648,9 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		}else{
 			query.unfinished();
 		}
+		/*if (criteria.getOrders()!=null&&criteria.getOrders().size()>0){
+			criteria2HistoricProcessInstanceQueryOrder(criteria,query);
+		}*/
 		return query.count();
 	}
 
@@ -1281,6 +1288,24 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 
 							break;
 					}
+				}
+			}
+		}
+	}
+	private void criteria2HistoricProcessInstanceQueryOrder(Criteria criteria, HistoricProcessInstanceQuery query){
+		if(criteria != null){
+			for (Order order:criteria.getOrders()){
+				String fieldName = order.getFieldName();
+				switch(fieldName){
+					case "processInstanceStartTime":
+						if(order.isDesc()){
+							query.orderByProcessInstanceStartTime().desc();
+						}else{
+							query.orderByProcessInstanceStartTime().asc();
+						}
+						break;
+					default:
+						break;
 				}
 			}
 		}
