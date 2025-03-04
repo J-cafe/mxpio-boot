@@ -1297,7 +1297,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			for (Order order:criteria.getOrders()){
 				String fieldName = order.getFieldName();
 				switch(fieldName){
-					case "processInstanceStartTime":
+					case "startTime":
 						if(order.isDesc()){
 							query.orderByProcessInstanceStartTime().desc();
 						}else{
