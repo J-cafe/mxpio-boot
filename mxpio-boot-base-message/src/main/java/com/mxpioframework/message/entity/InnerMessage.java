@@ -55,4 +55,8 @@ public class InnerMessage extends BaseEntity implements Message{
     @Schema(description = "阅读状态")
     private String readStatus = "0";
 
+    @Schema(description = "业务ID")
+    @Column(name = "BUSINESS_KEY_", length = 128)
+    private String businessKey;
+
 }

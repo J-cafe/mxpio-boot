@@ -33,7 +33,10 @@ public class CamundaGlobalListenerDelegate implements ExecutionListener, TaskLis
         if(ExecutionListener.EVENTNAME_START.equals(delegateExecution.getEventName())){
             MessageService messageService = SpringUtil.getBean(MessageService.class);
             Map<String, Object> props = delegateExecution.getVariables();
-
+            String businessKey = null;
+            if (props.containsKey("businessKey")){
+                businessKey = props.get("businessKey").toString();
+            }
             RuntimeService runtimeService = delegateExecution.getProcessEngine().getRuntimeService();
             // 获取流程实例
             ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
@@ -42,7 +45,7 @@ public class CamundaGlobalListenerDelegate implements ExecutionListener, TaskLis
             if(processInstance != null){
                 ActivityInstance[] instances = runtimeService.getActivityInstance(processInstance.getId()).getChildActivityInstances();
                 if(instances != null && instances.length == 1 && instances[0].getActivityType().endsWith("EndEvent")){
-                    messageService.sendMessage(new String[]{"innerMsg"},"admin",new String[]{props.get(CamundaConstant.BPMN_START_USER).toString()},"流程完成通知:"+props.get(CamundaConstant.BPMN_TITLE),"流程【"+props.get(CamundaConstant.BPMN_TITLE)+"】已完成");
+                    messageService.sendMessage(new String[]{"innerMsg"},"admin",new String[]{props.get(CamundaConstant.BPMN_START_USER).toString()},"流程完成通知:"+props.get(CamundaConstant.BPMN_TITLE),"流程【"+props.get(CamundaConstant.BPMN_TITLE)+"】已完成",businessKey);
                 }
             }
         }
@@ -58,6 +61,10 @@ public class CamundaGlobalListenerDelegate implements ExecutionListener, TaskLis
         Map<String, Object> props = delegateTask.getVariables();
 
         List<String> assignees = new ArrayList<>();
+        String businessKey = null;
+        if (props.containsKey("businessKey")){
+            businessKey = props.get("businessKey").toString();
+        }
         // log.info(props.get(CamundaConstant.BPMN_TITLE) + ":" + delegateTask.getName() + ":" + delegateTask.getEventName());
 
         if(TaskListener.EVENTNAME_CREATE.equals(delegateTask.getEventName())){
@@ -76,25 +83,25 @@ public class CamundaGlobalListenerDelegate implements ExecutionListener, TaskLis
                 assignees.add(delegateTask.getAssignee());
             }
             if(!assignees.isEmpty()){
-                sendMessage(new String[]{"innerMsg"},"admin",assignees.toArray(new String[]{}),"流程处理通知:"+props.get(CamundaConstant.BPMN_TITLE),"您有新的流程待处理");
+                sendMessage(new String[]{"innerMsg"},"admin",assignees.toArray(new String[]{}),"流程处理通知:"+props.get(CamundaConstant.BPMN_TITLE),"您有新的流程待处理",businessKey);
             }
         }else if(TaskListener.EVENTNAME_DELETE.equals(delegateTask.getEventName())){
-            sendMessage(new String[]{"innerMsg"},"admin",new String[]{props.get(CamundaConstant.BPMN_START_USER).toString()},"流程未通过通知:"+props.get(CamundaConstant.BPMN_TITLE),"流程【"+props.get(CamundaConstant.BPMN_TITLE)+"】审批未通过");
+            sendMessage(new String[]{"innerMsg"},"admin",new String[]{props.get(CamundaConstant.BPMN_START_USER).toString()},"流程未通过通知:"+props.get(CamundaConstant.BPMN_TITLE),"流程【"+props.get(CamundaConstant.BPMN_TITLE)+"】审批未通过",businessKey);
         }else if(TaskListener.EVENTNAME_UPDATE.equals(delegateTask.getEventName()) && delegateTask.getAssignee() != null){
             HistoricTaskInstance historicTask = historyService.createHistoricTaskInstanceQuery()
                     .taskId(delegateTask.getId())
                     .orderByHistoricTaskInstanceEndTime().desc()
                     .singleResult();
             if(!delegateTask.getAssignee().equals(historicTask.getAssignee())){
-                sendMessage(new String[]{"innerMsg"},"admin",new String[]{delegateTask.getAssignee()},"流程处理通知:"+props.get(CamundaConstant.BPMN_TITLE),"您有新的流程待处理");
+                sendMessage(new String[]{"innerMsg"},"admin",new String[]{delegateTask.getAssignee()},"流程处理通知:"+props.get(CamundaConstant.BPMN_TITLE),"您有新的流程待处理",businessKey);
             }
         }
     }
 
-    private void sendMessage(String[] chanels, String from, String[] to, String title, String content){
+    private void sendMessage(String[] chanels, String from, String[] to, String title, String content,String businessKey){
         try {
             MessageService messageService = SpringUtil.getBean(MessageService.class);
-            messageService.sendMessage(chanels,from,to,title,content);
+            messageService.sendMessage(chanels,from,to,title,content,businessKey);
         } catch (Exception e) {
             log.error(e.getMessage(),e);
         }

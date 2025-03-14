@@ -8,11 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 public abstract class AbstractMessageChannel implements MessageChannel {
     @Override
     @Transactional
-    public void send(String from, String[] to, String title, String content) {
+    public void send(String from, String[] to, String title, String content,String businessKey) {
         if (!beforeSend(from,to,title,content)) {
             throw new IllegalArgumentException("前置校验不通过");
         }
-        doSend(from,to,title,content);
+        doSend(from,to,title,content, businessKey);
 
     }
     @Override

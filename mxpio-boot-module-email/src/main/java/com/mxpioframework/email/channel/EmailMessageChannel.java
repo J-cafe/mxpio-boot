@@ -3,6 +3,7 @@ package com.mxpioframework.email.channel;
 import com.mxpioframework.common.exception.MBootException;
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
+import com.mxpioframework.message.channel.impl.AbstractMessageChannel;
 import com.mxpioframework.message.entity.Message;
 import com.mxpioframework.security.entity.User;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ import java.util.regex.Pattern;
 
 @Component
 @Slf4j
-public class EmailMessageChannel extends EmailAbstractMessageChannel {
+public class EmailMessageChannel extends AbstractMessageChannel {
 
     private static final String CHANNEL_CODE = "emailMsg";
 
@@ -54,7 +55,7 @@ public class EmailMessageChannel extends EmailAbstractMessageChannel {
     }
     @Override
     @Transactional
-    public void doSend(String from, String[] to, String title, String content) {
+    public void doSend(String from, String[] to, String title, String content,String businessKey) {
         //创建一个MINE消息
         try {
             MimeMessage message = mailSender.createMimeMessage();

@@ -49,7 +49,7 @@ public class InnerMessageChannel extends AbstractMessageChannel {
         return StringUtils.equals(CHANNEL_CODE,channelCode);
     }
     @Override
-    public void doSend(String from, String[] to, String title, String content) {
+    public void doSend(String from, String[] to, String title, String content,String businessKey) {
         User fromUser = JpaUtil.getOne(User.class, from);
         List<User> toUserList = JpaUtil.linq(User.class).in("username", (Object[]) to).list();
         for(User toUser:toUserList){
@@ -60,6 +60,7 @@ public class InnerMessageChannel extends AbstractMessageChannel {
             innerMessage.setFromNickName(fromUser.getNickname());
             innerMessage.setMessageTitle(title);
             innerMessage.setMessageContent(content);
+            innerMessage.setBusinessKey(businessKey);
             JpaUtil.save(innerMessage);
             try{
                 messageWebSocketHandler.send(toUser.getUsername(), JSON.toJSONString(innerMessage));

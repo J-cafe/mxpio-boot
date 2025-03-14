@@ -10,6 +10,7 @@ import com.mxpioframework.dingtalk.pojo.LinkTypeContent;
 import com.mxpioframework.dingtalk.pojo.DingTalkMessagePojo;
 import com.mxpioframework.dingtalk.provider.AppTokenFactory;
 import com.mxpioframework.jpa.query.Criteria;
+import com.mxpioframework.message.channel.impl.AbstractMessageChannel;
 import com.mxpioframework.message.entity.Message;
 import com.mxpioframework.message.handler.MessageWebSocketHandler;
 import com.taobao.api.ApiException;
@@ -30,7 +31,7 @@ import java.util.List;
  */
 @Component
 @Slf4j
-public class WorkMessageChannel extends DingTalkAbstractMessageChannel {
+public class WorkMessageChannel extends AbstractMessageChannel {
 
     private static final String CHANNEL_CODE = "dingtalkWorkMsg";
 
@@ -60,7 +61,7 @@ public class WorkMessageChannel extends DingTalkAbstractMessageChannel {
     }
     @Override
     @Transactional
-    public void doSend(String from, String[] to, String title, String content) {
+    public void doSend(String from, String[] to, String title, String content,String businessKey) {
         String appToken = appTokenFactory.getAppToken();
         String toUserIds = StringUtils.join(to, ",");
         DingTalkMessagePojo messagePojo = JSONObject.parseObject(content, DingTalkMessagePojo.class);//转换消息体

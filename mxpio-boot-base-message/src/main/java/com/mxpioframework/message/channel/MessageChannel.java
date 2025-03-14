@@ -35,17 +35,18 @@ public interface MessageChannel {
      * @param to
      * @param title
      * @param msg
+     * @param businessKey
      */
-    void send(String from,String [] to,String title,String msg);
-
+    void send(String from,String [] to,String title,String msg,String businessKey);
     /**
      * 发送消息，各渠道实现自己的特殊发送方法
      * @param from
      * @param to
      * @param title
      * @param msg
+     * @param businessKey
      */
-    void doSend(String from,String [] to,String title,String msg);
+    void doSend(String from,String [] to,String title,String msg,String businessKey);
 
     /**
      * 消息发送前钩子

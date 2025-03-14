@@ -41,10 +41,22 @@ public class MessageServiceImpl implements MessageService, ApplicationContextAwa
     @Override
     @Transactional
     public void sendMessage(String [] channelCodes, String from, String[] to, String title, String content) {
-        for(String channelCode:channelCodes){
+        /*for(String channelCode:channelCodes){
             for(MessageChannel channel:channels){
                 if(channel.support(channelCode)){
                     channel.send(from,to,title,content);
+                }
+            }
+        }*/
+        this.sendMessage(channelCodes,from,to,title,content,null);
+    }
+    @Override
+    @Transactional
+    public void sendMessage(String [] channelCodes, String from, String[] to, String title, String content,String businessKey) {
+        for(String channelCode:channelCodes){
+            for(MessageChannel channel:channels){
+                if(channel.support(channelCode)){
+                    channel.send(from,to,title,content,businessKey);
                 }
             }
         }

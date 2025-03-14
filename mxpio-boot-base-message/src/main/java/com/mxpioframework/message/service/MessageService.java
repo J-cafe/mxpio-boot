@@ -14,6 +14,7 @@ public interface MessageService {
 
     void sendMessage(String [] channelCodes,String from, String[] to, String title, String content);
 
+    void sendMessage(String [] channelCodes,String from, String[] to, String title, String content,String businessKey);
     Page<Message> myMessage(String channelCode, Criteria criteria, Pageable pageable);
 
     Page<Message> myUnread(String channelCode, Criteria criteria,Pageable pageable);
