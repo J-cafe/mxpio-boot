@@ -1,0 +1,9 @@
+#单实例配置
+wechat:
+  cp:
+    corpId: 111
+    appConfigs:
+      - agentId: 1000001
+        secret: 1111
+        token: 111
+        aesKey: 111

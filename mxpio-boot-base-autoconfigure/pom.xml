@@ -125,5 +125,10 @@
 			<artifactId>mxpio-boot-module-msal</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-boot-module-wechat</artifactId>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 </project>

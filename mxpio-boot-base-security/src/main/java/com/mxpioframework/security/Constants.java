@@ -93,7 +93,7 @@ public class Constants {
 	}
 
 	public enum ThirdAccessTokenKeyEnum {
-		DingTalk("-dingtalk-access-token-", "钉钉"), WeChat("-wechat-access-token-", "微信");
+		DingTalk("-dingtalk-access-token-", "钉钉"), WeChat("-wechat-access-token-", "微信"), WeChatCp("-wechatcp-access-token-", "企业微信");
 
 		ThirdAccessTokenKeyEnum(String code, String name) {
 			this.code = code;
@@ -121,7 +121,7 @@ public class Constants {
 		}
 	}
 	public enum ThirdPlatformTypeEnum {
-		DingTalk("dingtalk", "钉钉"),WeChat("wechat", "微信"), OAuth("oauth", "统一认证中台"), MSAL("MSAL", "Microsoft Graph身份验证库");
+		DingTalk("dingtalk", "钉钉"),WeChat("wechat", "微信"),WeChatCp("wechatcp", "企业微信"), OAuth("oauth", "统一认证中台"), MSAL("MSAL", "Microsoft Graph身份验证库");
 
 		ThirdPlatformTypeEnum(String code, String name) {
 			this.code = code;

@@ -64,6 +64,7 @@
 		<module>mxpio-boot-module-oauth</module>
 		<module>mxpio-boot-module-msal</module>
         <module>mxpio-boot-module-email</module>
+        <module>mxpio-boot-module-wechat</module>
         <!--<module>mxpio-boot-webapp</module>-->
     </modules>
 	<dependencies>
@@ -247,6 +248,11 @@
 			<dependency>
 				<groupId>com.mxpio</groupId>
 				<artifactId>mxpio-boot-module-msal</artifactId>
+				<version>${mxpio.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.mxpio</groupId>
+				<artifactId>mxpio-boot-module-wechat</artifactId>
 				<version>${mxpio.version}</version>
 			</dependency>
 			<dependency>
