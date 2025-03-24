@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import me.chanjar.weixin.common.bean.WxJsapiSignature;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.cp.api.WxCpService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,14 +21,14 @@ import java.util.Map;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/wx/cp/js/{corpId}/{agentId}/getJsConf")
-
+@RequestMapping("/wx/cp/js/")
 public class WxJsController {
+    @Value("${wechat.cp.appConfigs[0].agentId}")
+    private Integer agentId;
+    @Value("${wechat.cp.corpId}")
+    private String corpId;
     @PostMapping("/getJsConf")
-    public Map getJsConf(
-            @PathVariable String corpId,
-            @PathVariable Integer agentId,
-            String uri) throws WxErrorException {
+    public Map getJsConf(String uri) throws WxErrorException {
 
         final WxCpService wxCpService = WxCpConfiguration.getCpService(agentId);
         if (wxCpService == null) {
