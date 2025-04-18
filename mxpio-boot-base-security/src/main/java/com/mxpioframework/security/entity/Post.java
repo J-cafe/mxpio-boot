@@ -38,6 +38,18 @@ public class Post extends BaseEntity implements Actor {
 	@Column(name = "POST_GRADE_")
 	private String postGrade;
 
+	@Schema(description = "存储字符串的备用字段1")
+	@Column(name = "RESERVED_STRING_FIELD1_")
+	private String reservedStringField1;
+
+	@Schema(description = "存储字符串的备用字段2")
+	@Column(name = "RESERVED_STRING_FIELD2_")
+	private String reservedStringField2;
+
+	@Schema(description = "存储字符串的备用字段3")
+	@Column(name = "RESERVED_STRING_FIELD3_")
+	private String reservedStringField3;
+
 	@Override
 	public String getActorId() {
 		return id;
