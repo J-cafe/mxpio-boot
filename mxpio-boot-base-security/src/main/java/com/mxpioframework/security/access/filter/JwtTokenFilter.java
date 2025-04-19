@@ -1,7 +1,6 @@
 package com.mxpioframework.security.access.filter;
 
 import java.io.IOException;
-import java.util.Date;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -15,14 +14,11 @@ import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.alibaba.fastjson.JSON;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.mxpioframework.cache.provider.CacheProvider;
 import com.mxpioframework.common.util.SpringUtil;
 import com.mxpioframework.security.anthentication.JwtLoginToken;
 import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.OnlineUserService;
-import com.mxpioframework.security.util.TokenUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -71,8 +67,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             	User user = onlineUserService.getOne(token, cacheProvider);
             	if(user == null) {
                     filterChain.doFilter(httpServletRequest, httpServletResponse);
-                    return;
-            	} else {
+                } else {
             		JwtLoginToken jwtLoginToken = new JwtLoginToken(user, "", user.getAuthorities());
                     jwtLoginToken.setDetails(new WebAuthenticationDetails(httpServletRequest));
                     SecurityContextHolder.getContext().setAuthentication(jwtLoginToken);
@@ -80,7 +75,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     filterChain.doFilter(httpServletRequest, httpServletResponse);
             	}
             }else {
-            	DecodedJWT jwt = TokenUtil.verifyToken(token);
+            	/*DecodedJWT jwt = TokenUtil.verifyToken(token);
                 Date date = jwt.getExpiresAt();
 
                 if(date.before(new Date())) {
@@ -91,13 +86,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 JwtLoginToken jwtLoginToken = new JwtLoginToken(user, "", user.getAuthorities());
                 jwtLoginToken.setDetails(new WebAuthenticationDetails(httpServletRequest));
                 SecurityContextHolder.getContext().setAuthentication(jwtLoginToken);
-                filterChain.doFilter(httpServletRequest, httpServletResponse);
+                filterChain.doFilter(httpServletRequest, httpServletResponse);*/
+                throw new Exception("缓存服务未配置");
             }
         } catch (Exception e) {
         	//log.info(httpServletRequest.getRequestURI());
             log.error("错误信息：{}", e.getMessage());
             e.fillInStackTrace();
-        	e.printStackTrace();
         }
     }
 

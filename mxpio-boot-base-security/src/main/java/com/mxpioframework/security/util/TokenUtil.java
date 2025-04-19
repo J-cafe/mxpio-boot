@@ -15,14 +15,14 @@ public class TokenUtil {
 	
 	public static String createAccessToken(User jwtUserDetails) {
         long tokenTime = Long.parseLong(Objects.requireNonNull(ApplicationContextProvider.getEnvironment().getProperty("mxpio.token.time")));
-		String json = JSON.toJSONString(jwtUserDetails);
+		// String json = JSON.toJSONString(jwtUserDetails);
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
         long expMillis = nowMillis + tokenTime;
         Date exp = new Date(expMillis);
         Algorithm algorithm = Algorithm.HMAC256(Constants.JWT_TOKEN_SALT);
         String token = JWT.create()
-    		.withSubject(json)
+    		.withSubject(jwtUserDetails.getUsername())
             .withExpiresAt(exp)
             .withIssuedAt(now)
             .sign(algorithm);
