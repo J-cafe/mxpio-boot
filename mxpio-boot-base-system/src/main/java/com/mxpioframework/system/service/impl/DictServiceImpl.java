@@ -99,23 +99,26 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 	public void deleteItem(String id) {
 		DictItem item = JpaUtil.linq(DictItem.class).idEqual(id).findOne();
 		JpaUtil.delete(item);
+		Dict dict = JpaUtil.getOne(Dict.class, item.getDictId());
+		Map<String, String> dictMapping = this.getDictMappingByCode(dict.getDictCode());
+		cacheService.put("DictCache:" + dict.getDictCode(), dictMapping);//刷新缓存值
 	}
 
 	@Override
 	@Transactional(readOnly = false)
 	public void saveItem(DictItem item,Dict dict) {
+		JpaUtil.save(item);
 		String code = dict.getDictCode();
 		Map<String, String> dictMapping = this.getDictMappingByCode(code);
 		cacheService.put("DictCache:" + code, dictMapping);//刷新缓存值
-		JpaUtil.save(item);
 	}
 
 	@Override
 	@Transactional(readOnly = false)
 	public void updateItem(DictItem item,String code) {
+		JpaUtil.update(item);
 		Map<String, String> dictMapping = this.getDictMappingByCode(code);
 		cacheService.put("DictCache:" + code, dictMapping);//刷新缓存值
-		JpaUtil.update(item);
 	}
 
 	@Override

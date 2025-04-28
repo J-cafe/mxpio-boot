@@ -6,7 +6,8 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
-@Service("mxpio.system.dictCacheService")
+//@Service("mxpio.system.dictCacheService")
+@Deprecated
 public class DictThreadLocalCacheServiceImpl implements DictCacheService {
 	private ThreadLocal<Map<Object, Object>> threadLocalMap = new ThreadLocal<>();
 
@@ -30,5 +31,10 @@ public class DictThreadLocalCacheServiceImpl implements DictCacheService {
 	public <T> T put(Object key, T value) {
 		return (T) getCacheMap().put(key, value);
 
+	}
+
+	@Override
+	public void remove(Object key) {
+		getCacheMap().remove(key);
 	}
 }

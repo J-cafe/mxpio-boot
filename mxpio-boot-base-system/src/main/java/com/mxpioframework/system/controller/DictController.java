@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.List;
 
+import com.mxpioframework.system.service.DictCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +31,8 @@ import com.mxpioframework.system.service.DictService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import javax.annotation.Resource;
+
 @Tag(name = "DictController", description = "字典接口")
 @RestController("mxpio.system.dictController")
 @RequestMapping("/sys/dict/")
@@ -38,6 +41,8 @@ public class DictController {
 	@Autowired
 	private DictService dictSerivce;
 
+	@Resource(name = "mxpio.system.dictCacheService")
+	private DictCacheService cacheService;
 	@GetMapping("tree/list")
 	@Operation(summary = "字典树列表", description = "获取字典树列表", method = "GET")
 	public Result<List<Dict>> list(Criteria criteria) throws UnsupportedEncodingException {
@@ -162,6 +167,7 @@ public class DictController {
 					if(o instanceof Dict) {
 						try{
 							JpaUtil.lind(DictItem.class).equal("dictId", ((Dict) o).getId()).delete();
+							cacheService.remove("DictCache:" + ((Dict) o).getDictCode());
 						}catch (Exception e) {
 							return false;
 						}
