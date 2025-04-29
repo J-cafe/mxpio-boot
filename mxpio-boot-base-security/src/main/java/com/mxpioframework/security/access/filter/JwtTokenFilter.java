@@ -7,6 +7,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONObject;
+import com.mxpioframework.common.exception.MBootException;
+import com.mxpioframework.common.vo.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -21,6 +24,7 @@ import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.OnlineUserService;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.util.NestedServletException;
 
 /**
  * Token有效性验证拦截器
@@ -90,6 +94,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 throw new Exception("缓存服务未配置");
             }
         } catch (Exception e) {
+            Throwable realException = (e instanceof NestedServletException && e.getCause() != null)
+                    ? e.getCause() : e;
+            if (realException instanceof MBootException) {
+                log.error("业务异常：{}", realException.getMessage());
+                httpServletResponse.setContentType("application/json;charset=UTF-8");
+                httpServletResponse.getWriter().write(JSONObject.toJSONString(
+                        Result.error(realException.getMessage())
+                ));
+            }
         	//log.info(httpServletRequest.getRequestURI());
             log.error("错误信息：{}", e.getMessage());
             e.fillInStackTrace();
