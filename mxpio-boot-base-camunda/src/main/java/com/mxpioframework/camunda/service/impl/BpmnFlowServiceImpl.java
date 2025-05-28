@@ -1331,6 +1331,7 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 						}
 						break;
 					default:
+						query.orderByHistoricTaskInstanceEndTime().desc();
 						break;
 				}
 			}
