@@ -672,7 +672,8 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 			query.unfinished();
 		}
 		criteria2HistoricTaskInstanceQuery(criteria, query);
-		return query.orderByHistoricActivityInstanceStartTime().desc().listPage((pageNo - 1) * pageSize, pageSize);
+		criteria2HistoricTaskInstanceQueryOrder(criteria,query);
+		return query.listPage((pageNo - 1) * pageSize, pageSize);
 	}
 
 	@Override
@@ -1308,6 +1309,33 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 						break;
 				}
 			}
+		}
+	}
+	private void criteria2HistoricTaskInstanceQueryOrder(Criteria criteria, HistoricTaskInstanceQuery query) {
+		if(criteria != null&&criteria.getOrders()!=null&&criteria.getOrders().size()>0){
+			for (Order order:criteria.getOrders()){
+				String fieldName = order.getFieldName();
+				switch(fieldName){
+					case "startTime":
+						if(order.isDesc()){
+							query.orderByHistoricActivityInstanceStartTime().desc();
+						}else{
+							query.orderByHistoricActivityInstanceStartTime().asc();
+						}
+						break;
+					case "endTime":
+						if(order.isDesc()){
+							query.orderByHistoricTaskInstanceEndTime().desc();
+						}else{
+							query.orderByHistoricTaskInstanceEndTime().asc();
+						}
+						break;
+					default:
+						break;
+				}
+			}
+		}else{
+			query.orderByHistoricTaskInstanceEndTime().desc();//默认排序
 		}
 	}
 }
