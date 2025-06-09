@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,6 +100,16 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	public void deleteBatch(Class<T> clazz, Criteria c) {
 		List<T> entities = JpaUtil.linq(clazz).where(c).list();
 		JpaUtil.delete(entities);
+	}
+	@Transactional
+	@Override
+	public Integer deleteBatchPage(Class<T> clazz, Criteria c, Integer pageSize) {
+		Pageable page = PageRequest.of(0, pageSize);
+		List<Object> content = JpaUtil.linq(clazz).where(c).paging(page).getContent();
+		if (content.size()>0){
+			JpaUtil.delete(content);
+		}
+		return content.size();
 	}
 
 	@Override

@@ -94,8 +94,18 @@ public interface BaseService<T extends BaseEntity> {
 	 * @param id
 	 */
 	public <ID extends Serializable> void delete(Class<T> clazz, ID id);
-	
+
+
 	/**
+	 * 分批删除 数据量特别大的时候，删除会栈内存溢出，使用该方法分批执行删除
+	 * @param clazz
+	 * @param c
+	 * @pageSize 每次删除条数
+	 * @return 删除成功的条数
+	 */
+    Integer deleteBatchPage(Class<T> clazz, Criteria c, Integer pageSize);
+
+    /**
 	 * 通用智能删除By id（智能删除默认会处理@Transient属性）
 	 * @param clazz
 	 * @param id
