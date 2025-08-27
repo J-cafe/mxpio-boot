@@ -61,6 +61,8 @@ public class SystemController {
 	private long tokenTime;
 	@Value("${mxpio.refresh.token.time:7200000}")
 	private long refreshTokenTime;
+	@Value("${mxpio.logo:logo.png}")
+	private String logoPath;
 
 	@GetMapping("captcha")
 	@Operation(summary = "加载验证码", description = "获取登录验证码", method = "GET")
@@ -110,6 +112,7 @@ public class SystemController {
 		returnMap.put("appUserCompany",appUserCompany);
 		returnMap.put("tokenTime",tokenTime);
 		returnMap.put("refreshTokenTime",refreshTokenTime);
+		returnMap.put("logo",logoPath);
 		if (StringUtils.isNotBlank(passwordStrategy)){
 			String[] split = passwordStrategy.split(",");
 			List<Map<String,Object>> configRegexs = new ArrayList<>();
