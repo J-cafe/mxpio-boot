@@ -25,7 +25,7 @@ public class MxpioEnvironmentPostProcessor implements EnvironmentPostProcessor {
 
 	@Override
 	public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-		String[] profiles = { "classpath*:mxpio/mxpio.properties" };
+		String[] profiles = { "classpath*:mxpio/mxpio.properties","file:./config/mxpio/mxpio.properties","file:./mxpio.properties", "file:./mxpio/mxpio.properties"};
 
 		for (String profile : profiles) {
 			ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
@@ -33,7 +33,10 @@ public class MxpioEnvironmentPostProcessor implements EnvironmentPostProcessor {
 				Resource[] resources = resourcePatternResolver.getResources(profile);
 				Collections.reverse(Arrays.asList(resources));
 				for (Resource resource : resources) {
-					environment.getPropertySources().addFirst(loadProfiles(resource));
+                    PropertySource<?> propertySource = loadProfiles(resource);
+                    if(propertySource != null) {
+                        environment.getPropertySources().addFirst(propertySource);
+                    }
 				}
 			} catch (IOException e) {
 				throw new IllegalStateException("加载配置文件失败" + profile, e);
@@ -44,7 +47,8 @@ public class MxpioEnvironmentPostProcessor implements EnvironmentPostProcessor {
 	// 加载单个配置文件
 	private PropertySource<?> loadProfiles(Resource resource) {
 		if (!resource.exists()) {
-			throw new IllegalArgumentException("资源" + resource + "不存在");
+			//throw new IllegalArgumentException("资源" + resource + "不存在");
+            return null;
 		}
 		try {
 			// 从输入流中加载一个Properties对象
