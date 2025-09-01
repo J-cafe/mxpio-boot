@@ -94,6 +94,15 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 		T entity = JpaUtil.getOne(clazz, id);
 		JpaUtil.delete(entity);
 	}
+
+    @Override
+    @Transactional
+    public <ID extends Serializable> void delete(Class<T> clazz, ID[] ids) {
+        for(ID id:ids){
+            T entity = JpaUtil.getOne(clazz, id);
+            JpaUtil.delete(entity);
+        }
+    }
 	
 	@Override
 	@Transactional
