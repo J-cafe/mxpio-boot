@@ -7,6 +7,7 @@ import com.mxpioframework.cache.provider.CacheProvider;
 import com.mxpioframework.common.util.SpringUtil;
 import com.mxpioframework.security.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,6 +35,8 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private List<PasswordCheckPolicy> passwordCheckPolicies;
+	@Value("${mxpio.loginerror.locktime:300}")
+	private Integer loginErrorLockTime;
 
 	public JwtAuthenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder, List<PasswordCheckPolicy> passwordCheckPolicies) {
 		this.userDetailsService = userDetailsService;
@@ -109,14 +112,14 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 				break;
 			}
 		}
+		CacheProvider cacheProvider = SpringUtil.getBean(CacheProvider.class);
 		if(!result){
-			CacheProvider cacheProvider = SpringUtil.getBean(CacheProvider.class);
 			String errorCnt = "0";
 			if (cacheProvider.hasKey(Constants.LOGIN_ERROR_REDIS_KEY_PREFIX + userDetails.getUsername())) {
 				errorCnt = cacheProvider.get(Constants.LOGIN_ERROR_REDIS_KEY_PREFIX + userDetails.getUsername())+"";
 			}
 			int errorCount = Integer.parseInt(errorCnt)+1;
-			cacheProvider.set(Constants.LOGIN_ERROR_REDIS_KEY_PREFIX+userDetails.getUsername(),errorCount,1800, TimeUnit.SECONDS);
+			cacheProvider.set(Constants.LOGIN_ERROR_REDIS_KEY_PREFIX+userDetails.getUsername(),errorCount,loginErrorLockTime, TimeUnit.SECONDS);
 			String errorMsg = "密码错误，登录失败次数："+errorCount;
 			if (errorCount<3){
 				errorMsg = "密码错误，登录失败次数："+errorCount;
@@ -126,6 +129,11 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 				errorMsg = "账户密码失败次数超过5次，已被锁定，请联系管理员或稍后再试！";
 			}
 			throw new BadCredentialsException(errorMsg);
+		}else{
+			//登录成功，清理登录失败次数
+			if (cacheProvider.hasKey(Constants.LOGIN_ERROR_REDIS_KEY_PREFIX + userDetails.getUsername())) {
+				cacheProvider.del(Constants.LOGIN_ERROR_REDIS_KEY_PREFIX+userDetails.getUsername());
+			}
 		}
 		
 		/*if (authentication.getCredentials() == null) {
