@@ -39,6 +39,7 @@
 		<camunda.version>7.16.0</camunda.version>
 		<aviator.version>4.2.7</aviator.version>
 		<hutool.version>5.8.32</hutool.version>
+        <bizlog-sdk.version>3.0.0</bizlog-sdk.version>
 	</properties>
 	<modules>
 		<module>mxpio-boot-base-autoconfigure</module>
@@ -421,6 +422,13 @@
 				<artifactId>minio</artifactId>
 				<version>${minio.version}</version>
 			</dependency>
+
+            <dependency>
+                <groupId>io.github.mouzt</groupId>
+                <artifactId>bizlog-sdk</artifactId>
+                <version>${bizlog-sdk.version}</version>
+            </dependency>
+
 		</dependencies>
 	</dependencyManagement>
 	<build>
