@@ -95,7 +95,7 @@ public interface BaseService<T extends BaseEntity> {
 	 */
 	public <ID extends Serializable> void delete(Class<T> clazz, ID id);
 
-    <ID extends Serializable> void delete(Class<T> clazz, ID[] ids);
+    <ID extends Serializable> void deletes(Class<T> clazz, ID[] ids);
 	/**
 	 * 分批删除 数据量特别大的时候，删除会栈内存溢出，使用该方法分批执行删除
 	 * @param clazz
@@ -119,6 +119,13 @@ public interface BaseService<T extends BaseEntity> {
 	 * @param id
 	 */
 	public <ID extends Serializable> void remove(Class<T> clazz, ID id);
+
+    /**
+     * 通用删除
+     * @param clazz
+     * @param ids
+     */
+    public <ID extends Serializable> void removes(Class<T> clazz, ID [] ids);
 	
 	/**
 	 * 通用批量删除
