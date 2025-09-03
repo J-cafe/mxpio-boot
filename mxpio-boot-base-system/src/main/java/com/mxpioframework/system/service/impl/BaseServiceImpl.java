@@ -97,7 +97,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 
     @Override
     @Transactional
-    public <ID extends Serializable> void delete(Class<T> clazz, ID[] ids) {
+    public <ID extends Serializable> void deletes(Class<T> clazz, ID[] ids) {
         for(ID id:ids){
             T entity = JpaUtil.getOne(clazz, id);
             JpaUtil.delete(entity);
@@ -134,6 +134,15 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 		T entity = JpaUtil.getOne(clazz, id);
 		JpaUtil.remove(entity);
 	}
+
+    @Override
+    @Transactional
+    public <ID extends Serializable> void removes(Class<T> clazz, ID [] ids){
+        for(ID id:ids){
+            T entity = JpaUtil.getOne(clazz, id);
+            JpaUtil.remove(entity);
+        }
+    }
 	
 	@Override
 	@Transactional
