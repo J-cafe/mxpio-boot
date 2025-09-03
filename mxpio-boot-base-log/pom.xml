@@ -15,9 +15,13 @@
 			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-base-jpa</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-expression</artifactId>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>io.github.mouzt</groupId>
+            <artifactId>bizlog-sdk</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.mxpio</groupId>
+            <artifactId>mxpio-boot-base-security</artifactId>
+        </dependency>
+    </dependencies>
 </project>
