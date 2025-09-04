@@ -1,6 +1,9 @@
 package com.mxpioframework.log.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.mxpioframework.jpa.annotation.DictAble;
+import com.mxpioframework.security.annotation.Dict;
+import com.mxpioframework.security.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,13 +11,15 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
 @Entity
 @Table(name = "MB_LOG")
 @Schema(description="LOG对象")
-public class MxpioLog implements Serializable {
+public class MxpioLog implements DictAble, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -38,6 +43,7 @@ public class MxpioLog implements Serializable {
 
     @Column(name = "OPERATOR_",length = 64)
     @Schema(description = "操作人")
+    @Dict(dicCode = "username", dicEntity = User.class, dicText = "nickname")
     private String operator;
 
     @Column(name = "ACTION_",length = 512)
@@ -66,4 +72,13 @@ public class MxpioLog implements Serializable {
     @Schema(description = "方法名")
     private String methodName;
 
+    @Transient
+    private Map<String, String> textMap;
+
+    public String putText(String key, String value) {
+        if (textMap == null) {
+            textMap = new HashMap<>();
+        }
+        return textMap.put(key, value);
+    }
 }
