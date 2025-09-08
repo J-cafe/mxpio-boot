@@ -116,7 +116,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 				if(exception instanceof UsernameNotFoundException){
 					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101(exception.getMessage())));
 				}else if(exception instanceof BadCredentialsException){
-					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101("密码错误")));
+					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101(exception.getMessage())));
 				}else if(exception instanceof CaptchaAuthenticationException) {
 					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101(exception.getMessage())));
 				}else if(exception instanceof AccountStatusException){

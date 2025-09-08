@@ -2,6 +2,7 @@ package com.mxpioframework.security.controller;
 
 import java.util.HashSet;
 
+import com.mxpioframework.security.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -108,5 +109,14 @@ public class UserController {
 		log.info("logout sucessful");
 		return Result.OK();
 	}
-	
+
+	@GetMapping("pwd-error-clear")
+	@Operation(summary = "清除密码错误锁定", description = "根据用户名username清除密码错误锁定", method = "POST")
+	public Result<User> clearPwdErrorLock(@RequestParam("username") String username) {
+		boolean hasKey = cacheProvider.hasKey(Constants.LOGIN_ERROR_REDIS_KEY_PREFIX+username);
+		if(hasKey){
+			cacheProvider.del(Constants.LOGIN_ERROR_REDIS_KEY_PREFIX+username);
+		}
+		return Result.OK();
+	}
 }
