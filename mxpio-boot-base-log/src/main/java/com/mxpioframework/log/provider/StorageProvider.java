@@ -1,4 +1,4 @@
-package com.mxpioframework.log.service;
+package com.mxpioframework.log.provider;
 
 import com.mxpioframework.log.vo.LogParam;
 import com.mxpioframework.log.vo.LogVO;
@@ -6,10 +6,14 @@ import com.mzt.logapi.beans.LogRecord;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface MxpioLogService {
+import java.util.List;
+
+public interface StorageProvider {
+
+    String getProviderName();
 
     void saveLog(LogRecord logRecord);
 
-    Page<LogVO> listPage(Pageable page , LogParam param);
+    Page<LogVO> listPage(Pageable pageable, LogParam param);
 
 }

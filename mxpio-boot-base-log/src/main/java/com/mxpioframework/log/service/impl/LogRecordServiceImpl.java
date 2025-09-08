@@ -1,36 +1,38 @@
 package com.mxpioframework.log.service.impl;
 
-import com.mxpioframework.log.entity.MxpioLog;
-import com.mxpioframework.log.service.MxpioLogService;
-import com.mzt.logapi.beans.CodeVariableType;
+import com.mxpioframework.common.exception.MBootException;
+import com.mxpioframework.log.provider.StorageProvider;
+import com.mxpioframework.log.service.LogRecordService;
+import com.mxpioframework.log.vo.LogParam;
+import com.mxpioframework.log.vo.LogVO;
 import com.mzt.logapi.beans.LogRecord;
-import com.mzt.logapi.service.ILogRecordService;
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
-public class LogRecordServiceImpl implements ILogRecordService {
+public class LogRecordServiceImpl implements LogRecordService {
+
+    @Value("${mxpio.log.provider:db}")
+    public String providerName;
+
     @Autowired
-    private MxpioLogService mxpioLogService;
+    private List<StorageProvider> StorageProvider;
 
     @Override
     public void record(LogRecord logRecord) {
-        MxpioLog mxpioLog = new MxpioLog();
-        mxpioLog.setType(logRecord.getType());
-        mxpioLog.setSubType(logRecord.getSubType());
-        mxpioLog.setBizNo(logRecord.getBizNo());
-        mxpioLog.setOperator(logRecord.getOperator());
-        mxpioLog.setAction(logRecord.getAction());
-        mxpioLog.setExtra(logRecord.getExtra());
-        mxpioLog.setCreateTime(new Date());
-        mxpioLog.setSuccess(logRecord.isFail()?"0":"1");
-        mxpioLog.setClazzName(MapUtils.isEmpty(logRecord.getCodeVariable())?"":logRecord.getCodeVariable().get(CodeVariableType.ClassName).toString());
-        mxpioLog.setMethodName(MapUtils.isEmpty(logRecord.getCodeVariable())?"":logRecord.getCodeVariable().get(CodeVariableType.MethodName).toString());
-        mxpioLogService.insertLog(mxpioLog);
+        for (StorageProvider storageProvider : StorageProvider) {
+            if(StringUtils.equals(providerName,storageProvider.getProviderName())){
+                storageProvider.saveLog(logRecord);
+                return;
+            }
+        }
+        throw new MBootException("未找到可用的日志存储provider");
     }
 
     @Override
@@ -41,5 +43,15 @@ public class LogRecordServiceImpl implements ILogRecordService {
     @Override
     public List<LogRecord> queryLogByBizNo(String bizNo, String type, String subType) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Page<LogVO> listPage(Pageable pageable, LogParam param) {
+        for (StorageProvider storageProvider : StorageProvider) {
+            if(StringUtils.equals(providerName,storageProvider.getProviderName())){
+                return storageProvider.listPage(pageable, param);
+            }
+        }
+        throw new MBootException("未找到可用的日志存储provider");
     }
 }
