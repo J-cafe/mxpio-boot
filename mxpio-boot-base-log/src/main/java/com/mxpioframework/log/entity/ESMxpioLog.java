@@ -54,15 +54,15 @@ public class ESMxpioLog implements Serializable {
     @Schema(description = "创建时间")
     private Date createTime;
 
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Text)
     @Schema(description = "操作是否成功 1-成功 0-失败")
     private String success;
 
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Text)
     @Schema(description = "类名")
     private String clazzName;
 
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Text)
     @Schema(description = "方法名")
     private String methodName;
 
