@@ -13,6 +13,8 @@ public class Constants {
 	public static final String JWT_REFRESH_TOKEN_REDIS_KEY = "-jwt-token-";
 	
 	public static final String CAPTCHA_REDIS_KEY = "-captcha-";
+
+	public static final String LOGIN_ERROR_REDIS_KEY_PREFIX = "login_error_count_";
 	
 	// Swagger WHITELIST
     public static final String[] SWAGGER_WHITELIST = {

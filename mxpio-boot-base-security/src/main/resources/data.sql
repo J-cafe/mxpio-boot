@@ -13,7 +13,7 @@ INSERT INTO mb_url (id_, create_by, create_time, update_by, update_time, compone
 INSERT INTO mb_url (id_, create_by, create_time, update_by, update_time, component_, description_, icon_, keep_alive_, name_, navigable_, order_, parent_id_, path_, title_, outside_) VALUES ('b583ca44-0371-4f77-a3e3-71546aedert5', NULL, NULL, NULL, NULL, 'system/MenuList', '菜单管理', NULL, 0, 'menuList', 1, '1', 'd7d6e2e4e2934f2c9385a623fd98c6f3', 'list/menuList', '菜单管理', 0);
 
 
-INSERT INTO mb_user(username_, create_by, create_time, update_by, update_time, account_non_expired_, account_non_locked_, administrator_, credentials_non_expired_, enabled_, nickname_, password_, salt_) VALUES ('admin', NULL, NULL, NULL, NULL, 1, 1, 0, 1, 1, '系统管理员', '{bcrypt}$2a$10$.c/TiWuSmvwitqxBZsF5guQ6qQn08E1b1Aldff/LEb.dkeR0b4RGq', NULL);
+INSERT INTO mb_user(username_, create_by, create_time, update_by, update_time, account_non_expired_, account_non_locked_, administrator_, credentials_non_expired_, enabled_, nickname_, password_, salt_) VALUES ('admin', NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, '系统管理员', '{bcrypt}$2a$10$.c/TiWuSmvwitqxBZsF5guQ6qQn08E1b1Aldff/LEb.dkeR0b4RGq', NULL);
 
 -- 多租户菜单
 INSERT INTO mb_url(id_, create_by, create_time, update_by, update_time, component_, description_, icon_, keep_alive_, name_, navigable_, order_, parent_id_, path_, title_, outside_, create_dept, rul_type_) VALUES ('29c8547b-64b1-49b3-9f6f-52248dc398ce', 'admin', '2024-10-09 15:32:51.538000', NULL, NULL, 'multitenant/MultitenantList', NULL, NULL, 1, NULL, 1, 2, '1475ff9d-addf-4fb2-ab4a-3c1cdab2b930', 'multitenantList', '租户列表', 0, 'A0102', 'C');

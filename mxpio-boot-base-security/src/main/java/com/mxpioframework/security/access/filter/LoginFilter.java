@@ -78,6 +78,18 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 			if(username == null || password == null) {
 				throw new BadCredentialsException("账户名密码错误！");
 			}
+
+			CacheProvider cacheProvider = SpringUtil.getBean(CacheProvider.class);
+			boolean hasKey = cacheProvider.hasKey(Constants.LOGIN_ERROR_REDIS_KEY_PREFIX + username);
+			if (hasKey) {
+				String loginErrorCount = cacheProvider.get(Constants.LOGIN_ERROR_REDIS_KEY_PREFIX+username)+"";
+				if(org.apache.commons.lang3.StringUtils.isNotBlank(loginErrorCount)){
+					int count = Integer.parseInt(loginErrorCount);
+					if(count>=5){
+						throw new BadCredentialsException("账户密码失败次数超过5次，已被锁定，请联系管理员或稍后再试！");
+					}
+				}
+			}
 			// 封装到token中提交
 			JwtLoginToken authRequest = new JwtLoginToken(username, password);
 			return this.getAuthenticationManager().authenticate(authRequest);

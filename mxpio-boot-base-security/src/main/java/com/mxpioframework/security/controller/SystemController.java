@@ -61,7 +61,7 @@ public class SystemController {
 	private long tokenTime;
 	@Value("${mxpio.refresh.token.time:7200000}")
 	private long refreshTokenTime;
-	@Value("${mxpio.logo:logo.png}")
+	@Value("${mxpio.logo}")
 	private String logoPath;
 
 	@GetMapping("captcha")
