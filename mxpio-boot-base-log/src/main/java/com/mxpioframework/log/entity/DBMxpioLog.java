@@ -14,7 +14,7 @@ import java.util.Date;
 @Entity
 @Table(name = "MB_LOG")
 @Schema(description="LOG对象")
-public class MxpioLog implements Serializable {
+public class DBMxpioLog implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
