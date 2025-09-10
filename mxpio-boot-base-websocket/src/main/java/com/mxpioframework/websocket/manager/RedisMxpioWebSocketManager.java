@@ -32,7 +32,17 @@ public class RedisMxpioWebSocketManager implements MxpioWebSocketManager {
     }
 
     @Override
+    public void send(String id, String text) {
+
+    }
+
+    @Override
     public void broadcast(String endpoint, String text) {
+
+    }
+
+    @Override
+    public void broadcast(String text) {
 
     }
 }

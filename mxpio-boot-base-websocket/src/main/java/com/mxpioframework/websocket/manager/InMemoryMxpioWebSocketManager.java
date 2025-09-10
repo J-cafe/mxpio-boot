@@ -63,6 +63,23 @@ public class InMemoryMxpioWebSocketManager implements MxpioWebSocketManager {
     }
 
     @Override
+    public void send(String id, String text) {
+        for(Map<String, WebSocketConnection> endpointWebSocket:webSocketPool.values()){
+            WebSocketConnection connection = endpointWebSocket.get(id);
+            if(connection==null){
+                logger.info("无连接");
+                continue;
+            }
+            try {
+                WebSocketMessage<String> message = new TextMessage(text);
+                connection.getSession().sendMessage(message);
+            } catch (IOException e) {
+                logger.info("发送异常");
+            }
+        }
+    }
+
+    @Override
     public void broadcast(String endpoint, String text) {
         Map<String, WebSocketConnection> endpointWebSocket = webSocketPool.get(endpoint);
         if(endpointWebSocket==null){
@@ -77,6 +94,21 @@ public class InMemoryMxpioWebSocketManager implements MxpioWebSocketManager {
                 logger.error("broadcast>>>>>>向endpoint:{},id:{}的连接发送信息出现异常",endpoint,entry.getKey(),e);
             }
         }
+    }
+
+    @Override
+    public void broadcast(String text) {
+        for(Map<String, WebSocketConnection> endpointWebSocket:webSocketPool.values()){
+            WebSocketMessage<String> message = new TextMessage(text);
+            for(Map.Entry<String, WebSocketConnection> entry:endpointWebSocket.entrySet()){
+                try {
+                    entry.getValue().getSession().sendMessage(message);
+                } catch (IOException e) {
+                    logger.info("broadcast>>>>>>id:{}的连接发送信息出现异常",entry.getKey(),e);
+                }
+            }
+        }
+
     }
 
 }
