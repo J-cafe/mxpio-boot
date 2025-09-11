@@ -16,4 +16,9 @@ public interface MxpioWebSocketManager {
     void broadcast(String endpoint, String text);
     void broadcast(String text);
 
+    void sendToEndpoint(String endpoint, String id, String text);
+    void sendToEndpoint(String id, String text);
+    void broadcastToEndpoint(String endpoint, String text);
+    void broadcastToEndpoint(String text);
+
 }

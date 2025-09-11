@@ -1,9 +1,10 @@
-package com.mxpioframework.websocket.manager;
+package com.mxpioframework.websocket.manager.impl;
 
+import com.mxpioframework.common.exception.MBootException;
 import com.mxpioframework.websocket.WebSocketConnection;
+import com.mxpioframework.websocket.manager.MxpioWebSocketManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketMessage;
 
@@ -11,11 +12,10 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
-public class InMemoryMxpioWebSocketManager implements MxpioWebSocketManager {
+public abstract class AbstractMxpioWebSocketManager implements MxpioWebSocketManager {
     private final Map<String, Map<String, WebSocketConnection>> webSocketPool = new ConcurrentHashMap<>();
 
-    private static final Logger logger = LoggerFactory.getLogger(InMemoryMxpioWebSocketManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractMxpioWebSocketManager.class);
 
     @Override
     public WebSocketConnection get(String endpoint, String id) {
@@ -45,26 +45,26 @@ public class InMemoryMxpioWebSocketManager implements MxpioWebSocketManager {
     }
 
     @Override
-    public void send(String endpoint, String id, String text) {
-        Map<String, WebSocketConnection> endpointWebSocket = webSocketPool.get(endpoint);
+    public void sendToEndpoint(String endpoint, String id, String text) {
+        Map<String, WebSocketConnection> endpointWebSocket = getWebSocketPool().get(endpoint);
         if(endpointWebSocket==null){
-            throw new RuntimeException("endpoint为"+endpoint+"的连接不存在");
+            throw new MBootException("endpoint为"+endpoint+"的连接不存在");
         }
         WebSocketConnection connection = endpointWebSocket.get(id);
         if(connection==null){
-            throw new RuntimeException("endpoint为"+endpoint+" id为"+id+"的连接不存在");
+            throw new MBootException("endpoint为"+endpoint+" id为"+id+"的连接不存在");
         }
         try {
             WebSocketMessage<String> message = new TextMessage(text);
             connection.getSession().sendMessage(message);
         } catch (IOException e) {
-            throw new RuntimeException("发送异常");
+            throw new MBootException("发送异常");
         }
     }
 
     @Override
-    public void send(String id, String text) {
-        for(Map<String, WebSocketConnection> endpointWebSocket:webSocketPool.values()){
+    public void sendToEndpoint(String id, String text) {
+        for(Map<String, WebSocketConnection> endpointWebSocket:getWebSocketPool().values()){
             WebSocketConnection connection = endpointWebSocket.get(id);
             if(connection==null){
                 logger.info("无连接");
@@ -80,11 +80,11 @@ public class InMemoryMxpioWebSocketManager implements MxpioWebSocketManager {
     }
 
     @Override
-    public void broadcast(String endpoint, String text) {
-        Map<String, WebSocketConnection> endpointWebSocket = webSocketPool.get(endpoint);
+    public void broadcastToEndpoint(String endpoint, String text) {
+        Map<String, WebSocketConnection> endpointWebSocket = getWebSocketPool().get(endpoint);
         if(endpointWebSocket==null){
-            logger.error("send>>>>>>endpoint:{}的连接不存在",endpoint);
-            throw new RuntimeException("endpoint为"+endpoint+"的连接不存在");
+            logger.error("broadcast>>>>>>endpoint:{}的连接不存在",endpoint);
+            throw new MBootException("endpoint为"+endpoint+"的连接不存在");
         }
         WebSocketMessage<String> message = new TextMessage(text);
         for(Map.Entry<String, WebSocketConnection> entry:endpointWebSocket.entrySet()){
@@ -97,8 +97,8 @@ public class InMemoryMxpioWebSocketManager implements MxpioWebSocketManager {
     }
 
     @Override
-    public void broadcast(String text) {
-        for(Map<String, WebSocketConnection> endpointWebSocket:webSocketPool.values()){
+    public void broadcastToEndpoint(String text) {
+        for(Map<String, WebSocketConnection> endpointWebSocket:getWebSocketPool().values()){
             WebSocketMessage<String> message = new TextMessage(text);
             for(Map.Entry<String, WebSocketConnection> entry:endpointWebSocket.entrySet()){
                 try {
@@ -110,5 +110,10 @@ public class InMemoryMxpioWebSocketManager implements MxpioWebSocketManager {
         }
 
     }
+
+    public Map<String, Map<String, WebSocketConnection>> getWebSocketPool() {
+        return webSocketPool;
+    }
+
 
 }
