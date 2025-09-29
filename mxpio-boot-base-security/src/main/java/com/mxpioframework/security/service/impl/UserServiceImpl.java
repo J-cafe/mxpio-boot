@@ -12,9 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.entity.Dept;
 import com.mxpioframework.security.entity.UserDept;
+import com.mxpioframework.security.util.AesEncryptUtil;
 import com.mxpioframework.security.vo.UpatePassVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +45,9 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	
 	@Autowired
 	private CacheProvider cacheProvider;
+
+	@Value("${mxpio.JSEncrypt.privateKey:}")
+	private String privateKey;
 	
 	@Override
 	@Transactional
@@ -229,8 +234,15 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 		if (u==null){
 			return Result.error("用户名不存在，请确认");
 		}
-		String dbpassword = u.getPassword();
-		if (!passwordEncoder.matches(upatePassVo.getOldPassword(),dbpassword)){
+		String presentedPassword = upatePassVo.getOldPassword();
+		if (StringUtils.isNotBlank(privateKey)&&!StringUtils.equals("null",privateKey)) {
+			try {
+				presentedPassword = AesEncryptUtil.decrypt(presentedPassword, privateKey);
+			} catch (Exception e) {
+				throw new RuntimeException(e+"密码解密失败");
+			}
+		}
+		if (!passwordEncoder.matches(presentedPassword,u.getPassword())){
 			return Result.error("原密码不正确，请确认");
 		}
 		u.setPassword(passwordEncoder.encode(upatePassVo.getNewPassword()));
