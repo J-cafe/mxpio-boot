@@ -101,7 +101,7 @@ public class MxpioElasticsearchLogServiceImpl implements MxpioLogService {
             vo.setMethodName(hits.getContent().getMethodName());
             voList.add(vo);
         }
-        return new PageImpl<>(voList,page,searchPage.getTotalPages());
+        return new PageImpl<>(voList,page,searchPage.getTotalElements());
     }
 
 

@@ -62,7 +62,7 @@ public class MxpioDatabaseLogServiceImpl implements MxpioLogService {
             vo.setMethodName(mxpioLog.getMethodName());
             voList.add(vo);
         }
-        return new PageImpl<>(voList,page,pageList.getTotalPages());
+        return new PageImpl<>(voList,page,pageList.getTotalElements());
     }
 
     private Criteria getCriteria(LogParam param){
