@@ -1,5 +1,7 @@
 package com.mxpioframework.jpa.policy.impl;
 
+import com.mxpioframework.common.util.BeanReflectionUtils;
+
 import java.util.Date;
 
 public class UpdatedDatePolicy extends AbstractGeneratorPolicy {
@@ -11,7 +13,14 @@ public class UpdatedDatePolicy extends AbstractGeneratorPolicy {
 
 	@Override
 	protected Object getValue(Object entity, String field) {
-		return new Date();
+        Object value = BeanReflectionUtils.getPropertyValue(entity, field);
+        if ("".equals(value)) {
+            value = null;
+        }
+        if (value == null) {
+            return new Date();
+        }
+        return value;
 	}
 
 }
