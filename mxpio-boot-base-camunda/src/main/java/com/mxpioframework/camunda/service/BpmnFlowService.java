@@ -367,7 +367,15 @@ public interface BpmnFlowService {
 	 */
 	ResultMessage rejectToFirst(String taskId, Map<String, Object> properties, String loginUsername);
 
-	/**
+    /**
+     * 查询流程某个变量的值
+     * @param processInstanceId 流程实例ID
+     * @param variableName 流程变量名称
+     * @return 流程变量值
+     */
+    String getVariableByName(String processInstanceId, String variableName);
+
+    /**
 	 * 根据任务ID获取任务的评论列表
 	 *
 	 * @param taskId 任务ID

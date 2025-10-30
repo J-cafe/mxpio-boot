@@ -879,6 +879,15 @@ public class BpmnFlowServiceImpl implements BpmnFlowService {
 		taskDetail.setStartDatas(startDatas);
 	}
 
+    @Transactional(readOnly = true)
+    @Override
+    public String getVariableByName(String processInstanceId, String variableName) {
+		HistoricVariableInstanceQuery query = historyService.createHistoricVariableInstanceQuery()
+				.processInstanceId(processInstanceId)
+				.variableName(variableName);
+		HistoricVariableInstance variable = query.singleResult();
+		return variable == null ? null : variable.getValue().toString();
+	}
 	/**
      * 获取上一节点信息
      * 分两种情况：
