@@ -5,11 +5,12 @@
 	<parent>
 		<groupId>com.mxpio</groupId>
 		<artifactId>mxpio-boot-parent</artifactId>
-		<version>1.0.12-beta.11</version>
+		<version>1.0.12-beta.11-xct</version>
 	</parent>
 	<artifactId>mxpio-boot-base-security</artifactId>
 	<name>权鉴模块</name>
 	<description>权鉴模块</description>
+    <version>1.0.12-beta.11-xct</version>
 	<dependencies>
 		<dependency>
 			<groupId>com.mxpio</groupId>
