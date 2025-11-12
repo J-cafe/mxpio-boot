@@ -1,6 +1,7 @@
 package com.mxpioframework.security.entity;
 
 import com.mxpioframework.jpa.annotation.Generator;
+import com.mxpioframework.security.annotation.Dict;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,9 +26,18 @@ public class Post extends BaseEntity implements Actor {
 	@Column(name = "ID_")
 	private String id;
 
-	@Schema(description = "职位名称")
+    @Schema(description = "职位编码")
+    @Column(name = "CODE_")
+    private String code;
+
+    @Schema(description = "职位名称")
 	@Column(name = "NAME_")
 	private String name;
+
+    @Schema(description = "所属部门")
+    @Column(name = "DEPT_CODE_")
+    @com.mxpioframework.security.annotation.Dict(dicCode = "deptCode", dicEntity = Dept.class, dicText = "deptName")
+    private String deptCode;
 
 	@Schema(description = "职系")
 	@Column(name = "POST_TYPE_")
@@ -37,6 +47,20 @@ public class Post extends BaseEntity implements Actor {
 	@Schema(description = "职级")
 	@Column(name = "POST_GRADE_")
 	private String postGrade;
+
+    @Schema(description = "是否关键岗位")
+    @Dict(dicCode = "ERP_COMMON_YESNO")
+    @Column(name = "KEY_POSITION_", columnDefinition="varchar(8) default '0'")//0否 1是
+    private String toUser="0";
+
+    @Schema(description = "是否上岗扫描")
+    @Dict(dicCode = "ERP_COMMON_YESNO")
+    @Column(name = "NEED_SCAN_", columnDefinition="varchar(8) default '0'")//0否 1是
+    private String needScan="0";
+
+    @Schema(description = "岗位职责")
+    @Column(name = "DUTY_")
+    private String duty;
 
 	@Schema(description = "存储字符串的备用字段1")
 	@Column(name = "RESERVED_STRING_FIELD1_")
