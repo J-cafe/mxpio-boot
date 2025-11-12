@@ -51,7 +51,7 @@ public class Post extends BaseEntity implements Actor {
     @Schema(description = "是否关键岗位")
     @Dict(dicCode = "ERP_COMMON_YESNO")
     @Column(name = "KEY_POSITION_", columnDefinition="varchar(8) default '0'")//0否 1是
-    private String toUser="0";
+    private String keyPosition="0";
 
     @Schema(description = "是否上岗扫描")
     @Dict(dicCode = "ERP_COMMON_YESNO")
