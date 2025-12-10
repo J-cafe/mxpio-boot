@@ -148,6 +148,6 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		return parameter.getParameterName().equals("criteria");
+        return "criteria".equals(parameter.getParameterName());
 	}
 }
