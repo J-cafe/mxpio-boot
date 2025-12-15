@@ -40,7 +40,11 @@ public class Url extends BaseEntity implements Resource {
 	@Column(name = "TITLE_", length = 64)
 	@Schema(description = "标题")
 	private String title;
-	
+
+    @Column(name = "URL_SCOPE_", length = 64)
+    @Schema(description = "菜单范畴")//平台、模块、菜单
+    private String urlScope;
+
 	@Column(name = "RUL_TYPE_", length = 64)
 	@Schema(description = "目录/菜单")
 	private String urlType;
