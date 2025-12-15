@@ -7,12 +7,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -541,6 +536,22 @@ public class PojoDictParseServiceImpl implements PojoDictParseService {
     }
     cacheService.put(cacheKey, result);
     return result;
+  }
+
+  @Override
+  public List<Dict> getDictByEntity(Class<?> clazz){
+      Map<String, Dict> dictInfoMap = new HashMap<>();
+      for(Map<String,Dict> dictMap:dictListOfClassMap.values()){
+          for(Dict dict:dictMap.values()){
+            if(dict.dicEntity()!=null&&dict.dicEntity().equals(clazz)){
+                String key = dict.dicCode()+dict.dicText();
+                if(!dictInfoMap.containsKey(key)){
+                    dictInfoMap.put(key,dict);
+                }
+            }
+          }
+      }
+      return new ArrayList<>(dictInfoMap.values());
   }
 
 }

@@ -3,6 +3,8 @@ package com.mxpioframework.system.service.impl;
 import java.io.Serializable;
 import java.util.*;
 
+import com.mxpioframework.system.service.EntityDictRefreshService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,9 @@ import com.mxpioframework.system.service.BaseService;
 
 public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 
+    @Autowired
+    private EntityDictRefreshService entityDictRefreshService;
+
 	@Override
 	@Transactional
 	public T save(T entity) {
@@ -31,46 +36,51 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 		JpaUtil.save(entities);
 		return entities;
 	}
-	
+
 	@Override
 	@Transactional
 	public T save(T entity, CrudPolicy crudPolicy) {
 		JpaUtil.save(entity, crudPolicy);
 		return entity;
 	}
-	
+
 	@Override
 	@Transactional
 	public Collection<T> save(Collection<T> entities, CrudPolicy crudPolicy) {
 		JpaUtil.save(entities, crudPolicy);
 		return entities;
 	}
-	
+
 	@Override
 	@Transactional
 	public T persist(T entity) {
 		JpaUtil.persist(entity);
 		return entity;
 	}
-	
+
 	@Override
 	@Transactional
 	public T update(T entity) {
 		JpaUtil.update(entity);
+        entityDictRefreshService.deleteCache(entity);
 		return entity;
 	}
-	
+
 	@Override
 	@Transactional
 	public T update(T entity, CrudPolicy crudPolicy) {
 		JpaUtil.update(entity, crudPolicy);
+        entityDictRefreshService.deleteCache(entity);
 		return entity;
 	}
-	
+
 	@Override
 	@Transactional
 	public Collection<T> update(Collection<T> entities) {
 		JpaUtil.update(entities);
+        for (T entity : entities) {
+            entityDictRefreshService.deleteCache(entity);
+        }
 		return entities;
 	}
 
@@ -78,16 +88,19 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 	@Transactional
 	public Collection<T> update(Collection<T> entities, CrudPolicy crudPolicy) {
 		JpaUtil.update(entities, crudPolicy);
+        for (T entity : entities) {
+            entityDictRefreshService.deleteCache(entity);
+        }
 		return entities;
 	}
-	
+
 	@Override
 	@Transactional
 	public T merge(T entity) {
 		JpaUtil.merge(entity);
 		return entity;
 	}
-	
+
 	@Override
 	@Transactional
 	public <ID extends Serializable> void delete(Class<T> clazz, ID id) {
@@ -103,7 +116,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
             JpaUtil.delete(entity);
         }
     }
-	
+
 	@Override
 	@Transactional
 	public void deleteBatch(Class<T> clazz, Criteria c) {
@@ -127,7 +140,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 		T entity = JpaUtil.getOne(clazz, id);
 		JpaUtil.delete(entity, crudPolicy);
 	}
-	
+
 	@Override
 	@Transactional
 	public <ID extends Serializable> void remove(Class<T> clazz, ID id) {
@@ -143,27 +156,27 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
             JpaUtil.remove(entity);
         }
     }
-	
+
 	@Override
 	@Transactional
 	public void removeBatch(Class<T> clazz, Criteria c) {
 		List<T> entities = JpaUtil.linq(clazz).where(c).list();
 		JpaUtil.remove(entities);
 	}
-	
+
 	@Override
 	@Transactional
 	public void deleteBatch(Class<T> clazz, Criteria c, CrudPolicy crudPolicy) {
 		List<T> entities = JpaUtil.linq(clazz).where(c).list();
 		JpaUtil.delete(entities, crudPolicy);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<T> list(Class<T> clazz, Criteria c) {
 		return JpaUtil.linq(clazz).where(c).list();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public List<T> list(Class<T> clazz, Criteria c,
@@ -174,7 +187,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 		}
 		return lin.where(c).list();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional(readOnly = true)
@@ -204,11 +217,11 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 					children.add(record);
 				}
 			}
-			
+
 		}
 		return result;
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public <ID extends Serializable> T getById(Class<T> clazz, ID id) {
