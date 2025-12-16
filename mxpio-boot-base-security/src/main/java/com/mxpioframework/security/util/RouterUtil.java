@@ -22,6 +22,7 @@ public class RouterUtil {
 			meta.setTitle(url.getTitle());
 			meta.setOrder(url.getOrder());
 			meta.setDesc(url.getDescription());
+            meta.setUrlScope(url.getUrlScope());
 			RouterVo router = RouterVo.builder().key(url.getId()).parentId(url.getParentId()).name(url.getName())
 					.meta(meta).component(url.getComponent()).path(url.getPath()).build();
 			if (CollectionUtils.isNotEmpty(url.getChildren())) {

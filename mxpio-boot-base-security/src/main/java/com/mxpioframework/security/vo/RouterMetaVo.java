@@ -30,5 +30,8 @@ public class RouterMetaVo {
 	
 	@Schema(description = "描述")
 	private String desc;
+
+    @Schema(description = "菜单范畴")//平台、模块、菜单
+    private String urlScope;
 	
 }
