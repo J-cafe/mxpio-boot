@@ -147,6 +147,7 @@ public class UrlServiceImpl extends BaseServiceImpl<Url> implements UrlService {
 		u.setAttributes(url.getAttributes());
 		u.setOutside(url.isOutside());
 		u.setTitle(url.getTitle());
+        u.setUrlScope(url.getUrlScope());
 		return u;
 	}
 	
