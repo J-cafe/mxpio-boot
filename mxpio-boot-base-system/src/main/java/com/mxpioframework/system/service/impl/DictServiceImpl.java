@@ -91,7 +91,7 @@ public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictServic
 	@Transactional(readOnly = true)
 	public String getTextByCode(String code, String value) {
 		DictItem item = getItemByCode(code, value);
-		return item.getItemValue();
+		return item.getItemText();
 	}
 
 	@Override
