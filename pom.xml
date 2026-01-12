@@ -40,6 +40,7 @@
 		<aviator.version>4.2.7</aviator.version>
 		<hutool.version>5.8.32</hutool.version>
         <bizlog-sdk.version>3.0.0</bizlog-sdk.version>
+        <oauth2.autoconfigure.version>2.5.14</oauth2.autoconfigure.version>
 	</properties>
 	<modules>
 		<module>mxpio-boot-base-autoconfigure</module>
@@ -66,6 +67,7 @@
 		<module>mxpio-boot-module-msal</module>
         <module>mxpio-boot-module-email</module>
         <module>mxpio-boot-module-wechat</module>
+        <module>mxpio-boot-module-oauth2-server</module>
         <!--<module>mxpio-boot-webapp</module>-->
     </modules>
 	<dependencies>
@@ -91,6 +93,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-resource-server</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -427,6 +434,12 @@
                 <groupId>io.github.mouzt</groupId>
                 <artifactId>bizlog-sdk</artifactId>
                 <version>${bizlog-sdk.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.security.oauth.boot</groupId>
+                <artifactId>spring-security-oauth2-autoconfigure</artifactId>
+                <version>${oauth2.autoconfigure.version}</version>
             </dependency>
 
 		</dependencies>
