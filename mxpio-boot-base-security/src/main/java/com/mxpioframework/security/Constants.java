@@ -3,19 +3,19 @@ package com.mxpioframework.security;
 public class Constants {
 /*
 	public static final long DEFAULT_ACCESS_TOKEN_TIME_MS = 30 * 60 * 1000L;
-	
+
 	public static final long DEFAULT_REFRESH_TOKEN_TIME_MS = 4 * 30 * 60 * 1000L;*/
-	
+
 	public static final String JWT_TOKEN_SALT = "MXPIO";
-	
+
 	public static final String JWT_ACCESS_TOKEN_REDIS_KEY = "-jwt-token-";
-	
+
 	public static final String JWT_REFRESH_TOKEN_REDIS_KEY = "-jwt-token-";
-	
+
 	public static final String CAPTCHA_REDIS_KEY = "-captcha-";
 
 	public static final String LOGIN_ERROR_REDIS_KEY_PREFIX = "login_error_count_";
-	
+
 	// Swagger WHITELIST
     public static final String[] SWAGGER_WHITELIST = {
             "/swagger-ui.html",
@@ -31,7 +31,11 @@ public class Constants {
 	public static final String[] MULTITENANT_WHITELIST = {
 			"/multitenant/register/*"
 	};
-    
+
+    public static final String[] OAUTH_WHITELIST = {
+            "/oauth/**"
+    };
+
     public enum DatascopeEnum {
 		DEPT("DEPT", "部门过滤"), USER("USER", "用户过滤"),DEPT_AND_CHILD("DEPT_AND_CHILD", "部门及子部门过滤"),SERVICE("SERVICE", "服务");
 

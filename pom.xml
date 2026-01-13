@@ -263,6 +263,13 @@
 				<artifactId>mxpio-boot-module-wechat</artifactId>
 				<version>${mxpio.version}</version>
 			</dependency>
+
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-boot-module-oauth2-server</artifactId>
+                <version>${mxpio.version}</version>
+            </dependency>
+
 			<dependency>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-core</artifactId>

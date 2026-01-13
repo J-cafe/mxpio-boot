@@ -11,15 +11,15 @@ import com.mxpioframework.security.anthentication.ThirdAuthorizeException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.AccountStatusException;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.security.authentication.*;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
@@ -52,7 +52,9 @@ import com.mxpioframework.security.service.OnlineUserService;
 import com.mxpioframework.security.util.TokenUtil;
 import com.mxpioframework.security.vo.TokenVo;
 
-@Component
+//@Component
+@Configuration
+@EnableWebSecurity
 @Order(120)
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
@@ -72,10 +74,10 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private FilterInvocationSecurityMetadataSource securityMetadataSource;
-	
+
 	@Autowired
 	private AccessDecisionManager accessDecisionManager;
-	
+
 	/*@Autowired
 	private FilterSecurityInterceptor securityInterceptor;*/
 
@@ -84,19 +86,26 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private CacheProvider cacheProvider;
-	
+
 	@Autowired
 	private ObjectMapper objectMapper;
-	
+
 	@Resource(name = "jwtAuthenticationProvider")
 	private AuthenticationProvider jwtAuthenticationProvider;
 
 	@Resource(name = "thirdAuthorizeProvider")
 	private AuthenticationProvider thirdAuthorizeProvider;
-	
+
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
@@ -135,11 +144,11 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 			}
 		});
         JwtTokenFilter jwtTokenFilter = new JwtTokenFilter();
-        
+
         FilterSecurityInterceptor securityInterceptor = createFilterSecurityInterceptor();
-        
+
 //        JwtAuthenticationProvider jwtAuthenticationProvider = new JwtAuthenticationProvider(userDetailsService, passwordEncoder);
-        
+
         http.authenticationProvider(jwtAuthenticationProvider).authenticationProvider(thirdAuthorizeProvider).cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
@@ -148,6 +157,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 				// 添加SWAGGER地址
 				.antMatchers(Constants.SWAGGER_WHITELIST).permitAll()
 				.antMatchers(Constants.MULTITENANT_WHITELIST).permitAll()
+                .antMatchers(Constants.OAUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()  // 所有请求需要身份认证
                 .and()
                 .exceptionHandling()
@@ -164,10 +174,10 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
     			.rememberMe();
-        
+
         http.setSharedObject(FilterSecurityInterceptor.class, securityInterceptor);
         http.exceptionHandling().authenticationEntryPoint(new MxpioAuthenticationEntryPoint()).accessDeniedHandler(new MxpioAccessDeniedHandler());
-        
+
 	}
 
 	private FilterSecurityInterceptor createFilterSecurityInterceptor() throws Exception {
@@ -197,7 +207,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	    @Override
 	    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
 	        response.setContentType("application/json;charset=UTF-8");
-	        
+
 	        User jwtUserDetails = (User) authentication.getPrincipal();
 	        String accessToken = TokenUtil.createAccessToken(jwtUserDetails);
 	        String refreshToken = TokenUtil.createRefreshToken(accessToken);
@@ -213,13 +223,13 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	        response.getWriter().write(objectMapper.writeValueAsString(Result.OK(tokenVo)));
 	    }
 	}
-	
+
 	class JwtLogoutSuccessHandler implements LogoutSuccessHandler{
 
 		@Override
 		public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
 				Authentication authentication) throws IOException, ServletException {
-			
+
 			String authInfo = request.getHeader("Authorization");
 			String token = StringUtils.removeStart(authInfo, "Bearer ");
             if(cacheProvider != null) {
@@ -265,9 +275,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 				response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("登录异常")));
 			}
 		}
-		
+
 	}
-	
+
 	class MxpioAccessDeniedHandler implements AccessDeniedHandler {
 
 		@Override

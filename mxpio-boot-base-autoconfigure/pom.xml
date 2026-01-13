@@ -120,6 +120,11 @@
 			<artifactId>mxpio-boot-module-oauth</artifactId>
 			<optional>true</optional>
 		</dependency>
+        <dependency>
+            <groupId>com.mxpio</groupId>
+            <artifactId>mxpio-boot-module-oauth2-server</artifactId>
+            <optional>true</optional>
+        </dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-boot-module-msal</artifactId>
