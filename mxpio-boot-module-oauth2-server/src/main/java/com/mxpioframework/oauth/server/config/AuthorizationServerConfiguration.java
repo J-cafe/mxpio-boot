@@ -1,10 +1,10 @@
 package com.mxpioframework.oauth.server.config;
 
+import com.mxpioframework.oauth.server.convert.Auth0JwtAccessTokenConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -14,17 +14,22 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
+import javax.annotation.Resource;
+import javax.sql.DataSource;
 
 
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-    @Autowired
+    @Resource(name="mxpio.oauth2.server.clientDetailService")
     private ClientDetailsService clientDetailsService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private DataSource dataSource;
 
 
     @Override
@@ -35,7 +40,15 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        //clients.jdbc(dataSource);
         clients.withClientDetails(clientDetailsService);
+        /*clients.inMemory()
+                .withClient("fangsong")
+                .secret("{noop}123456") // 明文密码需用 {noop} 前缀
+                .authorizedGrantTypes("password", "refresh_token","authorization_code")
+                .scopes("read", "write")
+                .authorities("ROLE_CLIENT")
+                .resourceIds("resource_id");*/
     }
 
     @Override
@@ -54,9 +67,10 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
-        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+        /*JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
         jwtAccessTokenConverter.setSigningKey("mxpio");   //  Sets the JWT signing key
-        return jwtAccessTokenConverter;
+        return jwtAccessTokenConverter;*/
+        return new Auth0JwtAccessTokenConverter();
     }
 
 }

@@ -33,7 +33,7 @@ public class Constants {
 	};
 
     public static final String[] OAUTH_WHITELIST = {
-            "/oauth/**"
+            "/oauth/token","/oauth/check_token"
     };
 
     public enum DatascopeEnum {

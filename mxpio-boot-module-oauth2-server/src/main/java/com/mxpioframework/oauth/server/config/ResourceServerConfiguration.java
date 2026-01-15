@@ -1,6 +1,5 @@
 package com.mxpioframework.oauth.server.config;
 
-import com.mxpioframework.security.Constants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -8,8 +7,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 
-@Configuration
-@EnableResourceServer
+/*@Configuration
+@EnableResourceServer*/
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
     @Value("${mxpio.systemAnonymous}")
@@ -21,13 +20,14 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        /*http.authorizeRequests()
                 .antMatchers(mergeAnonymous()).permitAll()
                 // 添加SWAGGER地址
                 .antMatchers(Constants.SWAGGER_WHITELIST).permitAll()
                 .antMatchers(Constants.MULTITENANT_WHITELIST).permitAll()
                 .antMatchers(Constants.OAUTH_WHITELIST).permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated();*/
+        http.authorizeRequests().anyRequest().authenticated();
     }
 
 
