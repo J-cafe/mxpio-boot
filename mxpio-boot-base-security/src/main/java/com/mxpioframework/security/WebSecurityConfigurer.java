@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -96,6 +97,9 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	@Resource(name = "thirdAuthorizeProvider")
 	private AuthenticationProvider thirdAuthorizeProvider;
 
+
+    @Value("${mxpio.token.time:1800000}")
+    private int tokenTime;
 
     @Bean
     @Override
@@ -213,6 +217,13 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
             	OnlineUserService onlineUserService = SpringUtil.getBean(OnlineUserService.class);
             	onlineUserService.save(jwtUserDetails, accessToken, refreshToken, cacheProvider);
             }
+            //cookie
+            Cookie cookie = new Cookie("Access-Token", accessToken);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(tokenTime/1000);
+            response.addCookie(cookie);
+
 	        TokenVo tokenVo = new TokenVo();
 	        tokenVo.setUser(jwtUserDetails);
 	        tokenVo.setToken(accessToken);

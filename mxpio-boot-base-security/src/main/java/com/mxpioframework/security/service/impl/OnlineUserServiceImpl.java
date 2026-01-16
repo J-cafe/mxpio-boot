@@ -1,6 +1,5 @@
 package com.mxpioframework.security.service.impl;
 
-import com.mxpioframework.security.util.ApplicationContextProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,18 +11,15 @@ import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.OnlineUserService;
 import com.mxpioframework.security.util.TokenUtil;
 import com.mxpioframework.security.vo.TokenVo;
-
-import java.util.Objects;
-
 @Service("mxpio.security.onlineUserService")
 public class OnlineUserServiceImpl implements OnlineUserService {
-	
+
 	@Value("${mxpio.token.time:1800000}")
 	private long tokenTime;
 
 	@Value("${mxpio.refresh.token.time:7200000}")
 	private long refreshTokenTime;
-	
+
 	@Autowired
 	private UserDetailsService userDetailsService;
 
@@ -32,7 +28,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
 		cacheProvider.set(Constants.JWT_ACCESS_TOKEN_REDIS_KEY + token, user, tokenTime / 1000L);
 		cacheProvider.set(Constants.JWT_REFRESH_TOKEN_REDIS_KEY + refreshToken, user, refreshTokenTime / 1000L);
 	}
-	
+
 	@Override
 	public void refresh(User user, String token,  CacheProvider cacheProvider) {
 		cacheProvider.set(Constants.JWT_ACCESS_TOKEN_REDIS_KEY + token, user, tokenTime / 1000L);
@@ -82,7 +78,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
 		}else {
 			return null;
 		}
-		
+
 	}
 
 }

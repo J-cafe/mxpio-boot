@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.*;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -86,10 +87,15 @@ public class SystemController {
 
 	@PostMapping("token/refresh")
 	@Operation(summary = "刷新token", description = "双token机制下通过refreshToken刷新权限token", method = "POST")
-	public Result<Object> refreshToken(@RequestBody TokenVo tokenVo) throws IOException {
+	public Result<Object> refreshToken(@RequestBody TokenVo tokenVo,HttpServletResponse response) throws IOException {
 		TokenVo result;
 		result = onlineUserService.refreshToken(tokenVo.getRefreshToken(), cacheProvider);
 		if(result != null) {
+            Cookie cookie = new Cookie("Access-Token", result.getToken());
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge((int)tokenTime/1000);
+            response.addCookie(cookie);
 			return Result.OK(result);
 		}else {
 			return Result.noauth403("refreshToken已失效");

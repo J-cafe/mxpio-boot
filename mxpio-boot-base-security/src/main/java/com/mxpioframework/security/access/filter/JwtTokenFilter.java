@@ -4,12 +4,15 @@ import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mxpioframework.common.exception.MBootException;
 import com.mxpioframework.common.vo.Result;
+import com.mxpioframework.security.matcher.CookieRequestMatcher;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -34,10 +37,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
 	private RequestMatcher requiresAuthenticationRequestMatcher;
     private RequestMatcher websocketAuthenticationRequestMatcher;
+    private RequestMatcher cookieAuthenticationRequestMatcher;
 
 	public JwtTokenFilter() {
 		this.requiresAuthenticationRequestMatcher = new RequestHeaderRequestMatcher("Access-Token");
         this.websocketAuthenticationRequestMatcher = new RequestHeaderRequestMatcher("Sec-WebSocket-Protocol");
+        this.cookieAuthenticationRequestMatcher = new CookieRequestMatcher("Access-Token");
 	}
 
 	protected String getJwtToken(HttpServletRequest request,HttpServletResponse httpServletResponse) {
@@ -49,6 +54,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         authInfo = request.getHeader("Sec-WebSocket-Protocol");
         if(StringUtils.isNotBlank(authInfo)){
             httpServletResponse.setHeader("Sec-WebSocket-Protocol",authInfo);
+        }
+        Cookie[] cookies = request.getCookies();
+        if(ArrayUtils.isNotEmpty(cookies)){
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("Access-Token")) {
+                    authInfo=cookie.getValue();
+                    break;
+                }
+            }
         }
 		return authInfo;
 	}
@@ -111,6 +125,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     protected boolean requiresAuthentication(HttpServletRequest request,
 			HttpServletResponse response) {
-		return requiresAuthenticationRequestMatcher.matches(request)||websocketAuthenticationRequestMatcher.matches(request);
+		return requiresAuthenticationRequestMatcher.matches(request)||websocketAuthenticationRequestMatcher.matches(request)||cookieAuthenticationRequestMatcher.matches(request);
 	}
 }
