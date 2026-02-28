@@ -4,11 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Schema(description="租户")
@@ -16,19 +16,19 @@ import javax.persistence.Transient;
 public class Organization implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Column(name = "ID_")
 	private String id;
-	
+
 	@Column(name = "NAME_")
 	@Schema(description="租户名称")
 	private String name;
-	
+
 	@Column(name = "DATA_SOURCE_INFO_ID_")
 	@Schema(description="数据源ID")
 	private String dataSourceInfoId;
-	
+
 	@Transient
 	@Schema(description="数据源信息")
 	private DataSourceInfo dataSourceInfo;

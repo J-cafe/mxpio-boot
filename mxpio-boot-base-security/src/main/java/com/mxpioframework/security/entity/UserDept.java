@@ -1,6 +1,6 @@
 package com.mxpioframework.security.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import com.mxpioframework.jpa.annotation.Generator;
 
@@ -10,9 +10,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Table(name = "MB_USER_DEPT")
 @Schema(description="用户部门关系")
 public class UserDept extends BaseEntity {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Generator
 	@Schema(description = "ID")
@@ -22,7 +22,7 @@ public class UserDept extends BaseEntity {
 	@Schema(description = "USER_ID")
 	@Column(name = "USER_ID_")
 	private String userId;
-	
+
 	@Schema(description = "DEPT_ID")
 	@Column(name = "DEPT_ID_")
 	private String deptId;

@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 @Service("mxpio.log.es.storage.provider")
 @ConditionalOnClass(name = {"org.elasticsearch.client.RestHighLevelClient"})

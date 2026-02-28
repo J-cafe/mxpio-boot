@@ -85,7 +85,7 @@ public class SnRuleServiceImpl extends BaseServiceImpl<SerialNumber> implements 
 
 	/**
 	 * 获取表达式中${}中的值
-	 * 
+	 *
 	 * @param content
 	 * @return
 	 */

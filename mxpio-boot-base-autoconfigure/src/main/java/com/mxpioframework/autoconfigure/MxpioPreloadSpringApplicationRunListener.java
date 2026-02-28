@@ -1,8 +1,9 @@
 package com.mxpioframework.autoconfigure;
 
+import java.time.Duration;
 import java.util.Properties;
 
-import org.springframework.boot.ConfigurableBootstrapContext;
+import org.springframework.boot.bootstrap.ConfigurableBootstrapContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -29,13 +30,7 @@ public class MxpioPreloadSpringApplicationRunListener implements SpringApplicati
 	}
 
 	@Override
-	public void started(ConfigurableApplicationContext context) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void running(ConfigurableApplicationContext context) {
+	public void started(ConfigurableApplicationContext context, Duration timeTaken) {
 		// TODO Auto-generated method stub
 
 	}

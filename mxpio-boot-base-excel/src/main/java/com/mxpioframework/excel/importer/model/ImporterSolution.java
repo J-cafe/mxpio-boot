@@ -3,14 +3,14 @@ package com.mxpioframework.excel.importer.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import com.mxpioframework.jpa.annotation.Generator;
 import com.mxpioframework.security.entity.BaseEntity;
@@ -27,31 +27,31 @@ public class ImporterSolution extends BaseEntity {
 	@Column(name = "ID_", length = 64)
 	@Schema(description = "ID")
 	private String id;
-	
+
 	@Column(name = "CODE_", length = 64, unique = true)
 	@Schema(description = "方案编码")
 	private String code;
-	
+
 	@Schema(description = "方案名称")
 	@Column(name = "NAME_", length = 60)
 	private String name;
-	
+
 	@Schema(description = "Sheet页名称")
 	@Column(name = "EXCEL_SHEET_NAME_", length = 60)
 	private String excelSheetName;
-	
+
 	@Column(name = "ENTITY_CLASS_NAME_", length = 255)
 	@Schema(description = "实体类")
 	private String entityClassName;
-	
+
 	@Schema(description = "描述")
 	@Column(name = "DESC_", length = 255)
 	private String desc;
-	
+
 	@Schema(description = "实体管理工厂")
 	@Column(name = "ENTITY_MANAGER_FACTORY_NAME_", length = 60)
 	private String entityManagerFactoryName;
-	
+
 	@Column(name = "START_ROW_")
 	@Schema(description = "起始行")
 	private Integer startRow;

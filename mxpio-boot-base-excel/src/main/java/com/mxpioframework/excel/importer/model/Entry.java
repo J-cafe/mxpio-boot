@@ -1,9 +1,9 @@
 package com.mxpioframework.excel.importer.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import com.mxpioframework.jpa.annotation.Generator;
 import com.mxpioframework.security.entity.BaseEntity;
@@ -22,15 +22,15 @@ public class Entry extends BaseEntity {
 	@Column(name = "ID_", length = 36)
 	@Schema(description = "ID")
 	private String id;
-	
+
 	@Schema(description = "关键字")
 	@Column(name = "KEY_", length = 100)
 	private String key;
-	
+
 	@Column(name = "VALUE_", length = 100)
 	@Schema(description = "值")
 	private String value;
-	
+
 	@Column(name = "MAPPING_RULE_ID_", length = 36)
 	@Schema(description = "映射规则ID")
 	private String mappingRuleId;

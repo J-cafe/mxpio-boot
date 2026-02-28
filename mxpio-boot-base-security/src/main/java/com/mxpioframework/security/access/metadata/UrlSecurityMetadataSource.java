@@ -8,14 +8,14 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 
@@ -32,14 +32,14 @@ import lombok.extern.slf4j.Slf4j;
 public class UrlSecurityMetadataSource  implements FilterInvocationSecurityMetadataSource {
 
 	private Map<RequestMatcher, Collection<ConfigAttribute>> requestMap;
-	
-	
+
+
 	@Autowired
 	private List<FilterConfigAttributeProvider> providers;
-	
+
 	@Autowired
 	private List<DataResourceConfigAttributeProvider> dataProviders;
-	
+
 	public Collection<ConfigAttribute> getAllConfigAttributes() {
 		Set<ConfigAttribute> allAttributes = new HashSet<ConfigAttribute>();
 
@@ -63,14 +63,14 @@ public class UrlSecurityMetadataSource  implements FilterInvocationSecurityMetad
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
-		
+
 		return null;
 	}
 
 	public boolean supports(Class<?> clazz) {
 		return FilterInvocation.class.isAssignableFrom(clazz);
 	}
-	
+
 	public Map<RequestMatcher, Collection<ConfigAttribute>> getRequestMap() {
 		AnnotationAwareOrderComparator.sort(providers);
 		requestMap = new ConcurrentHashMap<RequestMatcher, Collection<ConfigAttribute>>();
@@ -78,7 +78,10 @@ public class UrlSecurityMetadataSource  implements FilterInvocationSecurityMetad
 			Map<String, Collection<ConfigAttribute>> map = provider.provide();
 			if (map != null && !map.isEmpty()) {
 				for (Entry<String, Collection<ConfigAttribute>> entry : map.entrySet()) {
-					requestMap.put(new AntPathRequestMatcher("/" + entry.getKey(), null), entry.getValue());
+                    RequestMatcher matcher = PathPatternRequestMatcher
+                            .withDefaults()
+                            .matcher("/" + entry.getKey());
+					requestMap.put(matcher, entry.getValue());
 				}
 			}
 		}
@@ -87,7 +90,10 @@ public class UrlSecurityMetadataSource  implements FilterInvocationSecurityMetad
 			Map<String, Collection<ConfigAttribute>> map = provider.provide();
 			if (map != null && !map.isEmpty()) {
 				for (Entry<String, Collection<ConfigAttribute>> entry : map.entrySet()) {
-					requestMap.put(new AntPathRequestMatcher("/" + entry.getKey(), null), entry.getValue());
+                    RequestMatcher matcher = PathPatternRequestMatcher
+                            .withDefaults()
+                            .matcher("/" + entry.getKey());
+					requestMap.put(matcher, entry.getValue());
 				}
 			}
 		}

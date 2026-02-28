@@ -21,7 +21,7 @@ public class JwtLoginToken extends AbstractAuthenticationToken {
 	 *
 	 */
 	public JwtLoginToken(Object principal, Object credentials) {
-		super(null);
+		super((Collection<? extends GrantedAuthority>)null);
 		this.principal = principal;
 		this.credentials = credentials;
 		setAuthenticated(false);
@@ -31,7 +31,7 @@ public class JwtLoginToken extends AbstractAuthenticationToken {
 	 * 创建一个已认证的授权令牌,如注释中说的那样,这个方法应该由AuthenticationProvider来调用
 	 * 也就是我们写的JwtAuthenticationProvider,有它完成认证后再调用这个方法,
 	 * 这时传入的principal为从userService中查出的UserDetails
-	 * 
+	 *
 	 * @param principal
 	 * @param credentials
 	 * @param authorities

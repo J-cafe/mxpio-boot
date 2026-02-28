@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.entity.Dept;
@@ -36,19 +36,19 @@ import com.mxpioframework.security.service.UserService;
 
 @Service("mxpio.security.userService")
 public class UserServiceImpl implements UserService, JpaUtilAble {
-	
+
 	@Autowired
 	protected PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private OnlineUserService onlineUserService;
-	
+
 	@Autowired
 	private CacheProvider cacheProvider;
 
 	@Value("${mxpio.JSEncrypt.privateKey:}")
 	private String privateKey;
-	
+
 	@Override
 	@Transactional
 	public User create(User user) {
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	@Override
 	@Transactional
 	public void updateEmail(String username, String email) {
-		
+
 	}
 
 	@Override
@@ -153,7 +153,7 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	public List<User> queryAll(Criteria criteria) {
 		return JpaUtil.linq(User.class).where(criteria).list();
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public void download(List<User> queryAll, HttpServletResponse response) throws IOException {
@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 		if (principal instanceof User) {
 			if (((User) principal).getUsername().equals(username)) {
 				return ((User) principal).isAdministrator();
-			} 
+			}
 			if (username == null) {
 				return ((User) principal).isAdministrator();
 			}
@@ -191,35 +191,35 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	@Override
 	@Transactional
 	public void afterPropertiesSet(ApplicationContext applicationContext) {
-		
+
 		/*List<User> users = JpaUtil.linq(User.class).aliasToBean().select("username", "nickname").list();
 		for(User user : users){
 			System.out.println(user.toString());
 		}*/
 		/*Linq linq = JpaUtil.linq(User.class);
 		linq.aliasToBean().select("username", linq.criteriaBuilder().sum(linq.root().get("quantity")).alias("quantity")).groupBy("username").list();*/
-		
+
 		/*
 		 * SimpleCriterion sc = new SimpleCriterion("resourceType", Operator.EQ,
 		 * ResourceType.ELEMENT); SimpleCriterion sc1 = new SimpleCriterion("roleId",
 		 * Operator.EQ, "111"); SimpleCriterion sc2 = new SimpleCriterion("id",
 		 * Operator.EQ, "p111");
-		 * 
+		 *
 		 * Criteria c =
 		 * Criteria.create().addCriterion(sc).or().addCriterion(sc1).addCriterion(sc2);
 		 */
-	
+
 		// String json = "{\"criterions\":[{\"fieldName\":\"resourceType\",\"operator\":\"EQ\",\"value\":\"ELEMENT\"},{\"criterions\":[{\"fieldName\":\"roleId\",\"operator\":\"EQ\",\"value\":\"111\"},{\"fieldName\":\"id\",\"operator\":\"EQ\",\"value\":\"p111\"}],\"type\":\"OR\"}],\"orders\":[{\"desc\":false,\"fieldName\":\"createTime\"}]}";
-		
+
 		// Criteria c2 = CriteriaUtils.json2Criteria(json);
 		/*
 		 * Pageable page = PageRequest.of(0, 10);
-		 * 
+		 *
 		 * JpaUtil.linq(Permission.class) .where(c) .collect(Role.class, "roleId")
 		 * .collect(Element.class, "resourceId") .exists(RoleGrantedAuthority.class)
 		 * .equalProperty("roleId", "roleId") .equal("actorId", "admin") .end()
 		 * .paging(page);
-		 */	
+		 */
 	}
 
 	@Override

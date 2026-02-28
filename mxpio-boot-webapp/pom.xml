@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.mxpio</groupId>
 		<artifactId>mxpio-boot-parent</artifactId>
-		<version>1.0.12-beta.11</version>
+		<version>4.0.0-beta.1</version>
 	</parent>
 	<artifactId>mxpio-boot-webapp</artifactId>
 	<dependencies>
@@ -66,7 +66,7 @@
 			<artifactId>mxpio-boot-base-dbconsole</artifactId>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpcore</artifactId>
 		</dependency>
@@ -79,7 +79,7 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpmime</artifactId>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>com.mxpio</groupId>

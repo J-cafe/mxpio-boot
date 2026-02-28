@@ -2,9 +2,9 @@ package com.mxpioframework.security.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Version;
 
 @Data
 @MappedSuperclass

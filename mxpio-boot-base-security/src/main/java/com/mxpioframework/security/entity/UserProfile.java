@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Data
 @Entity
@@ -15,15 +15,15 @@ import javax.persistence.*;
 @Schema(description="个性化配置")
 @EqualsAndHashCode(callSuper = true)
 public class UserProfile extends BaseEntity{
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Generator
 	@Column(name = "ID_", length = 64)
 	@Schema(description = "ID")
 	private String id;
-	
+
 	@Column(name = "USER_ID_", length = 64)
 	@Schema(description = "用户ID")
 	private String userId;

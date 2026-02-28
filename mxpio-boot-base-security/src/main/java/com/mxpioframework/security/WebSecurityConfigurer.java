@@ -2,11 +2,11 @@ package com.mxpioframework.security;
 
 import java.io.IOException;
 
-import javax.annotation.Resource;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.annotation.Resource;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.mxpioframework.security.anthentication.ThirdAuthorizeException;
 import org.apache.commons.lang3.StringUtils;
@@ -18,9 +18,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.*;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -28,6 +29,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -51,10 +53,9 @@ import com.mxpioframework.security.entity.User;
 import com.mxpioframework.security.service.OnlineUserService;
 import com.mxpioframework.security.util.TokenUtil;
 import com.mxpioframework.security.vo.TokenVo;
-
 @Configuration
 @Order(120)
-public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfigurer{
 
 	private static final String URL_PREFIX = "/";
 
@@ -102,90 +103,49 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     private int tokenTime;
 
     @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    public AuthenticationManager authenticationManager(HttpSecurity http){
+        AuthenticationManagerBuilder authenticationManagerBuilder =
+                http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.authenticationProvider(jwtAuthenticationProvider);
+        authenticationManagerBuilder.authenticationProvider(thirdAuthorizeProvider);
+        return authenticationManagerBuilder.build();
     }
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-	}
-
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		LoginFilter jwtLoginFilter = new LoginFilter();
-		jwtLoginFilter.setAuthenticationManager(authenticationManagerBean());
+    @Bean
+    public LoginFilter jwtLoginFilter(AuthenticationManager authenticationManager){
+        LoginFilter jwtLoginFilter = new LoginFilter(authenticationManager);
         jwtLoginFilter.setAuthenticationSuccessHandler(new JwtLoginSuccessHandler());
-        // jwtLoginFilter.setAuthenticationFailureHandler(new HttpStatusLoginFailureHandler());
-		jwtLoginFilter.setAuthenticationFailureHandler(new AuthenticationFailureHandler(){
-			@Override
-			public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-				exception.fillInStackTrace();
-				response.setContentType("application/json;charset=UTF-8");
-				if(exception instanceof UsernameNotFoundException){
-					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101(exception.getMessage())));
-				}else if(exception instanceof BadCredentialsException){
-					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101(exception.getMessage())));
-				}else if(exception instanceof CaptchaAuthenticationException) {
-					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101(exception.getMessage())));
-				}else if(exception instanceof AccountStatusException){
-					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101("账号已锁定")));
-				}else if(exception instanceof InsufficientAuthenticationException){
-					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101("Token异常")));
-				}else if(exception instanceof NonceExpiredException){
-					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101("Nonce已过期")));
-				}else if(exception instanceof DataAuthenticationException){
-					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth403("无权访问")));
-				}else if(exception instanceof ThirdAuthorizeException){
-					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401(exception.getMessage())));
-				}else {
-					response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("登录异常")));
-				}
-			}
-		});
+        jwtLoginFilter.setAuthenticationFailureHandler(new JwtLoginFailedHandler());
+        return jwtLoginFilter;
+    }
+
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         JwtTokenFilter jwtTokenFilter = new JwtTokenFilter();
-
-        FilterSecurityInterceptor securityInterceptor = createFilterSecurityInterceptor();
-
-//        JwtAuthenticationProvider jwtAuthenticationProvider = new JwtAuthenticationProvider(userDetailsService, passwordEncoder);
-
-        http.authenticationProvider(jwtAuthenticationProvider).authenticationProvider(thirdAuthorizeProvider).cors().and().csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests()
-                // 添加系统及客户定义的白名单地址
-				.antMatchers(mergeAnonymous()).permitAll()
-				// 添加SWAGGER地址
-				.antMatchers(Constants.SWAGGER_WHITELIST).permitAll()
-				.antMatchers(Constants.MULTITENANT_WHITELIST).permitAll()
-                .antMatchers(Constants.OAUTH_WHITELIST).permitAll()
-                .anyRequest().authenticated()  // 所有请求需要身份认证
-                .and()
-                .exceptionHandling()
-                .accessDeniedHandler(new MxpioAccessDeniedHandler())
-                .and()
-                .addFilterAt(jwtLoginFilter, UsernamePasswordAuthenticationFilter.class)
+        FilterSecurityInterceptor securityInterceptor = createFilterSecurityInterceptor(httpSecurity);
+        httpSecurity.authenticationProvider(jwtAuthenticationProvider)
+                .authenticationProvider(thirdAuthorizeProvider)
+                .cors(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(p->p.requestMatchers(mergeAnonymous()).permitAll().requestMatchers(Constants.SWAGGER_WHITELIST).permitAll().requestMatchers(Constants.MULTITENANT_WHITELIST).permitAll().anyRequest().authenticated())
+                .exceptionHandling(p->p.authenticationEntryPoint(new MxpioAuthenticationEntryPoint()).accessDeniedHandler(new MxpioAccessDeniedHandler()))
+                .addFilterAt(jwtLoginFilter(authenticationManager(httpSecurity)), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(jwtTokenFilter, LoginFilter.class)
                 .addFilterBefore(securityInterceptor,
-        				org.springframework.security.web.access.intercept.FilterSecurityInterceptor.class)
-                .logout() // 默认注销行为为logout，可以通过下面的方式来修改
-                .logoutUrl(URL_PREFIX + logoutPath)
-                .logoutSuccessUrl("/login")// 设置注销成功后跳转页面，默认是跳转到登录页面;
-                .logoutSuccessHandler(new JwtLogoutSuccessHandler())
-                .permitAll()
-                .and()
-    			.rememberMe();
-
-        http.setSharedObject(FilterSecurityInterceptor.class, securityInterceptor);
-        http.exceptionHandling().authenticationEntryPoint(new MxpioAuthenticationEntryPoint()).accessDeniedHandler(new MxpioAccessDeniedHandler());
-
+                        org.springframework.security.web.access.intercept.AuthorizationFilter.class)
+                .logout(p->p.logoutUrl(URL_PREFIX + logoutPath).logoutSuccessUrl("/login").logoutSuccessHandler(new JwtLogoutSuccessHandler()).permitAll())
+    			.rememberMe(Customizer.withDefaults());
+        httpSecurity.setSharedObject(FilterSecurityInterceptor.class, securityInterceptor);
+        return httpSecurity.build();
 	}
 
-	private FilterSecurityInterceptor createFilterSecurityInterceptor() throws Exception {
+	private FilterSecurityInterceptor createFilterSecurityInterceptor(HttpSecurity httpSecurity) throws Exception {
 		FilterSecurityInterceptor securityInterceptor = new FilterSecurityInterceptor();
 		securityInterceptor.setSecurityMetadataSource(securityMetadataSource);
 		securityInterceptor.setAccessDecisionManager(accessDecisionManager);
-		securityInterceptor.setAuthenticationManager(this.authenticationManagerBean());
+		securityInterceptor.setAuthenticationManager(authenticationManager(httpSecurity));
 		securityInterceptor.afterPropertiesSet();
 		return securityInterceptor;
 	}
@@ -231,6 +191,33 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	        response.getWriter().write(objectMapper.writeValueAsString(Result.OK(tokenVo)));
 	    }
 	}
+
+    class JwtLoginFailedHandler implements AuthenticationFailureHandler{
+        @Override
+        public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+            exception.fillInStackTrace();
+            response.setContentType("application/json;charset=UTF-8");
+            if(exception instanceof UsernameNotFoundException){
+                response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101(exception.getMessage())));
+            }else if(exception instanceof BadCredentialsException){
+                response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101(exception.getMessage())));
+            }else if(exception instanceof CaptchaAuthenticationException) {
+                response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101(exception.getMessage())));
+            }else if(exception instanceof AccountStatusException){
+                response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101("账号已锁定")));
+            }else if(exception instanceof InsufficientAuthenticationException){
+                response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101("Token异常")));
+            }else if(exception instanceof NonceExpiredException){
+                response.getWriter().write(objectMapper.writeValueAsString(Result.noauth40101("Nonce已过期")));
+            }else if(exception instanceof DataAuthenticationException){
+                response.getWriter().write(objectMapper.writeValueAsString(Result.noauth403("无权访问")));
+            }else if(exception instanceof ThirdAuthorizeException){
+                response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401(exception.getMessage())));
+            }else {
+                response.getWriter().write(objectMapper.writeValueAsString(Result.noauth401("登录异常")));
+            }
+        }
+    }
 
 	class JwtLogoutSuccessHandler implements LogoutSuccessHandler{
 

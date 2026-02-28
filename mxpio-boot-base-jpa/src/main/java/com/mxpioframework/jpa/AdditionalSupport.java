@@ -1,6 +1,6 @@
 package com.mxpioframework.jpa;
 
-import javax.persistence.Transient;
+import jakarta.persistence.Transient;
 
 public class AdditionalSupport {
 

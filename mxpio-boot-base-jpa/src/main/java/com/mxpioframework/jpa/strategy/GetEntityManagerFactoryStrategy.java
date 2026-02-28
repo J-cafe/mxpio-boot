@@ -1,6 +1,6 @@
 package com.mxpioframework.jpa.strategy;
 
-import javax.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManagerFactory;
 
 public interface GetEntityManagerFactoryStrategy {
 

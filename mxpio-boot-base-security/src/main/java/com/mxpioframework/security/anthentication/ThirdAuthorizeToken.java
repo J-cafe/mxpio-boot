@@ -1,5 +1,6 @@
 package com.mxpioframework.security.anthentication;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -22,7 +23,7 @@ public class ThirdAuthorizeToken extends AbstractAuthenticationToken {
 	 *
 	 */
 	public ThirdAuthorizeToken(Object principal,Object authCode,Object thirdPlatformType) {
-		super(null);
+		super((Collection<? extends GrantedAuthority>)null);
 		this.principal = principal;
 		this.credentials = authCode;
 		this.thirdPlatformType = thirdPlatformType;

@@ -1,7 +1,7 @@
 package com.mxpioframework.multitenant.listener;
 
 import com.mxpioframework.multitenant.domain.Organization;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder.Builder;
+import org.springframework.boot.jpa.EntityManagerFactoryBuilder.Builder;
 
 
 /**

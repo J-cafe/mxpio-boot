@@ -1,7 +1,7 @@
 package com.mxpioframework.multitenant;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,10 +16,10 @@ public class MasterDataSourceInitiator implements JpaUtilAble {
 
 	@Autowired
 	private DataSourceProperties properties;
-	
+
 	@Autowired
 	private DatabaseNameService databaseNameService;
-	
+
 	@Override
 	@Transactional
 	public void afterPropertiesSet(ApplicationContext applicationContext) {
@@ -46,7 +46,7 @@ public class MasterDataSourceInitiator implements JpaUtilAble {
 		} else {
 			JpaUtil.persist(dataSourceInfo);
 		}
-		
+
 	}
 
 }

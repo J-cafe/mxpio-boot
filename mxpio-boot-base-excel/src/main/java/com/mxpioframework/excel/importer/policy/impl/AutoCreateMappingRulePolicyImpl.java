@@ -4,8 +4,8 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Transient;
+import jakarta.persistence.Column;
+import jakarta.persistence.Transient;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ public class AutoCreateMappingRulePolicyImpl implements AutoCreateMappingRulePol
 	@Override
 	@Transactional(readOnly = false)
 	public ImporterSolution apply(ImporterSolution importerSolution) {
-		
+
 		Class<?> entityClass = BeanReflectionUtils.getClassByName(importerSolution.getEntityClassName());
 		List<Field> fields = BeanReflectionUtils.loadClassFields(entityClass);
 		List<String> propertyNames = getPropertyNames(importerSolution);

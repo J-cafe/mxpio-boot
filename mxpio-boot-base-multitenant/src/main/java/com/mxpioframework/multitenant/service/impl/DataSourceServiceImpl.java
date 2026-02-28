@@ -20,7 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.context.ApplicationContext;
@@ -32,26 +32,26 @@ import org.springframework.stereotype.Service;
 
 @Service("mxpio.multitenant.dataSourceService")
 public class DataSourceServiceImpl implements DataSourceService, InitializingBean, ApplicationContextAware {
-	
+
 	@Autowired
 	private DataSource dataSource;
 
 	@Autowired
 	private DataSourceProperties properties;
-	
+
 	@Autowired
 	private DataSourceInfoService dataSourceInfoService;
-	
+
 	private Map<String, DataSource> dataSourceMap = new ConcurrentHashMap<String, DataSource>();
 
 	@Autowired(required = false)
 	private List<DataSourceCreateListener> listeners;
-	
+
 	@Autowired
 	private DatabaseNameService databaseNameService;
-	
+
 	private ApplicationContext applicationContext;
-	
+
 	@Override
 	public DataSource getDataSource(Organization organization) {
 		return dataSourceMap.get(organization.getId());
@@ -94,15 +94,15 @@ public class DataSourceServiceImpl implements DataSourceService, InitializingBea
 		});
 
 	}
-	
-	
+
+
 	private void publishEvent(Organization organization, DataSourceInfo dataSourceInfo, DataSourceBuilder<?> dataSourceBuilder) {
 		if (listeners != null) {
 			for (DataSourceCreateListener dataSourceCreateListener : listeners) {
 				dataSourceCreateListener.onCreate(organization, dataSourceInfo, dataSourceBuilder);
 			}
 		}
-		
+
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class DataSourceServiceImpl implements DataSourceService, InitializingBea
 		return dataSource;
 	}
 
-	
+
 	@Override
 	public DataSource getOrCreateDataSource(String organizationId) {
 		Organization organization = new Organization();
@@ -144,15 +144,15 @@ public class DataSourceServiceImpl implements DataSourceService, InitializingBea
 			AnnotationAwareOrderComparator.sort(listeners);
 		}
 
-		
+
 	}
 
 	@Override
 	public void removeDataSource(Organization organization) {
 		dataSourceMap.remove(organization.getId());
-		
+
 	}
-	
+
 	@Override
 	public void clearDataSource() {
 		dataSourceMap.clear();
@@ -161,9 +161,9 @@ public class DataSourceServiceImpl implements DataSourceService, InitializingBea
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
-		
+
 	}
-	
-	
+
+
 
 }

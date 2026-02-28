@@ -1,8 +1,8 @@
 package com.mxpioframework.jpa.lin.impl;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.Predicate;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaDelete;
+import jakarta.persistence.criteria.Predicate;
 
 import com.mxpioframework.jpa.lin.Lind;
 

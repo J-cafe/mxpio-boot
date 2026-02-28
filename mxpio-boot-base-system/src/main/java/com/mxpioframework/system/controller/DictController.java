@@ -31,13 +31,13 @@ import com.mxpioframework.system.service.DictService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 @Tag(name = "DictController", description = "字典接口")
 @RestController("mxpio.system.dictController")
 @RequestMapping("/sys/dict/")
 public class DictController {
-	
+
 	@Autowired
 	private DictService dictSerivce;
 
@@ -49,38 +49,38 @@ public class DictController {
 		List<Dict> dicts = dictSerivce.listWithItems(criteria);
 		return Result.OK(dicts);
 	}
-	
+
 	@GetMapping("{code}/list")
 	@Operation(summary = "字典列表", description = "根据code获取字典列表", method = "GET")
 	public Result<List<DictItem>> items(Criteria criteria, @PathVariable(name = "code", required = true) String code) {
 		List<DictItem> items = dictSerivce.getItemsByCode(code, criteria);
 		return Result.OK(items);
 	}
-	
+
 	@GetMapping("{code}/default")
 	@Operation(summary = "默认字典项", description = "根据code获取默认字典项", method = "GET")
 	public Result<DictItem> getDefaultItem(@PathVariable(name = "code", required = true) String code) {
-		
+
 		DictItem item = dictSerivce.getDefaultItemByCode(code);
 		return Result.OK(item);
 	}
-	
+
 	@GetMapping("{code}/default/value")
 	@Operation(summary = "默认字典值", description = "根据code获取默认字典值", method = "GET")
 	public Result<String> getDefaultItemValue(@PathVariable(name = "code", required = true) String code) {
-		
+
 		String itemValue = dictSerivce.getDefaultValueByCode(code);
 		return Result.OK(itemValue);
 	}
-	
+
 	@GetMapping("{code}/default/text")
 	@Operation(summary = "默认字典文本", description = "根据code获取默认字典文本", method = "GET")
 	public Result<String> getDefaultItemText(@PathVariable(name = "code", required = true) String code) {
-		
+
 		String itemText = dictSerivce.getDefaultTextByCode(code);
 		return Result.OK(itemText);
 	}
-	
+
 	@GetMapping("tree/page")
 	@Operation(summary = "字典列表", description = "获取字典列表(分页)", method = "GET")
 	public Result<Page<Dict>> page(Criteria criteria,
@@ -90,7 +90,7 @@ public class DictController {
 		Page<Dict> page = dictSerivce.listPageWithItems(criteria, pageAble);
 		return Result.OK(page);
 	}
-	
+
 	@GetMapping("tree/{code}")
 	@Operation(summary = "根据code获取字典", description = "根据code获取字典", method = "GET")
 	public Result<Dict> getByCode(@PathVariable(name = "code", required = true) String code) {
@@ -102,7 +102,7 @@ public class DictController {
 			return Result.OK(null);
 		}
 	}
-	
+
 	@PostMapping("add")
 	@Operation(summary = "新增字典", description = "新增字典", method = "POST")
 	public Result<Dict> add(@RequestBody Dict dict) {
@@ -119,7 +119,7 @@ public class DictController {
 		});
 		return Result.OK(dict);
 	}
-	
+
 	@PostMapping("{code}/add")
 	@Operation(summary = "新增字典项", description = "新增字典项", method = "POST")
 	public Result<DictItem> addItem(@PathVariable(name = "code", required = true) String code
@@ -129,7 +129,7 @@ public class DictController {
 		dictSerivce.saveItem(item,dict);
 		return Result.OK(item);
 	}
-	
+
 	@PutMapping("{code}/edit")
 	@Operation(summary = "更新字典项", description = "更新字典项", method = "PUT")
 	public Result<DictItem> editItem(@PathVariable(name = "code", required = true) String code
@@ -137,7 +137,7 @@ public class DictController {
 		dictSerivce.updateItem(item,code);
 		return Result.OK(item);
 	}
-	
+
 	@PutMapping("edit")
 	@Operation(summary = "编辑字典", description = "编辑字典（全量）", method = "PUT")
 	public Result<Dict> edit(@RequestBody Dict dict) {
@@ -154,7 +154,7 @@ public class DictController {
 		});
 		return Result.OK(dict);
 	}
-	
+
 	@DeleteMapping("remove/{id}")
 	@Operation(summary = "删除字典", description = "删除字典", method = "DELETE")
 	public Result<Dict> remove(@PathVariable(name = "id", required = true) String id) {
@@ -178,7 +178,7 @@ public class DictController {
 		}
 		return Result.OK();
 	}
-	
+
 	@DeleteMapping("remove/item/{id}")
 	@Operation(summary = "删除字典项", description = "删除字典项", method = "DELETE")
 	public Result<DictItem> removeItem(@PathVariable(name = "id", required = true) String id) {
@@ -188,5 +188,5 @@ public class DictController {
 		}
 		return Result.OK();
 	}
-	
+
 }

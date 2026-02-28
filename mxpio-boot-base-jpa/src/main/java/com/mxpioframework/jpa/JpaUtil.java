@@ -14,16 +14,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.persistence.Tuple;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.SingularAttribute;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Query;
+import jakarta.persistence.Tuple;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.metamodel.EntityType;
+import jakarta.persistence.metamodel.SingularAttribute;
 
 import com.mxpioframework.jpa.lin.Lind;
 import com.mxpioframework.jpa.lin.Linq;
@@ -69,7 +69,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建Linq
-	 * 
+	 *
 	 * @param domainClass 领域类（实体类）
 	 * @param <T>         领域类（实体类）范型
 	 * @return Linq
@@ -80,7 +80,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建Linq
-	 * 
+	 *
 	 * @param domainClass   领域类（实体类）
 	 * @param entityManager 实体类管理器
 	 * @param <T>           领域类（实体类）范型
@@ -92,7 +92,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建Linq
-	 * 
+	 *
 	 * @param domainClass 领域类（实体类）
 	 * @param resultClass 结果类
 	 * @param <T>         领域类（实体类）范型
@@ -104,7 +104,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建Linq
-	 * 
+	 *
 	 * @param domainClass   领域类（实体类）
 	 * @param resultClass   结果类
 	 * @param entityManager 实体类管理器
@@ -117,7 +117,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建Lind
-	 * 
+	 *
 	 * @param domainClass 领域类（实体类）
 	 * @return Lind
 	 */
@@ -127,7 +127,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建Lind
-	 * 
+	 *
 	 * @param domainClass   领域类（实体类）
 	 * @param entityManager 实体类管理器
 	 * @return Lind
@@ -138,7 +138,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建Linu
-	 * 
+	 *
 	 * @param domainClass 领域类（实体类）
 	 * @return Linu
 	 */
@@ -148,7 +148,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建Linu
-	 * 
+	 *
 	 * @param domainClass   领域类（实体类）
 	 * @param entityManager 实体类管理器
 	 * @return Linu
@@ -159,7 +159,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建命名查询
-	 * 
+	 *
 	 * @param name 查询的名称
 	 * @return Query
 	 */
@@ -169,7 +169,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建命名查询
-	 * 
+	 *
 	 * @param name          查询名称
 	 * @param entityManager 实体类管理器
 	 * @return Query
@@ -180,7 +180,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建本地查询
-	 * 
+	 *
 	 * @param sqlString 本地SQL查询字符串
 	 * @return Query
 	 */
@@ -190,7 +190,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建本地查询
-	 * 
+	 *
 	 * @param sqlString     本地SQL查询字符串
 	 * @param entityManager 实体类管理器
 	 * @return Query
@@ -201,7 +201,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建本地查询
-	 * 
+	 *
 	 * @param sqlString   本地SQL查询字符串
 	 * @param resultClass 结果实例的class
 	 * @return Query
@@ -212,7 +212,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建本地查询
-	 * 
+	 *
 	 * @param sqlString     本地SQL查询字符串
 	 * @param resultClass   结果实例的class
 	 * @param entityManager 实体类管理器
@@ -224,7 +224,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建本地查询
-	 * 
+	 *
 	 * @param sqlString        本地SQL查询字符串
 	 * @param resultSetMapping 结果集映射名称
 	 * @return Query
@@ -235,7 +235,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建本地查询
-	 * 
+	 *
 	 * @param sqlString        本地SQL查询字符串
 	 * @param resultSetMapping 结果集映射名称
 	 * @param entityManager    实体类管理器
@@ -247,7 +247,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 根据主键查询数据
-	 * 
+	 *
 	 * @param domainClass 领域类（实体类）
 	 * @param id          主键ID
 	 * @param <T>         领域类（实体类）范型
@@ -260,11 +260,11 @@ public abstract class JpaUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * 智能数据保存。
-	 * 
+	 *
 	 * @param entityList 实体类对象或者实体类集合
-	 * 
+	 *
 	 */
 	public static <T> void save(Collection<T> entityList) {
 		for (T entity : entityList) {
@@ -273,11 +273,11 @@ public abstract class JpaUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * 智能数据保存。
-	 * 
+	 *
 	 * @param entityList 实体类对象或者实体类集合
-	 * 
+	 *
 	 */
 	public static <T> void save(Collection<T> entityList, CrudPolicy savePolicy) {
 		for (T entity : entityList) {
@@ -286,36 +286,36 @@ public abstract class JpaUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * 智能数据保存。
-	 * 
+	 *
 	 * @param entity 实体类对象或者实体类集合
-	 * 
+	 *
 	 */
 	public static void save(Object entity) {
 		save(entity, null);
 	}
 
 	/**
-	 * 
+	 *
 	 * 智能数据保存。
-	 * 
+	 *
 	 * <p>
-	 * 
+	 *
 	 * 方法内部会根据实体类智能判断所属EntityManager，<br>
-	 * 
+	 *
 	 * 只有当某个实体类归属于多个EntityManager的情况下，不可以使用此方法<br>
-	 * 
+	 *
 	 * 同时智能提取立体数据模型中的各个层级的实体数据，交由参数savePolicy来处理后继的持久化操作。
-	 * 
+	 *
 	 * </p>
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
 	 * @param entity     实体类对象或者实体类集合
-	 * 
+	 *
 	 * @param crudPolicy 保存策略
-	 * 
+	 *
 	 */
 	public static <T> void save(T entity, CrudPolicy crudPolicy) {
 		DirtyTreeCrudPolicy dirtyTreeCrudPolicy = new DirtyTreeCrudPolicy();
@@ -333,11 +333,11 @@ public abstract class JpaUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * 智能数据更新。
-	 * 
+	 *
 	 * @param entityList 实体类对象或者实体类集合
-	 * 
+	 *
 	 */
 	public static <T> void update(Collection<T> entityList) {
 		for (T entity : entityList) {
@@ -346,11 +346,11 @@ public abstract class JpaUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * 智能数据更新。
-	 * 
+	 *
 	 * @param entityList 实体类对象或者实体类集合
-	 * 
+	 *
 	 */
 	public static <T> void update(Collection<T> entityList, CrudPolicy savePolicy) {
 		for (T entity : entityList) {
@@ -359,36 +359,36 @@ public abstract class JpaUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * 智能数据更新。
-	 * 
+	 *
 	 * @param entity 实体类对象或者实体类集合
-	 * 
+	 *
 	 */
 	public static void update(Object entity) {
 		update(entity, null);
 	}
 
 	/**
-	 * 
+	 *
 	 * 智能数据更新。
-	 * 
+	 *
 	 * <p>
-	 * 
+	 *
 	 * 方法内部会根据实体类智能判断所属EntityManager，<br>
-	 * 
+	 *
 	 * 只有当某个实体类归属于多个EntityManager的情况下，不可以使用此方法<br>
-	 * 
+	 *
 	 * 同时智能提取立体数据模型中的各个层级的实体数据，交由参数savePolicy来处理后继的持久化操作。
-	 * 
+	 *
 	 * </p>
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
 	 * @param entity     实体类对象或者实体类集合
-	 * 
+	 *
 	 * @param crudPolicy 更新策略
-	 * 
+	 *
 	 */
 	public static <T> void update(T entity, CrudPolicy crudPolicy) {
 		DirtyTreeCrudPolicy dirtyTreeCrudPolicy = new DirtyTreeCrudPolicy();
@@ -407,11 +407,11 @@ public abstract class JpaUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * 智能数据刪除。
-	 * 
+	 *
 	 * @param entityList 实体类对象或者实体类集合
-	 * 
+	 *
 	 */
 	public static <T> void delete(Collection<T> entityList) {
 		for (T entity : entityList) {
@@ -420,11 +420,11 @@ public abstract class JpaUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * 智能数据刪除。
-	 * 
+	 *
 	 * @param entityList 实体类对象或者实体类集合
-	 * 
+	 *
 	 */
 	public static <T> void delete(Collection<T> entityList, CrudPolicy savePolicy) {
 		for (T entity : entityList) {
@@ -433,36 +433,36 @@ public abstract class JpaUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * 智能数据刪除。
-	 * 
+	 *
 	 * @param entity 实体类对象或者实体类集合
-	 * 
+	 *
 	 */
 	public static void delete(Object entity) {
 		delete(entity, null);
 	}
 
 	/**
-	 * 
+	 *
 	 * 智能数据刪除。
-	 * 
+	 *
 	 * <p>
-	 * 
+	 *
 	 * 方法内部会根据实体类智能判断所属EntityManager，<br>
-	 * 
+	 *
 	 * 只有当某个实体类归属于多个EntityManager的情况下，不可以使用此方法<br>
-	 * 
+	 *
 	 * 同时智能提取立体数据模型中的各个层级的实体数据，交由参数savePolicy来处理后继的持久化操作。
-	 * 
+	 *
 	 * </p>
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
 	 * @param entity     实体类对象或者实体类集合
-	 * 
+	 *
 	 * @param crudPolicy 刪除策略
-	 * 
+	 *
 	 */
 	public static <T> void delete(T entity, CrudPolicy crudPolicy) {
 		DirtyTreeCrudPolicy dirtyTreeCrudPolicy = new DirtyTreeCrudPolicy();
@@ -481,7 +481,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 持久化实体对象
-	 * 
+	 *
 	 * @param entity 实体对象
 	 * @param <T>    领域类（实体类）范型
 	 * @return 托管实体类对象
@@ -494,7 +494,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 更新实体对象
-	 * 
+	 *
 	 * @param entity 实体对象
 	 * @param <T>    领域类（实体类）范型
 	 * @return 托管实体类对象
@@ -506,7 +506,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 批量持久化实体对象
-	 * 
+	 *
 	 * @param entities 实体对象集合
 	 * @param <T>      领域类（实体类）范型
 	 * @return 返回持久化以后的实体对象
@@ -527,7 +527,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 批量持久化实体对象
-	 * 
+	 *
 	 * @param entities 实体对象集合
 	 * @param <T>      领域类（实体类）范型
 	 * @return 返回更新后的实体对象
@@ -548,7 +548,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 持久化实体对象并刷新
-	 * 
+	 *
 	 * @param entity 实体对象
 	 * @param <T>    领域类（实体类）范型
 	 * @return 持久后的实体对象
@@ -562,7 +562,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 更新实体对象并刷新
-	 * 
+	 *
 	 * @param entity 实体对象
 	 * @param <T>    领域类（实体类）范型
 	 * @return 更新后的实体对象
@@ -576,7 +576,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 删除实体对象
-	 * 
+	 *
 	 * @param entity 实体对象
 	 * @param <T>    领域类（实体类）范型
 	 */
@@ -587,7 +587,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 批量删除实体对象
-	 * 
+	 *
 	 * @param entities 实体对象集合
 	 * @param <T>      领域类（实体类）范型
 	 */
@@ -602,7 +602,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 删除实体类对应的所有记录
-	 * 
+	 *
 	 * @param domainClass 领域类（实体类）
 	 * @param <T>         领域类（实体类）范型
 	 */
@@ -619,7 +619,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 批量删除实体类对应的所有记录
-	 * 
+	 *
 	 * @param domainClass 领域累（实体类）
 	 * @param <T>         领域类（实体类）范型
 	 */
@@ -631,7 +631,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 查询并返回一条记录
-	 * 
+	 *
 	 * @param domainClass 领域类（实体类）
 	 * @param <T>         领域类（实体类）范型
 	 * @return 实体对象
@@ -646,7 +646,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 查询实体类的所有数据
-	 * 
+	 *
 	 * @param domainClass 领域类（实体类）
 	 * @param <T>         领域类（实体类）范型
 	 * @return 结果集合
@@ -661,7 +661,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 更具查询条件查询记录
-	 * 
+	 *
 	 * @param cq  条件
 	 * @param <T> 领域类（实体类）范型
 	 * @return 结果集合
@@ -677,7 +677,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 分页查询
-	 * 
+	 *
 	 * @param domainClass 领域类（实体类）
 	 * @param pageable    分页信息
 	 * @param <T>         领域类（实体类）范型
@@ -694,7 +694,7 @@ public abstract class JpaUtil {
 	@SuppressWarnings("unchecked")
 	/**
 	 * 分页条件查询
-	 * 
+	 *
 	 * @param cq       条件
 	 * @param pageable 分页信息
 	 * @param <T>      领域类（实体类）范型
@@ -730,7 +730,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 根据实体对象，返回EmtityManager
-	 * 
+	 *
 	 * @param entity 实体类
 	 * @param <T>    领域类（实体类）范型
 	 * @return EntityManager
@@ -742,7 +742,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 返回默认的EntityManager
-	 * 
+	 *
 	 * @return EntityManager
 	 */
 	public static EntityManager getEntityManager() {
@@ -751,7 +751,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 创建默认的EntityManager
-	 * 
+	 *
 	 * @return EntityManager
 	 */
 	public static EntityManager createEntityManager() {
@@ -760,7 +760,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 根据领域类（实体类），返回EmtityManager
-	 * 
+	 *
 	 * @param domainClass 领域类（实体类）
 	 * @param <T>         领域类（实体类）范型
 	 * @return EntityManager
@@ -772,7 +772,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 实体管理器工厂在spring中的名称，返回EmtityManager
-	 * 
+	 *
 	 * @param entityManagerFactoryName 实体管理器工厂在spring中的名称
 	 * @return EntityManager
 	 */
@@ -783,7 +783,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 根据实体对象，创建EmtityManager
-	 * 
+	 *
 	 * @param entity 实体类
 	 * @param <T>    领域类（实体类）范型
 	 * @return EntityManager
@@ -795,7 +795,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 根据领域类（实体类），创建EmtityManager
-	 * 
+	 *
 	 * @param domainClass 领域类（实体类）
 	 * @param <T>         领域类（实体类）范型
 	 * @return EntityManager
@@ -807,7 +807,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 实体管理器工厂在spring中的名称，创建EmtityManager
-	 * 
+	 *
 	 * @param entityManagerFactoryName 实体管理器工厂在spring中的名称
 	 * @return EntityManager
 	 */
@@ -818,7 +818,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 实体管理器工厂在spring中的名称，获取EntityManagerFactory
-	 * 
+	 *
 	 * @param entityManagerFactoryName 实体管理器工厂在spring中的名称
 	 * @return EntityManagerFactory
 	 */
@@ -828,7 +828,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 根据领域类（实体类），获取EntityManagerFactory
-	 * 
+	 *
 	 * @param domainClass 领域类（实体类）
 	 * @param <T>         领域类（实体类）范型
 	 * @return EntityManagerFactory
@@ -839,7 +839,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 获取默认EntityManagerFactory
-	 * 
+	 *
 	 * @return EntityManagerFactory
 	 */
 	public static EntityManagerFactory getEntityManagerFactory() {
@@ -848,7 +848,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 判断类是否为领域类（实体类）
-	 * 
+	 *
 	 * @param domainClass 类
 	 * @param <T>         领域类（实体类）范型
 	 * @return true是实体类，否则不是
@@ -864,7 +864,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 根据领域类（实体类）获得总记录数
-	 * 
+	 *
 	 * @param domainClass 领域类（实体类）
 	 * @param <T>         领域类（实体类）范型
 	 * @return 纪录总数
@@ -877,7 +877,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 根据领域类（实体类）获得总记录数
-	 * 
+	 *
 	 * @param cq  CriteriaQuery
 	 * @param <T> 领域类（实体类）范型
 	 * @return 纪录总数
@@ -888,7 +888,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 根据领域类（实体类）判断记录是否存在
-	 * 
+	 *
 	 * @param domainClass 领域类（实体类）
 	 * @param <T>         领域类（实体类）范型
 	 * @return true则存在，否则不存在
@@ -901,7 +901,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 根据条件判断记录是否存在
-	 * 
+	 *
 	 * @param cq  CriteriaQuery
 	 * @param <T> 领域类（实体类）范型
 	 * @return true则存在，否则不存在
@@ -912,7 +912,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 刷新实体对象对应的EntityManager
-	 * 
+	 *
 	 * @param entity 实体对象
 	 * @param <T>    领域类（实体类）范型
 	 */
@@ -924,7 +924,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 刷新领域类（实体类）对应的EntityManager
-	 * 
+	 *
 	 * @param domainClass 实体对象
 	 * @param <T>         领域类（实体类）范型
 	 */
@@ -994,7 +994,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 根据属性收集属性对应的数据
-	 * 
+	 *
 	 * @param source       源
 	 * @param propertyName 属性名
 	 * @param <T>          范型
@@ -1019,7 +1019,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 根据属性收集属性对应的数据
-	 * 
+	 *
 	 * @param source 源
 	 * @param <T>    领域类（实体类）范型
 	 * @return source集合每个对象的propertyName属性值的一个集合
@@ -1035,7 +1035,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * source转Map，Key为propertyName对应的值，Value为source中propertyName属性值相同的元素
-	 * 
+	 *
 	 * @param source       源
 	 * @param propertyName 属性名
 	 * @param <K>          propertyName对应的属性的类型
@@ -1082,7 +1082,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * source转Map，Key为source元素的propertyName属性值，Value为该元素
-	 * 
+	 *
 	 * @param source       源集合
 	 * @param propertyName 属性名
 	 * @param <K>          propertyName对应的属性的类型
@@ -1106,7 +1106,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * source转Map，Key为source元素主键属性属性值，Value为该元素
-	 * 
+	 *
 	 * @param source 源集合
 	 * @param <K>    propertyName对应的属性的类型
 	 * @param <V>    source集合元素类型
@@ -1126,7 +1126,7 @@ public abstract class JpaUtil {
 	 * 获取领域类（实体类）的主键属性名称<br>
 	 * 注意：<br>
 	 * 不适用组合主键
-	 * 
+	 *
 	 * @param domainClass 领域类（实体类）
 	 * @param <T>         领域类（实体类）范型
 	 * @return ID属性名
@@ -1139,7 +1139,7 @@ public abstract class JpaUtil {
 
 	/**
 	 * 获取领域类（实体类）的主键属性
-	 * 
+	 *
 	 * @param domainClass 领域类（实体类）
 	 * @param <T>         领域类（实体类）范型
 	 * @return SingularAttribute

@@ -19,7 +19,7 @@ import com.mxpioframework.security.entity.Dict;
 import com.mxpioframework.security.entity.DictItem;
 import com.mxpioframework.system.service.DictService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 @Service("mxpio.system.dictService")
 public class DictServiceImpl extends BaseServiceImpl<Dict> implements DictService {

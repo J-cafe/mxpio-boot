@@ -2,7 +2,7 @@ package com.mxpioframework.excel.importer.converter.filter.impl;
 
 import java.util.Map;
 
-import javax.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManagerFactory;
 
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ public class EmptyEntityManagerFactoryFilter implements EntityManagerFactoryFilt
 
 	@Override
 	public void filter(Map<String, EntityManagerFactory> SessionFactoryMap) {
-		
+
 	}
 
 }

@@ -2,10 +2,10 @@ package com.mxpioframework.security.entity;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import com.mxpioframework.jpa.annotation.Generator;
 
@@ -23,33 +23,33 @@ import lombok.ToString;
 public class DictItem extends BaseEntity implements Comparable<DictItem> {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Generator
 	@Column(name = "ID_", updatable = false)
 	@Schema(description = "ID", hidden = true)
 	private String id;
-	
+
 	@Column(name = "DICT_ID_")
 	@Schema(description = "字典ID")
 	private String dictId;
-	
+
 	@Column(name = "ITEM_TEXT_")
 	@Schema(description = "显示文本")
 	private String itemText;
-	
+
 	@Column(name = "ITEM_VALUE_")
 	@Schema(description = "字典值")
 	private String itemValue;
-	
+
 	@Column(name = "ITEM_DESC_")
 	@Schema(description = "描述")
 	private String itemDesc;
-	
+
 	@Column(name = "ITEM_SORT_")
 	@Schema(description = "排序")
 	private BigDecimal itemSort;
-	
+
 	@Column(name = "ITEM_STATUS_")
 	@Schema(description = "状态")
 	private String itemStatus;

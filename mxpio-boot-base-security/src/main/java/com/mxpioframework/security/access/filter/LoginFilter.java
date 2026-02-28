@@ -4,16 +4,18 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.mxpioframework.security.anthentication.ThirdAuthorizeToken;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 
@@ -28,9 +30,10 @@ import com.mxpioframework.security.captcha.CaptchaProperties;
 
 public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
-	public LoginFilter() {
+	public LoginFilter(AuthenticationManager authenticationManager) {
 		// 拦截url为 "/login" 的POST请求
-		super(new AntPathRequestMatcher("/login", "POST"));
+        super(PathPatternRequestMatcher.pathPattern(HttpMethod.POST, "/login"));
+        setAuthenticationManager(authenticationManager);
 	}
 
 	@Override

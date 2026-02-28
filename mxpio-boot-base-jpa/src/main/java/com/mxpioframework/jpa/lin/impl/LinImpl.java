@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CommonAbstractCriteria;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Selection;
-import javax.persistence.criteria.Subquery;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CommonAbstractCriteria;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Selection;
+import jakarta.persistence.criteria.Subquery;
 
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.lin.Lin;
@@ -308,7 +308,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.exists(lin.getSubquery()));
 		return lin;
 	}
-	
+
 	@Override
 	public T notExists(Class<?> domainClass) {
 		if (!beforeMethodInvoke()) {
