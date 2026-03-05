@@ -317,9 +317,11 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Long> criteria = cb.createQuery(Long.class);
-		criteria.getRoots().add(root);
+		//criteria.getRoots().add(root);
+        criteria.from(root.getModel());
 		applyPredicateToCriteria(criteria);
-		criteria.getOrderList().clear();
+		//criteria.getOrderList().clear();
+        criteria.orderBy(new ArrayList<>());
 		if (distinct) {
 			criteria.select(cb.countDistinct(root));
 		} else {

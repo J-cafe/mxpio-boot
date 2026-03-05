@@ -1,5 +1,5 @@
 
-org.springframework.boot.env.EnvironmentPostProcessor=com.mxpioframework.autoconfigure.MxpioEnvironmentPostProcessor
+org.springframework.boot.EnvironmentPostProcessor=com.mxpioframework.autoconfigure.MxpioEnvironmentPostProcessor
 
 # Run Listeners
 org.springframework.boot.SpringApplicationRunListener=com.mxpioframework.autoconfigure.MxpioPreloadSpringApplicationRunListener

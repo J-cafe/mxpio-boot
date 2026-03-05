@@ -25,10 +25,14 @@
 			<artifactId>mxpio-boot-base-expression</artifactId>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>org.camunda.bpm.springboot</groupId>
 			<artifactId>camunda-bpm-spring-boot-starter</artifactId>
-		</dependency>
+		</dependency>-->
+        <dependency>
+            <groupId>team.vme50</groupId>
+            <artifactId>camunda7-spring-boot-starter</artifactId>
+        </dependency>
 
 		<dependency>
 		    <groupId>commons-io</groupId>

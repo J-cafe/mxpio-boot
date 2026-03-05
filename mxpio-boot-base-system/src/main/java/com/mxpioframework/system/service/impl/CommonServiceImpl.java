@@ -15,7 +15,7 @@ public class CommonServiceImpl implements CommonService {
 	@Override
 	@Transactional(readOnly = true)
 	public Long duplicate(String tableName, String column, String key, String exclude) {
-		
+
 		String sql = "SELECT COUNT(1) FROM " + tableName + " WHERE "+ column + " = '" + key + "'";
 		if(exclude != null){
 			sql = sql + " AND "+ column + " <> '" + exclude + "'";
@@ -27,7 +27,11 @@ public class CommonServiceImpl implements CommonService {
 			return  ((Double) singleResult).longValue();
 		}else if (singleResult instanceof BigDecimal){
 			return  ((BigDecimal) singleResult).longValue();
-		}else {
+		}
+        else if(singleResult instanceof Long){
+            return (Long)singleResult;
+        }
+        else {
 			return  ((Integer) singleResult).longValue();//sqlserver类型数据库返回结果类型
 		}
 	}

@@ -87,7 +87,7 @@ public interface MessageChannel {
 
     /**
      * 我的所有消息
-     * @param pageable
+     * @param criteria
      * @return
      */
     List<Message> myMessage(Criteria criteria);
@@ -100,7 +100,7 @@ public interface MessageChannel {
 
     /**
      * 我的未读消息
-     * @param pageable
+     * @param criteria
      * @return
      */
     List<Message> myUnread(Criteria criteria);

@@ -40,7 +40,7 @@ import org.springframework.security.web.authentication.www.NonceExpiredException
 
 
 import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.mxpioframework.cache.provider.CacheProvider;
 import com.mxpioframework.common.CommonConstant;
 import com.mxpioframework.common.util.SpringUtil;

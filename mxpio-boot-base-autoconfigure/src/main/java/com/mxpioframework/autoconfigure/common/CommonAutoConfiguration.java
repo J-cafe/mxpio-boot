@@ -20,10 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 @Import(CommonConfiguration.class)
 @Slf4j
 public class CommonAutoConfiguration {
-	
+
 	public CommonAutoConfiguration() {
 		log.info("[AutoConfiguration==>]:Common Module Loading");
-		
+
 		CommonConstant.addModule(new ModuleVO("Common","公共模块"));
 	}
 

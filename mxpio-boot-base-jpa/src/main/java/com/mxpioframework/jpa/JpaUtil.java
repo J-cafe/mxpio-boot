@@ -39,6 +39,7 @@ import com.mxpioframework.jpa.policy.impl.DirtyTreeCrudPolicy;
 import com.mxpioframework.jpa.policy.impl.SmartCrudPolicy;
 import com.mxpioframework.jpa.strategy.GetEntityManagerFactoryStrategy;
 
+import org.hibernate.query.criteria.JpaCriteriaQuery;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
@@ -963,7 +964,7 @@ public abstract class JpaUtil {
 		}
 		return total;
 	}
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	public static <T> TypedQuery<Long> getCountQuery(CriteriaQuery<T> cq) {
 		Class<T> domainClass = cq.getResultType();
 		EntityManager em = getEntityManager(domainClass);
@@ -979,7 +980,10 @@ public abstract class JpaUtil {
 		if (cq.getRoots().isEmpty()) {
 			root = countCq.from(domainClass);
 		} else {
-			countCq.getRoots().addAll(cq.getRoots());
+            //countCq.getRoots().addAll(cq.getRoots());
+            for(Root<?> cqRoot:cq.getRoots()){
+                countCq.from(cqRoot.getModel());
+            }
 			root = (Root<T>) countCq.getRoots().iterator().next();
 		}
 		countCq.groupBy(cq.getGroupList());
@@ -990,7 +994,14 @@ public abstract class JpaUtil {
 		}
 
 		return em.createQuery(countCq);
-	}
+	}*/
+
+    @SuppressWarnings("unchecked")
+    public static <T> TypedQuery<Long> getCountQuery(CriteriaQuery<T> cq) {
+        Class<T> domainClass = cq.getResultType();
+        EntityManager em = getEntityManager(domainClass);
+        return em.createQuery(((JpaCriteriaQuery<T>)cq).createCountQuery());
+    }
 
 	/**
 	 * 根据属性收集属性对应的数据

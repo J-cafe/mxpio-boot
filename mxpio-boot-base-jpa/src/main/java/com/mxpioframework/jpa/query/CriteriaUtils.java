@@ -1,12 +1,10 @@
 package com.mxpioframework.jpa.query;
 
 import java.net.URLDecoder;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,16 +15,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mxpioframework.jpa.lin.Linq;
 
 public class CriteriaUtils {
-	
+
 	static ObjectMapper objectMapper = new ObjectMapper();
-	
+
 	private static String YMD_HMS = "yyyy-MM-dd HH:mm:ss";
-	
+
 	private static String YMD = "yyyy-MM-dd";
-	
+
 	/**
 	 * 以and形式添加多个条件
-	 * 
+	 *
 	 * @param criteria 条件载体
 	 * @param map      map的key为属性名称（深层次属性用点.分隔），map的value为条件值
 	 * @return 条件载体
@@ -46,7 +44,7 @@ public class CriteriaUtils {
 
 	/**
 	 * 以and形式添加多个条件
-	 * 
+	 *
 	 * @param junction 条件载体
 	 * @param map      map的key为属性名称（深层次属性用点.分隔），map的value为条件值
 	 * @return 条件载体
@@ -63,7 +61,7 @@ public class CriteriaUtils {
 
 	/**
 	 * 添加条件
-	 * 
+	 *
 	 * @param criteria       条件载体
 	 * @param propertyName   属性名
 	 * @param filterOperator 条件操作类型
@@ -81,7 +79,7 @@ public class CriteriaUtils {
 
 	/**
 	 * 添加条件
-	 * 
+	 *
 	 * @param junction       条件载体
 	 * @param propertyName   属性名
 	 * @param filterOperator 条件操作类型
@@ -103,9 +101,10 @@ public class CriteriaUtils {
 
 		Object value = criterion.getValue();
 		Operator operator = criterion.getOperator();
-		
-		// 添加日期处理
-		if(linq.root().get(property).getJavaType().equals(Date.class) && !(value instanceof Date)){
+
+		// 添加日期处理  hibernate5返回Date，hibernate7返回Timestamp
+		if((linq.root().get(property).getJavaType().equals(Date.class)||
+                linq.root().get(property).getJavaType().equals(Timestamp.class)) && !(value instanceof Date)){
 			SimpleDateFormat sdf = new SimpleDateFormat(YMD_HMS);
 			try{
 				value = sdf.parse(value.toString());
@@ -118,7 +117,7 @@ public class CriteriaUtils {
 				}
 			}
 		}
-		
+
 		if (Operator.LIKE_END.equals(operator)) {
 			linq.like(property, "%" + (String) value);
 		} else if (Operator.LIKE_START.equals(operator)) {
@@ -156,13 +155,20 @@ public class CriteriaUtils {
 		} else if (Operator.IN.equals(operator)) {
 			if(value instanceof String) {
 				linq.in(property, (Object[]) ((String) value).split(","));
-			}else {
+			}
+            if(value instanceof Collection<?>){
+                linq.in(property, (Collection)value);
+            }
+            else {
 				linq.in(property, value);
 			}
 		} else if (Operator.NOT_IN.equals(operator)) {
 			if(value instanceof String) {
 				linq.notIn(property, (Object[]) ((String) value).split(","));
-			}else {
+			}
+            if(value instanceof Collection<?>){
+                linq.notIn(property, (Collection)value);
+            }else {
 				linq.notIn(property, value);
 			}
 		} else if (Operator.IS_NULL.equals(operator)) {
@@ -226,7 +232,7 @@ public class CriteriaUtils {
 	/*
 	 * public static Criteria json2Criteria(String json) throws
 	 * UnsupportedEncodingException { log.info("Criteria-->" + json);
-	 * 
+	 *
 	 * Criteria c = Criteria.create(); if (StringUtils.isNotEmpty(json)) { if
 	 * (json.startsWith("%")) { json = URLDecoder.decode(json, "utf-8");
 	 * log.info("Criteria-->" + json); } JSONObject object = JSON.parseObject(json);
@@ -236,7 +242,7 @@ public class CriteriaUtils {
 	 * criterions)); c.setCriterions(criterions); if (object.getJSONArray("orders")
 	 * != null) {
 	 * c.setOrders(object.getJSONArray("orders").toJavaList(Order.class)); } } }
-	 * 
+	 *
 	 * return c; }
 	 */
 
@@ -259,14 +265,14 @@ public class CriteriaUtils {
 					});
 					c.setCriterions(criterions);
 				}
-				
+
 			}
 			return c;
 		}catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 	}
 
 	/*
@@ -302,7 +308,7 @@ public class CriteriaUtils {
 	 * JsonProcessingException, UnsupportedEncodingException { String json =
 	 * "{\"criterions\":[{\"fieldName\":\"resourceType\",\"operator\":\"EQ\",\"value\":\"ELEMENT\"},{\"criterions\":[{\"fieldName\":\"roleId\",\"operator\":\"EQ\",\"value\":\"111\"},{\"fieldName\":\"id\",\"operator\":\"EQ\",\"value\":\"p111\"}],\"type\":\"OR\"}],\"orders\":[{\"desc\":false,\"fieldName\":\"username\"},{\"desc\":false,\"fieldName\":\"createTime\"}]}";
 	 * Criteria c = Criteria.create(); c = json2Criteria(json);
-	 * 
+	 *
 	 * Criteria c2 = Criteria.create().addCriterion("resourceType", Operator.EQ,
 	 * "ELEMENT").or() .addCriterion("username", Operator.EQ,
 	 * "admin").and().addCriterion("username", Operator.EQ, "admin")
@@ -310,11 +316,11 @@ public class CriteriaUtils {
 	 * "admin").end().addCriterion("username", Operator.EQ, "admin1")
 	 * .end().addOrder(new Order("createTime", true)).addOrder(new
 	 * Order("updateTime", true));
-	 * 
+	 *
 	 * Criteria c3 = Criteria.create().addCriterion("resourceType", Operator.EQ,
 	 * "ELEMENT"); String json3 = JSON.toJSONString(c3); System.out.println(json);
 	 * System.out.println(JSON.toJSONString(c));
-	 * 
+	 *
 	 * System.out.println(json3);
 	 * System.out.println(JSON.toJSONString(json2Criteria(json3))); }
 	 */

@@ -1,18 +1,17 @@
 package com.mxpioframework.common;
 
+import com.fasterxml.jackson.core.JsonParser;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.json.JsonReadFeature;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.json.JsonReadFeature;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * 模块配置类
@@ -22,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @ComponentScan
 public class CommonConfiguration {
 
-	@Bean
+	/*@Bean
 	@Primary
 	@ConditionalOnMissingBean(ObjectMapper.class)
 	public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
@@ -40,15 +39,30 @@ public class CommonConfiguration {
 		// 允许出现单引号
 		objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
 		// 字段保留，将null值转为""
-		/*
+		*//*
 		 * objectMapper.getSerializerProvider().setNullValueSerializer(new
 		 * JsonSerializer<Object>() {
-		 * 
+		 *
 		 * @Override public void serialize(Object o, JsonGenerator jsonGenerator,
 		 * SerializerProvider serializerProvider) throws IOException {
 		 * jsonGenerator.writeString(""); } });
-		 */
+		 *//*
 		return objectMapper;
-	}
+	}*/
+
+    @Bean
+    @Primary
+    @ConditionalOnMissingBean(ObjectMapper.class)
+    public JsonMapper jsonMapper() {
+        // 使用 Jackson 3 的 Builder 进行配置
+        return JsonMapper.builder()
+                .changeDefaultPropertyInclusion(
+                        incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL)
+                )
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .enable(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS)
+                .enable(JsonReadFeature.ALLOW_SINGLE_QUOTES)
+                .build();
+    }
 
 }

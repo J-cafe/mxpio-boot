@@ -46,7 +46,8 @@ public class OnlineUserServiceImpl implements OnlineUserService {
 
 	@Override
 	public User getOne(String token, CacheProvider cacheProvider) {
-		return (User) cacheProvider.get(Constants.JWT_ACCESS_TOKEN_REDIS_KEY + token);
+        return (User)cacheProvider.get(Constants.JWT_ACCESS_TOKEN_REDIS_KEY + token);
+
 	}
 
 	@Override

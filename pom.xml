@@ -29,14 +29,14 @@
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
 		<springdoc.version>1.7.0</springdoc.version>
 		<knife4j.version>3.0.3</knife4j.version>
-		<fastjson.version>2.0.61</fastjson.version>
+		<fastjson.version>1.2.83</fastjson.version>
 		<druid.version>1.2.27</druid.version>
 		<!--<jackson.version>2.17.0</jackson.version>-->
 		<poi.version>5.5.1</poi.version>
 		<liquibase.version>4.8.0</liquibase.version>
 		<caffeine.version>3.2.3</caffeine.version>
 		<minio.version>8.6.0</minio.version>
-		<camunda.version>7.16.0</camunda.version>
+		<camunda.version>7.24.0</camunda.version>
 		<aviator.version>4.2.7</aviator.version>
 		<hutool.version>5.8.32</hutool.version>
         <bizlog-sdk.version>3.0.0</bizlog-sdk.version>
@@ -54,6 +54,7 @@
         <commons-fileupload.version>1.6.0</commons-fileupload.version>
         <okhttp3.version>4.12.0</okhttp3.version>
         <dom4j.version>2.2.0</dom4j.version>
+        <asm.version>9.7.1</asm.version>
 	</properties>
 	<modules>
 		<module>mxpio-boot-base-autoconfigure</module>
@@ -142,7 +143,7 @@
 			<artifactId>spring-boot-starter-cache</artifactId>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 		</dependency>
@@ -153,7 +154,7 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
-		</dependency>
+		</dependency>-->
 
 	</dependencies>
 	<dependencyManagement>
@@ -321,11 +322,16 @@
 		        <version>${knife4j.version}</version>
 		    </dependency>
 
-		    <dependency>
+		    <!--<dependency>
 			    <groupId>org.camunda.bpm.springboot</groupId>
 			    <artifactId>camunda-bpm-spring-boot-starter</artifactId>
 			    <version>${camunda.version}</version>
-			</dependency>
+			</dependency>-->
+            <dependency>
+                <groupId>team.vme50</groupId>
+                <artifactId>camunda7-spring-boot-starter</artifactId>
+                <version>${camunda.version}</version>
+            </dependency>
 
 			<dependency>
 			    <groupId>org.camunda.bpm.springboot</groupId>
@@ -462,6 +468,11 @@
                 <groupId>org.dom4j</groupId>
                 <artifactId>dom4j</artifactId>
                 <version>${dom4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>${asm.version}</version>
             </dependency>
 
 

@@ -525,7 +525,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 	}
 
 	@Override
-	public T in(String property, Set<?> values) {
+	public T in(String property, Collection<?> values) {
 		return in(property, values.toArray());
 	}
 
@@ -587,7 +587,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 	}
 
 	@Override
-	public T notIn(String property, Set<?> values) {
+	public T notIn(String property, Collection<?> values) {
 		return notIn(property, values.toArray());
 	}
 
