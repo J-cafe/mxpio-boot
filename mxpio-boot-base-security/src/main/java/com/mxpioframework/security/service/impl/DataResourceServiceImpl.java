@@ -34,25 +34,25 @@ import io.swagger.v3.oas.annotations.Operation;
 
 @Service("mxpio.security.dataResourceService")
 public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> implements DataResourceService {
-	
+
 	@Value("${mxpio.systemAnonymous}")
 	private String systemAnonymous;
 
 	@Value("${mxpio.customAnonymous}")
 	private String customAnonymous;
-	
+
 	@Autowired
 	private SecurityDecisionManager securityDecisionManager;
-	
+
 	@Autowired
 	private UserService userService;
 
 	@Autowired
 	private RbacCacheService rbacCacheService;
-	
+
 	@Override
 	public List<DataVo> findAllApi(boolean onlyCriteria, String path) {
-		RequestMappingHandlerMapping mapping = ApplicationContextProvider.getBean(RequestMappingHandlerMapping.class);
+		RequestMappingHandlerMapping mapping = ApplicationContextProvider.getBean("requestMappingHandlerMapping",RequestMappingHandlerMapping.class);
 		Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
 		List<DataVo> dataVos = new ArrayList<>();
 		Map<String,DataVo> patternsMap = new HashMap<>();
@@ -62,11 +62,11 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 			if(path != null && !info.getPatternsCondition().getPatterns().toArray()[0].equals(path)){
 				continue;
 			}
-			
+
 			if(patternsMap.get(info.getPatternsCondition().getPatterns().toArray()[0]) != null){
 				continue;
 			}
-			
+
 	        RequestMethodsRequestCondition methodsCondition = info.getMethodsCondition();
 	        MethodParameter[] parameters = method.getMethodParameters();
 	        boolean hasCriteria = false;
@@ -118,7 +118,7 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 		}
 		return result;
 	}
-	
+
 	private boolean decide(String username, DataResource data, boolean administrator) {
 		if (administrator || securityDecisionManager.decide(username, data)) {
 			return true;
