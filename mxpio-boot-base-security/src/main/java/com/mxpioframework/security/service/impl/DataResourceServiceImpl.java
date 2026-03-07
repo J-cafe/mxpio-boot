@@ -8,11 +8,10 @@ import java.util.Map;
 import com.mxpioframework.security.service.RbacCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.MethodParameter;
-import org.springframework.security.access.ConfigAttribute;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -20,11 +19,8 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import com.mxpioframework.jpa.JpaUtil;
 import com.mxpioframework.jpa.query.Criteria;
-import com.mxpioframework.security.common.Constants;
 import com.mxpioframework.security.decision.manager.SecurityDecisionManager;
 import com.mxpioframework.security.entity.DataResource;
-import com.mxpioframework.security.entity.Permission;
-import com.mxpioframework.security.entity.ResourceType;
 import com.mxpioframework.security.service.DataResourceService;
 import com.mxpioframework.security.service.UserService;
 import com.mxpioframework.security.util.ApplicationContextProvider;
@@ -59,13 +55,17 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 		for(Map.Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet()){
 			RequestMappingInfo info = m.getKey();
 	        HandlerMethod method = m.getValue();
-			if(path != null && !info.getPatternsCondition().getPatterns().toArray()[0].equals(path)){
-				continue;
-			}
+            String pattern = getPattern(info);
+            if(pattern==null){
+                continue;
+            }
+            if(path != null && !path.equals(pattern)){
+                continue;
+            }
 
-			if(patternsMap.get(info.getPatternsCondition().getPatterns().toArray()[0]) != null){
-				continue;
-			}
+            if(patternsMap.get(pattern) != null){
+                continue;
+            }
 
 	        RequestMethodsRequestCondition methodsCondition = info.getMethodsCondition();
 	        MethodParameter[] parameters = method.getMethodParameters();
@@ -87,13 +87,13 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 	    	        	.requestMethods(methodsCondition.getMethods())
 	    	        	.className(method.getMethod().getDeclaringClass().getName())
 	    	        	.classMethod(method.getMethod().getName())
-	    	        	.httpUrls(info.getPatternsCondition().getPatterns())
+	    	        	.httpUrls(info.getPatternValues())
 	    	        	.hasCriteria(hasCriteria)
 	    	        	.method(method.getMethod())
 	    	        	.beanClass(method.getBeanType())
 	    	        	.build();
 	    	    dataVos.add(dataVo);
-	    	    patternsMap.put(info.getPatternsCondition().getPatterns().toArray(new String[0])[0], dataVo);
+	    	    patternsMap.put(pattern, dataVo);
 	        }
 		}
 		return dataVos;
@@ -125,4 +125,11 @@ public class DataResourceServiceImpl extends BaseServiceImpl<DataResource> imple
 		}
 		return false;
 	}
+
+    private String getPattern(RequestMappingInfo info){
+        if(info==null|| CollectionUtils.isEmpty(info.getPatternValues())){
+            return null;
+        }
+        return info.getPatternValues().iterator().next();
+    }
 }
