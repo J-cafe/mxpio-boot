@@ -10,8 +10,8 @@
     <name>微信模块</name>
     <description>微信模块</description>
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <!--<maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>-->
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
 
         <weixin-java-cp.version>4.7.0</weixin-java-cp.version>
