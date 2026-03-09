@@ -27,7 +27,8 @@
 		<mxpio.version>4.0.0-beta.1</mxpio.version>
 		<java.version>25</java.version>
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
-		<springdoc.version>1.7.0</springdoc.version>
+		<!--<springdoc.version>1.7.0</springdoc.version>-->
+        <springdoc.version>3.0.2</springdoc.version>
 		<knife4j.version>3.0.3</knife4j.version>
 		<fastjson.version>1.2.83</fastjson.version>
 		<druid.version>1.2.27</druid.version>
@@ -307,7 +308,7 @@
 				<version>${commons-pool2.version}</version>
 			</dependency>
 
-			<dependency>
+			<!--<dependency>
 			   <groupId>org.springdoc</groupId>
 			   <artifactId>springdoc-openapi-ui</artifactId>
 			   <version>${springdoc.version}</version>
@@ -321,7 +322,13 @@
 		        <groupId>com.github.xiaoymin</groupId>
 		        <artifactId>knife4j-springdoc-ui</artifactId>
 		        <version>${knife4j.version}</version>
-		    </dependency>
+		    </dependency>-->
+
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
 
 		    <!--<dependency>
 			    <groupId>org.camunda.bpm.springboot</groupId>

@@ -29,7 +29,7 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
 		</dependency>
@@ -40,7 +40,11 @@
 		<dependency>
 	        <groupId>com.github.xiaoymin</groupId>
 	        <artifactId>knife4j-springdoc-ui</artifactId>
-	    </dependency>
+	    </dependency>-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
