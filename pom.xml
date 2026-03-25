@@ -83,7 +83,7 @@
 		<module>mxpio-boot-module-msal</module>
         <module>mxpio-boot-module-email</module>
         <module>mxpio-boot-module-wechat</module>
-        <module>mxpio-boot-module-oauth2-server</module>
+        <!--<module>mxpio-boot-module-oauth2-server</module>-->
         <module>mxpio-boot-webapp</module>
     </modules>
 	<dependencies>
