@@ -21,4 +21,3 @@ com.mxpioframework.autoconfigure.oauth.OAuthAutoConfiguration
 com.mxpioframework.autoconfigure.msal.MSALAutoConfiguration
 com.mxpioframework.autoconfigure.email.EmailAutoConfiguration
 com.mxpioframework.autoconfigure.wechat.WeChatAutoConfiguration
-com.mxpioframework.autoconfigure.oauthserver.OAuthServerAutoConfiguration

@@ -282,11 +282,11 @@
 				<version>${mxpio.version}</version>
 			</dependency>
 
-            <dependency>
+            <!--<dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-boot-module-oauth2-server</artifactId>
                 <version>${mxpio.version}</version>
-            </dependency>
+            </dependency>-->
 
 			<dependency>
 				<groupId>org.liquibase</groupId>
