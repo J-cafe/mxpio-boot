@@ -1,6 +1,6 @@
 package com.mxpioframework.autoconfigure.oauthserver;
 
-import com.mxpioframework.common.CommonConstant;
+/*import com.mxpioframework.common.CommonConstant;
 import com.mxpioframework.common.vo.ModuleVO;
 import com.mxpioframework.oauth.server.OAuthServerConfiguration;
 import lombok.extern.slf4j.Slf4j;
@@ -19,4 +19,4 @@ public class OAuthServerAutoConfiguration {
 
         CommonConstant.addModule(new ModuleVO("OAuthServer", "OAuth Sever模块"));
     }
-}
+}*/
