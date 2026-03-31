@@ -36,8 +36,7 @@ public class UserProfile extends BaseEntity{
 	@Schema(description = "组件Key")
 	private String elementKey;
 
-	@Lob
-	@Column(name = "PROPERTIES_")
+	@Column(name = "PROPERTIES_",columnDefinition="TEXT")
 	@Schema(description = "属性")
 	private String properties;
 
