@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
+import com.mxpioframework.jpa.property.PropertyNamer;
+import com.mxpioframework.jpa.support.LambdaMeta;
+import com.mxpioframework.jpa.support.SFunction;
+import com.mxpioframework.jpa.utils.LambdaUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CommonAbstractCriteria;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -265,6 +269,13 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		}
 		add(cb.equal(root.get(x), y));
 		return (T) this;
+	}
+
+	@Override
+	public <R, S> T equal(SFunction<R, S> x, Object y){
+		LambdaMeta meta  = LambdaUtils.extract(x);
+		String property = PropertyNamer.methodToProperty(meta.getImplMethodName());
+		return equal(property, y);
 	}
 
 	@Override

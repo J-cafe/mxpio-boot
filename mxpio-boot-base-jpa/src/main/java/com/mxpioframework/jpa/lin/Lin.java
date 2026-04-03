@@ -3,6 +3,7 @@ package com.mxpioframework.jpa.lin;
 import java.util.Collection;
 import java.util.Set;
 
+import com.mxpioframework.jpa.support.SFunction;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CommonAbstractCriteria;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -152,6 +153,8 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
      * @return 添加属性值等于条件
      */
 	T equal(String x, Object y);
+
+	<R, S> T equal(SFunction<R, S> function, Object y);
 
 	T equal(Expression<?> x, Object y);
 
