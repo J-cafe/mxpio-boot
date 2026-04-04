@@ -2,6 +2,7 @@ package com.mxpioframework.jpa.lin;
 
 import java.util.List;
 
+import com.mxpioframework.jpa.support.SerializableFunction;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Expression;
 
@@ -284,5 +285,28 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 * @return 本身
 	 */
 	Linq setDisableSmartSubQueryCriterion();
+
+
+    <R, S> Linq desc(SerializableFunction<R, S>... properties);
+
+    <R, S> Linq asc(SerializableFunction<R, S>... properties);
+
+    <R, S> Linq collect(SerializableFunction<R, S>... properties);
+
+    <R, S> Linq collect(SerializableFunction<R, S> otherProperty, Class<?> entityClass);
+
+    <R, S> Linq collect(Class<?> entityClass, SerializableFunction<R, S>... properties);
+
+    <R, S> Linq collect(SerializableFunction<R, S> otherProperty, Class<?> entityClass, SerializableFunction<R, S>... properties);
+
+    <R, S> Linq collect(Class<?> relationClass, SerializableFunction<R, S> relationProperty, SerializableFunction<R, S> relationOtherProperty, Class<?> entityClass);
+
+    <R, S> Linq collect(Class<?> relationClass, SerializableFunction<R, S> relationProperty, SerializableFunction<R, S> relationOtherProperty, SerializableFunction<R, S> otherProperty,
+                 Class<?> entityClass);
+
+    <R, S> Linq collect(Class<?> relationClass, SerializableFunction<R, S> relationProperty, SerializableFunction<R, S> relationOtherProperty, SerializableFunction<R, S> otherProperty,
+                 Class<?> entityClass, SerializableFunction<R, S>... properties);
+
+    <R, S> Linq collectSelect(Class<?> entityClass, SerializableFunction<R, S>... projections);
 
 }

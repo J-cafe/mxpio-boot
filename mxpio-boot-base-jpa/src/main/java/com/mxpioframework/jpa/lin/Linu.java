@@ -1,5 +1,6 @@
 package com.mxpioframework.jpa.lin;
 
+import com.mxpioframework.jpa.support.SerializableFunction;
 import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Path;
@@ -67,5 +68,7 @@ public interface Linu extends Lin<Linu, CriteriaUpdate<?>> {
 	 * @return 本身
 	 */
 	<Y> Linu set(SingularAttribute<? super Object, Y> attribute, Expression<? extends Y> value);
+
+    <R, S>Linu set(SerializableFunction<R, S> property, Object value);
 
 }

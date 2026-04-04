@@ -1,9 +1,8 @@
 package com.mxpioframework.jpa.lin;
 
 import java.util.Collection;
-import java.util.Set;
 
-import com.mxpioframework.jpa.support.SFunction;
+import com.mxpioframework.jpa.support.SerializableFunction;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CommonAbstractCriteria;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -104,6 +103,7 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	 */
 	T select(String... selections);
 
+
 	/**
 	 * 查询结果投影设置
 	 * @param selections 可以是String或者JPA标准{@link jakarta.persistence.criteria.Selection}
@@ -154,9 +154,7 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
      */
 	T equal(String x, Object y);
 
-	<R, S> T equal(SFunction<R, S> function, Object y);
-
-	T equal(Expression<?> x, Object y);
+    T equal(Expression<?> x, Object y);
 
 	T equal(Expression<?> x, Expression<?> y);
 
@@ -368,5 +366,75 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 
 	T notIn(String property, Collection<?> values);
 
+
+    <R, S> T select (SerializableFunction<R, S> ... functions);
+
+    <R, S> T equal(SerializableFunction<R, S> function, Object y);
+
+    <Y extends Comparable<? super Y>,R,S> T between(SerializableFunction<R, S> v, Y x, Y y);
+
+    <R, S> T equalProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
+    <R,S> T ge(SerializableFunction<R, S> x, Number y);
+
+    <Y extends Comparable<? super Y>, R, S> T greaterThan(SerializableFunction<R, S> x, Y y);
+
+    <Y extends Comparable<? super Y>, R, S> T greaterThanOrEqualTo(SerializableFunction<R, S> x, Y y);
+
+    <R, S> T greaterThanProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
+    <R, S> T greaterThanOrEqualToProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
+    <Y extends Number, R, S> T gt(SerializableFunction<R, S> x, Y y);
+
+    <R, S> T in(SerializableFunction<R, S> property, Object... values);
+
+    <R, S> T in(SerializableFunction<R, S> property, Collection<?> values);
+
+    <R, S> T notIn(SerializableFunction<R, S> property, Object... values);
+
+    <R, S> T notIn(SerializableFunction<R, S> property, Collection<?> values);
+
+    <R, S> T isEmpty(SerializableFunction<R, S> property);
+
+    <R, S> T isFalse(SerializableFunction<R, S> property);
+
+    <R, S> T isNotEmpty(SerializableFunction<R, S> property);
+
+    <R, S> T isNull(SerializableFunction<R, S> property);
+
+    <R, S> T isNotNull(SerializableFunction<R, S> property);
+
+    <R, S> T isTrue(SerializableFunction<R, S> property);
+
+    <Y extends Number, R, S> T le(SerializableFunction<R, S> x, Y y);
+
+    <R, S> T le(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
+    <Y extends Number, R, S> T lt(SerializableFunction<R, S> x, Y y);
+
+    <R, S> T lt(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
+    <Y extends Comparable<? super Y>, R, S> T lessThan(SerializableFunction<R, S> x, Y y);
+
+    <Y extends Comparable<? super Y>, R, S> T lessThanOrEqualTo(SerializableFunction<R, S> x, Y y);
+
+    <R, S> T like(SerializableFunction<R, S> x, String pattern);
+
+    <R, S> T notLike(SerializableFunction<R, S> x, String pattern);
+
+    <R, S> T notEqual(SerializableFunction<R, S> x, Object y);
+
+    <R, S> T notEqualProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
+    <R, S> T groupBy(SerializableFunction<R, S>... grouping);
+
+    <R, S> T ge(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
+    <R, S> T gt(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
+    <R, S> T lessThanProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
+    <R, S> T lessThanOrEqualToProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
 
 }

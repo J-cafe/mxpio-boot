@@ -1,5 +1,7 @@
 package com.mxpioframework.jpa.lin.impl;
 
+import com.mxpioframework.jpa.support.SerializableFunction;
+import com.mxpioframework.jpa.utils.LambdaUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Expression;
@@ -76,6 +78,12 @@ public class LinuImpl extends LinImpl<Linu, CriteriaUpdate<?>> implements Linu {
 		criteria.set(attribute, value);
 		return this;
 	}
+
+    @Override
+    public <R,S>Linu set(SerializableFunction<R, S> property, Object value){
+        String propertyName = LambdaUtils.extractPropertyName(property);
+        return set(propertyName, value);
+    }
 
 	@Override
 	public int update() {

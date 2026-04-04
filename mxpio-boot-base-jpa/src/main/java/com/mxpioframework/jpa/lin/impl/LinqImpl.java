@@ -1,15 +1,11 @@
 package com.mxpioframework.jpa.lin.impl;
 
 import java.beans.Introspector;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.Serializable;
+import java.util.*;
 
+import com.mxpioframework.jpa.support.SerializableFunction;
+import com.mxpioframework.jpa.utils.LambdaUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Tuple;
@@ -730,4 +726,70 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		return this;
 	}
 
+    @Override
+    public <R, S> Linq desc(SerializableFunction<R, S>... properties){
+        Set<String> propertySet = getPropertySet(properties);
+        return desc(propertySet.toArray(new String[0]));
+    }
+
+    @Override
+    public <R, S> Linq asc(SerializableFunction<R, S>... properties){
+        Set<String> propertySet = getPropertySet(properties);
+        return asc(propertySet.toArray(new String[0]));
+    }
+
+    @Override
+    public <R, S> Linq collect(SerializableFunction<R, S>... properties){
+        Set<String> propertySet = getPropertySet(properties);
+        return collect(propertySet.toArray(new String[0]));
+    }
+
+    @Override
+    public <R, S> Linq collect(SerializableFunction<R, S> otherProperty, Class<?> entityClass){
+        return collect(LambdaUtils.extractPropertyName(otherProperty), entityClass);
+    }
+
+    @Override
+    public  <R, S> Linq collect(Class<?> entityClass, SerializableFunction<R, S>... properties){
+        Set<String> propertySet = getPropertySet(properties);
+        return collect(entityClass,propertySet.toArray(new String[0]));
+    }
+
+    @Override
+    public <R, S> Linq collect(SerializableFunction<R, S> otherProperty, Class<?> entityClass, SerializableFunction<R, S>... properties){
+        Set<String> propertySet = getPropertySet(properties);
+        return collect(LambdaUtils.extractPropertyName(otherProperty), entityClass, propertySet.toArray(new String[0]));
+    }
+
+    @Override
+    public <R, S> Linq collect(Class<?> relationClass, SerializableFunction<R, S> relationProperty, SerializableFunction<R, S> relationOtherProperty, Class<?> entityClass){
+        return collect(relationClass, LambdaUtils.extractPropertyName(relationProperty), LambdaUtils.extractPropertyName(relationOtherProperty), entityClass);
+    }
+
+    @Override
+    public <R, S> Linq collect(Class<?> relationClass, SerializableFunction<R, S> relationProperty, SerializableFunction<R, S> relationOtherProperty, SerializableFunction<R, S> otherProperty,
+                        Class<?> entityClass){
+        return collect(relationClass, LambdaUtils.extractPropertyName(relationProperty), LambdaUtils.extractPropertyName(relationOtherProperty), LambdaUtils.extractPropertyName(otherProperty), entityClass);
+    }
+
+    @Override
+    public <R, S> Linq collect(Class<?> relationClass, SerializableFunction<R, S> relationProperty, SerializableFunction<R, S> relationOtherProperty, SerializableFunction<R, S> otherProperty,
+                        Class<?> entityClass, SerializableFunction<R, S>... properties){
+        Set<String> propertySet = getPropertySet(properties);
+        return collect(relationClass, LambdaUtils.extractPropertyName(relationProperty), LambdaUtils.extractPropertyName(relationOtherProperty), LambdaUtils.extractPropertyName(otherProperty), entityClass, propertySet.toArray(new String[0]));
+    }
+
+    @Override
+    public <R, S> Linq collectSelect(Class<?> entityClass, SerializableFunction<R, S>... projections){
+        Set<String> pprojectionsSet = getPropertySet(projections);
+        return collectSelect(entityClass, pprojectionsSet.toArray(new String[0]));
+    }
+
+    private <R, S> Set<String> getPropertySet(SerializableFunction<R, S>... properties){
+        Set<String> propertySet = new HashSet<>();
+        for (SerializableFunction<R, S> property : properties) {
+            propertySet.add(LambdaUtils.extractPropertyName(property));
+        }
+        return propertySet;
+    }
 }
