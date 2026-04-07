@@ -297,15 +297,15 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 
     <R, S> Linq collect(Class<?> entityClass, SerializableFunction<R, S>... properties);
 
-    <R, S> Linq collect(SerializableFunction<R, S> otherProperty, Class<?> entityClass, SerializableFunction<R, S>... properties);
+    <R, S, U> Linq collect(SerializableFunction<R, S> otherProperty, Class<?> entityClass, SerializableFunction<U, S>... properties);
 
-    <R, S> Linq collect(Class<?> relationClass, SerializableFunction<R, S> relationProperty, SerializableFunction<R, S> relationOtherProperty, Class<?> entityClass);
+    <R, S, U> Linq collect(Class<?> relationClass, SerializableFunction<R, S> relationProperty, SerializableFunction<U, S> relationOtherProperty, Class<?> entityClass);
 
-    <R, S> Linq collect(Class<?> relationClass, SerializableFunction<R, S> relationProperty, SerializableFunction<R, S> relationOtherProperty, SerializableFunction<R, S> otherProperty,
+    <R, S, U, V> Linq collect(Class<?> relationClass, SerializableFunction<R, S> relationProperty, SerializableFunction<U, S> relationOtherProperty, SerializableFunction<V, S> otherProperty,
                  Class<?> entityClass);
 
-    <R, S> Linq collect(Class<?> relationClass, SerializableFunction<R, S> relationProperty, SerializableFunction<R, S> relationOtherProperty, SerializableFunction<R, S> otherProperty,
-                 Class<?> entityClass, SerializableFunction<R, S>... properties);
+    <R, S, U, V, W> Linq collect(Class<?> relationClass, SerializableFunction<R, S> relationProperty, SerializableFunction<U, S> relationOtherProperty, SerializableFunction<V, S> otherProperty,
+                 Class<?> entityClass, SerializableFunction<W, S>... properties);
 
     <R, S> Linq collectSelect(Class<?> entityClass, SerializableFunction<R, S>... projections);
 
