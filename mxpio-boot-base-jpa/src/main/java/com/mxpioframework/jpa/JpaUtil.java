@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.mxpioframework.jpa.support.SerializableFunction;
+import com.mxpioframework.jpa.utils.LambdaUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
@@ -1028,6 +1030,10 @@ public abstract class JpaUtil {
 		return result;
 	}
 
+	public static <T, R, S> Set<T> collect(Collection<?> source, SerializableFunction<R, S> func) {
+		String propertyName = LambdaUtils.extractPropertyName(func);
+		return collect(source, propertyName);
+	}
 	/**
 	 * 根据属性收集属性对应的数据
 	 *
@@ -1074,6 +1080,11 @@ public abstract class JpaUtil {
 		return result;
 	}
 
+	public static <K, V, R, S> Map<K, List<V>> classify(Collection<V> source, SerializableFunction<R, S> func) {
+		String propertyName = LambdaUtils.extractPropertyName(func);
+		return classify(source, propertyName);
+	}
+
 	@SuppressWarnings("rawtypes")
 	private static Object getValue(String propertyName, Object obj) {
 		if (obj instanceof Map) {
@@ -1113,6 +1124,11 @@ public abstract class JpaUtil {
 			result.put(value, obj);
 		}
 		return result;
+	}
+
+	public static <K, V, R, S> Map<K, V> index(Collection<V> source, SerializableFunction<R, S> func) {
+		String propertyName = LambdaUtils.extractPropertyName(func);
+		return index(source, propertyName);
 	}
 
 	/**
