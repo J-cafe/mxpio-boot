@@ -156,7 +156,7 @@ public class CriteriaUtils {
 			if(value instanceof String) {
 				linq.in(property, (Object[]) ((String) value).split(","));
 			}
-            if(value instanceof Collection<?>){
+            else if(value instanceof Collection<?>){
                 linq.in(property, (Collection)value);
             }
             else {
@@ -166,7 +166,7 @@ public class CriteriaUtils {
 			if(value instanceof String) {
 				linq.notIn(property, (Object[]) ((String) value).split(","));
 			}
-            if(value instanceof Collection<?>){
+            else if(value instanceof Collection<?>){
                 linq.notIn(property, (Collection)value);
             }else {
 				linq.notIn(property, value);
