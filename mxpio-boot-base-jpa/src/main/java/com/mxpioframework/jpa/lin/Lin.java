@@ -373,7 +373,7 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 
     <Y extends Comparable<? super Y>,R,S> T between(SerializableFunction<R, S> v, Y x, Y y);
 
-    <R, S> T equalProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+    <R, S, V> T equalProperty(SerializableFunction<R, S> property, SerializableFunction<V, S> otherProperty);
 
     <R,S> T ge(SerializableFunction<R, S> x, Number y);
 
@@ -425,7 +425,7 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 
     <R, S> T notEqual(SerializableFunction<R, S> x, Object y);
 
-    <R, S> T notEqualProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+    <R, S, V> T notEqualProperty(SerializableFunction<R, S> property, SerializableFunction<V, S> otherProperty);
 
     <R, S> T groupBy(SerializableFunction<R, S>... grouping);
 

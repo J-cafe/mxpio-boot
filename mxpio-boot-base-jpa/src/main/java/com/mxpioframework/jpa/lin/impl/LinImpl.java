@@ -1305,7 +1305,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
     }
 
     @Override
-    public <R, S> T equalProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty){
+    public <R, S, V> T equalProperty(SerializableFunction<R, S> property, SerializableFunction<V, S> otherProperty){
         String propertyName = LambdaUtils.extractPropertyName(property);
         String otherPropertyName = LambdaUtils.extractPropertyName(otherProperty);
         return equalProperty(propertyName, otherPropertyName);
@@ -1466,7 +1466,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
     }
 
     @Override
-    public <R, S> T notEqualProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty){
+    public <R, S, V> T notEqualProperty(SerializableFunction<R, S> property, SerializableFunction<V, S> otherProperty){
         String propertyName = LambdaUtils.extractPropertyName(property);
         String otherPropertyName = LambdaUtils.extractPropertyName(otherProperty);
         return notEqualProperty(propertyName, otherPropertyName);
