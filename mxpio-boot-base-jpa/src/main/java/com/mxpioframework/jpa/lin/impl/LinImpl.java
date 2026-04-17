@@ -2,6 +2,7 @@ package com.mxpioframework.jpa.lin.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
@@ -21,6 +22,8 @@ import com.mxpioframework.jpa.lin.Lin;
 import com.mxpioframework.jpa.query.Junction;
 import com.mxpioframework.jpa.query.JunctionType;
 
+import com.mxpioframework.jpa.support.SerializableFunction;
+import com.mxpioframework.jpa.utils.LambdaUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -308,7 +311,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 		add(cb.exists(lin.getSubquery()));
 		return lin;
 	}
-	
+
 	@Override
 	public T notExists(Class<?> domainClass) {
 		if (!beforeMethodInvoke()) {
@@ -525,7 +528,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 	}
 
 	@Override
-	public T in(String property, Set<?> values) {
+	public T in(String property, Collection<?> values) {
 		return in(property, values.toArray());
 	}
 
@@ -587,7 +590,7 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 	}
 
 	@Override
-	public T notIn(String property, Set<?> values) {
+	public T notIn(String property, Collection<?> values) {
 		return notIn(property, values.toArray());
 	}
 
@@ -1280,6 +1283,232 @@ public abstract class LinImpl<T extends Lin<T, Q>, Q extends CommonAbstractCrite
 	@Override
 	public <E> Root<E> root() {
 		return (Root<E>) root;
+	}
+
+	@Override
+	public <R, S> T select(SerializableFunction<R, S>... functions) {
+		Set<String> selects = new HashSet<>();
+		for (SerializableFunction<R, S> function : functions) {
+			selects.add(LambdaUtils.extractPropertyName(function));
+		}
+		return select(selects.toArray(new String[0]));
+	}
+
+	@Override
+	public <Y extends Comparable<? super Y>,R,S> T between(SerializableFunction<R, S> v, Y x, Y y){
+		String propertyName = LambdaUtils.extractPropertyName(v);
+		return between(propertyName, x, y);
+	}
+
+	@Override
+	public <R, S> T equal(SerializableFunction<R, S> x, Object y){
+		String property = LambdaUtils.extractPropertyName(x);
+		return equal(property, y);
+	}
+
+	@Override
+	public <R, S, V> T equalProperty(SerializableFunction<R, S> property, SerializableFunction<V, S> otherProperty){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		String otherPropertyName = LambdaUtils.extractPropertyName(otherProperty);
+		return equalProperty(propertyName, otherPropertyName);
+	}
+
+	@Override
+	public <R, S> T ge(SerializableFunction<R, S> x, Number y) {
+		String property = LambdaUtils.extractPropertyName(x);
+		return ge(property, y);
+	}
+
+	@Override
+	public <R,S> T greaterThanProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		String otherPropertyName = LambdaUtils.extractPropertyName(otherProperty);
+		return greaterThanProperty(propertyName, otherPropertyName);
+	}
+
+	@Override
+	public <Y extends Comparable<? super Y>, R, S> T greaterThan(SerializableFunction<R, S> x, Y y){
+		String property = LambdaUtils.extractPropertyName(x);
+		return greaterThan(property, y);
+	}
+
+	@Override
+	public <R, S> T greaterThanOrEqualToProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		String otherPropertyName = LambdaUtils.extractPropertyName(otherProperty);
+		return greaterThanOrEqualToProperty(propertyName, otherPropertyName);
+	}
+
+	@Override
+	public <Y extends Comparable<? super Y>, R, S> T greaterThanOrEqualTo(SerializableFunction<R, S> x, Y y){
+		String property = LambdaUtils.extractPropertyName(x);
+		return greaterThanOrEqualTo(property, y);
+	}
+
+	@Override
+	public <Y extends Number, R, S> T gt(SerializableFunction<R, S> x, Y y){
+		String property = LambdaUtils.extractPropertyName(x);
+		return gt(property, y);
+	}
+
+	@Override
+	public <R, S> T in(SerializableFunction<R, S> property, Object... values){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		return in(propertyName, values);
+	}
+
+	@Override
+	public <R, S> T in(SerializableFunction<R, S> property, Collection<?> values){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		return in(propertyName, values);
+	}
+
+	@Override
+	public <R, S> T notIn(SerializableFunction<R, S> property, Object... values){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		return notIn(propertyName, values);
+	}
+
+	@Override
+	public <R, S> T notIn(SerializableFunction<R, S> property, Collection<?> values){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		return notIn(propertyName, values);
+	}
+
+	@Override
+	public <R, S> T isEmpty(SerializableFunction<R, S> property){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		return isEmpty(propertyName);
+	}
+
+	@Override
+	public <R, S> T isFalse(SerializableFunction<R, S> property){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		return isFalse(propertyName);
+	}
+
+	@Override
+	public <R, S> T isNotEmpty(SerializableFunction<R, S> property){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		return isNotEmpty(propertyName);
+	}
+
+	@Override
+	public <R, S> T isNull(SerializableFunction<R, S> property){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		return isNull(propertyName);
+	}
+
+	@Override
+	public <R, S> T isNotNull(SerializableFunction<R, S> property){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		return isNotNull(propertyName);
+	}
+
+	@Override
+	public <R, S> T isTrue(SerializableFunction<R, S> property){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		return isTrue(propertyName);
+	}
+
+	@Override
+	public <Y extends Number, R, S> T le(SerializableFunction<R, S> x, Y y){
+		String property = LambdaUtils.extractPropertyName(x);
+		return le(property, y);
+	}
+
+	@Override
+	public <R, S> T le(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		String otherPropertyName = LambdaUtils.extractPropertyName(otherProperty);
+		return le(propertyName, otherPropertyName);
+	}
+
+	@Override
+	public <Y extends Number, R, S> T lt(SerializableFunction<R, S> x, Y y){
+		String property = LambdaUtils.extractPropertyName(x);
+		return lt(property, y);
+	}
+
+	@Override
+	public <R, S> T lt(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		String otherPropertyName = LambdaUtils.extractPropertyName(otherProperty);
+		return lt(propertyName, otherPropertyName);
+	}
+
+	@Override
+	public <Y extends Comparable<? super Y>, R, S> T lessThan(SerializableFunction<R, S> x, Y y){
+		String property = LambdaUtils.extractPropertyName(x);
+		return lessThan(property, y);
+	}
+
+	@Override
+	public <Y extends Comparable<? super Y>, R, S> T lessThanOrEqualTo(SerializableFunction<R, S> x, Y y){
+		String property = LambdaUtils.extractPropertyName(x);
+		return lessThanOrEqualTo(property, y);
+	}
+
+	@Override
+	public <R, S> T like(SerializableFunction<R, S> x, String pattern){
+		String property = LambdaUtils.extractPropertyName(x);
+		return like(property, pattern);
+	}
+
+	@Override
+	public <R, S> T notLike(SerializableFunction<R, S> x, String pattern){
+		String property = LambdaUtils.extractPropertyName(x);
+		return notLike(property, pattern);
+	}
+
+	@Override
+	public  <R, S> T notEqual(SerializableFunction<R, S> x, Object y){
+		String property = LambdaUtils.extractPropertyName(x);
+		return notEqual(property, y);
+	}
+
+	@Override
+	public <R, S, V> T notEqualProperty(SerializableFunction<R, S> property, SerializableFunction<V, S> otherProperty){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		String otherPropertyName = LambdaUtils.extractPropertyName(otherProperty);
+		return notEqualProperty(propertyName, otherPropertyName);
+	}
+
+	@Override
+	public <R, S> T groupBy(SerializableFunction<R, S>... grouping){
+		Set<String> set = new HashSet<>();
+		for (SerializableFunction<R, S> property : grouping){
+			set.add(LambdaUtils.extractPropertyName(property));
+		}
+		return groupBy(set.toArray(new String[0]));
+	}
+
+	@Override
+	public <R, S> T ge(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		String otherPropertyName = LambdaUtils.extractPropertyName(otherProperty);
+		return ge(propertyName, otherPropertyName);
+	}
+
+	@Override
+	public <R, S> T gt(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		String otherPropertyName = LambdaUtils.extractPropertyName(otherProperty);
+		return gt(propertyName, otherPropertyName);
+	}
+
+	@Override
+	public <R, S> T lessThanProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		String otherPropertyName = LambdaUtils.extractPropertyName(otherProperty);
+		return lessThanProperty(propertyName, otherPropertyName);
+	}
+
+	@Override
+	public <R, S> T lessThanOrEqualToProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		String otherPropertyName = LambdaUtils.extractPropertyName(otherProperty);
+		return lessThanOrEqualTo(propertyName, otherPropertyName);
 	}
 
 }

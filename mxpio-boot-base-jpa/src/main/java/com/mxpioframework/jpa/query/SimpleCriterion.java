@@ -1,5 +1,8 @@
 package com.mxpioframework.jpa.query;
 
+import com.mxpioframework.jpa.support.SerializableFunction;
+import com.mxpioframework.jpa.utils.LambdaUtils;
+
 public class SimpleCriterion implements Criterion {
 
 	private String fieldName; // 属性名
@@ -12,6 +15,12 @@ public class SimpleCriterion implements Criterion {
 
 	public SimpleCriterion(String fieldName, Operator operator, Object value) {
 		this.fieldName = fieldName;
+		this.value = value;
+		this.operator = operator;
+	}
+
+	public <T,R> SimpleCriterion(SerializableFunction<T,R> fieldName, Operator operator, Object value) {
+		this.fieldName = LambdaUtils.extractPropertyName(fieldName);
 		this.value = value;
 		this.operator = operator;
 	}
@@ -47,7 +56,7 @@ public class SimpleCriterion implements Criterion {
 	 * fieldName.split("."); expression = root.get(names[0]); for (int i = 1; i <
 	 * names.length; i++) { expression = expression.get(names[i]); } } else {
 	 * expression = root.get(fieldName); }
-	 * 
+	 *
 	 * switch (operator) { case EQ: return builder.equal(expression, value); case
 	 * NE: return builder.notEqual(expression, value); case LIKE: return
 	 * builder.like((javax.persistence.criteria.Expression<String>) expression, "%"

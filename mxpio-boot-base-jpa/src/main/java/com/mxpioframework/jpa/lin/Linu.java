@@ -1,5 +1,7 @@
 package com.mxpioframework.jpa.lin;
 
+import com.mxpioframework.jpa.support.SerializableFunction;
+
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Path;
@@ -12,14 +14,14 @@ public interface Linu extends Lin<Linu, CriteriaUpdate<?>> {
 
 	/**
 	 * 批量更新
-	 * 
+	 *
 	 * @return 更新记录数
 	 */
 	int update();
 
 	/**
 	 * 设置更新值
-	 * 
+	 *
 	 * @param attribute 属性
 	 * @param value     值
 	 * @param <Y>       范型
@@ -29,7 +31,7 @@ public interface Linu extends Lin<Linu, CriteriaUpdate<?>> {
 
 	/**
 	 * 设置更新值
-	 * 
+	 *
 	 * @param attributeName 属性名称
 	 * @param value         值
 	 * @return 本身
@@ -38,7 +40,7 @@ public interface Linu extends Lin<Linu, CriteriaUpdate<?>> {
 
 	/**
 	 * 设置更新值
-	 * 
+	 *
 	 * @param attribute 属性
 	 * @param value     值
 	 * @param <Y>       路径范型
@@ -49,7 +51,7 @@ public interface Linu extends Lin<Linu, CriteriaUpdate<?>> {
 
 	/**
 	 * 设置更新值
-	 * 
+	 *
 	 * @param attribute 属性
 	 * @param value     值
 	 * @param <Y>       属性范型
@@ -60,12 +62,14 @@ public interface Linu extends Lin<Linu, CriteriaUpdate<?>> {
 
 	/**
 	 * 设置更新值
-	 * 
+	 *
 	 * @param attribute 属性
 	 * @param value     值
 	 * @param <Y>       属性范型
 	 * @return 本身
 	 */
 	<Y> Linu set(SingularAttribute<? super Object, Y> attribute, Expression<? extends Y> value);
+
+	<R, S>Linu set(SerializableFunction<R, S> property, Object value);
 
 }

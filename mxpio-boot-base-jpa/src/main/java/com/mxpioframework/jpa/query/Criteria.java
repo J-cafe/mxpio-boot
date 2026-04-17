@@ -6,6 +6,8 @@ import java.util.Stack;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mxpioframework.jpa.support.SerializableFunction;
+import com.mxpioframework.jpa.utils.LambdaUtils;
 
 public class Criteria {
 
@@ -14,7 +16,7 @@ public class Criteria {
 
 	@JsonProperty(value = "orders")
 	private List<Order> orders = new ArrayList<>();
-	
+
 	@JsonIgnore
 	private Stack<JunctionStack> stack;
 
@@ -26,7 +28,7 @@ public class Criteria {
 		Criteria c = new Criteria();
         return create(c);
 	}
-	
+
 	/**
 	 * 构建查询构造器对象
 	 * @param c 源构造器
@@ -36,7 +38,7 @@ public class Criteria {
 		c.setStack(new Stack<JunctionStack>());
 		return c;
 	}
-	
+
 	/**
 	 * 添加Or联合条件
 	 * @return 构造器
@@ -46,7 +48,7 @@ public class Criteria {
 		stack.add(junctionStack);
 		return this;
 	}
-	
+
 	/**
 	 * 添加and联合条件
 	 * @return 构造器
@@ -56,7 +58,7 @@ public class Criteria {
 		stack.add(junctionStack);
 		return this;
 	}
-	
+
 	/**
 	 * 结束联合添加
 	 * @return 构造器
@@ -75,7 +77,7 @@ public class Criteria {
 
 	/**
 	 * 增加简单条件表达式
-	 * 
+	 *
 	 * @param criterion 条件
 	 * @return 构造器
 	 */
@@ -89,7 +91,7 @@ public class Criteria {
 		}
 		return this;
 	}
-	
+
 	/**
 	 * 增加简单条件表达式
 	 * @param propertyName 属性名
@@ -105,10 +107,19 @@ public class Criteria {
 		}
 		return this;
 	}
-	
+
+	public <T, R> Criteria addCriterion(SerializableFunction<T, R> propertyNameFunc, Operator filterOperator, Object value) {
+		if(stack.empty()) {
+			criterions.add(new SimpleCriterion(LambdaUtils.extractPropertyName(propertyNameFunc), filterOperator, value));
+		}else {
+			stack.peek().getCriterions().add(new SimpleCriterion(LambdaUtils.extractPropertyName(propertyNameFunc), filterOperator, value));
+		}
+		return this;
+	}
+
 	/**
 	 * 以and形式添加多个条件
-	 * 
+	 *
 	 * @param junction 条件载体
 	 * @return 条件载体
 	 */
@@ -122,7 +133,7 @@ public class Criteria {
 		}
 		return this;
 	}
-	
+
 	/**
 	 * 添加Order
 	 * @param order 排序对象
@@ -134,7 +145,7 @@ public class Criteria {
 		}
 		return this;
 	}
-	
+
 	public List<Object> getCriterions() {
 		return criterions;
 	}

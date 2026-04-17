@@ -8,6 +8,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.metamodel.SingularAttribute;
 
 import com.mxpioframework.jpa.lin.Linu;
+import com.mxpioframework.jpa.support.SerializableFunction;
+import com.mxpioframework.jpa.utils.LambdaUtils;
 
 public class LinuImpl extends LinImpl<Linu, CriteriaUpdate<?>> implements Linu {
 
@@ -75,6 +77,12 @@ public class LinuImpl extends LinImpl<Linu, CriteriaUpdate<?>> implements Linu {
 		}
 		criteria.set(attribute, value);
 		return this;
+	}
+
+	@Override
+	public <R,S>Linu set(SerializableFunction<R, S> property, Object value){
+		String propertyName = LambdaUtils.extractPropertyName(property);
+		return set(propertyName, value);
 	}
 
 	@Override

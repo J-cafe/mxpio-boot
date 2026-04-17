@@ -1,5 +1,7 @@
 package com.mxpioframework.jpa.lin;
 
+import com.mxpioframework.jpa.support.SerializableFunction;
+
 import java.util.Collection;
 import java.util.Set;
 
@@ -19,7 +21,7 @@ import javax.persistence.criteria.Subquery;
  * @param <Q> JPA的{@link javax.persistence.criteria.CommonAbstractCriteria}的类型
  */
 public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
-	
+
 	/**
 	 * 动态添加条件<br>
 	 * 根据目标对象（target）决定后继相关操作是否有效，endIf是后继相关操作范围边界<br>
@@ -32,27 +34,27 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	 * @return 自身
 	 */
 	T addIf(Object target);
-	
+
 	/**
 	 * 与addIf功能类似，只是规则相反
 	 * @param target 目标对象
 	 * @return 自身
 	 */
 	T addIfNot(Object target);
-	
+
 	/**
 	 * 动态添加条件结束
 	 * @return 自身
 	 */
 	T endIf();
-	
+
 	/**
 	 * 创建子查询，主要内部使用
 	 * @param domainClass 实体类
 	 * @return 自身
 	 */
 	T createChild(Class<?> domainClass);
-	
+
 	/**
 	 * 添加条件
 	 * @param predicate 条件
@@ -84,7 +86,7 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	 * @return 自身
 	 */
 	<E> Subquery<E> getSubquery();
-	
+
 	/**
 	 * 查询结果投影为主键设置<br>
 	 * 例如：<br>
@@ -92,7 +94,7 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	 * @return 自身
 	 */
 	T selectId();
-	
+
 	/**
 	 * 查询结果投影设置<br>
 	 * 例如：<br>
@@ -102,27 +104,27 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	 * @return 自身
 	 */
 	T select(String... selections);
-	
+
 	/**
 	 * 查询结果投影设置
 	 * @param selections 可以是String或者JPA标准{@link javax.persistence.criteria.Selection}
 	 * @return 自身
 	 */
 	T select(Object... selections);
-	
+
 	/**
 	 * 查询结果投影设置
 	 * @param selections JPA标准{@link javax.persistence.criteria.Selection}
 	 * @return 自身
 	 */
 	T select(Selection<?>... selections);
-	
+
 	/**
 	 * 并且联合条件（支持递归定义）
 	 * @return 自身
 	 */
 	T and();
-	
+
 	/**
 	 * 或者联合条件（支持递归定义）
 	 * @return 自身
@@ -144,7 +146,7 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
      * @return 添加ID等于条件
      */
     T idEqual(Object id);
-    
+
     /**
      * 添加条件：等于
      * @param x 属性名
@@ -183,25 +185,25 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	<Y extends Number> T gt(Expression<? extends Y> x, Expression<? extends Y> y);
 
 	T in(String property, Object... values);
-	
+
 	T in(String property, Expression<Collection<?>> values);
-	
+
 	T in(Expression<?> expression, Expression<Collection<?>> values);
 
 	T in(Expression<?> expression, Object... values);
-	
+
 	T in(String property, Expression<?>... values);
 
 	<E> T in(Expression<E> expression, Expression<?>... values);
-	
+
 	T notIn(String property, Object... values);
-	
+
 	T notIn(String property, Expression<Collection<?>> values);
-	
+
 	<E> T notIn(Expression<E> expression, Expression<Collection<?>> values);
 
 	T notIn(Expression<?> expression, Object... values);
-	
+
 	T notIn(String property, Expression<?>... values);
 
 	<E> T notIn(Expression<E> expression, Expression<?>... values);
@@ -310,11 +312,11 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 	/**
 	 * 复杂条件结束标记方法<br>
 	 * 复杂条件后面如果是执行数据库操作方法（findAll、delete和update等等），可以不加结束标记方法end<br>
-	 * 
+	 *
 	 * @return 自身
 	 */
 	T end();
-	
+
 	/**
 	 * 分组
 	 * @param grouping 分组字段
@@ -361,8 +363,79 @@ public interface Lin<T extends Lin<T, Q>, Q extends CommonAbstractCriteria> {
 
 	T in(Class<?> domainClass);
 
-	T in(String property, Set<?> values);
+	T in(String property, Collection<?> values);
 
-	T notIn(String property, Set<?> values);
-	
+	T notIn(String property, Collection<?> values);
+
+
+	<R, S> T select (SerializableFunction<R, S>... functions);
+
+	<R, S> T equal(SerializableFunction<R, S> function, Object y);
+
+	<Y extends Comparable<? super Y>,R,S> T between(SerializableFunction<R, S> v, Y x, Y y);
+
+	<R, S, V> T equalProperty(SerializableFunction<R, S> property, SerializableFunction<V, S> otherProperty);
+
+	<R,S> T ge(SerializableFunction<R, S> x, Number y);
+
+	<Y extends Comparable<? super Y>, R, S> T greaterThan(SerializableFunction<R, S> x, Y y);
+
+	<Y extends Comparable<? super Y>, R, S> T greaterThanOrEqualTo(SerializableFunction<R, S> x, Y y);
+
+	<R, S> T greaterThanProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
+	<R, S> T greaterThanOrEqualToProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
+	<Y extends Number, R, S> T gt(SerializableFunction<R, S> x, Y y);
+
+	<R, S> T in(SerializableFunction<R, S> property, Object... values);
+
+	<R, S> T in(SerializableFunction<R, S> property, Collection<?> values);
+
+	<R, S> T notIn(SerializableFunction<R, S> property, Object... values);
+
+	<R, S> T notIn(SerializableFunction<R, S> property, Collection<?> values);
+
+	<R, S> T isEmpty(SerializableFunction<R, S> property);
+
+	<R, S> T isFalse(SerializableFunction<R, S> property);
+
+	<R, S> T isNotEmpty(SerializableFunction<R, S> property);
+
+	<R, S> T isNull(SerializableFunction<R, S> property);
+
+	<R, S> T isNotNull(SerializableFunction<R, S> property);
+
+	<R, S> T isTrue(SerializableFunction<R, S> property);
+
+	<Y extends Number, R, S> T le(SerializableFunction<R, S> x, Y y);
+
+	<R, S> T le(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
+	<Y extends Number, R, S> T lt(SerializableFunction<R, S> x, Y y);
+
+	<R, S> T lt(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
+	<Y extends Comparable<? super Y>, R, S> T lessThan(SerializableFunction<R, S> x, Y y);
+
+	<Y extends Comparable<? super Y>, R, S> T lessThanOrEqualTo(SerializableFunction<R, S> x, Y y);
+
+	<R, S> T like(SerializableFunction<R, S> x, String pattern);
+
+	<R, S> T notLike(SerializableFunction<R, S> x, String pattern);
+
+	<R, S> T notEqual(SerializableFunction<R, S> x, Object y);
+
+	<R, S, V> T notEqualProperty(SerializableFunction<R, S> property, SerializableFunction<V, S> otherProperty);
+
+	<R, S> T groupBy(SerializableFunction<R, S>... grouping);
+
+	<R, S> T ge(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
+	<R, S> T gt(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
+	<R, S> T lessThanProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
+	<R, S> T lessThanOrEqualToProperty(SerializableFunction<R, S> property, SerializableFunction<R, S> otherProperty);
+
 }
