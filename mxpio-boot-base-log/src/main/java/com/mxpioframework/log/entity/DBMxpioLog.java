@@ -49,8 +49,7 @@ public class DBMxpioLog implements DictAble, Serializable {
     @Schema(description = "日志内容")
     private String action;
 
-    @Lob
-    @Column(name = "EXTRA_")
+    @Column(name = "EXTRA_",columnDefinition="TEXT")
     @Schema(description = "日志额外信息")
     private String extra;
 

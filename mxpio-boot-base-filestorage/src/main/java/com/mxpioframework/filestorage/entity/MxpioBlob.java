@@ -28,8 +28,7 @@ public class MxpioBlob extends BaseEntity {
 	@Schema(description = "ID")
 	private String id;
 
-	@Lob
-	@Column(name = "DATA_")
+	@Column(name = "DATA_",columnDefinition="TEXT")
 	private byte[] data;
 
 }
