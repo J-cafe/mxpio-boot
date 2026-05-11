@@ -1,6 +1,5 @@
 package com.mxpioframework.common;
 
-import com.fasterxml.jackson.core.JsonParser;
 import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -52,7 +51,7 @@ public class CommonConfiguration {
 
     @Bean
     @Primary
-    @ConditionalOnMissingBean(ObjectMapper.class)
+    @ConditionalOnMissingBean(JsonMapper.class)
     public JsonMapper jsonMapper() {
         // 使用 Jackson 3 的 Builder 进行配置
         return JsonMapper.builder()
