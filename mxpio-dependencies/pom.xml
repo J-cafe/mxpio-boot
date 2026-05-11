@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.mxpio</groupId>
+    <artifactId>mxpio-dependencies</artifactId>
+    <version>4.0.0-beta.1</version>
+    <packaging>pom</packaging>
+    <name>mxpio-dependencies</name>
+    <description>mxpio-boot 统一依赖管理 BOM</description>
+
+    <properties>
+        <!-- Springdoc / Swagger -->
+        <springdoc.version>3.0.2</springdoc.version>
+        <knife4j.version>3.0.3</knife4j.version>
+
+        <!-- Connection Pool -->
+        <druid.version>1.2.27</druid.version>
+        <liquibase.version>4.8.0</liquibase.version>
+
+        <!-- Camunda Workflow -->
+        <camunda.version>7.24.0</camunda.version>
+
+        <!-- Utilities -->
+        <fastjson.version>1.2.83</fastjson.version>
+        <poi.version>5.5.1</poi.version>
+        <caffeine.version>3.2.3</caffeine.version>
+        <minio.version>8.6.0</minio.version>
+        <aviator.version>4.2.7</aviator.version>
+        <hutool.version>5.8.32</hutool.version>
+        <bizlog-sdk.version>3.0.0</bizlog-sdk.version>
+        <burningwave.core.version>12.66.2</burningwave.core.version>
+        <okhttp3.version>4.12.0</okhttp3.version>
+        <dom4j.version>2.2.0</dom4j.version>
+        <asm.version>9.7.1</asm.version>
+
+        <!-- Commons -->
+        <commons-pool2.version>2.13.1</commons-pool2.version>
+        <cglib.version>3.3.0</cglib.version>
+        <java.jwt.version>4.5.1</java.jwt.version>
+        <commons-beanutils.version>1.11.0</commons-beanutils.version>
+        <commons-codec.version>1.21.0</commons-codec.version>
+        <commons-io.version>2.21.0</commons-io.version>
+        <assertj-core.version>3.27.7</assertj-core.version>
+        <itext-asian.version>5.2.0</itext-asian.version>
+        <itextpdf.version>5.5.13.5</itextpdf.version>
+        <commons-fileupload.version>1.6.0</commons-fileupload.version>
+
+        <!-- Security -->
+        <oauth2.server.version>7.0.3</oauth2.server.version>
+
+        <!-- Build Tools -->
+        <lombok.version>1.18.42</lombok.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- ======================================== -->
+            <!-- mxpio-boot 模块（自引用）                   -->
+            <!-- ======================================== -->
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-boot-base-autoconfigure</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-common</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-jpa</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-security</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-cache</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-cache-redis</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-cache-caffeine</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-excel</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-quartz</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-system</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-camunda</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-filestorage</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-log</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-expression</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-multitenant</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-dbconsole</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-message</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-websocket</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-datav</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-dingtalk</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-email</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-oauth</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-msal</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-wechat</artifactId>
+                <version>4.0.0-beta.1</version>
+            </dependency>
+
+            <!-- ======================================== -->
+            <!-- Spring Boot Starters                       -->
+            <!-- ======================================== -->
+
+            <!-- Springdoc / Swagger -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+
+            <!-- Camunda Workflow -->
+            <dependency>
+                <groupId>org.camunda.bpm.springboot</groupId>
+                <artifactId>camunda-bpm-spring-boot-starter</artifactId>
+                <version>${camunda.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.camunda.bpm.springboot</groupId>
+                <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
+                <version>${camunda.version}</version>
+            </dependency>
+
+            <!-- Database & Connection Pool -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-core</artifactId>
+                <version>${liquibase.version}</version>
+            </dependency>
+
+            <!-- Apache Commons Pool -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${commons-pool2.version}</version>
+            </dependency>
+
+            <!-- ======================================== -->
+            <!-- 第三方库                                    -->
+            <!-- ======================================== -->
+
+            <!-- JSON -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+
+            <!-- JWT -->
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>${java.jwt.version}</version>
+            </dependency>
+
+            <!-- CGLIB -->
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>${cglib.version}</version>
+            </dependency>
+
+            <!-- Apache Commons -->
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${commons-beanutils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${commons-fileupload.version}</version>
+            </dependency>
+
+            <!-- Apache POI -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-excelant</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml-lite</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+
+            <!-- iText PDF -->
+            <dependency>
+                <groupId>com.itextpdf</groupId>
+                <artifactId>itextpdf</artifactId>
+                <version>${itextpdf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.itextpdf</groupId>
+                <artifactId>itext-asian</artifactId>
+                <version>${itext-asian.version}</version>
+            </dependency>
+
+            <!-- Expression Engine -->
+            <dependency>
+                <groupId>com.googlecode.aviator</groupId>
+                <artifactId>aviator</artifactId>
+                <version>${aviator.version}</version>
+            </dependency>
+
+            <!-- AssertJ -->
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj-core.version}</version>
+            </dependency>
+
+            <!-- Hutool -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-http</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
+            <!-- Caffeine Cache -->
+            <dependency>
+                <groupId>com.github.ben-manes.caffeine</groupId>
+                <artifactId>caffeine</artifactId>
+                <version>${caffeine.version}</version>
+            </dependency>
+
+            <!-- MinIO -->
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
+
+            <!-- Business Log SDK -->
+            <dependency>
+                <groupId>io.github.mouzt</groupId>
+                <artifactId>bizlog-sdk</artifactId>
+                <version>${bizlog-sdk.version}</version>
+            </dependency>
+
+            <!-- OAuth2 Authorization Server -->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-oauth2-authorization-server</artifactId>
+                <version>${oauth2.server.version}</version>
+            </dependency>
+
+            <!-- Burningwave -->
+            <dependency>
+                <groupId>org.burningwave</groupId>
+                <artifactId>core</artifactId>
+                <version>${burningwave.core.version}</version>
+            </dependency>
+
+            <!-- OkHttp3 -->
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp3.version}</version>
+            </dependency>
+
+            <!-- Dom4j -->
+            <dependency>
+                <groupId>org.dom4j</groupId>
+                <artifactId>dom4j</artifactId>
+                <version>${dom4j.version}</version>
+            </dependency>
+
+            <!-- ASM -->
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>${asm.version}</version>
+            </dependency>
+
+            <!-- Lombok -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
