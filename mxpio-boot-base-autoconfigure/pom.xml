@@ -17,122 +17,122 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-common</artifactId>
+			<artifactId>mxpio-common</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-jpa</artifactId>
+			<artifactId>mxpio-jpa</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-security</artifactId>
+			<artifactId>mxpio-security</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-cache</artifactId>
+			<artifactId>mxpio-cache</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-system</artifactId>
+			<artifactId>mxpio-system</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-module-cache-redis</artifactId>
+			<artifactId>mxpio-cache-redis</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-module-cache-caffeine</artifactId>
+			<artifactId>mxpio-cache-caffeine</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-quartz</artifactId>
+			<artifactId>mxpio-quartz</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-camunda</artifactId>
+			<artifactId>mxpio-camunda</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-filestorage</artifactId>
+			<artifactId>mxpio-filestorage</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-excel</artifactId>
+			<artifactId>mxpio-excel</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-log</artifactId>
+			<artifactId>mxpio-log</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-expression</artifactId>
+			<artifactId>mxpio-expression</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-multitenant</artifactId>
+			<artifactId>mxpio-multitenant</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-dbconsole</artifactId>
+			<artifactId>mxpio-dbconsole</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-message</artifactId>
+			<artifactId>mxpio-message</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-base-websocket</artifactId>
+			<artifactId>mxpio-websocket</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-module-datav</artifactId>
+			<artifactId>mxpio-datav</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-module-dingtalk</artifactId>
+			<artifactId>mxpio-dingtalk</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-module-email</artifactId>
+			<artifactId>mxpio-email</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-module-oauth</artifactId>
+			<artifactId>mxpio-oauth</artifactId>
 			<optional>true</optional>
 		</dependency>
         <!--<dependency>
             <groupId>com.mxpio</groupId>
-            <artifactId>mxpio-boot-module-oauth2-server</artifactId>
+            <artifactId>mxpio-oauth2-server</artifactId>
             <optional>true</optional>
         </dependency>-->
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-module-msal</artifactId>
+			<artifactId>mxpio-msal</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
-			<artifactId>mxpio-boot-module-wechat</artifactId>
+			<artifactId>mxpio-wechat</artifactId>
 			<optional>true</optional>
 		</dependency>
 	</dependencies>

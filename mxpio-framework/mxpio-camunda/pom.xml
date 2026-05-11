@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.mxpio</groupId>
+		<artifactId>mxpio-boot-parent</artifactId>
+		<relativePath>../../pom.xml</relativePath>
+		<version>4.0.0-beta.1</version>
+	</parent>
+	<artifactId>mxpio-camunda</artifactId>
+	<name>工作流模块</name>
+	<description>工作流模块</description>
+	<dependencies>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-message</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-expression</artifactId>
+		</dependency>
+
+		<!--<dependency>
+			<groupId>org.camunda.bpm.springboot</groupId>
+			<artifactId>camunda-bpm-spring-boot-starter</artifactId>
+		</dependency>-->
+        <dependency>
+            <groupId>team.vme50</groupId>
+            <artifactId>camunda7-spring-boot-starter</artifactId>
+        </dependency>
+
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		</dependency>
+		<!-- <dependency>
+			<groupId>org.camunda.bpm.springboot</groupId>
+			<artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
+		</dependency> -->
+	</dependencies>
+</project>

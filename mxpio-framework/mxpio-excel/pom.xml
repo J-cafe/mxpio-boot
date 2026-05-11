@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.mxpio</groupId>
+		<artifactId>mxpio-boot-parent</artifactId>
+		<relativePath>../../pom.xml</relativePath>
+		<version>4.0.0-beta.1</version>
+	</parent>
+	<artifactId>mxpio-excel</artifactId>
+	<name>Excel模块</name>
+	<description>Excel模块</description>
+	<dependencies>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-system</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-excelant</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml-lite</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itext-asian</artifactId>
+		</dependency>
+	</dependencies>
+</project>

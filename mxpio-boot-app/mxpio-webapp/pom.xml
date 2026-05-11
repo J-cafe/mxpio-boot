@@ -1,0 +1,95 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.mxpio</groupId>
+		<artifactId>mxpio-boot-parent</artifactId>
+		<relativePath>../../pom.xml</relativePath>
+		<version>4.0.0-beta.1</version>
+	</parent>
+	<artifactId>mxpio-boot-webapp</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-boot-base-autoconfigure</artifactId>
+		</dependency>
+		<!-- <dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-cache-redis</artifactId>
+		</dependency> -->
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-cache-caffeine</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-datav</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-security</artifactId>
+		</dependency>
+		<!-- <dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-multitenant</artifactId>
+		</dependency> -->
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-excel</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-quartz</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-camunda</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-filestorage</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-log</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-expression</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-system</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-dbconsole</artifactId>
+		</dependency>
+
+		<!--<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+		</dependency>-->
+
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-message</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-websocket</artifactId>
+		</dependency>
+	</dependencies>
+</project>
