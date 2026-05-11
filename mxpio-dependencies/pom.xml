@@ -11,6 +11,8 @@
     <description>mxpio-boot 统一依赖管理 BOM</description>
 
     <properties>
+        <mxpio.version>4.0.0-beta.1</mxpio.version>
+
         <!-- Springdoc / Swagger -->
         <springdoc.version>3.0.2</springdoc.version>
         <knife4j.version>3.0.3</knife4j.version>
@@ -62,122 +64,122 @@
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-boot-base-autoconfigure</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-common</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-jpa</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-security</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-cache</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-cache-redis</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-cache-caffeine</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-excel</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-quartz</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-system</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-camunda</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-filestorage</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-log</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-expression</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-multitenant</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-dbconsole</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-message</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-websocket</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-datav</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-dingtalk</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-email</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-oauth</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-msal</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.mxpio</groupId>
                 <artifactId>mxpio-wechat</artifactId>
-                <version>4.0.0-beta.1</version>
+                <version>${mxpio.version}</version>
             </dependency>
 
             <!-- ======================================== -->
