@@ -25,6 +25,7 @@
 | mxpio-camunda | [📄 camunda.md](./modules/camunda.md) | Camunda 工作流引擎集成 |
 | mxpio-websocket | [📄 websocket.md](./modules/websocket.md) | WebSocket 实时推送 |
 | 工作流整体 | [📄 workflow.md](./modules/workflow.md) | 工作流程自动化总览 |
+| 🔧 **配置体系** | [📄 config.md](./modules/config.md) | **全量配置项参考（必读）** |
 
 ### 部署文档
 

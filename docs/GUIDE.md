@@ -774,3 +774,60 @@ emailChannel.send("system", new String[]{"user@example.com"}, "邮件主题", "�
     <artifactId>mxpio-cache</artifactId>
 </dependency>
 ```
+
+---
+
+## 11. 配置体系说明
+
+mxpio-boot 的配置采用**模块级默认 + 应用级覆盖**的分层机制：
+
+```
+应用级覆盖 (mxpio-webapp/mxpio.properties)    ← 最高优先级
+           ↓
+模块级默认 (各模块 mxpio/mxpio.properties)
+           ↓
+application.yml / application-mysql.yml     ← 最低优先级
+```
+
+### 11.1 配置文件位置
+
+每个核心模块在 `src/main/resources/mxpio/` 下都有自己的 `mxpio.properties`：
+
+| 模块 | 配置文件 | 配置内容 |
+|------|---------|---------|
+| mxpio-common | `framework/mxpio-common/.../mxpio.properties` | Swagger、应用信息 |
+| mxpio-security | `framework/mxpio-security/.../mxpio.properties` | 登录、验证码、密码策略、Token、权限 |
+| mxpio-system | `framework/mxpio-system/.../mxpio.properties` | 代码生成路径、资源文件 |
+| mxpio-multitenant | `framework/mxpio-multitenant/.../mxpio.properties` | 多租户数据库配置 |
+| mxpio-excel | `framework/mxpio-excel/.../mxpio.properties` | 导出设置、CSV 配置 |
+| mxpio-filestorage | `framework/mxpio-filestorage/.../mxpio.properties` | 文件存储路径、存储提供商 |
+| mxpio-dingtalk | `modules/mxpio-dingtalk/.../mxpio.properties` | 钉钉 AppKey/Secret/AgentId |
+
+### 11.2 应用级覆盖
+
+`mxpio-webapp` 中的 `mxpio.properties` 可以覆盖任何模块的默认配置。例如，
+security 模块默认开启了密码过期和验证码，但 webapp 将其关闭：
+
+```properties
+# mxpio-boot-app/mxpio-webapp/src/main/resources/mxpio/mxpio.properties
+mxpio.password.expiredswitch=off
+mxpio.captcha.open=false
+```
+
+### 11.3 通过 application.yml 覆盖
+
+所有 `mxpio.*` 配置项也支持通过 Spring Boot 标准配置文件覆盖：
+
+```yaml
+mxpio:
+  appName: 我的生产管理系统
+  swagger:
+    title: 生产管理 API
+  password:
+    expiredswitch: on
+    expireddays: 90
+  captcha:
+    open: true
+```
+
+> 📖 完整配置项清单参见 [config.md](./modules/config.md)。
