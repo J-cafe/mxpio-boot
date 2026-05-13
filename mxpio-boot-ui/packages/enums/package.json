@@ -1,0 +1,14 @@
+{
+  "name": "@mxpio/enums",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "index.ts",
+  "module": "index.ts",
+  "scripts": {
+    "clean": "pnpm rimraf dist .turbo"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "@mxpio/request",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "index.ts",
+  "module": "index.ts",
+  "scripts": {
+    "clean": "pnpm rimraf node_modules dist .turbo"
+  },
+  "dependencies": {
+    "@mxpio/bridge": "workspace:*",
+    "@mxpio/enums": "workspace:*",
+    "@mxpio/locales": "workspace:*",
+    "@mxpio/stores": "workspace:*",
+    "@mxpio/types": "workspace:*",
+    "@mxpio/utils": "workspace:*",
+    "axios": "^1.6.5",
+    "axios-retry": "^4.0.0",
+    "qs": "^6.11.2"
+  },
+  "devDependencies": {
+    "@types/qs": "^6.9.11"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

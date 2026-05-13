@@ -1,0 +1,124 @@
+<template>
+  <BasicModal
+    width="1200px"
+    title="销售发货确认"
+    v-bind="$attrs"
+    destroyOnClose
+    @register="registerModal"
+    @ok="handleSubmit"
+  >
+    <VxeBasicTable ref="tableRef" v-bind="gridOptions" />
+  </BasicModal>
+</template>
+<script lang="ts" setup>
+  import { ref, computed } from 'vue';
+  import {
+    BasicModal,
+    useModalInner,
+    VxeBasicTable,
+    BasicVxeTableProps,
+    VxeGridInstance,
+  } from '@mxpio/components';
+  import { executeColumns } from './saleDelivery.data';
+  import { saleDeliveryExecute, snLineList, useExecuteClassifyData } from '@mxpio/bizcommon';
+
+  defineOptions({ name: 'SaleDeliveryExecuteModal' });
+
+  const emit = defineEmits(['success', 'register']);
+
+  let notice: Recordable = {};
+  const dataSource = ref([]);
+  const tableRef = ref<VxeGridInstance>();
+  const { classifyNoticeFormData } = useExecuteClassifyData();
+  const gridOptions = computed<BasicVxeTableProps>(() => {
+    return {
+      id: 'DeliveryNoticeExecuteTable',
+      keepSource: true,
+      minHeight: '200px',
+      tableClass: '!px-0 !py-0',
+      columns: executeColumns,
+      data: dataSource.value,
+      proxyConfig: { enabled: false },
+      pagerConfig: {
+        enabled: false,
+      },
+      editConfig: {
+        trigger: 'click',
+        mode: 'row',
+        showStatus: true,
+        autoClear: false,
+      },
+      editRules: {
+        executeQuantity: [
+          { required: true, message: '请输入确认数量', trigger: 'change' },
+          {
+            validator: ({ cellValue, row }) => {
+              if (cellValue <= 0) {
+                return new Error('发货数量不能小于等于0');
+              }
+              if (cellValue > row.quantity) {
+                return new Error('不能大于数量' + row.quantity);
+              }
+            },
+            trigger: 'change',
+          },
+        ],
+      },
+    };
+  });
+
+  const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
+    setModalProps({ confirmLoading: false });
+    notice = data.record;
+    const res = await snLineList(notice.noticeNo);
+    dataSource.value = res.map((item) => {
+      return {
+        ...item,
+        executeQuantity: item.quantity,
+      };
+    });
+    tableRef.value?.loadData(dataSource.value);
+  });
+
+  async function handleSubmit() {
+    try {
+      setModalProps({ confirmLoading: true });
+      let errMap = await tableRef.value?.validate(true);
+      if (errMap) {
+        return;
+      }
+      const executeData = classifyIntoFormData();
+      await saleDeliveryExecute(notice.noticeNo, executeData);
+      closeModal();
+      emit('success');
+    } finally {
+      setModalProps({ confirmLoading: false });
+    }
+  }
+
+  function classifyIntoFormData() {
+    const { fullData = [] } = tableRef.value?.getTableData() || {};
+    const executeData = classifyNoticeFormData(fullData, notice);
+    // 展开已选择批次数组，组装执行需要的格式
+    // const tableData: Recordable[] = [];
+    // fullData.forEach((item: Recordable) => {
+    //   tableData.push({
+    //     bizOrderNo: item.originBizNo,
+    //     bizOrderlineNo: item.originBizLineNo,
+    //     itemCode: item.itemCode,
+    //     lineQuantity: Number(item.quantity),
+    //     lotNo: item.lotNo,
+    //     subLotIndex: item.subLotIndex,
+    //     quantity: Number(item.executeQuantity),
+    //     whCode: notice.whCode,
+    //     bizWoLineNo: '',
+    //     bizWoNo: '',
+    //     noticeNo: notice.noticeNo,
+    //     noticeLineNo: item.lineNo,
+    //   });
+    // });
+    return {
+      lines: executeData,
+    };
+  }
+</script>

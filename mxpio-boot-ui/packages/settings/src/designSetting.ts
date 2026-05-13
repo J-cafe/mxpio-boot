@@ -1,0 +1,47 @@
+import { ThemeEnum } from '@mxpio/enums';
+import type { DesignSettingOptions } from './types';
+
+export const designSettingDef: DesignSettingOptions = {
+  prefixCls: 'vben',
+  multipleTabHeight: 30,
+  darkMode: ThemeEnum.LIGHT,
+  footerHeight: 75,
+  layoutMultipleHeadePlaceholderTime: 0.6,
+  APP_PRESET_COLOR_LIST: [
+    '#0960bd',
+    '#1c79fe',
+    '#009688',
+    '#536dfe',
+    '#ff5c93',
+    '#ee4f12',
+    '#0096c7',
+    '#9c27b0',
+    '#ff9800',
+  ],
+  HEADER_PRESET_BG_COLOR_LIST: [
+    '#ffffff',
+    '#151515',
+    '#009688',
+    '#5172DC',
+    '#018ffb',
+    '#409eff',
+    '#e74c3c',
+    '#24292e',
+    '#394664',
+    '#001529',
+    '#383f45',
+  ],
+  SIDE_BAR_BG_COLOR_LIST: [
+    '#001529',
+    '#212121',
+    '#273352',
+    '#ffffff',
+    '#191b24',
+    '#191a23',
+    '#304156',
+    '#001628',
+    '#28333E',
+    '#344058',
+    '#383f45',
+  ],
+};

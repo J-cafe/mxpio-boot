@@ -1,0 +1,21 @@
+{
+  "name": "@mxpio/locales",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "index.ts",
+  "module": "index.ts",
+  "scripts": {
+    "clean": "pnpm rimraf node_modules dist .turbo"
+  },
+  "dependencies": {
+    "vue-i18n": "9.8.0"
+  },
+  "devDependencies": {
+    "@mxpio/types": "workspace:*",
+    "vite": "^5.0.10"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

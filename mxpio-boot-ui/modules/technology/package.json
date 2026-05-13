@@ -1,0 +1,25 @@
+{
+  "name": "@mxpio/technology",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "index.ts",
+  "module": "index.ts",
+  "scripts": {
+    "clean": "pnpm rimraf dist .turbo"
+  },
+  "dependencies": {
+    "@mxpio/api": "workspace:*",
+    "@mxpio/bizcommon": "workspace:*",
+    "@mxpio/common": "workspace:*",
+    "@mxpio/components": "workspace:*",
+    "@mxpio/enums": "workspace:*",
+    "@mxpio/hooks": "workspace:*",
+    "@mxpio/stores": "workspace:*",
+    "@mxpio/types": "workspace:*",
+    "@mxpio/utils": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

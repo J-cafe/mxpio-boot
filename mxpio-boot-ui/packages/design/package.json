@@ -1,0 +1,19 @@
+{
+  "name": "@mxpio/design",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vue Vben Admin Design System",
+  "license": "MIT",
+  "main": "index.ts",
+  "module": "index.ts",
+  "scripts": {
+    "clean": "pnpm rimraf node_modules .turbo"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "less": "^4.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

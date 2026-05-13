@@ -1,0 +1,19 @@
+{
+  "name": "@mxpio/directives",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "index.ts",
+  "module": "index.ts",
+  "scripts": {
+    "clean": "pnpm rimraf dist .turbo"
+  },
+  "dependencies": {
+    "@mxpio/enums": "workspace:*",
+    "@mxpio/hooks": "workspace:*",
+    "@mxpio/utils": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

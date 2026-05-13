@@ -1,0 +1,26 @@
+{
+  "name": "@mxpio/utils",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "index.ts",
+  "module": "index.ts",
+  "scripts": {
+    "//build": "pnpm unbuild",
+    "//stub": "pnpm unbuild --stub",
+    "clean": "pnpm rimraf .turbo node_modules dist",
+    "lint": "pnpm eslint ."
+  },
+  "dependencies": {
+    "@mxpio/enums": "workspace:*",
+    "@mxpio/settings": "workspace:*",
+    "@mxpio/types": "workspace:*",
+    "@types/big.js": "6.2.2",
+    "big.js": "7.0.1",
+    "crypto-js": "^4.2.0",
+    "dayjs": "^1.11.10",
+    "echarts": "^5.4.3",
+    "resize-observer-polyfill": "^1.5.1",
+    "vue-types": "^5.1.1"
+  }
+}

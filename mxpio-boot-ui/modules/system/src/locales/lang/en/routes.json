@@ -1,0 +1,20 @@
+{
+  "basic": {
+    "login": "Login",
+    "homePage": "HomePage",
+    "register": "Register",
+    "codeLogin": "Code Login",
+    "qrcodeLogin": "Qr Code Login",
+    "forgetPassword": "Forget Password"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "analytics": "Analytics",
+    "workspace": "Workspace"
+  },
+  "account": {
+    "account": "Personal",
+    "accountCenter": "Personal Center",
+    "accountSetting": "Personal Settings"
+  }
+}

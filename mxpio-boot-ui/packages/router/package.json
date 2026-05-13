@@ -1,0 +1,30 @@
+{
+  "name": "@mxpio/router",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "index.ts",
+  "module": "index.ts",
+  "scripts": {
+    "clean": "pnpm rimraf node_modules dist .turbo"
+  },
+  "dependencies": {
+    "@mxpio/bridge": "workspace:*",
+    "@mxpio/enums": "workspace:*",
+    "@mxpio/locales": "workspace:*",
+    "@mxpio/logics": "workspace:*",
+    "@mxpio/router-config": "workspace:*",
+    "@mxpio/settings": "workspace:*",
+    "@mxpio/stores": "workspace:*",
+    "@mxpio/utils": "workspace:*",
+    "nprogress": "^0.2.0",
+    "path-to-regexp": "^6.2.1"
+  },
+  "devDependencies": {
+    "@mxpio/types": "workspace:*",
+    "vite": "^5.0.10"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

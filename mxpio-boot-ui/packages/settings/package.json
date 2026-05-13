@@ -1,0 +1,18 @@
+{
+  "name": "@mxpio/settings",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "index.ts",
+  "module": "index.ts",
+  "scripts": {
+    "//build": "pnpm unbuild",
+    "//stub": "pnpm unbuild --stub",
+    "clean": "pnpm rimraf .turbo node_modules dist",
+    "lint": "pnpm eslint ."
+  },
+  "dependencies": {
+    "@mxpio/enums": "workspace:*",
+    "@mxpio/types": "workspace:*"
+  }
+}

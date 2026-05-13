@@ -12,3 +12,8 @@ target/
 .sts4-cache
 .idea/
 .xcodemap
+# mxpio-boot-ui 前端项目
+mxpio-boot-ui/node_modules/
+mxpio-boot-ui/.pnpm-store/
+mxpio-boot-ui/dist/
+mxpio-boot-ui/*.tsbuildinfo

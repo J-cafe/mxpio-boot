@@ -1,0 +1,49 @@
+{
+  "name": "@mxpio/components",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "index.ts",
+  "module": "index.ts",
+  "scripts": {
+    "clean": "pnpm rimraf dist .turbo"
+  },
+  "dependencies": {
+    "@iconify/iconify": "^3.1.1",
+    "@mxpio/api": "workspace:*",
+    "@mxpio/bridge": "workspace:*",
+    "@mxpio/directives": "workspace:*",
+    "@mxpio/enums": "workspace:*",
+    "@mxpio/hooks": "workspace:*",
+    "@mxpio/locales": "workspace:*",
+    "@mxpio/logics": "workspace:*",
+    "@mxpio/router-config": "workspace:*",
+    "@mxpio/settings": "workspace:*",
+    "@mxpio/stores": "workspace:*",
+    "@mxpio/types": "workspace:*",
+    "@mxpio/utils": "workspace:*",
+    "@purge-icons/generated": "^0.10.0",
+    "@zxcvbn-ts/core": "^3.0.4",
+    "codemirror": "^5.65.16",
+    "cron-parser": "^4.9.0",
+    "cropperjs": "^1.6.1",
+    "dayjs": "^1.11.10",
+    "path-to-regexp": "^6.2.1",
+    "qrcode": "^1.5.3",
+    "sortablejs": "^1.15.1",
+    "tinymce": "^5.10.9",
+    "vditor": "^3.9.8",
+    "vue-codemirror": "4.x",
+    "vue-json-pretty": "^2.3.0",
+    "vuedraggable": "^4.1.0",
+    "vxe-pc-ui": "4.13.0",
+    "vxe-table": "4.17.49",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "vite": "^5.0.10"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

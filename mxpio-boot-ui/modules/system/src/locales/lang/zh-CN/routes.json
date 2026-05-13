@@ -1,0 +1,20 @@
+{
+  "basic": {
+    "login": "登录",
+    "homePage": "首页",
+    "register": "注册",
+    "codeLogin": "验证码登录",
+    "qrcodeLogin": "二维码登录",
+    "forgetPassword": "忘记密码"
+  },
+  "dashboard": {
+    "title": "概览",
+    "analytics": "分析页",
+    "workspace": "工作台"
+  },
+  "account": {
+    "account": "个人页",
+    "accountCenter": "个人中心",
+    "accountSetting": "个人设置"
+  }
+}

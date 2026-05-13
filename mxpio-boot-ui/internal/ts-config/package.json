@@ -1,0 +1,25 @@
+{
+  "name": "@mxpio/ts-config",
+  "version": "1.0.0",
+  "private": true,
+  "bugs": {
+    "url": "https://gitee.com/glf_gao/vue-vben-admin-monorepo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitee.com/glf_gao/vue-vben-admin-monorepo.git",
+    "directory": "internal/ts-config"
+  },
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "base.json",
+    "node.json",
+    "vue-app.json",
+    "node-server.json"
+  ],
+  "dependencies": {
+    "@types/node": "^20.10.6",
+    "vite": "^5.0.10"
+  }
+}

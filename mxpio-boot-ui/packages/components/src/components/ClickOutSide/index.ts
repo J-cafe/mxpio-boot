@@ -1,0 +1,4 @@
+import { withInstall } from '@mxpio/utils';
+import clickOutSide from './src/ClickOutSide.vue';
+
+export const ClickOutSide = withInstall(clickOutSide);

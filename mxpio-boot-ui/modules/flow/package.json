@@ -1,0 +1,35 @@
+{
+  "name": "@mxpio/flow",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "index.ts",
+  "module": "index.ts",
+  "scripts": {
+    "clean": "pnpm rimraf dist .turbo"
+  },
+  "dependencies": {
+    "@bpmn-io/properties-panel": "^2.2.0",
+    "@mxpio/api": "workspace:*",
+    "@mxpio/bizcommon": "workspace:*",
+    "@mxpio/common": "workspace:*",
+    "@mxpio/components": "workspace:*",
+    "@mxpio/enums": "workspace:*",
+    "@mxpio/hooks": "workspace:*",
+    "@mxpio/types": "workspace:*",
+    "@mxpio/utils": "workspace:*",
+    "bpmn-js": "^13.2.0",
+    "bpmn-js-properties-panel": "^2.0.0",
+    "bpmn-js-token-simulation": "^0.31.1",
+    "camunda-bpmn-moddle": "^7.0.1",
+    "diagram-js": "^12.2.0",
+    "vue-codemirror": "4.x",
+    "vuedraggable": "^4.1.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.10"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

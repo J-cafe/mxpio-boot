@@ -1,0 +1,28 @@
+{
+  "name": "@mxpio/hooks",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "index.ts",
+  "module": "index.ts",
+  "scripts": {
+    "clean": "pnpm rimraf node_modules dist .turbo"
+  },
+  "dependencies": {
+    "@mxpio/api": "workspace:*",
+    "@mxpio/bridge": "workspace:*",
+    "@mxpio/enums": "workspace:*",
+    "@mxpio/locales": "workspace:*",
+    "@mxpio/settings": "workspace:*",
+    "@mxpio/stores": "workspace:*",
+    "@mxpio/utils": "workspace:*",
+    "echarts": "^5.4.3",
+    "sortablejs": "^1.15.1"
+  },
+  "devDependencies": {
+    "@mxpio/types": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

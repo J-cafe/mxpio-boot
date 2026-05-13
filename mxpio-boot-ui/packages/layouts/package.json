@@ -1,0 +1,32 @@
+{
+  "name": "@mxpio/layouts",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "index.ts",
+  "module": "index.ts",
+  "scripts": {
+    "clean": "pnpm rimraf node_modules dist .turbo"
+  },
+  "dependencies": {
+    "@mxpio/api": "workspace:*",
+    "@mxpio/bridge": "workspace:*",
+    "@mxpio/components": "workspace:*",
+    "@mxpio/directives": "workspace:*",
+    "@mxpio/enums": "workspace:*",
+    "@mxpio/hooks": "workspace:*",
+    "@mxpio/locales": "workspace:*",
+    "@mxpio/logics": "workspace:*",
+    "@mxpio/router-config": "workspace:*",
+    "@mxpio/settings": "workspace:*",
+    "@mxpio/stores": "workspace:*",
+    "@mxpio/types": "workspace:*",
+    "@mxpio/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "^5.0.10"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
