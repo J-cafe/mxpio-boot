@@ -40,7 +40,7 @@ public class DatabaseResourceAllocator implements ResourceAllocator {
 		} finally {
 			if (dataSource != null) {
 				try {
-					dataSource.destroy();
+					dataSource.close();
 				} catch (Throwable ex) {
 					logger.debug("Could not destroy DataSource", ex);
 				}

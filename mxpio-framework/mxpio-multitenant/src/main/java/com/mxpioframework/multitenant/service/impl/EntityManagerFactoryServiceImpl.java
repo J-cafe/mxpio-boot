@@ -99,20 +99,8 @@ public class EntityManagerFactoryServiceImpl implements
 
 	private static final String JTA_PLATFORM = "hibernate.transaction.jta.platform";
 
-	/**
-	 * {@code NoJtaPlatform} implementations for various Hibernate versions.
-	 */
-	private static final String[] NO_JTA_PLATFORM_CLASSES = {
-			"org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform",
-			"org.hibernate.service.jta.platform.internal.NoJtaPlatform" };
-
-	/**
-	 * {@code WebSphereExtendedJtaPlatform} implementations for various Hibernate
-	 * versions.
-	 */
-	private static final String[] WEBSPHERE_JTA_PLATFORM_CLASSES = {
-			"org.hibernate.engine.transaction.jta.platform.internal.WebSphereExtendedJtaPlatform",
-			"org.hibernate.service.jta.platform.internal.WebSphereExtendedJtaPlatform", };
+	private static final String WEBSPHERE_JTA_PLATFORM_CLASS =
+			"org.hibernate.engine.transaction.jta.platform.internal.WebSphereExtendedJtaPlatform";
 
 	@Autowired
 	private JpaProperties properties;
@@ -251,9 +239,8 @@ public class EntityManagerFactoryServiceImpl implements
 				configureSpringJtaPlatform(vendorProperties, jtaTransactionManager);
 			}
 		}
-		else {
-			vendorProperties.put(JTA_PLATFORM, getNoJtaPlatformManager());
-		}
+		// Hibernate 6+ auto-detects NoJtaPlatform when no JTA is configured,
+		// no need to explicitly set it.
 	}
 
 	private boolean runningOnWebSphere() {
@@ -268,7 +255,11 @@ public class EntityManagerFactoryServiceImpl implements
 	}
 
 	private Object getWebSphereJtaPlatformManager() {
-		return getJtaPlatformManager(WEBSPHERE_JTA_PLATFORM_CLASSES);
+		try {
+			return Class.forName(WEBSPHERE_JTA_PLATFORM_CLASS).getDeclaredConstructor().newInstance();
+		} catch (Exception ex) {
+			throw new IllegalStateException("Could not configure WebSphere JTA platform", ex);
+		}
 	}
 
 	private void configureSpringJtaPlatform(Map<String, Object> vendorProperties,
@@ -296,22 +287,6 @@ public class EntityManagerFactoryServiceImpl implements
 		catch (Error ex) {
 			return false;
 		}
-	}
-
-	private Object getNoJtaPlatformManager() {
-		return getJtaPlatformManager(NO_JTA_PLATFORM_CLASSES);
-	}
-
-	private Object getJtaPlatformManager(String[] candidates) {
-		for (String candidate : candidates) {
-			try {
-				return Class.forName(candidate).newInstance();
-			}
-			catch (Exception ex) {
-				// Continue searching
-			}
-		}
-		throw new IllegalStateException("Could not configure JTA platform");
 	}
 
 	protected JtaTransactionManager getJtaTransactionManager() {
@@ -379,8 +354,8 @@ public class EntityManagerFactoryServiceImpl implements
 			entityManagerFactoryBean.setLoadTimeWeaver(loadTimeWeaver);
 			entityManagerFactoryBean.setResourceLoader(resourceLoader);
 			entityManagerFactoryBean.afterPropertiesSet();
-			entityManagerFactoryBean.destroy();
-			dataSource.destroy();
+			entityManagerFactoryBean.getObject().close();
+			dataSource.close();
 		}
 	}
 
