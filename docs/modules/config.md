@@ -30,7 +30,7 @@ mxpio-boot 采用 **模块级默认配置 + 应用级覆盖配置** 的机制。
 | `app.system.desc` | MxpIO-Boot | 系统描述 |
 | `app.name` | MxpIO-Boot | 应用名称 |
 | `app.system.abbr` | MxpIO-Boot | 系统缩写 |
-| `app.user.company` | 数字卓粤 | 公司名称 |
+| `app.user.company` | 数字卓臻 | 公司名称 |
 
 ### 2. mxpio-security — 安全与权限体系
 
