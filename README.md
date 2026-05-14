@@ -77,7 +77,7 @@ mxpio-boot/
 │   ├── mxpio-email/                   ← 邮件发送
 │   ├── mxpio-msal/                    ← Microsoft 身份认证
 │   └── mxpio-oauth/                   ← OAuth2 客户端
-├── mxpio-boot-ui/                     ← 前端 monorepo
+├── mxpio-ui/                     ← 前端 monorepo
 └── examples/                          ← 示例工程（非 Maven 模块）
     └── mxpio-boot-example/
 ```

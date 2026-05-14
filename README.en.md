@@ -77,7 +77,7 @@ mxpio-boot/
 │   ├── mxpio-email/                   ← Email
 │   ├── mxpio-msal/                    ← Microsoft Authentication
 │   └── mxpio-oauth/                   ← OAuth2 Client
-├── mxpio-boot-ui/                     ← Frontend Monorepo
+├── mxpio-ui/                     ← Frontend Monorepo
 └── examples/                          ← Examples (not a Maven module)
     └── mxpio-boot-example/
 ```
