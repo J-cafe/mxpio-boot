@@ -13,7 +13,7 @@ import com.mxpioframework.log.LogConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 自动装载 工作流模块 mxpio-boot-base-log
+ * 自动装载 日志模块 mxpio-log
  * @author MxpIO
  *
  */

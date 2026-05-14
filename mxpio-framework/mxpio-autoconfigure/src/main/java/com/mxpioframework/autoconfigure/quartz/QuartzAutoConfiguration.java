@@ -13,7 +13,7 @@ import com.mxpioframework.quartz.QuartzConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 自动装载 调度模块 mxpio-boot-base-quartz
+ * 自动装载 调度模块 mxpio-quartz
  * @author MxpIO
  *
  */

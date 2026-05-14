@@ -13,7 +13,7 @@ import com.mxpioframework.system.SystemConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 自动装载 系统模块 mxpio-boot-base-system
+ * 自动装载 系统模块 mxpio-system
  * @author MxpIO
  *
  */

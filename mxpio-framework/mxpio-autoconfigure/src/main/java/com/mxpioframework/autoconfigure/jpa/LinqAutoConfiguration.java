@@ -15,7 +15,7 @@ import com.mxpioframework.jpa.LinqConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 自动装载 ORM模块 mxpio-boot-base-linq
+ * 自动装载 JPA模块 mxpio-jpa
  * @author MxpIO
  *
  */

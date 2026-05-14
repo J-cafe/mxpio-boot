@@ -16,7 +16,7 @@ import com.mxpioframework.excel.ExcelConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 自动装载 系统模块 mxpio-boot-base-excle
+ * 自动装载 Excel模块 mxpio-excel
  * @author MxpIO
  *
  */

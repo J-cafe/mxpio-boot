@@ -11,7 +11,7 @@ import com.mxpioframework.common.vo.ModuleVO;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 自动装载 公共模块 mxpio-boot-base-common
+ * 自动装载 公共模块 mxpio-common
  * @author MxpIO
  *
  */

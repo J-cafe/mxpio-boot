@@ -15,7 +15,7 @@ import com.mxpioframework.module.cache.redis.RedisCacheConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 自动装载 缓存模块Redis实现 mxpio-boot-module-cache-redis
+ * 自动装载 缓存模块Redis实现 mxpio-cache-redis
  * @author MxpIO
  *
  */

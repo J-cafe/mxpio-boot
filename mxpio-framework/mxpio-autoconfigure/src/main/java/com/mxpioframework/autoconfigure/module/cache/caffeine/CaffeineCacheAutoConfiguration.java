@@ -15,7 +15,7 @@ import com.mxpioframework.module.cache.caffeine.CaffeineCacheConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 自动装载 缓存模块Caffeine实现 mxpio-boot-module-cache-caffeine
+ * 自动装载 缓存模块Caffeine实现 mxpio-cache-caffeine
  * @author MxpIO
  *
  */

@@ -16,7 +16,7 @@ import com.mxpioframework.dbconsole.DbconsoleConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 自动装载 系统模块 mxpio-boot-base-dbconsole
+ * 自动装载 云数据库模块 mxpio-dbconsole
  * @author MxpIO
  *
  */

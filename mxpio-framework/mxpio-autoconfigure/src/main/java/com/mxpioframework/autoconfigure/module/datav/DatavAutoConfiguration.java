@@ -13,7 +13,7 @@ import com.mxpioframework.module.datav.DatavConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 自动装载 大屏模块 mxpio-boot-module-datav
+ * 自动装载 大屏模块 mxpio-datav
  * @author MxpIO
  *
  */

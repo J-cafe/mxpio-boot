@@ -13,7 +13,7 @@ import com.mxpioframework.filestorage.FilestorageConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 自动装载 文件模块 mxpio-boot-base-filestorage
+ * 自动装载 文件模块 mxpio-filestorage
  * @author MxpIO
  *
  */

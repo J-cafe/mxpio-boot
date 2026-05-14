@@ -12,7 +12,7 @@ import com.mxpioframework.expression.ExpressionConfiguration;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 自动装载 工作流模块 mxpio-boot-base-expression
+ * 自动装载 表达式模块 mxpio-expression
  * @author MxpIO
  *
  */
