@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-parent</artifactId>
+        <version>4.0.0-beta.1</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>mxpio-boot-modules</artifactId>
+    <packaging>pom</packaging>
+    <name>功能模块层聚合</name>
+    <description>mxpio-boot 功能模块层，聚合第三方集成等子模块</description>
+
+    <modules>
+        <module>mxpio-dingtalk</module>
+        <module>mxpio-email</module>
+        <module>mxpio-msal</module>
+        <module>mxpio-oauth</module>
+        <!--<module>mxpio-oauth2-server</module>-->
+        <module>mxpio-wechat</module>
+    </modules>
+</project>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.mxpio</groupId>
+        <artifactId>mxpio-boot-parent</artifactId>
+        <version>4.0.0-beta.1</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>mxpio-framework</artifactId>
+    <packaging>pom</packaging>
+    <name>框架层聚合</name>
+    <description>mxpio-boot 核心框架层，聚合所有 framework 子模块</description>
+
+    <modules>
+        <module>mxpio-autoconfigure</module>
+        <module>mxpio-common</module>
+        <module>mxpio-jpa</module>
+        <module>mxpio-cache</module>
+        <module>mxpio-security</module>
+        <module>mxpio-system</module>
+        <module>mxpio-quartz</module>
+        <module>mxpio-excel</module>
+        <module>mxpio-camunda</module>
+        <module>mxpio-log</module>
+        <module>mxpio-expression</module>
+        <module>mxpio-filestorage</module>
+        <module>mxpio-multitenant</module>
+        <module>mxpio-dbconsole</module>
+        <module>mxpio-message</module>
+        <module>mxpio-websocket</module>
+        <module>mxpio-cache-redis</module>
+        <module>mxpio-cache-caffeine</module>
+        <module>mxpio-datav</module>
+    </modules>
+</project>
