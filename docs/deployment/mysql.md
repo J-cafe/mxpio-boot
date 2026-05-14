@@ -43,7 +43,7 @@ CREATE DATABASE IF NOT EXISTS `mboot_test`
 
 ### 3.1 开发环境配置
 
-文件位置：`mxpio-boot-app/mxpio-webapp/src/main/resources/application-dev.yml`
+文件位置：`mxpio-boot-app/mxpio-boot-webapp/src/main/resources/application-dev.yml`
 
 ```yaml
 spring:
@@ -130,7 +130,7 @@ spring:
 - `schema-mysql.sql`
 - `data-mysql.sql`
 
-> 这两个文件位于 `mxpio-webapp/src/main/resources/` 目录下。
+> 这两个文件位于 `mxpio-boot-webapp/src/main/resources/` 目录下。
 
 ### 4.3 框架模块内置初始化数据
 

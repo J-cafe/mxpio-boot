@@ -782,7 +782,7 @@ emailChannel.send("system", new String[]{"user@example.com"}, "邮件主题", "�
 mxpio-boot 的配置采用**模块级默认 + 应用级覆盖**的分层机制：
 
 ```
-应用级覆盖 (mxpio-webapp/mxpio.properties)    ← 最高优先级
+应用级覆盖 (mxpio-boot-webapp/mxpio.properties)    ← 最高优先级
            ↓
 模块级默认 (各模块 mxpio/mxpio.properties)
            ↓
@@ -805,11 +805,11 @@ application.yml / application-mysql.yml     ← 最低优先级
 
 ### 11.2 应用级覆盖
 
-`mxpio-webapp` 中的 `mxpio.properties` 可以覆盖任何模块的默认配置。例如，
+`mxpio-boot-webapp` 中的 `mxpio.properties` 可以覆盖任何模块的默认配置。例如，
 security 模块默认开启了密码过期和验证码，但 webapp 将其关闭：
 
 ```properties
-# mxpio-boot-app/mxpio-webapp/src/main/resources/mxpio/mxpio.properties
+# mxpio-boot-app/mxpio-boot-webapp/src/main/resources/mxpio/mxpio.properties
 mxpio.password.expiredswitch=off
 mxpio.captcha.open=false
 ```

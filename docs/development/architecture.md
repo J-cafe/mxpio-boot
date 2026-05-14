@@ -12,15 +12,15 @@ mxpio-boot-parent (com.mxpio:mxpio-boot-parent:4.0.0-beta.1)
 │
 ├── mxpio-dependencies (BOM — 统一版本管理)
 │
-├── mxpio-boot-base-autoconfigure (自动配置聚合入口)
+├── mxpio-autoconfigure (自动配置聚合入口)
 │
 ├── mxpio-framework/                      [核心框架层]
 │   ├── mxpio-common                      ← 公共常量、工具类
 │   ├── mxpio-jpa                         ← JPA 增强：Linq/Criteria
 │   ├── mxpio-security                    ← RBAC 权限体系
 │   ├── mxpio-cache                       ← 缓存抽象接口
-│   │   ├── mxpio-cache-redis             ← Redis 缓存实现
-│   │   └── mxpio-cache-caffeine          ← Caffeine 本地缓存
+│   ├── mxpio-cache-redis                 ← Redis 缓存实现
+│   ├── mxpio-cache-caffeine              ← Caffeine 本地缓存
 │   ├── mxpio-quartz                      ← Quartz 定时任务
 │   ├── mxpio-log                         ← 操作日志审计
 │   ├── mxpio-camunda                     ← Camunda 工作流适配
@@ -41,7 +41,7 @@ mxpio-boot-parent (com.mxpio:mxpio-boot-parent:4.0.0-beta.1)
 │   └── mxpio-oauth                       ← OAuth2 认证授权
 │
 └── mxpio-boot-app/                       [应用启动层]
-    └── mxpio-webapp                      ← Spring Boot 启动入口
+    └── mxpio-boot-webapp                 ← Spring Boot 启动入口
 ```
 
 ## 分层架构
@@ -80,7 +80,7 @@ public class XxxConfiguration {
 }
 ```
 
-所有模块的自动配置在 `mxpio-boot-base-autoconfigure` 中集中注册：
+所有模块的自动配置在 `mxpio-autoconfigure` 中集中注册：
 
 ```
 META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports

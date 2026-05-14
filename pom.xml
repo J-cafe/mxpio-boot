@@ -30,75 +30,25 @@
 	</properties>
 	<modules>
 		<module>mxpio-dependencies</module>
-		<module>mxpio-boot-base-autoconfigure</module>
-		<module>mxpio-framework/mxpio-common</module>
-		<module>mxpio-framework/mxpio-jpa</module>
-		<module>mxpio-framework/mxpio-cache</module>
-		<module>mxpio-framework/mxpio-security</module>
-		<module>mxpio-framework/mxpio-system</module>
-		<module>mxpio-framework/mxpio-quartz</module>
-		<module>mxpio-framework/mxpio-excel</module>
-		<module>mxpio-framework/mxpio-camunda</module>
-		<module>mxpio-framework/mxpio-log</module>
-		<module>mxpio-framework/mxpio-expression</module>
-		<module>mxpio-framework/mxpio-filestorage</module>
-		<module>mxpio-framework/mxpio-multitenant</module>
-		<module>mxpio-framework/mxpio-dbconsole</module>
-		<module>mxpio-framework/mxpio-message</module>
-		<module>mxpio-framework/mxpio-websocket</module>
-		<module>mxpio-framework/mxpio-cache-redis</module>
-		<module>mxpio-framework/mxpio-cache-caffeine</module>
-		<module>mxpio-framework/mxpio-datav</module>
-		<module>mxpio-boot-modules/mxpio-dingtalk</module>
-		<module>mxpio-boot-modules/mxpio-email</module>
-		<module>mxpio-boot-modules/mxpio-msal</module>
-		<module>mxpio-boot-modules/mxpio-oauth</module>
-		<!--<module>mxpio-boot-modules/mxpio-oauth2-server</module>-->
-		<module>mxpio-boot-modules/mxpio-wechat</module>
-		<module>mxpio-boot-app/mxpio-webapp</module>
+		<module>mxpio-framework</module>
+		<module>mxpio-boot-modules</module>
+		<module>mxpio-boot-app</module>
 	</modules>
 	<dependencies>
+		<!-- 全局：Lombok（所有模块都需要） -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<optional>true</optional>
 		</dependency>
-
-		<dependency>
-			<groupId>org.hibernate.validator</groupId>
-			<artifactId>hibernate-validator</artifactId>
-		</dependency>
-
-		<!--Spring boot 安全框架 -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-access</artifactId>
-        </dependency>
-
-		<!--Spring boot Web容器 -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-oauth2-resource-server</artifactId>
-        </dependency>
-
+		<!-- 全局：配置处理器（可选） -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>${lombok.version}</version>
-		</dependency>
+		<!-- 全局：测试 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -109,26 +59,6 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<!-- spring boot 缓存 -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-cache</artifactId>
-		</dependency>
-
-		<!--<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-		</dependency>-->
-
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

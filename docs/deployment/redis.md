@@ -17,7 +17,7 @@
 
 ### 2.1 开发环境配置
 
-文件位置：`mxpio-boot-app/mxpio-webapp/src/main/resources/application-dev.yml`
+文件位置：`mxpio-boot-app/mxpio-boot-webapp/src/main/resources/application-dev.yml`
 
 ```yaml
 spring:

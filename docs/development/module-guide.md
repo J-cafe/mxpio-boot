@@ -111,15 +111,17 @@ org.springframework.boot.autoconfigure.AutoConfiguration.imports
 com.mxpioframework.report.ReportConfiguration
 ```
 
-> 或者统一在 `mxpio-boot-base-autoconfigure` 中注册，适合框架核心模块。
+> 或者统一在 `mxpio-autoconfigure` 中注册，适合框架核心模块。
 
-### 步骤 5 — 添加到根 pom.xml
+### 步骤 5 — 添加到聚合 POM
 
-编辑 `mxpio-boot/pom.xml`，在 `<modules>` 中添加：
+编辑对应层级的聚合 POM，在 `<modules>` 中添加。例如，业务集成模块放在 `mxpio-boot-modules/pom.xml`：
 
 ```xml
-<module>mxpio-boot-modules/mxpio-report</module>
+<module>mxpio-report</module>
 ```
+
+> 框架核心模块添加到 `mxpio-framework/pom.xml`，应用模块添加到 `mxpio-boot-app/pom.xml`。
 
 ### 步骤 6 — 注册到 BOM（可选）
 

@@ -12,6 +12,10 @@
 	<name>缓存模块</name>
 	<description>缓存模块</description>
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
+		</dependency>
 		<!--Mxpio Boot Common -->
 		<dependency>
 			<groupId>com.mxpio</groupId>

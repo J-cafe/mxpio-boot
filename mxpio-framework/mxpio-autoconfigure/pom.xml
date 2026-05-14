@@ -5,9 +5,10 @@
 	<parent>
 		<groupId>com.mxpio</groupId>
 		<artifactId>mxpio-boot-parent</artifactId>
+		<relativePath>../../pom.xml</relativePath>
 		<version>4.0.0-beta.1</version>
 	</parent>
-	<artifactId>mxpio-boot-base-autoconfigure</artifactId>
+	<artifactId>mxpio-autoconfigure</artifactId>
 	<name>自动装配模块</name>
 	<description>自动装配模块</description>
 	<properties>

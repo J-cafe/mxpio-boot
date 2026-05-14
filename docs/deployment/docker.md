@@ -18,15 +18,15 @@ WORKDIR /build
 COPY mvnw pom.xml ./
 COPY .mvn .mvn
 COPY mxpio-dependencies/pom.xml mxpio-dependencies/
-COPY mxpio-boot-base-autoconfigure/pom.xml mxpio-boot-base-autoconfigure/
+COPY mxpio-framework/mxpio-autoconfigure/pom.xml mxpio-framework/mxpio-autoconfigure/
 
 # 复制框架模块 POM
 COPY mxpio-framework/mxpio-common/pom.xml mxpio-framework/mxpio-common/
 COPY mxpio-framework/mxpio-jpa/pom.xml mxpio-framework/mxpio-jpa/
 COPY mxpio-framework/mxpio-security/pom.xml mxpio-framework/mxpio-security/
 COPY mxpio-framework/mxpio-cache/pom.xml mxpio-framework/mxpio-cache/
-COPY mxpio-framework/mxpio-cache/mxpio-cache-redis/pom.xml mxpio-framework/mxpio-cache/mxpio-cache-redis/
-COPY mxpio-framework/mxpio-cache/mxpio-cache-caffeine/pom.xml mxpio-framework/mxpio-cache/mxpio-cache-caffeine/
+COPY mxpio-framework/mxpio-cache-redis/pom.xml mxpio-framework/mxpio-cache-redis/
+COPY mxpio-framework/mxpio-cache-caffeine/pom.xml mxpio-framework/mxpio-cache-caffeine/
 COPY mxpio-framework/mxpio-quartz/pom.xml mxpio-framework/mxpio-quartz/
 COPY mxpio-framework/mxpio-log/pom.xml mxpio-framework/mxpio-log/
 COPY mxpio-framework/mxpio-camunda/pom.xml mxpio-framework/mxpio-camunda/
@@ -47,14 +47,14 @@ COPY mxpio-boot-modules/mxpio-msal/pom.xml mxpio-boot-modules/mxpio-msal/
 COPY mxpio-boot-modules/mxpio-oauth/pom.xml mxpio-boot-modules/mxpio-oauth/
 
 # 复制应用 POM
-COPY mxpio-boot-app/mxpio-webapp/pom.xml mxpio-boot-app/mxpio-webapp/
+COPY mxpio-boot-app/mxpio-boot-webapp/pom.xml mxpio-boot-app/mxpio-boot-webapp/
 
 # 下载依赖（利用 Docker 层缓存）
 RUN mvn dependency:go-offline -DskipTests -B || true
 
 # 复制源码并构建
 COPY . .
-RUN mvn clean package -DskipTests -pl mxpio-boot-app/mxpio-webapp -am -B
+RUN mvn clean package -DskipTests -pl mxpio-boot-app/mxpio-boot-webapp -am -B
 
 # ========== 第二阶段：运行 ==========
 FROM zulu-openjdk:25-jre
@@ -62,7 +62,7 @@ FROM zulu-openjdk:25-jre
 WORKDIR /app
 
 # 从构建阶段复制 JAR
-COPY --from=builder /build/mxpio-boot-app/mxpio-webapp/target/mxpio-webapp-*.jar app.jar
+COPY --from=builder /build/mxpio-boot-app/mxpio-boot-webapp/target/mxpio-boot-webapp-*.jar app.jar
 
 # 创建日志和数据目录
 RUN mkdir -p /app/logs /app/uploads
