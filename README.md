@@ -1,5 +1,7 @@
 # MxpIO Boot
 
+简体中文 | [English](./README.en.md)
+
 > 基于 Spring Boot 4.0 的企业级低代码快速开发框架，整合了企业常用的功能及组件，开箱即用。
 
 [![License](https://img.shields.io/github/license/J-cafe/mxpio-boot)](https://gitee.com/i_mxpio/mxpio-boot/blob/master/LICENSE)

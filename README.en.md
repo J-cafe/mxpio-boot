@@ -1,377 +1,289 @@
-# Mxpio-Boot
+# MxpIO Boot
 
-[简体中文](https://gitee.com/i_mxpio/mxpio-boot/blob/master/README.md) | English
+[简体中文](./README.md) | English
 
-![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/J-cafe/mxpio-boot?include_prereleases)
-![GitHub](https://img.shields.io/github/license/J-cafe/mxpio-boot)
-![GitHub top language](https://img.shields.io/github/languages/top/J-cafe/mxpio-boot)
-![OSCS Status](https://www.oscs1024.com/platform/badge/J-cafe/mxpio-boot.svg?size=small)
-## 1.Introduction
->MxpIO Boot is a low code rapid development framework developed based on Spring Boot, which integrates and encapsulates commonly used enterprise functions and components, making it ready to use out of the box. MxpIO Boot adopts a broad [MIT]（ https://gitee.com/i_mxpio/mxpio-boot/blob/master/LICENSE ）Open source protocol, completely open source.
+> An enterprise-grade low-code rapid development framework based on Spring Boot 4.0, integrating commonly used enterprise features and components out of the box.
 
-**Vue2 Front framework repository：**[Mxpio-Boot-Antd-Vue](https://gitee.com/i_mxpio/mxpio-boot-antd-vue)
+[![License](https://img.shields.io/github/license/J-cafe/mxpio-boot)](https://gitee.com/i_mxpio/mxpio-boot/blob/master/LICENSE)
+[![Version](https://img.shields.io/badge/version-4.0.0--beta.1-blue)](https://gitee.com/i_mxpio/mxpio-boot)
 
-## 2.Documents
+---
 
-**Online Documents：**[mxpio-boot](https://mxpio.com/)
+## 1. Tech Stack
 
-## 3.Backend Technology Stack
+### Backend
 
-* Spring Boot 2.5.14
-* Spring Data Jpa
-* Spring Data Redis
-* Spring Security
-* Spring Cache
-* Alibaba Druid
-* SpringDoc
-* Jwt
-* Poi
-* Camunda
-* Quartz
+| Technology | Version / Notes |
+|------------|-----------------|
+| JDK | 25 |
+| Spring Boot | 4.0.1 |
+| Spring Data JPA | Hibernate dialects, supports MySQL / Dameng / Kingbase / GaussDB |
+| Spring Security | Lambda DSL, OAuth2 Resource Server |
+| Spring Cache | Caffeine (local) / Redis (distributed) |
+| Camunda | 7.24.0 Workflow Engine |
+| Quartz | JDBC-persisted Job Scheduler |
+| Apache POI | 5.5.1 Excel Import/Export |
+| Aviator | 4.2.7 Expression Engine |
+| MinIO | 8.6.0 File Storage |
+| Druid | 1.2.27 Connection Pool |
+| SpringDoc | 3.0.2 + Knife4j 3.0.3 API Docs |
+| Lombok | 1.18.42 |
 
-### 3.1 Modules
+### Middleware
 
-> MxpIO Boot adopts Spring Boot style module management. Manage the automatic assembly of various modules through the mxpio boot base auto configure module, and the specific inheritance relationships between modules are as follows:
+- **Database:** MySQL 8.0+ (also compatible with Dameng DM8, Kingbase V8, GaussDB)
+- **Cache:** Redis 7.x
 
-```
-mxpio-boot-parent
-├─mxpio-boot-base-autoconfigure
-├─mxpio-boot-base-common
-├─mxpio-boot-base-cache
-├─mxpio-boot-base-jpa
-├─mxpio-boot-base-log
-├─mxpio-boot-base-expression
-├─mxpio-boot-base-security
-├─mxpio-boot-base-system
-├─mxpio-boot-base-excel
-├─mxpio-boot-base-camunda
-├─mxpio-boot-base-quartz
-├─mxpio-boot-base-message
-├─mxpio-boot-base-multitenant
-├─mxpio-boot-base-dbconsole
-├─mxpio-boot-module-cache-redis
-├─mxpio-boot-module-cache-caffeine
-└─mxpio-boot-example
+### Frontend
 
+Based on [Vue Vben Admin](https://github.com/vbenjs/vue-vben-admin) monorepo:
+
+- Vue 3 + TypeScript + Vite
+- UnoCSS / Ant Design Vue
+- pnpm + TurboRepo monorepo
+- Built-in business modules: System, Inventory, Purchase, Sales, Quality, Equipment, Planning, etc.
+
+---
+
+## 2. Module Structure
 
 ```
+mxpio-boot/
+├── pom.xml                            ← Root POM
+├── mxpio-dependencies/                ← BOM (unified version management)
+├── mxpio-framework/                   ← Core Framework Layer
+│   ├── mxpio-autoconfigure/           ← Auto-configuration Hub
+│   ├── mxpio-common/                  ← Common Utilities
+│   ├── mxpio-jpa/                     ← JPA Enhancement (Linq-style queries)
+│   ├── mxpio-cache/                   ← Cache Abstraction
+│   ├── mxpio-cache-redis/             ← Redis Cache Implementation
+│   ├── mxpio-cache-caffeine/          ← Caffeine Local Cache
+│   ├── mxpio-security/                ← RBAC (URL/Button/Data permissions)
+│   ├── mxpio-system/                  ← System Management (Dept, Role, User, Menu, Dict)
+│   ├── mxpio-quartz/                  ← Quartz Job Management
+│   ├── mxpio-camunda/                 ← Camunda Workflow Adapter
+│   ├── mxpio-log/                     ← Audit Logging
+│   ├── mxpio-expression/              ← Aviator Expression Engine
+│   ├── mxpio-filestorage/             ← File Storage (MinIO/Local)
+│   ├── mxpio-multitenant/             ← Multi-tenancy
+│   ├── mxpio-dbconsole/               ← Cloud DB Console
+│   ├── mxpio-message/                 ← Message Notification Center
+│   ├── mxpio-websocket/               ← WebSocket Real-time Push
+│   ├── mxpio-excel/                   ← Excel Import/Export
+│   └── mxpio-datav/                   ← Data Visualization
+├── mxpio-boot-modules/                ← Third-party Integrations
+│   ├── mxpio-dingtalk/                ← DingTalk
+│   ├── mxpio-wechat/                  ← WeCom
+│   ├── mxpio-email/                   ← Email
+│   ├── mxpio-msal/                    ← Microsoft Authentication
+│   └── mxpio-oauth/                   ← OAuth2 Client
+├── mxpio-boot-ui/                     ← Frontend Monorepo
+└── examples/                          ← Examples (not a Maven module)
+    └── mxpio-boot-example/
+```
 
-## 4.Middleware Technology Stack
-
-* Relational DB：Mysql/Oracle/Mssql/Postgresql
-* Cache DB：Redis
-
-## 5.Front Technology Stack
-
-> The front-end project is based on the excellent Vue open source project[Vue-Antd-Admin](https://gitee.com/iczer/vue-antd-admin)Development.
-
-* Vue
-* Vuex
-* Vue-Cli
-* Vue-Router
-* Vue-i18n
-* Ant-Design-Vue
-* Vxe-Table
-* Axios
-* Viser
-
-## 6.Demo
-
-Coming soon.
-
-## 7.Quick Start
-
-### 7.1 Run through example project
-
-Example Code Repository:[https://gitee.com/i_mxpio/mxpio-boot-example](https://gitee.com/i_mxpio/mxpio-boot-example)
-
-
-Check out
+### Layered Build
 
 ```bash
-git clone https://gitee.com/i_mxpio/mxpio-boot-example.git
-```
-edit file:resources/application-dev.yml
+# Build framework layer only
+mvn -pl mxpio-framework clean install -DskipTests
 
-```yaml
-server:
-  # Server
-  port: 9005
-  tomcat:
-    max-swallow-size: -1
-  servlet:
-    # Path
-    context-path: 
-spring:
-  servlet:
-     multipart:
-        max-file-size: 10MB
-        max-request-size: 10MB
-  jpa:
-    open-in-view: false
-    showSql: true
-    hibernate:
-      ddl-auto: update
-  # db
-  datasource:
-    url: jdbc:mysql://localhost:3306/mboot?characterEncoding=utf-8&useSSL=true
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    sql-script-encoding: UTF-8
-    continue-on-error: true
-    initialization-mode: ALWAYS
-  # redis
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    password:
-    timeout:
-    pool:
-      maxActive: 8
-      maxWait: -1
-      maxIdle: 8
-      minIdle: 0
-...
+# Build integration modules only
+mvn -pl mxpio-boot-modules clean install -DskipTests
 
+# Full build
+mvn clean install -DskipTests
 ```
-Compile
+
+---
+
+## 3. Quick Start
+
+### Prerequisites
+
+| Component | Required Version |
+|-----------|-----------------|
+| JDK | 25 |
+| Maven | 3.8+ |
+| MySQL | 8.0+ |
+| Redis | 7.x |
+
+### 3.1 Run from Source
 
 ```bash
-cd mxpio-boot-example
-mvn clean package spring-boot:repackage
+# Clone
+git clone https://gitee.com/i_mxpio/mxpio-boot.git
+cd mxpio-boot
 
+# Create database
+# Run in MySQL: CREATE DATABASE IF NOT EXISTS `mboot` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+# Edit config (database password, etc.)
+# Edit examples/mxpio-boot-example/src/main/resources/application-dev.yml
+
+# Build framework and start example
+mvn clean install -DskipTests
+cd examples/mxpio-boot-example && mvn spring-boot:run
 ```
-Start
 
-```bash
-java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.11.jar
-```
+After startup:
+- App: `http://localhost:9005`
+- API Docs: `http://localhost:9005/swagger-ui.html`
+- Default account: `admin` / `123456` (auto-created on first run)
 
-### 7.2 Run as a new maven project
+### 3.2 Use as a Dependency
 
-edit pom.xml file
+Extend `mxpio-boot-parent` in your Spring Boot project and add modules as needed:
 
 ```xml
-<!-- extends mxpio-boot-parent -->
 <parent>
-	<groupId>com.mxpio</groupId>
-	<artifactId>mxpio-boot-parent</artifactId>
-	<version>1.0.12-beta.11</version>
+    <groupId>com.mxpio</groupId>
+    <artifactId>mxpio-boot-parent</artifactId>
+    <version>4.0.0-beta.1</version>
 </parent>
-```
 
-```xml
-<!-- dependencies -->
 <dependencies>
+    <!-- Auto-configuration (required) -->
     <dependency>
         <groupId>com.mxpio</groupId>
-        <artifactId>mxpio-boot-base-autoconfigure</artifactId>
+        <artifactId>mxpio-autoconfigure</artifactId>
     </dependency>
-    <!-- <dependency>
-        <groupId>com.mxpio</groupId>
-        <artifactId>mxpio-boot-module-cache-redis</artifactId>
-    </dependency> -->
+    <!-- Add feature modules as needed -->
     <dependency>
         <groupId>com.mxpio</groupId>
-        <artifactId>mxpio-boot-module-cache-caffeine</artifactId>
+        <artifactId>mxpio-security</artifactId>
     </dependency>
     <dependency>
         <groupId>com.mxpio</groupId>
-        <artifactId>mxpio-boot-base-security</artifactId>
-    </dependency>
-    <!-- <dependency>
-        <groupId>com.mxpio</groupId>
-        <artifactId>mxpio-boot-base-multitenant</artifactId>
-    </dependency> -->
-    <dependency>
-        <groupId>com.mxpio</groupId>
-        <artifactId>mxpio-boot-base-excel</artifactId>
+        <artifactId>mxpio-system</artifactId>
     </dependency>
     <dependency>
         <groupId>com.mxpio</groupId>
-        <artifactId>mxpio-boot-base-quartz</artifactId>
+        <artifactId>mxpio-cache-caffeine</artifactId>
     </dependency>
     <dependency>
         <groupId>com.mxpio</groupId>
-        <artifactId>mxpio-boot-base-camunda</artifactId>
+        <artifactId>mxpio-excel</artifactId>
     </dependency>
     <dependency>
         <groupId>com.mxpio</groupId>
-        <artifactId>mxpio-boot-base-filestorage</artifactId>
+        <artifactId>mxpio-quartz</artifactId>
     </dependency>
     <dependency>
         <groupId>com.mxpio</groupId>
-        <artifactId>mxpio-boot-base-log</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>com.mxpio</groupId>
-        <artifactId>mxpio-boot-base-expression</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>com.mxpio</groupId>
-        <artifactId>mxpio-boot-base-system</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>com.mxpio</groupId>
-        <artifactId>mxpio-boot-base-dbconsole</artifactId>
+        <artifactId>mxpio-camunda</artifactId>
     </dependency>
 </dependencies>
 ```
 
-edit file:resources/application-dev.yml
+### 3.3 Configuration Sample
 
 ```yaml
 server:
-  # Server
   port: 9005
-  tomcat:
-    max-swallow-size: -1
-  servlet:
-    # Path
-    context-path: 
+
 spring:
-  servlet:
-     multipart:
-        max-file-size: 10MB
-        max-request-size: 10MB
+  datasource:
+    url: jdbc:mysql://localhost:3306/mboot?characterEncoding=utf-8&useSSL=true&nullCatalogMeansCurrent=true
+    username: root
+    password: your-password
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    open-in-view: false
-    showSql: true
     hibernate:
       ddl-auto: update
-  # DB
-  datasource:
-    url: jdbc:mysql://localhost:3306/mboot?characterEncoding=utf-8&useSSL=true
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    sql-script-encoding: UTF-8
-    continue-on-error: true
-    initialization-mode: ALWAYS
-  # redis
+    show-sql: true
   redis:
     host: 127.0.0.1
     port: 6379
-    password:
-    timeout:
-    pool:
-      maxActive: 8
-      maxWait: -1
-      maxIdle: 8
-      minIdle: 0
-...
+  sql:
+    init:
+      mode: always
+      platform: mysql
+      data-locations: classpath*:data-${spring.sql.init.platform}.sql,classpath*:data.sql
+  quartz:
+    job-store-type: jdbc
 
+camunda:
+  bpm:
+    database:
+      type: mysql
+      schema-update: true
 ```
 
-Compile
+---
 
-```bash
-cd mxpio-boot-example
-mvn clean package spring-boot:repackage
+## 4. Configuration System
 
-```
-Start
-
-```bash
-java -jar target\mxpio-boot-example-1.0.12-beta.11.jar
-```
-
-### 7.3 Run from source code
-
-Check out
-
-```bash
-git clone https://gitee.com/i_mxpio/mxpio-boot.git
-```
-
-edit file:mxpio-boot-example/resources/application-dev.yml
-
-```yaml
-server:
-  # Server
-  port: 9005
-  tomcat:
-    max-swallow-size: -1
-  servlet:
-    # Path
-    context-path: 
-spring:
-  servlet:
-     multipart:
-        max-file-size: 10MB
-        max-request-size: 10MB
-  jpa:
-    open-in-view: false
-    showSql: true
-    hibernate:
-      ddl-auto: update
-  # DB
-  datasource:
-    url: jdbc:mysql://localhost:3306/mboot?characterEncoding=utf-8&useSSL=true
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    sql-script-encoding: UTF-8
-    continue-on-error: true
-    initialization-mode: ALWAYS
-  # redis
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    password:
-    timeout:
-    pool:
-      maxActive: 8
-      maxWait: -1
-      maxIdle: 8
-      minIdle: 0
-...
+MxpIO Boot uses a **module-level defaults + app-level overrides** mechanism:
 
 ```
-
-Compile
-
-```bash
-cd mxpio-boot
-mvn clean package spring-boot:repackage
-
-```
-Start
-
-```bash
-java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.11.jar
+App-level mxpio.properties   ← Highest priority (overrides module defaults)
+        ↓
+Module-level mxpio.properties ← Defaults provided by each module
+        ↓
+application.yml              ← Spring Boot standard config
 ```
 
+Each module declares defaults in `src/main/resources/mxpio/mxpio.properties`. The application project can override any value in its own `mxpio.properties`.
 
-## 8.User registration
+---
 
-Here are some well-known companies currently using this framework:
+## 5. Core Features
 
-- **Henan Talent Group** - [人才集团](http://www.hn-talent.com/)
-- **Zhengzhou Zhuozhen Information Technology Co., Ltd** - [数字卓臻](https://www.datazhzh.com/)
-- **Shandong Hemei Network Technology Co., Ltd** - [山东禾美](http://www.unidbg.cn/)
+- **Auto-configuration** — `mxpio-autoconfigure` conditionally assembles modules based on classpath
+- **RBAC** — Three-level permission control: URL / Button / Data, with JWT Token support
+- **Linq Queries** — `mxpio-jpa` provides C# Linq-style JPA query wrappers
+- **Multi-tenancy** — Isolated database per tenant, dynamic datasource switching
+- **Workflow** — Deep Camunda 7.x integration with process designer + task management
+- **Code Generation** — Auto-generate Controller / Service / Repository from entities
+- **File Management** — Abstract storage layer supporting Local / MinIO, extensible to OSS
+- **Message Center** — Unified push interface: in-app, WebSocket, Email, DingTalk, WeCom
+- **Expression Engine** — Aviator for business rule configuration
+- **Job Scheduler** — Quartz with JDBC persistence, cluster-ready
+- **Data Dashboard** — Built-in visualization configuration (mxpio-datav)
 
-We are very grateful for the support and contribution of these companies to the project! If your company is also using this framework and willing to be listed here, please use [Gitee Issue]（ https://gitee.com/i_mxpio/mxpio-boot/issues/IAMNUX ）Contact us.
+---
 
-## 9.Screenshot
+## 6. Documentation
 
-![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E7%99%BB%E5%BD%95.png)
+See `docs/` directory for detailed development guides, or visit [https://mxpio.com/](https://mxpio.com/).
 
-![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E8%8F%9C%E5%8D%95.png)
+---
 
-![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E8%A7%92%E8%89%B2.png)
+## 7. Adopters
 
-![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E9%83%A8%E9%97%A8.png)
+The following companies are using this framework:
 
-![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E5%AF%BC%E5%85%A5%E7%AE%A1%E7%90%86.png)
+- **Henan Talent Group** — [http://www.hn-talent.com/](http://www.hn-talent.com/)
+- **Zhengzhou Zhuozhen Information Technology Co., Ltd.** — [https://www.datazhzh.com/](https://www.datazhzh.com/)
+- **Shandong Hemei Network Technology Co., Ltd.** — [http://www.unidbg.cn/](http://www.unidbg.cn/)
 
-![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E5%AF%BC%E5%87%BA%E7%AE%A1%E7%90%86.png)
+If your company is also using this framework, feel free to reach out via Issue.
 
-![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E5%AD%97%E5%85%B8.png)
+---
 
-![加载失败](https://gitee.com/i_mxpio/mxpio-boot/raw/master/screenshots/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6.png)
+## 8. Screenshots
 
-## 10.Others
+| Login | Menu Management |
+|-------|----------------|
+| ![Login](screenshots/登录.png) | ![Menu](screenshots/菜单.png) |
 
-Thank you [JetBrains](https://www.jetbrains.com/) provides IDE license
+| Role Management | Department Management |
+|-----------------|----------------------|
+| ![Role](screenshots/角色.png) | ![Department](screenshots/部门.png) |
+
+| Import Management | Export Management |
+|-------------------|-------------------|
+| ![Import](screenshots/导入管理.png) | ![Export](screenshots/导出管理.png) |
+
+| Data Dictionary | Job Scheduler |
+|-----------------|---------------|
+| ![Dict](screenshots/字典.png) | ![Scheduler](screenshots/任务调度.png) |
+
+---
+
+## 9. License
+
+[MIT License](https://gitee.com/i_mxpio/mxpio-boot/blob/master/LICENSE)
+
+Thanks to [JetBrains](https://www.jetbrains.com/) for the IDE license.
