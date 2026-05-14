@@ -75,9 +75,9 @@ mxpio-boot/
 │   ├── mxpio-email/                   ← 邮件发送
 │   ├── mxpio-msal/                    ← Microsoft 身份认证
 │   └── mxpio-oauth/                   ← OAuth2 客户端
-├── mxpio-boot-app/                    ← 应用启动层
-│   └── mxpio-boot-webapp/             ← Spring Boot 启动入口
-└── mxpio-boot-ui/                     ← 前端 monorepo
+├── mxpio-boot-ui/                     ← 前端 monorepo
+└── examples/                          ← 示例工程（非 Maven 模块）
+    └── mxpio-boot-example/
 ```
 
 ### 分层构建
@@ -117,11 +117,11 @@ cd mxpio-boot
 # 登录 MySQL 执行：CREATE DATABASE IF NOT EXISTS `mboot` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 # 修改配置（数据库密码等）
-# 编辑 mxpio-boot-app/mxpio-boot-webapp/src/main/resources/application-dev.yml
+# 编辑 examples/mxpio-boot-example/src/main/resources/application-dev.yml
 
-# 编译并启动
+# 编译框架并启动示例工程
 mvn clean install -DskipTests
-mvn spring-boot:run -pl mxpio-boot-app/mxpio-boot-webapp -am
+cd examples/mxpio-boot-example && mvn spring-boot:run
 ```
 
 启动后访问：

@@ -54,7 +54,8 @@ CREATE DATABASE IF NOT EXISTS `mboot` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8
 
 ## 4. 配置
 
-找到配置文件 `mxpio-boot-app/mxpio-boot-webapp/src/main/resources/application-dev.yml`，根据你的环境修改关键配置：
+找到配置文件 `examples/mxpio-boot-example/src/main/resources/application-dev.yml`，根据你的环境修改关键配置：
+> examples 目录不是 Maven 模块，示例工程需单独编译运行。
 
 ```yaml
 server:
@@ -105,14 +106,16 @@ quartz:
 
 ```bash
 # 在项目根目录执行
-mvn spring-boot:run -pl mxpio-boot-app/mxpio-boot-webapp -am
+mvn clean install -DskipTests
+cd examples/mxpio-boot-example && mvn spring-boot:run
 ```
 
 或打包后启动：
 
 ```bash
-mvn clean package -DskipTests -pl mxpio-boot-app/mxpio-boot-webapp -am
-java -jar mxpio-boot-app/mxpio-boot-webapp/target/mxpio-boot-webapp-*.jar
+mvn clean install -DskipTests
+cd examples/mxpio-boot-example && mvn clean package -DskipTests
+java -jar examples/mxpio-boot-example/target/mxpio-boot-example-*.jar
 ```
 
 启动日志末尾应看到：

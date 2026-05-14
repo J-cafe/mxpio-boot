@@ -47,14 +47,14 @@ COPY mxpio-boot-modules/mxpio-msal/pom.xml mxpio-boot-modules/mxpio-msal/
 COPY mxpio-boot-modules/mxpio-oauth/pom.xml mxpio-boot-modules/mxpio-oauth/
 
 # 复制应用 POM
-COPY mxpio-boot-app/mxpio-boot-webapp/pom.xml mxpio-boot-app/mxpio-boot-webapp/
+COPY examples/mxpio-boot-example/pom.xml examples/mxpio-boot-example/
 
 # 下载依赖（利用 Docker 层缓存）
 RUN mvn dependency:go-offline -DskipTests -B || true
 
 # 复制源码并构建
 COPY . .
-RUN mvn clean package -DskipTests -pl mxpio-boot-app/mxpio-boot-webapp -am -B
+RUN mvn clean install -DskipTests -B && cd examples/mxpio-boot-example && mvn clean package -DskipTests -B
 
 # ========== 第二阶段：运行 ==========
 FROM zulu-openjdk:25-jre
@@ -62,7 +62,7 @@ FROM zulu-openjdk:25-jre
 WORKDIR /app
 
 # 从构建阶段复制 JAR
-COPY --from=builder /build/mxpio-boot-app/mxpio-boot-webapp/target/mxpio-boot-webapp-*.jar app.jar
+COPY --from=builder /build/examples/mxpio-boot-example/target/mxpio-boot-example-*.jar app.jar
 
 # 创建日志和数据目录
 RUN mkdir -p /app/logs /app/uploads

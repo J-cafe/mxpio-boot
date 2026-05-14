@@ -51,7 +51,7 @@ mxpio-boot-parent
 ├─mxpio-boot-base-dbconsole
 ├─mxpio-boot-module-cache-redis
 ├─mxpio-boot-module-cache-caffeine
-└─mxpio-boot-webapp
+└─mxpio-boot-example
 
 
 ```
@@ -285,7 +285,7 @@ Check out
 git clone https://gitee.com/i_mxpio/mxpio-boot.git
 ```
 
-edit file:mxpio-boot-webapp/resources/application-dev.yml
+edit file:mxpio-boot-example/resources/application-dev.yml
 
 ```yaml
 server:
@@ -340,7 +340,7 @@ mvn clean package spring-boot:repackage
 Start
 
 ```bash
-java -jar mxpio-boot-webapp\target\mxpio-boot-webapp-1.0.12-beta.11.jar
+java -jar mxpio-boot-example\target\mxpio-boot-example-1.0.12-beta.11.jar
 ```
 
 

@@ -2,10 +2,10 @@
 
 ## 概述
 
-mxpio-boot 采用 **模块级默认配置 + 应用级覆盖配置** 的机制。每个模块在自己的 `src/main/resources/mxpio/mxpio.properties` 中声明默认配置，应用工程（如 `mxpio-boot-webapp`）可以在自己的 `mxpio.properties` 中覆盖这些默认值。
+mxpio-boot 采用 **模块级默认配置 + 应用级覆盖配置** 的机制。每个模块在自己的 `src/main/resources/mxpio/mxpio.properties` 中声明默认配置，应用工程（如 `mxpio-boot-example`）可以在自己的 `mxpio.properties` 中覆盖这些默认值。
 
 **加载优先级**（高 → 低）：
-1. `mxpio-boot-webapp/src/main/resources/mxpio/mxpio.properties` — **应用级覆盖**，最高优先级
+1. `mxpio-boot-example/src/main/resources/mxpio/mxpio.properties` — **应用级覆盖**，最高优先级
 2. 各模块 `src/main/resources/mxpio/mxpio.properties` — **模块级默认值**
 3. `application.yml` / `application-mysql.yml` — Spring Boot 标准配置
 
@@ -160,9 +160,9 @@ mxpio-boot 采用 **模块级默认配置 + 应用级覆盖配置** 的机制。
 
 > ⚠️ 这些配置项默认注释掉，需根据实际应用信息填写。
 
-### 8. mxpio-boot-webapp — 应用级覆盖
+### 8. mxpio-boot-example — 应用级覆盖
 
-**位置**: `mxpio-boot-app/mxpio-boot-webapp/src/main/resources/mxpio/mxpio.properties`
+**位置**: `examples/mxpio-boot-example/src/main/resources/mxpio/mxpio.properties`
 
 此文件中的配置会**覆盖**各模块的默认值。默认内容：
 
@@ -205,7 +205,7 @@ mxpio:
     fileSystemStorageLocation: /data/fileStorage/
 ```
 
-或者在 `mxpio-boot-webapp/src/main/resources/mxpio/mxpio.properties` 中覆盖：
+或者在 `mxpio-boot-example/src/main/resources/mxpio/mxpio.properties` 中覆盖：
 
 ```properties
 mxpio.appName=我的铝业生产管理系统

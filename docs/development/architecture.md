@@ -40,8 +40,8 @@ mxpio-boot-parent (com.mxpio:mxpio-boot-parent:4.0.0-beta.1)
 │   ├── mxpio-msal                        ← Microsoft 身份认证
 │   └── mxpio-oauth                       ← OAuth2 认证授权
 │
-└── mxpio-boot-app/                       [应用启动层]
-    └── mxpio-boot-webapp                 ← Spring Boot 启动入口
+└── examples/                              [示例工程，非 Maven 模块]
+    └── mxpio-boot-example
 ```
 
 ## 分层架构

@@ -32,7 +32,6 @@
 		<module>mxpio-dependencies</module>
 		<module>mxpio-framework</module>
 		<module>mxpio-boot-modules</module>
-		<module>mxpio-boot-app</module>
 	</modules>
 	<dependencies>
 		<!-- 全局：Lombok（所有模块都需要） -->

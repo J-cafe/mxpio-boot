@@ -121,7 +121,7 @@ com.mxpioframework.report.ReportConfiguration
 <module>mxpio-report</module>
 ```
 
-> 框架核心模块添加到 `mxpio-framework/pom.xml`，应用模块添加到 `mxpio-boot-app/pom.xml`。
+> 框架核心模块添加到 `mxpio-framework/pom.xml`。示例工程放在 `examples/` 目录下独立构建，不作为 Maven 模块。
 
 ### 步骤 6 — 注册到 BOM（可选）
 
