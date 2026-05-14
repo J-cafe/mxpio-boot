@@ -19,7 +19,7 @@ export default defineApplicationConfig({
       https: undefined,
       proxy: {
         '/basic-api': {
-          target: 'http://127.0.0.1:9008',
+          target: 'http://127.0.0.1:9005',
           changeOrigin: true,
           ws: true,
           rewrite: (path) => path.replace(new RegExp(`^/basic-api`), ''),
