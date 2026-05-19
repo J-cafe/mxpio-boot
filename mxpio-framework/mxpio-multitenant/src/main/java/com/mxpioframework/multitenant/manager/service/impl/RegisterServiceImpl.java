@@ -49,7 +49,7 @@ public class RegisterServiceImpl implements RegisterService {
 			return false;
 		}
 		return MultitenantUtils.doQuery(organizationId, () -> {
-			return userService.findByName(username) == null;
+			return userService.findByName(username) != null;
 		});
 	}
 
