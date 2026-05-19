@@ -48,9 +48,7 @@ public class RegisterServiceImpl implements RegisterService {
 		if (!isExistOrganization(organizationId)) {
 			return false;
 		}
-		return MultitenantUtils.doQuery(organizationId, () -> {
-			return userService.findByName(username) != null;
-		});
+		return MultitenantUtils.doQuery(organizationId, () -> userService.findByName(username) != null);
 	}
 
 	@Override
