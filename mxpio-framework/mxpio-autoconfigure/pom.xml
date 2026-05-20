@@ -136,5 +136,10 @@
 			<artifactId>mxpio-wechat</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-lowcode</artifactId>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 </project>

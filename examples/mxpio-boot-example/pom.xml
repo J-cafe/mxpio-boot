@@ -68,6 +68,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
+			<artifactId>mxpio-lowcode</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-system</artifactId>
 		</dependency>
 		<dependency>

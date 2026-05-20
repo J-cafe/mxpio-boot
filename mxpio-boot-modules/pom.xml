@@ -21,5 +21,6 @@
         <module>mxpio-oauth</module>
         <!--<module>mxpio-oauth2-server</module>-->
         <module>mxpio-wechat</module>
+        <module>mxpio-lowcode</module>
     </modules>
 </project>

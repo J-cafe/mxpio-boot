@@ -349,7 +349,7 @@ importers:
         version: 1.77.4
       unocss:
         specifier: 0.58.3
-        version: 0.58.3(postcss@5.2.18)(rollup@4.18.0)(vite@5.2.12(@types/node@20.14.2)(less@4.2.0)(sass@1.77.4)(terser@5.31.1))
+        version: 0.58.3(postcss@8.4.38)(rollup@4.18.0)(vite@5.2.12(@types/node@20.14.2)(less@4.2.0)(sass@1.77.4)(terser@5.31.1))
       vite-plugin-compression:
         specifier: ^0.5.1
         version: 0.5.1(vite@5.2.12(@types/node@20.14.2)(less@4.2.0)(sass@1.77.4)(terser@5.31.1))
@@ -606,6 +606,39 @@ importers:
       big.js:
         specifier: 7.0.1
         version: 7.0.1
+
+  modules/lowcode:
+    dependencies:
+      '@mxpio/api':
+        specifier: workspace:*
+        version: link:../../packages/api
+      '@mxpio/bridge':
+        specifier: workspace:*
+        version: link:../../packages/bridge
+      '@mxpio/common':
+        specifier: workspace:*
+        version: link:../common
+      '@mxpio/components':
+        specifier: workspace:*
+        version: link:../../packages/components
+      '@mxpio/enums':
+        specifier: workspace:*
+        version: link:../../packages/enums
+      '@mxpio/hooks':
+        specifier: workspace:*
+        version: link:../../packages/hooks
+      '@mxpio/locales':
+        specifier: workspace:*
+        version: link:../../packages/locales
+      '@mxpio/stores':
+        specifier: workspace:*
+        version: link:../../packages/stores
+      '@mxpio/types':
+        specifier: workspace:*
+        version: link:../../packages/types
+      '@mxpio/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
 
   modules/plan:
     dependencies:
@@ -8363,7 +8396,7 @@ snapshots:
       gzip-size: 6.0.0
       sirv: 2.0.4
 
-  '@unocss/postcss@0.58.3(postcss@5.2.18)':
+  '@unocss/postcss@0.58.3(postcss@8.4.38)':
     dependencies:
       '@unocss/config': 0.58.3
       '@unocss/core': 0.58.3
@@ -8371,7 +8404,7 @@ snapshots:
       css-tree: 2.3.1
       fast-glob: 3.3.2
       magic-string: 0.30.10
-      postcss: 5.2.18
+      postcss: 8.4.38
 
   '@unocss/preset-attributify@0.58.3':
     dependencies:
@@ -12938,13 +12971,13 @@ snapshots:
 
   universalify@2.0.1: {}
 
-  unocss@0.58.3(postcss@5.2.18)(rollup@4.18.0)(vite@5.2.12(@types/node@20.14.2)(less@4.2.0)(sass@1.77.4)(terser@5.31.1)):
+  unocss@0.58.3(postcss@8.4.38)(rollup@4.18.0)(vite@5.2.12(@types/node@20.14.2)(less@4.2.0)(sass@1.77.4)(terser@5.31.1)):
     dependencies:
       '@unocss/astro': 0.58.3(rollup@4.18.0)(vite@5.2.12(@types/node@20.14.2)(less@4.2.0)(sass@1.77.4)(terser@5.31.1))
       '@unocss/cli': 0.58.3(rollup@4.18.0)
       '@unocss/core': 0.58.3
       '@unocss/extractor-arbitrary-variants': 0.58.3
-      '@unocss/postcss': 0.58.3(postcss@5.2.18)
+      '@unocss/postcss': 0.58.3(postcss@8.4.38)
       '@unocss/preset-attributify': 0.58.3
       '@unocss/preset-icons': 0.58.3
       '@unocss/preset-mini': 0.58.3

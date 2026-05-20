@@ -1,0 +1,26 @@
+{
+  "name": "@mxpio/lowcode",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "scripts": {
+    "clean": "pnpm rimraf dist .turbo"
+  },
+  "dependencies": {
+    "@mxpio/api": "workspace:*",
+    "@mxpio/bridge": "workspace:*",
+    "@mxpio/common": "workspace:*",
+    "@mxpio/components": "workspace:*",
+    "@mxpio/enums": "workspace:*",
+    "@mxpio/hooks": "workspace:*",
+    "@mxpio/locales": "workspace:*",
+    "@mxpio/stores": "workspace:*",
+    "@mxpio/types": "workspace:*",
+    "@mxpio/utils": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

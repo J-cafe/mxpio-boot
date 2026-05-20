@@ -12,6 +12,7 @@ import quality from '@mxpio/quality';
 import plan from '@mxpio/plan';
 import equipment from '@mxpio/equipment';
 import layouts from '@mxpio/layouts';
+import lowcode from '@mxpio/lowcode';
 
 // 自动加载modules目录下的所有ts文件路由模块
 const modules = import.meta.glob('./modules/**/*.ts', { eager: true });
@@ -40,5 +41,6 @@ export const pages = {
   ...quality,
   ...plan,
   ...equipment,
+  ...lowcode,
 };
 export default pages;
