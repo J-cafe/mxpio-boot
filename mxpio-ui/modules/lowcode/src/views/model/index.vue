@@ -31,50 +31,57 @@
 </template>
 
 <script lang="ts" setup>
-import { BasicTable, useTable, TableAction, useModal } from '@mxpio/components';
-import ImportModal from './ImportModal.vue';
-import { useBridge } from '@mxpio/bridge';
+  import { BasicTable, useTable, TableAction, useModal } from '@mxpio/components';
+  import ImportModal from './ImportModal.vue';
+  import { useBridge } from '@mxpio/bridge';
 
-const { http } = useBridge();
-const [registerModal, { openModal }] = useModal();
+  const { http } = useBridge();
+  const [registerModal, { openModal }] = useModal();
 
-const columns = [
-  { title: '模型编码', dataIndex: 'modelCode', key: 'modelCode' },
-  { title: '模型名称', dataIndex: 'modelName', key: 'modelName' },
-  { title: '实体类', dataIndex: 'entityClass', key: 'entityClass' },
-  { title: '数据库表', dataIndex: 'tableName', key: 'tableName' },
-  { title: '操作', key: 'action', width: 120 },
-];
+  const columns = [
+    { title: '模型编码', dataIndex: 'modelCode', key: 'modelCode' },
+    { title: '模型名称', dataIndex: 'modelName', key: 'modelName' },
+    { title: '实体类', dataIndex: 'entityClass', key: 'entityClass' },
+    { title: '数据库表', dataIndex: 'tableName', key: 'tableName' },
+    { title: '操作', key: 'action', width: 120 },
+  ];
 
-async function loadData(_params: any) {
-  const res: any = await http.get({ url: '/lowcode/model/list' });
-  return { content: res || [], totalElements: (res || []).length };
-}
+  async function loadData(_params: any) {
+    const res: any = await http.get({ url: '/lowcode/model/list', params: _params || {} });
+    return res || {};
 
-const [registerTable, { reload }] = useTable({
-  columns,
-  api: loadData,
-  fetchSetting: { listField: 'content', totalField: 'totalElements' },
-  showIndexColumn: false,
-  pagination: false,
-  useSearchForm: false,
-  bordered: true,
-});
+    // const res: any = await http.get({ url: '/lowcode/model/list' });
+    // return { content: res || [], totalElements: (res || []).length };
+  }
 
-function handleImport() {
-  openModal(true);
-}
+  const [registerTable, { reload }] = useTable({
+    columns,
+    api: loadData,
+    fetchSetting: {
+      sizeField: 'size',
+      listField: 'content',
+      totalField: 'totalElements',
+    },
+    showIndexColumn: false,
+    pagination: false,
+    useSearchForm: false,
+    bordered: true,
+  });
 
-function handleImportSuccess() {
-  reload();
-}
+  function handleImport() {
+    openModal(true, {});
+  }
 
-function handleDetail(record: any) {
-  openModal(true, { detail: record });
-}
+  function handleImportSuccess() {
+    reload();
+  }
 
-async function handleDelete(record: any) {
-  await http.delete({ url: `/lowcode/model/${record.modelCode}` });
-  reload();
-}
+  function handleDetail(record: any) {
+    openModal(true, { detail: record });
+  }
+
+  async function handleDelete(record: any) {
+    await http.delete({ url: `/lowcode/model/${record.modelCode}` });
+    reload();
+  }
 </script>

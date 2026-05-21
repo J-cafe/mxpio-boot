@@ -43,6 +43,7 @@
     "@mxpio/types": "workspace:*",
     "@mxpio/utils": "workspace:*",
     "@mxpio/workshop": "workspace:*",
+    "@mxpio/lowcode": "workspace:*",
     "dayjs": "^1.11.10",
     "pinia": "2.1.7"
   },

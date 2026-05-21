@@ -85,9 +85,11 @@
     pagination: { pageSize: 10 },
   });
 
-  function loadData(queryParams) {
+  async function loadData(queryParams) {
     const params = getQueryParams(queryParams, {});
-    return getUserList(params);
+    const res = await getUserList(params);
+    console.log(res);
+    return res || {};
   }
 
   function handleCreate() {

@@ -30,46 +30,51 @@
 </template>
 
 <script lang="ts" setup>
-import { BasicTable, useTable, TableAction } from '@mxpio/components';
-import { useRouter } from 'vue-router';
-import { useBridge } from '@mxpio/bridge';
+  import { BasicTable, useTable, TableAction } from '@mxpio/components';
+  import { useRouter } from 'vue-router';
+  import { useBridge } from '@mxpio/bridge';
 
-const router = useRouter();
-const { http } = useBridge();
+  const router = useRouter();
+  const { http } = useBridge();
 
-const columns = [
-  { title: '页面编码', dataIndex: 'pageCode', key: 'pageCode' },
-  { title: '页面名称', dataIndex: 'pageName', key: 'pageName' },
-  { title: '关联模型', dataIndex: 'modelCode', key: 'modelCode' },
-  { title: '页面类型', dataIndex: 'pageType', key: 'pageType' },
-  { title: '操作', key: 'action', width: 180 },
-];
+  const columns = [
+    { title: '页面编码', dataIndex: 'pageCode', key: 'pageCode' },
+    { title: '页面名称', dataIndex: 'pageName', key: 'pageName' },
+    { title: '关联模型', dataIndex: 'modelCode', key: 'modelCode' },
+    { title: '页面类型', dataIndex: 'pageType', key: 'pageType' },
+    { title: '操作', key: 'action', width: 180 },
+  ];
 
-async function loadData(_params: any) {
-  const res: any = await http.get({ url: '/lowcode/page/list' });
-  return { content: res || [], totalElements: (res || []).length };
-}
+  async function loadData(_params: any) {
+    const res: any = await http.get({ url: '/lowcode/page/list', params: _params || {} });
+    return res || {};
+    // return { content: res || [], totalElements: (res || []).length };
+  }
 
-const [registerTable, { reload }] = useTable({
-  columns,
-  api: loadData,
-  fetchSetting: { listField: 'content', totalField: 'totalElements' },
-  showIndexColumn: false,
-  pagination: false,
-  useSearchForm: false,
-  bordered: true,
-});
+  const [registerTable, { reload }] = useTable({
+    columns,
+    api: loadData,
+    fetchSetting: {
+      sizeField: 'size',
+      listField: 'content',
+      totalField: 'totalElements',
+    },
+    showIndexColumn: false,
+    pagination: false,
+    useSearchForm: false,
+    bordered: true,
+  });
 
-function handleCreate() {
-  router.push({ path: '/lowcode/designer' });
-}
+  function handleCreate() {
+    router.push({ path: '/lowcode/designer' });
+  }
 
-function handleEdit(record: any) {
-  router.push({ path: '/lowcode/designer', query: { pageCode: record.pageCode } });
-}
+  function handleEdit(record: any) {
+    router.push({ path: '/lowcode/designer', query: { pageCode: record.pageCode } });
+  }
 
-async function handleDelete(record: any) {
-  await http.delete({ url: `/lowcode/page/${record.pageCode}` });
-  reload();
-}
+  async function handleDelete(record: any) {
+    await http.delete({ url: `/lowcode/page/${record.pageCode}` });
+    reload();
+  }
 </script>
