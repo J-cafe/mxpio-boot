@@ -506,4 +506,25 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 		}
 		return false;
 	}
+
+	@Override
+	@Transactional
+	public Result<List<User>> getDeptUsers(String deptCode, boolean includeSubDepts) {
+		List<String> deptCodeWithSubByCode = new ArrayList<>();
+		if (includeSubDepts){
+			deptCodeWithSubByCode = this.getDeptCodeWithSubByCode(deptCode);
+		}else{
+			deptCodeWithSubByCode.add(deptCode);
+		}
+		if (deptCodeWithSubByCode.isEmpty()){
+			return Result.error("部门编码未匹配到部门及子部门数据");
+		}
+		List<User> users = JpaUtil.linq(User.class)
+				.exists(UserDept.class)
+					.equalProperty("userId","username")
+					.in("deptId", deptCodeWithSubByCode)
+				.end()
+			.list();
+		return Result.OK(users);
+	}
 }

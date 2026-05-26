@@ -153,4 +153,10 @@ public class DeptController {
 	public Result<Dept> enableById(@PathVariable(name = "deptId", required = true) String deptId) {
 		return deptService.enableById(deptId);
 	}
+
+	@GetMapping("getDeptUsers/{deptCode}")
+	@Operation(summary = "根据部门编码查询部门的人员", description = "根据部门编码查询部门的人员", method = "GET")
+	public Result<List<User>> getDeptUsers(@PathVariable(required = true) String deptCode, @RequestParam(value="includeSubDepts", defaultValue = "true") boolean includeSubDepts) {
+		return deptService.getDeptUsers(deptCode,includeSubDepts);
+	}
 }

@@ -137,4 +137,6 @@ public interface DeptService extends BaseService<Dept> {
 	Result<Dept> enableById(String deptId);
 
 	List<Dept> getDeptTreeWithDisableFilter(Criteria criteria);
+
+	Result<List<User>> getDeptUsers(String deptCode, boolean includeSubDepts);
 }
