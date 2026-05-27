@@ -2,6 +2,7 @@ package com.mxpioframework.security.service.impl;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import com.mxpioframework.common.vo.Result;
 import com.mxpioframework.security.enums.SecurityEnums;
@@ -508,23 +509,42 @@ public class DeptServiceImpl extends BaseServiceImpl<Dept> implements DeptServic
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public Result<List<User>> getDeptUsers(String deptCode, boolean includeSubDepts) {
-		List<String> deptCodeWithSubByCode = new ArrayList<>();
-		if (includeSubDepts){
-			deptCodeWithSubByCode = this.getDeptCodeWithSubByCode(deptCode);
-		}else{
-			deptCodeWithSubByCode.add(deptCode);
+		// 参数校验
+		if (StringUtils.isBlank(deptCode)) {
+			return Result.error("部门编码不能为空");
 		}
-		if (deptCodeWithSubByCode.isEmpty()){
+		// 获取目标部门编码列表
+		List<String> targetDeptCodes;
+		if (includeSubDepts) {
+			targetDeptCodes = this.getDeptCodeWithSubByCode(deptCode);
+		} else {
+			// 验证部门是否存在
+			Dept dept = JpaUtil.linq(Dept.class).equal("deptCode", deptCode).findOne();
+			if (dept == null) {
+				return Result.error("部门编码未匹配到部门数据");
+			}
+			targetDeptCodes = Collections.singletonList(deptCode);
+		}
+
+		if (targetDeptCodes.isEmpty()) {
 			return Result.error("部门编码未匹配到部门及子部门数据");
 		}
+
+		// 查询部门ID列表
+		List<Dept> deptList = JpaUtil.linq(Dept.class).in("deptCode", targetDeptCodes).list();
+		List<String> deptIds = deptList.stream().map(Dept::getId).collect(Collectors.toList());
+		if (deptIds.isEmpty()) {
+			return Result.OK(new ArrayList<>());
+		}
+		// 查询关联用户
 		List<User> users = JpaUtil.linq(User.class)
 				.exists(UserDept.class)
-					.equalProperty("userId","username")
-					.in("deptId", deptCodeWithSubByCode)
+					.equalProperty("userId", "username")
+					.in("deptId", deptIds)
 				.end()
-			.list();
+				.list();
 		return Result.OK(users);
 	}
 }
