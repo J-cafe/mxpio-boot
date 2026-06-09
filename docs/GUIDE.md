@@ -745,7 +745,7 @@ emailChannel.send("system", new String[]{"user@example.com"}, "邮件主题", "�
         <dependency>
             <groupId>com.mxpio</groupId>
             <artifactId>mxpio-dependencies</artifactId>
-            <version>4.0.0-beta.1</version>
+            <version>4.0.0-beta.2</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>

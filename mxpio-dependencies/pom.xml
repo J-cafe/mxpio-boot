@@ -11,13 +11,13 @@
     </parent>
     <groupId>com.mxpio</groupId>
     <artifactId>mxpio-dependencies</artifactId>
-    <version>4.0.0-beta.1</version>
+    <version>4.0.0-beta.2</version>
     <packaging>pom</packaging>
     <name>mxpio-dependencies</name>
     <description>mxpio-boot 统一依赖管理 BOM</description>
 
     <properties>
-        <mxpio.version>4.0.0-beta.1</mxpio.version>
+        <mxpio.version>4.0.0-beta.2</mxpio.version>
 
         <!-- Springdoc / Swagger -->
         <springdoc.version>3.0.2</springdoc.version>

@@ -139,7 +139,7 @@ Extend `mxpio-boot-parent` in your Spring Boot project and add modules as needed
 <parent>
     <groupId>com.mxpio</groupId>
     <artifactId>mxpio-boot-parent</artifactId>
-    <version>4.0.0-beta.1</version>
+    <version>4.0.0-beta.2</version>
 </parent>
 
 <dependencies>

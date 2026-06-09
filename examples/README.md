@@ -30,7 +30,7 @@ mvn spring-boot:run
 <parent>
     <groupId>com.mxpio</groupId>
     <artifactId>mxpio-boot-parent</artifactId>
-    <version>4.0.0-beta.1</version>
+    <version>4.0.0-beta.2</version>
     <relativePath>../../pom.xml</relativePath>
 </parent>
 

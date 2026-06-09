@@ -7,7 +7,7 @@
 ## 模块依赖图
 
 ```
-mxpio-boot-parent (com.mxpio:mxpio-boot-parent:4.0.0-beta.1)
+mxpio-boot-parent (com.mxpio:mxpio-boot-parent:4.0.0-beta.2)
 │   parent: spring-boot-starter-parent:4.0.1
 │
 ├── mxpio-dependencies (BOM — 统一版本管理)
