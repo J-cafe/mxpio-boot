@@ -43,23 +43,19 @@ public class LowcodePage extends BaseEntity {
 	@Schema(description = "页面类型：LIST/FORM/DETAIL/MASTER_DETAIL")
 	private String pageType;
 
-	@Lob
-	@Column(name = "WIDGET_CONFIG_")
+	@Column(name = "WIDGET_CONFIG_",columnDefinition = "TEXT")
 	@Schema(description = "控件配置JSON（widgets + layout）")
 	private String widgetConfig;
 
-	@Lob
-	@Column(name = "DATA_SET_CONFIG_")
+	@Column(name = "DATA_SET_CONFIG_",columnDefinition = "TEXT")
 	@Schema(description = "数据集配置JSON")
 	private String dataSetConfig;
 
-	@Lob
-	@Column(name = "BUTTON_CONFIG_")
+	@Column(name = "BUTTON_CONFIG_",columnDefinition = "TEXT")
 	@Schema(description = "按钮配置JSON")
 	private String buttonConfig;
 
-	@Lob
-	@Column(name = "EVENT_CONFIG_")
+	@Column(name = "EVENT_CONFIG_",columnDefinition = "TEXT")
 	@Schema(description = "事件配置JSON（字段联动、按钮动作）")
 	private String eventConfig;
 
