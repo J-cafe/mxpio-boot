@@ -27,6 +27,7 @@ mxpio-jpa 是基于 JPA (Jakarta Persistence API) 与 Spring Data JPA 构建的�
 - [十三、辅助类与接口](#十三辅助类与接口)
 - [十四、前端使用指南](#十四前端使用指南)
 - [十五、最佳实践与注意事项](#十五最佳实践与注意事项)
+- [十六、扩展属性（EAV 模式）](#十六扩展属性eav-模式)
 
 ---
 
@@ -1731,3 +1732,301 @@ A: 继承 `SmartCrudPolicyAdapter`，覆盖 `beforeDelete` 方法设置 `deleted
 
 **Q: persist 和 save 有什么区别？**
 A: `persist` 是标准 JPA 操作，仅处理当前实体。`save` 是智能操作，会递归处理对象树并执行 `@Generator` 策略和 `CrudPolicy`。
+
+---
+
+## 十六、扩展属性（EAV 模式）
+
+当实体需要可变的自定义字段时，使用 EAV（Entity-Attribute-Value）模式将每个属性存储为一行。`collectExtAttr()` 将 EAV 风格的过滤和回填直接集成到 Linq 链中——一次调用完成解析器注册、批量查询、Map 聚合和反射回填。
+
+### 16.1 表结构约定
+
+```sql
+CREATE TABLE task_ext_attr (
+    id          VARCHAR(64)  PRIMARY KEY,
+    task_id     VARCHAR(64)  NOT NULL,    -- 指向所属实体的外键
+    attr_key    VARCHAR(128) NOT NULL,    -- 属性名
+    attr_value  TEXT,                     -- 属性值
+    UNIQUE KEY uk_task_attr (task_id, attr_key)
+);
+```
+
+```java
+@Entity
+public class TaskExtAttr {
+    @Id private String id;
+    @Column(name = "task_id") private String taskId;
+    @Column(name = "attr_key") private String attrKey;
+    @Column(name = "attr_value") private String attrValue;
+}
+
+@Entity
+public class Task {
+    @Id private String id;
+    private String taskName;
+    private String projectId;
+
+    @Transient
+    private Map<String, String> extAttrs;  // 扩展属性回填目标
+}
+```
+
+### 16.2 collectExtAttr — 单层
+
+```java
+// 加载全部扩展属性
+Linq collectExtAttr(String ownerIdProperty, Class<?> extAttrEntity,
+                    String alias, String mapProperty);
+
+// 仅加载指定的 key（推荐，性能更优）
+Linq collectExtAttr(String ownerIdProperty, Class<?> extAttrEntity,
+                    String alias, String mapProperty, String... keys);
+```
+
+一次调用完成三件事：
+
+1. **注册 SubQueryParser（EAV 模式）** — `where(criteria)` 中的 `"alias.key"` 条件自动转换为 EXISTS 子查询
+2. **注册 CollectInfo（EAV 模式）** — `buildMetadata` 批量查询扩展属性行，聚合成 `Map<FK, Map<String, String>>`
+3. **BackfillFilter 填充 Map** — 从 metadata 读取 FK→Map 索引，通过反射写入实体的 mapProperty 属性
+
+**示例 — 加载全部 key：**
+
+```java
+List<Task> tasks = JpaUtil.linq(Task.class)
+    .collectExtAttr("taskId", TaskExtAttr.class, "ext", "extAttrs")
+    .where(criteria)
+    .list();
+
+// tasks.get(0).getExtAttrs() → {"color": "red", "priority": "high", "score": "95", ...}
+```
+
+**示例 — 仅加载指定 key：**
+
+```java
+List<Task> tasks = JpaUtil.linq(Task.class)
+    .collectExtAttr("taskId", TaskExtAttr.class, "ext", "extAttrs",
+                    "color", "priority")            // 只加载这两个 key
+    .where(criteria)
+    .list();
+
+// tasks.get(0).getExtAttrs() → {"color": "red", "priority": "high"}
+```
+
+指定 key 后，回填批量查询的 SQL 会自动添加过滤：
+
+```sql
+SELECT * FROM task_ext_attr
+WHERE taskId IN ('t1', 't2', 't3')
+  AND attrKey IN ('color', 'priority')          -- ← 自动添加的过滤
+```
+
+`where(criteria)` 中的过滤条件 `"ext.color" EQ "red"` 不受 keys 参数影响，生成的 EXISTS 子查询不变：
+
+```sql
+SELECT * FROM task t
+WHERE EXISTS (
+    SELECT e FROM TaskExtAttr e
+    WHERE e.taskId = t.id AND e.attrKey = 'color' AND e.attrValue = 'red'
+)
+```
+
+前端 JSON 条件：
+
+```json
+{
+    "criterions": [
+        {"fieldName": "ext.color",    "value": "red",    "operator": "EQ"},
+        {"fieldName": "ext.priority", "value": "high",   "operator": "EQ"},
+        {"fieldName": "taskName",     "value": "design", "operator": "LIKE"}
+    ]
+}
+```
+
+条件路由：
+
+```
+"ext.color"          → SubQueryParser (EAV)     → EXISTS on TaskExtAttr
+"ext.priority"       → SubQueryParser (EAV)     → EXISTS on TaskExtAttr
+"taskName"           → CriteriaUtils.parse      → Task 主表直接 LIKE
+```
+
+### 16.3 collectExtAttr — 两层（嵌套）
+
+```java
+// 加载全部 key
+Linq collectExtAttr(Class<?> middleEntity, String middleFkProperty,
+                    String ownerIdProperty, Class<?> extAttrEntity,
+                    String alias, String mapProperty);
+
+// 仅加载指定的 key
+Linq collectExtAttr(Class<?> middleEntity, String middleFkProperty,
+                    String ownerIdProperty, Class<?> extAttrEntity,
+                    String alias, String mapProperty, String... keys);
+```
+
+查询父实体（如 Project）并按子实体（如 Task）的扩展属性过滤时，生成**嵌套 EXISTS** 子查询。回填需要两步，因为 BackfillFilter 只遍历顶层结果。
+
+**示例：**
+
+```java
+// 第一步：查询 + 嵌套过滤
+Page<Project> page = JpaUtil.linq(Project.class)
+    .collect("projectId", Task.class, "id")              // 带出 Task
+    .collectExtAttr(Task.class, "projectId",             // 中间实体 + 其指向主表的外键
+                    "taskId", TaskExtAttr.class,          // 扩展表指向 Task 的外键
+                    "tasks.ext", "extAttrs",              // 别名 + Task 上的回填属性
+                    "color", "priority")                  // 只加载这两个 key
+    .where(criteria)
+    .paging(pageable);
+
+// 第二步：为收集到的 Task 回填扩展属性
+List<Task> allTasks = page.getContent().stream()
+    .flatMap(p -> p.getTasks().stream())
+    .collect(Collectors.toList());
+ExtAttrHelper.backfillExtAttrs(allTasks, TaskExtAttr.class,
+    "taskId", Task::getId, Task::setExtAttrs,
+    "color", "priority");                                // 同样的 key
+```
+
+`"tasks.ext.color" EQ "red"` 生成的 SQL：
+
+```sql
+SELECT * FROM project p
+WHERE EXISTS (
+    SELECT t FROM Task t WHERE t.projectId = p.id
+    AND EXISTS (
+        SELECT e FROM TaskExtAttr e
+        WHERE e.taskId = t.id AND e.attrKey = 'color' AND e.attrValue = 'red'
+    )
+)
+```
+
+前端 JSON 条件：
+
+```json
+{
+    "criterions": [
+        {"fieldName": "tasks.ext.color",    "value": "red",    "operator": "EQ"},
+        {"fieldName": "tasks.ext.priority", "value": "high",   "operator": "EQ"},
+        {"fieldName": "tasks.taskName",     "value": "design", "operator": "LIKE"},
+        {"fieldName": "projectName",        "value": "R&D",    "operator": "LIKE"}
+    ]
+}
+```
+
+条件路由：
+
+```
+"tasks.ext.color"       → SubQueryParser (2-level EAV) → 嵌套 EXISTS (Task → TaskExtAttr)
+"tasks.ext.priority"    → SubQueryParser (2-level EAV) → 嵌套 EXISTS
+"tasks.taskName"        → SmartSubQueryParser           → EXISTS (Task)
+"projectName"           → CriteriaUtils.parse           → 主表直接 LIKE
+```
+
+> **为什么回填需要两步？** SubQueryParser 在 SQL 层面完美处理了过滤。回填需要手动是因为 BackfillFilter 只遍历顶层查询结果（Project），不会递归到 collect 的子实体（Task）。使用 `ExtAttrHelper` 并传入相同的 keys 即可完成第二层回填。
+
+### 16.4 支持的操作符
+
+所有 `Operator` 均通过 `CriteriaUtils.parse` 委托在 `attrValue` 上生效：
+
+| Operator | 条件示例 | 生成的条件 |
+|---|---|---|
+| `EQ` | `"ext.color" EQ "red"` | `attrValue = 'red'` |
+| `LIKE` | `"ext.desc" LIKE "%urgent%"` | `attrValue LIKE '%urgent%'` |
+| `GT` | `"ext.score" GT 80` | `attrValue > '80'` |
+| `GE` / `LT` / `LE` | `"ext.priority" GE 3` | `attrValue >= '3'` |
+| `IN` | `"ext.color" IN ["red","blue"]` | `attrValue IN ('red','blue')` |
+| `IS_NULL` | `"ext.note" IS_NULL` | `attrValue IS NULL` |
+| `NE` | `"ext.status" NE "deleted"` | `attrValue != 'deleted'` |
+
+### 16.5 Keys 过滤 — 性能说明
+
+如果实体有大量扩展属性，只指定需要的 key 避免加载无用数据：
+
+```java
+// ❌ 加载全部 50 个扩展属性——浪费
+.collectExtAttr("taskId", TaskExtAttr.class, "ext", "extAttrs")
+
+// ✅ 只加载实际需要的 2 个 key
+.collectExtAttr("taskId", TaskExtAttr.class, "ext", "extAttrs",
+                "color", "priority")
+```
+
+批量查询 SQL 会追加 `AND attrKey IN ('color', 'priority')`，同时减少数据库流量和内存占用。
+
+> **注意：** keys 过滤只影响**回填**的批量查询——不影响 `where(criteria)` 生成的过滤子查询。过滤条件对任何 key 都始终生效，与加载了哪些 key 无关。
+
+### 16.6 返回 JSON — 层级天然可见
+
+```json
+{
+    "content": [
+        {
+            "id": "p1",
+            "projectName": "R&D",
+            "tasks": [
+                {
+                    "id": "t1",
+                    "taskName": "Design",
+                    "extAttrs": {
+                        "color": "red",
+                        "priority": "high"
+                    }
+                }
+            ]
+        }
+    ]
+}
+```
+
+前端直接按层级访问：`project.tasks[0].extAttrs.color`。无需额外解析。
+
+### 16.7 原理说明
+
+**SubQueryParser 三种模式：**
+
+| 模式 | 构造器 | 别名匹配 | Join 条件 |
+|---|---|---|---|
+| Normal | `(linq, domainClass)` | FK 命名约定（`roleId` ↔ `role.id`） | `sub.PK = parent.FK` |
+| EAV 单层 | `(linq, domainClass, alias, joinProp, parentProp)` | 精确别名（`"ext"`） | `sub.joinProp = parent.parentProp` |
+| EAV 嵌套 | `(linq, middle, midJoin, midParent, ext, extJoin, extParent, ...)` | 精确别名（`"tasks.ext"`） | 两层：`mid.midJoin = parent.midParent` AND `ext.extJoin = mid.extParent` |
+
+**CollectInfo（EAV 模式）：** 当 `extAttrMapProperty != null` 时，`buildMetadata` 将扩展属性行聚合成 `Map<FK, Map<String, String>>` 而非普通的实体列表分组。若设置了 `extAttrKeys`，批量查询会追加 `AND attrKey IN (...)`。
+
+**BackfillFilter（EAV 分支）：** 当 `extAttrMapProperty != null` 时，直接从 metadata 读取 FK→Map 索引，通过显式属性名反射写入实体——无需类型匹配。
+
+### 16.8 ExtAttrHelper — 两层场景的手动回填
+
+```java
+// 批量查询并回填（全部 key）
+ExtAttrHelper.backfillExtAttrs(entities, extAttrEntity, ownerIdProperty,
+    EntityType::getId, EntityType::setExtAttrs);
+
+// 批量查询并回填（指定 key）
+ExtAttrHelper.backfillExtAttrs(entities, extAttrEntity, ownerIdProperty,
+    EntityType::getId, EntityType::setExtAttrs,
+    "color", "priority");
+
+// 只查询不回填
+Map<String, Map<String, String>> extMap = ExtAttrHelper.collectAsMap(
+    entities, extAttrEntity, ownerIdProperty, EntityType::getId,
+    "color", "priority");
+
+// 自定义 key/value 列名 + keys 过滤
+ExtAttrHelper.backfillExtAttrs(entities, extAttrEntity, ownerIdProperty,
+    "propName", "propValue",
+    new String[]{"color", "priority"},
+    EntityType::getId, EntityType::setExtAttrs);
+```
+
+### 16.9 API 速查
+
+| 场景 | 方法 | 过滤 | 回填 |
+|---|---|---|---|
+| 查询 Task，按 Task 扩展属性过滤 + 回填 | `collectExtAttr("taskId", TaskExtAttr, "ext", "extAttrs")` | 自动（单层 EXISTS） | 自动（可选 keys） |
+| 查询 Task，只加载指定扩展属性 | `collectExtAttr(..., "color", "priority")` | 自动 | 自动，过滤 key |
+| 查询 Project，按 Task 扩展属性过滤 | `collectExtAttr(Task.class, "projectId", "taskId", TaskExtAttr, "tasks.ext", "extAttrs")` | 自动（嵌套 EXISTS） | 手动（ExtAttrHelper） |
+| 只回填不过滤 | `ExtAttrHelper.backfillExtAttrs(...)` | 无 | 手动（可选 keys） |
+
+---
+

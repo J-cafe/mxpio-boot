@@ -259,6 +259,71 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	Linq addParser(CriterionParser criterionParser);
 
 	/**
+	 * Collect extension attributes in EAV mode. Registers a SubQueryParser so that
+	 * {@code alias.key} conditions in {@code where(criteria)} are automatically
+	 * converted to EXISTS sub-queries on the ext-attr table. After the query the
+	 * ext-attr rows are aggregated into {@code Map<String,String>} and backfilled
+	 * into the entity property named by {@code mapProperty}.
+	 *
+	 * @param ownerIdProperty FK column on the ext-attr table pointing to the owner entity
+	 * @param extAttrEntity   the ext-attr entity class
+	 * @param alias           criteria prefix, e.g. "ext" → "ext.color"
+	 * @param mapProperty     the {@code @Transient Map<String,String>} property
+	 *                        name on the owner entity to backfill
+	 */
+	Linq collectExtAttr(String ownerIdProperty, Class<?> extAttrEntity,
+						String alias, String mapProperty);
+
+	/**
+	 * Same as above, but only loads the specified ext-attr keys.
+	 * @param keys ext-attr keys to load (e.g. "color", "priority").
+	 *             If empty/null, all keys are loaded.
+	 */
+	Linq collectExtAttr(String ownerIdProperty, Class<?> extAttrEntity,
+						String alias, String mapProperty, String... keys);
+
+	/**
+	 * Lambda version of {@link #collectExtAttr(String, Class, String, String)}.
+	 */
+	<R, S> Linq collectExtAttr(SerializableFunction<R, S> ownerIdProperty,
+							   Class<?> extAttrEntity, String alias, String mapProperty);
+
+	/**
+	 * Collect extension attributes through a middle entity (two-level nested).
+	 * Registers a SubQueryParser so that {@code alias.key} conditions in
+	 * {@code where(criteria)} generate nested EXISTS sub-queries.
+	 * <p>
+	 * Example: querying {@code Project} while filtering by ext-attrs of
+	 * its child {@code Task} entities.
+	 * <pre>{@code
+	 * JpaUtil.linq(Project.class)
+	 *     .collect("projectId", Task.class, "id")
+	 *     .collectExtAttr(Task.class, "projectId", "taskId",
+	 *                     TaskExtAttr.class, "tasks.ext", "extAttrs")
+	 *     .where(criteria)   // "tasks.ext.color" = "red" → nested EXISTS
+	 *     .paging(pageable);
+	 * }</pre>
+	 *
+	 * @param middleEntity     middle entity class (A)
+	 * @param middleFkProperty FK on middle pointing to the queried entity (B)
+	 * @param ownerIdProperty  FK on ext-attr table pointing to middle entity
+	 * @param extAttrEntity    the ext-attr entity class (C)
+	 * @param alias            criteria prefix, e.g. "tasks.ext"
+	 * @param mapProperty      {@code @Transient Map} property name on the
+	 *                         middle entity to backfill
+	 */
+	Linq collectExtAttr(Class<?> middleEntity, String middleFkProperty,
+						String ownerIdProperty, Class<?> extAttrEntity,
+						String alias, String mapProperty);
+
+	/**
+	 * Same as above, but only loads the specified ext-attr keys.
+	 */
+	Linq collectExtAttr(Class<?> middleEntity, String middleFkProperty,
+						String ownerIdProperty, Class<?> extAttrEntity,
+						String alias, String mapProperty, String... keys);
+
+	/**
 	 * 添加子查询解析器
 	 * @param entityClass 实体类
 	 * @param foreignKeys 实体类外键

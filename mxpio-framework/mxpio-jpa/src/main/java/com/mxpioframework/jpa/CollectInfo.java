@@ -13,6 +13,45 @@ public class CollectInfo {
 	private String[] properties;
 	private Set set;
 
+	// EAV mode: if non-null, buildMetadata aggregates rows into Map<String,Map<String,String>>
+	// and BackfillFilter fills the named property on the entity
+	private String extAttrMapProperty;
+	private String extAttrKeyProp = "attrKey";
+	private String extAttrValueProp = "attrValue";
+	private String[] extAttrKeys;  // if non-null, only load these keys
+
+	public String getExtAttrMapProperty() {
+		return extAttrMapProperty;
+	}
+
+	public void setExtAttrMapProperty(String extAttrMapProperty) {
+		this.extAttrMapProperty = extAttrMapProperty;
+	}
+
+	public String getExtAttrKeyProp() {
+		return extAttrKeyProp;
+	}
+
+	public void setExtAttrKeyProp(String extAttrKeyProp) {
+		this.extAttrKeyProp = extAttrKeyProp;
+	}
+
+	public String getExtAttrValueProp() {
+		return extAttrValueProp;
+	}
+
+	public void setExtAttrValueProp(String extAttrValueProp) {
+		this.extAttrValueProp = extAttrValueProp;
+	}
+
+	public String[] getExtAttrKeys() {
+		return extAttrKeys;
+	}
+
+	public void setExtAttrKeys(String[] extAttrKeys) {
+		this.extAttrKeys = extAttrKeys;
+	}
+
 	public Class<?> getEntityClass() {
 		return entityClass;
 	}

@@ -41,6 +41,22 @@ public class BackfillFilter implements Filter {
 		for (CollectInfo collectInfo : collectInfos) {
 			Class<?> cls = collectInfo.getEntityClass();
 
+			// EAV mode: fill Map<String,String> property directly from metadata
+			if (collectInfo.getExtAttrMapProperty() != null) {
+				@SuppressWarnings("unchecked")
+				Map<Object, Map<String, String>> extMap = (Map<Object, Map<String, String>>)
+						linqContext.getMetadata().get(collectInfo.getExtAttrMapProperty());
+				if (extMap != null) {
+					Object fkValue = BeanMap.create(entity).get(collectInfo.getProperties()[0]);
+					Map<String, String> attrs = extMap.get(fkValue);
+					if (attrs != null) {
+						BeanReflectionUtils.setPropertyValue(entity,
+								collectInfo.getExtAttrMapProperty(), attrs);
+					}
+				}
+				continue;
+			}
+
 			if (cls != null) {
 				List<PropertyDescriptor> pds = getPropertyMap(entity).get(cls);
 				String[] properties = collectInfo.getProperties();

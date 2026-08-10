@@ -442,6 +442,64 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 	}
 
 	@Override
+	public Linq collectExtAttr(String ownerIdProperty, Class<?> extAttrEntity,
+							   String alias, String mapProperty) {
+		return collectExtAttr(ownerIdProperty, extAttrEntity, alias, mapProperty, (String[]) null);
+	}
+
+	@Override
+	public Linq collectExtAttr(String ownerIdProperty, Class<?> extAttrEntity,
+							   String alias, String mapProperty, String... keys) {
+		if (!beforeMethodInvoke()) {
+			return this;
+		}
+		this.addParser(new SubQueryParser(this, extAttrEntity, alias,
+				ownerIdProperty, JpaUtil.getIdName(domainClass)));
+
+		CollectInfo info = new CollectInfo();
+		info.setEntityClass(extAttrEntity);
+		info.setOtherProperty(ownerIdProperty);
+		info.setProperties(new String[]{ JpaUtil.getIdName(domainClass) });
+		info.setExtAttrMapProperty(mapProperty);
+		if (keys != null && keys.length > 0) {
+			info.setExtAttrKeys(keys);
+		}
+		collectInfos.add(info);
+		return this;
+	}
+
+	@Override
+	public <R, S> Linq collectExtAttr(SerializableFunction<R, S> ownerIdProperty,
+									  Class<?> extAttrEntity, String alias, String mapProperty) {
+		return collectExtAttr(LambdaUtils.extractPropertyName(ownerIdProperty), extAttrEntity, alias, mapProperty);
+	}
+
+	@Override
+	public Linq collectExtAttr(Class<?> middleEntity, String middleFkProperty,
+							   String ownerIdProperty, Class<?> extAttrEntity,
+							   String alias, String mapProperty) {
+		return collectExtAttr(middleEntity, middleFkProperty, ownerIdProperty,
+				extAttrEntity, alias, mapProperty, (String[]) null);
+	}
+
+	@Override
+	public Linq collectExtAttr(Class<?> middleEntity, String middleFkProperty,
+							   String ownerIdProperty, Class<?> extAttrEntity,
+							   String alias, String mapProperty, String... keys) {
+		if (!beforeMethodInvoke()) {
+			return this;
+		}
+		this.addParser(new SubQueryParser(this,
+				middleEntity, middleFkProperty, JpaUtil.getIdName(domainClass),
+				extAttrEntity, ownerIdProperty, JpaUtil.getIdName(middleEntity),
+				"attrKey", "attrValue",
+				alias));
+		// Note: backfill must be done separately via ExtAttrHelper.backfillExtAttrs.
+		// Pass 'keys' to the helper for selective loading.
+		return this;
+	}
+
+	@Override
 	public Linq collect(String... properties) {
 		if (!beforeMethodInvoke()) {
 			return this;
@@ -558,8 +616,28 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 								}
 								//TODO in有超过限度的异常
 								linq.in(otherProperty, collectSet);
+								// EAV: if only specific keys requested, add attrKey IN (...) filter
+								if (collectInfo.getExtAttrMapProperty() != null
+										&& collectInfo.getExtAttrKeys() != null) {
+									linq.in(collectInfo.getExtAttrKeyProp(),
+											(Object[]) collectInfo.getExtAttrKeys());
+								}
 								List result = linq.list();
-								Map<Object, Object> resultMap = JpaUtil.index(result, otherProperty);
+
+								if (collectInfo.getExtAttrMapProperty() != null) {
+									// EAV mode: aggregate rows into Map<FK, Map<String,String>>
+									String keyProp = collectInfo.getExtAttrKeyProp();
+									String valProp = collectInfo.getExtAttrValueProp();
+									Map<Object, Map<String, String>> extMap = new HashMap<>();
+									for (Object row : result) {
+										Object fk = BeanReflectionUtils.getPropertyValue(row, otherProperty);
+										String k = (String) BeanReflectionUtils.getPropertyValue(row, keyProp);
+										String v = (String) BeanReflectionUtils.getPropertyValue(row, valProp);
+										extMap.computeIfAbsent(fk, x -> new HashMap<>()).put(k, v);
+									}
+									metadata.put(collectInfo.getExtAttrMapProperty(), extMap);
+								} else {
+									Map<Object, Object> resultMap = JpaUtil.index(result, otherProperty);
 								Map<Object, List<Object>> map = new HashMap<Object, List<Object>>();
 								if (collectList != null) {
 									for (Object obj : collectList) {
@@ -592,6 +670,7 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 
 								metadata.put(property, map);
 								metadata.put(entityClass, map);
+							}
 							}
 
 						} else {
