@@ -141,11 +141,7 @@ public class BackfillFilter implements Filter {
 	}
 
 	private void addPd2PropertyMap(Class<?> cls, PropertyDescriptor pd) {
-		List<PropertyDescriptor> list = propertyMap.get(cls);
-		if (list == null) {
-			list = new ArrayList<>(4);
-			propertyMap.put(cls, list);
-		}
-		list.add(pd);
+        List<PropertyDescriptor> list = propertyMap.computeIfAbsent(cls, k -> new ArrayList<>(4));
+        list.add(pd);
 	}
 }
