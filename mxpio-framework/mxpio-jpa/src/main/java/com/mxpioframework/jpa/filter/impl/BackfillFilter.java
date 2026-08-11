@@ -25,9 +25,7 @@ import net.sf.cglib.beans.BeanMap;
 public class BackfillFilter implements Filter {
 
 	private List<CollectInfo> collectInfos;
-
-	private Map<Class<?>, List<PropertyDescriptor>> propertyMap = new HashMap<Class<?>, List<PropertyDescriptor>>();
-
+	private Map<Class<?>, List<PropertyDescriptor>> propertyMap = new HashMap<>();
 	private Filter filter;
 
 	public BackfillFilter(Filter filter, List<CollectInfo> collectInfos) {
@@ -38,17 +36,33 @@ public class BackfillFilter implements Filter {
 	@Override
 	public boolean invoke(LinqContext linqContext) {
 		Object entity = linqContext.getEntity();
+		BeanMap beanMap = BeanMap.create(entity);
+
 		for (CollectInfo collectInfo : collectInfos) {
 			Class<?> cls = collectInfo.getEntityClass();
 
-			// EAV mode: fill Map<String,String> property directly from metadata
+			// Resolve the lookup key: composite for multi-key, single value otherwise
+			Object lookupKey;
+			if (collectInfo.isMultiKey()) {
+				String[] props = collectInfo.getProperties();
+				Object[] values = new Object[props.length];
+				for (int i = 0; i < props.length; i++) {
+					values[i] = beanMap.get(props[i]);
+				}
+				lookupKey = CollectInfo.buildCompositeKey(values);
+			} else if (collectInfo.getProperties() != null && collectInfo.getProperties().length > 0) {
+				lookupKey = beanMap.get(collectInfo.getProperties()[0]);
+			} else {
+				continue;
+			}
+
+			// EAV mode
 			if (collectInfo.getExtAttrMapProperty() != null) {
 				@SuppressWarnings("unchecked")
 				Map<Object, Map<String, String>> extMap = (Map<Object, Map<String, String>>)
 						linqContext.getMetadata().get(collectInfo.getExtAttrMapProperty());
 				if (extMap != null) {
-					Object fkValue = BeanMap.create(entity).get(collectInfo.getProperties()[0]);
-					Map<String, String> attrs = extMap.get(fkValue);
+					Map<String, String> attrs = extMap.get(lookupKey);
 					if (attrs != null) {
 						BeanReflectionUtils.setPropertyValue(entity,
 								collectInfo.getExtAttrMapProperty(), attrs);
@@ -57,41 +71,35 @@ public class BackfillFilter implements Filter {
 				continue;
 			}
 
+			// Normal entity backfill
 			if (cls != null) {
 				List<PropertyDescriptor> pds = getPropertyMap(entity).get(cls);
-				String[] properties = collectInfo.getProperties();
 				if (CollectionUtils.isEmpty(pds)) {
-					Object value = linqContext.get(cls, BeanMap.create(entity).get(properties[0]));
+					Object value = linqContext.get(cls, lookupKey);
 					if (value != null) {
-						BeanReflectionUtils.setPropertyValue(entity, Introspector.decapitalize(cls.getSimpleName()),
-								value);
+						BeanReflectionUtils.setPropertyValue(entity,
+								Introspector.decapitalize(cls.getSimpleName()), value);
 					}
 				} else if (pds.size() == 1) {
-					doFill(linqContext, entity, cls, properties[0], pds.get(0));
+					doFill(linqContext, entity, cls, lookupKey, pds.get(0));
 				} else {
-					for (String property : properties) {
-						for (PropertyDescriptor pd : pds) {
-							if (StringUtils.contains(property, pd.getName())
-									|| StringUtils.contains(pd.getName(), property)) {
-								doFill(linqContext, entity, cls, property, pd);
-							}
-						}
+					for (PropertyDescriptor pd : pds) {
+						doFill(linqContext, entity, cls, lookupKey, pd);
 					}
 				}
-
 			}
-
 		}
 
 		return filter == null ? true : filter.invoke(linqContext);
 	}
 
-	private void doFill(LinqContext linqContext, Object entity, Class<?> cls, String property, PropertyDescriptor pd) {
+	private void doFill(LinqContext linqContext, Object entity, Class<?> cls,
+						Object lookupKey, PropertyDescriptor pd) {
 		Object value;
 		if (Collection.class.isAssignableFrom(pd.getPropertyType())) {
-			value = linqContext.getList(cls, BeanMap.create(entity).get(property));
+			value = linqContext.getList(cls, lookupKey);
 		} else {
-			value = linqContext.get(cls, BeanMap.create(entity).get(property));
+			value = linqContext.get(cls, lookupKey);
 		}
 		if (value != null) {
 			try {
@@ -129,17 +137,15 @@ public class BackfillFilter implements Filter {
 				}
 			}
 		}
-
 		return propertyMap;
 	}
 
 	private void addPd2PropertyMap(Class<?> cls, PropertyDescriptor pd) {
 		List<PropertyDescriptor> list = propertyMap.get(cls);
 		if (list == null) {
-			list = new ArrayList<PropertyDescriptor>(4);
+			list = new ArrayList<>(4);
 			propertyMap.put(cls, list);
 		}
 		list.add(pd);
 	}
-
 }

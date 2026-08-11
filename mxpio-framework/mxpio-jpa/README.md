@@ -886,6 +886,38 @@ linq.collect(UserRole.class, UserRole::getUserId, UserRole::getRoleId, Role.clas
     .collectSelect(Role.class, Role::getId, Role::getName);
 ```
 
+#### 多键关联（Multi-Key）
+
+当关联条件由多个列组成时（如组合外键），使用数组参数，按位置一一对应：
+
+```java
+// 父表 (tenantId, deptCode) = 子表 (tenantId, deptCode)
+linq.collect(
+    new String[]{"tenantId", "deptCode"},   // properties: 父表 FK 列
+    Dept.class,                               // entityClass: 子表实体
+    new String[]{"tenantId", "deptCode"}    // otherProperties: 子表匹配列
+);
+
+// 典型场景：OrderItem(tenantId, orderNo) → MOrder(tenantId, orderNo)
+JpaUtil.linq(OrderItem.class)
+    .collect(new String[]{"tenantId", "orderNo"}, MOrder.class,
+             new String[]{"tenantId", "orderNo"})
+    .list();
+// item.getOrder() 已自动填充
+```
+
+> **注意：** 多键模式不支持中间表（多对多）。需要多对多时，先手动查询中间表再单键 collect。
+>
+> **where(criteria) 过滤：** `collect` 多键重载会自动注册 SubQueryParser。
+> 第一个 FK 列作为点号路径的别名前缀。
+> 例如 `collect(new String[]{"tenantId","orderNo"}, MOrder.class, ...)` 注册后，
+> `"tenantId.orderName" LIKE ...` 会生成：
+> ```sql
+> EXISTS (SELECT m FROM MOrder m
+>   WHERE m.tenantId = parent.tenantId AND m.orderNo = parent.orderNo
+>   AND m.orderName LIKE ...)
+> ```
+
 ### 7.2 collect 参数说明（全参版本）
 
 ```
@@ -901,14 +933,33 @@ collect(relationClass, relationProperty, relationOtherProperty, otherProperty, e
 | `entityClass` | 被收集实体类 | `Role.class` |
 | `properties` | 主表用于关联的属性名（通常为主键） | `"id"` |
 
+多键版本的参数：
+
+```
+collect(properties[], entityClass, otherProperties[])
+```
+
+| 参数 | 含义 | 示例 |
+|---|---|---|
+| `properties[]` | 主表 FK 列数组 | `new String[]{"tenantId","deptCode"}` |
+| `entityClass` | 被收集实体类 | `Dept.class` |
+| `otherProperties[]` | 子表匹配列数组（与 properties 按位置对应） | `new String[]{"tenantId","deptCode"}` |
+
 ### 7.3 执行流程
 
+**单键：**
 1. 查询主表 → 从结果中提取外键值集合
 2. （如有中间表）查中间表两列投影 → 提取被收集方 ID 集合
-3. 批量 IN 查询被收集实体 → 按主表标识分组建立索引 `Map<主表ID, List<关联对象>>`
-4. `BackfillFilter` 遍历结果，按属性类型和名称匹配，反射写回实体属性
+3. 批量 IN 查询被收集实体 → 按主表标识分组建立索引
+4. `BackfillFilter` 遍历结果，按属性类型和名称匹配，反射写回
 
-全程最多 2-3 次 SQL，无 N+1。
+**多键：**
+1. 查询主表 → 从结果中提取外键元组（组合 key）
+2. 去重后构建 OR-of-ANDs 查询：`WHERE (col1=v1 AND col2=v2) OR (col1=v3 AND col2=v4) ...`
+3. 按组合 key 索引和分组
+4. `BackfillFilter` 从主实体提取全部 FK 列值拼组合 key，查索引回填
+
+全程最多 1-2 次 SQL，无 N+1。
 
 ### 7.4 完整示例
 
@@ -934,7 +985,16 @@ List<User> users = JpaUtil.linq(User.class)
     .list();
 // users.get(0).getRoles() 已自动填充
 
-// 示例 4：链式多个 collect
+// 示例 4：多键关联
+// 查询 OrderItem，按 (tenantId, orderNo) 组合外键回填 MOrder
+List<OrderItem> items = JpaUtil.linq(OrderItem.class)
+    .collect(new String[]{"tenantId", "orderNo"}, MOrder.class,
+             new String[]{"tenantId", "orderNo"})
+    .where(criteria)   // "tenantId.orderName" LIKE ... → 自动转多键 EXISTS
+    .list();
+// items.get(0).getOrder() 已自动填充
+
+// 示例 5：链式多个 collect
 // 同时收集部门、角色、权限
 List<User> users = JpaUtil.linq(User.class)
     .collect("deptId", Dept.class, "id")
@@ -943,7 +1003,7 @@ List<User> users = JpaUtil.linq(User.class)
     .where(criteria)
     .paging(pageable);
 
-// 示例 5：只收集值集合 + 自定义 Filter
+// 示例 6：只收集值集合 + 自定义 Filter
 JpaUtil.linq(Order.class)
     .collect("userId")                           // 只收集 userId 值集合
     .setDisableBackFillFilter()                  // 禁用自动回填
@@ -1774,12 +1834,16 @@ public class Task {
 ### 16.2 collectExtAttr — 单层
 
 ```java
-// 加载全部扩展属性
+// 加载全部扩展属性（单键 FK）
 Linq collectExtAttr(String ownerIdProperty, Class<?> extAttrEntity,
                     String alias, String mapProperty);
 
 // 仅加载指定的 key（推荐，性能更优）
 Linq collectExtAttr(String ownerIdProperty, Class<?> extAttrEntity,
+                    String alias, String mapProperty, String... keys);
+
+// 多键 FK（扩展表有多列指向所属实体，如组合主键场景）
+Linq collectExtAttr(String[] ownerIdProperties, Class<?> extAttrEntity,
                     String alias, String mapProperty, String... keys);
 ```
 
@@ -1861,6 +1925,11 @@ Linq collectExtAttr(Class<?> middleEntity, String middleFkProperty,
 // 仅加载指定的 key
 Linq collectExtAttr(Class<?> middleEntity, String middleFkProperty,
                     String ownerIdProperty, Class<?> extAttrEntity,
+                    String alias, String mapProperty, String... keys);
+
+// 多键 FK 版本（中间实体或扩展表有组合外键时使用）
+Linq collectExtAttr(Class<?> middleEntity, String[] middleFkProperties,
+                    String[] ownerIdProperties, Class<?> extAttrEntity,
                     String alias, String mapProperty, String... keys);
 ```
 
@@ -2025,7 +2094,10 @@ ExtAttrHelper.backfillExtAttrs(entities, extAttrEntity, ownerIdProperty,
 |---|---|---|---|
 | 查询 Task，按 Task 扩展属性过滤 + 回填 | `collectExtAttr("taskId", TaskExtAttr, "ext", "extAttrs")` | 自动（单层 EXISTS） | 自动（可选 keys） |
 | 查询 Task，只加载指定扩展属性 | `collectExtAttr(..., "color", "priority")` | 自动 | 自动，过滤 key |
+| 查询 Task（组合 FK），扩展属性过滤 + 回填 | `collectExtAttr(new String[]{"tenantId","taskId"}, TaskExtAttr, "ext", "extAttrs")` | 自动（多键 EXISTS） | 自动 |
 | 查询 Project，按 Task 扩展属性过滤 | `collectExtAttr(Task.class, "projectId", "taskId", TaskExtAttr, "tasks.ext", "extAttrs")` | 自动（嵌套 EXISTS） | 手动（ExtAttrHelper） |
+| 查询 Project（组合 FK），按 Task 扩展属性过滤 | `collectExtAttr(Task.class, new String[]{"tenantId","projectId"}, new String[]{"tenantId","taskId"}, TaskExtAttr, "tasks.ext", "extAttrs")` | 自动（多键嵌套 EXISTS） | 手动（ExtAttrHelper） |
+| 多键普通 collect | `collect(new String[]{"tenantId","deptCode"}, Dept.class, new String[]{"tenantId","deptCode"})` | 自动（以第一个 FK 列为别名） | 自动 |
 | 只回填不过滤 | `ExtAttrHelper.backfillExtAttrs(...)` | 无 | 手动（可选 keys） |
 
 ---

@@ -17,24 +17,26 @@ public class SubQueryParser implements CriterionParser {
 
 	// EAV single-level mode
 	private String eavAlias;
-	private String joinProperty;
-	private String parentProperty;
+	private String[] joinProperties;
+	private String[] parentProperties;
 
 	// EAV two-level (nested) mode
 	private Class<?> middleEntity;
-	private String middleJoinProp;
-	private String middleParentProp;
+	private String[] middleJoinProps;
+	private String[] middleParentProps;
 	private Class<?> extAttrEntity;
-	private String extJoinProp;
-	private String extParentProp;
+	private String[] extJoinProps;
+	private String[] extParentProps;
 	private String attrKeyProp = "attrKey";
 	private String attrValueProp = "attrValue";
+
+	// ---- Normal mode ----
 
 	public SubQueryParser(Linq linq, Class<?> domainClass) {
 		this.linq = linq;
 		this.domainClass = domainClass;
-		this.foreignKeys = new String[] { Introspector.decapitalize(domainClass.getSimpleName())
-				+ StringUtils.capitalize(JpaUtil.getIdName(domainClass)) };
+		this.foreignKeys = new String[]{Introspector.decapitalize(domainClass.getSimpleName())
+				+ StringUtils.capitalize(JpaUtil.getIdName(domainClass))};
 	}
 
 	public SubQueryParser(Linq linq, Class<?> domainClass, String... foreignKeys) {
@@ -42,63 +44,58 @@ public class SubQueryParser implements CriterionParser {
 		this.foreignKeys = foreignKeys;
 	}
 
-	/**
-	 * EAV mode constructor. Matches criteria alias {@code eavAlias} and joins
-	 * with {@code joinProperty = parent.parentProperty} instead of the default
-	 * PK = FK join.
-	 *
-	 * @param linq          主查询 Linq
-	 * @param domainClass   子查询实体类（如扩展属性表）
-	 * @param eavAlias      条件别名（如 "ext"）→ 匹配 "ext.xxx"
-	 * @param joinProperty  子查询侧的关联属性（如扩展表的 "taskId" FK）
-	 * @param parentProperty 父查询侧的关联属性（如主表的 "id" PK）
-	 */
+	// ---- EAV single-level (single key, backward compatible) ----
+
 	public SubQueryParser(Linq linq, Class<?> domainClass,
 						  String eavAlias, String joinProperty, String parentProperty) {
+		this(linq, domainClass, eavAlias,
+				new String[]{joinProperty}, new String[]{parentProperty});
+	}
+
+	// ---- EAV single-level (multi-key) ----
+
+	public SubQueryParser(Linq linq, Class<?> domainClass,
+						  String eavAlias, String[] joinProperties, String[] parentProperties) {
 		this.linq = linq;
 		this.domainClass = domainClass;
 		this.eavAlias = eavAlias;
-		this.joinProperty = joinProperty;
-		this.parentProperty = parentProperty;
+		this.joinProperties = joinProperties;
+		this.parentProperties = parentProperties;
 	}
 
-	/**
-	 * Two-level nested EAV mode constructor. Matches {@code alias.key} and
-	 * generates nested EXISTS: outer-entity → ext-attr table.
-	 *
-	 * <pre>
-	 * EXISTS (SELECT m FROM middleEntity m WHERE m.middleJoinProp = parent.middleParentProp
-	 *   AND EXISTS (SELECT e FROM extAttrEntity e WHERE e.extJoinProp = m.extParentProp
-	 *     AND e.attrKeyProp = keyName AND e.attrValueProp [op] value))
-	 * </pre>
-	 *
-	 * @param linq             the main query Linq
-	 * @param middleEntity     middle entity (e.g. Task.class)
-	 * @param middleJoinProp   FK on middle pointing to the query entity (e.g. "projectId")
-	 * @param middleParentProp PK of the query entity (e.g. "id")
-	 * @param extAttrEntity    ext-attr entity (e.g. TaskExtAttr.class)
-	 * @param extJoinProp      FK on ext-attr pointing to middle (e.g. "taskId")
-	 * @param extParentProp    PK of middle entity (e.g. "id")
-	 * @param attrKeyProp      attr-key column name on ext-attr table
-	 * @param attrValueProp    attr-value column name on ext-attr table
-	 * @param alias            criteria prefix to match (e.g. "tasks.ext")
-	 */
+	// ---- EAV two-level (single key, backward compatible) ----
+
 	public SubQueryParser(Linq linq,
 						  Class<?> middleEntity, String middleJoinProp, String middleParentProp,
 						  Class<?> extAttrEntity, String extJoinProp, String extParentProp,
 						  String attrKeyProp, String attrValueProp,
 						  String alias) {
+		this(linq,
+				middleEntity, new String[]{middleJoinProp}, new String[]{middleParentProp},
+				extAttrEntity, new String[]{extJoinProp}, new String[]{extParentProp},
+				attrKeyProp, attrValueProp, alias);
+	}
+
+	// ---- EAV two-level (multi-key) ----
+
+	public SubQueryParser(Linq linq,
+						  Class<?> middleEntity, String[] middleJoinProps, String[] middleParentProps,
+						  Class<?> extAttrEntity, String[] extJoinProps, String[] extParentProps,
+						  String attrKeyProp, String attrValueProp,
+						  String alias) {
 		this.linq = linq;
 		this.eavAlias = alias;
 		this.middleEntity = middleEntity;
-		this.middleJoinProp = middleJoinProp;
-		this.middleParentProp = middleParentProp;
+		this.middleJoinProps = middleJoinProps;
+		this.middleParentProps = middleParentProps;
 		this.extAttrEntity = extAttrEntity;
-		this.extJoinProp = extJoinProp;
-		this.extParentProp = extParentProp;
+		this.extJoinProps = extJoinProps;
+		this.extParentProps = extParentProps;
 		this.attrKeyProp = attrKeyProp;
 		this.attrValueProp = attrValueProp;
 	}
+
+	// ---- parse ----
 
 	@Override
 	public boolean parse(SimpleCriterion criterion) {
@@ -109,17 +106,21 @@ public class SubQueryParser implements CriterionParser {
 
 		String alias = StringUtils.substringBefore(property, ".");
 
-		// Two-level EAV mode: "alias.key" → nested EXISTS
+		// Two-level EAV mode
 		if (eavAlias != null && eavAlias.equals(alias) && middleEntity != null) {
 			String keyName = property.substring(alias.length() + 1);
 			if (keyName.isEmpty()) {
 				return false;
 			}
-			Linq first = linq.exists(middleEntity)
-					.equalProperty(middleJoinProp, middleParentProp);
-			Linq second = first.exists(extAttrEntity)
-					.equalProperty(extJoinProp, extParentProp)
-					.equal(attrKeyProp, keyName);
+			Linq first = linq.exists(middleEntity);
+			for (int i = 0; i < middleJoinProps.length; i++) {
+				first.equalProperty(middleJoinProps[i], middleParentProps[i]);
+			}
+			Linq second = first.exists(extAttrEntity);
+			for (int i = 0; i < extJoinProps.length; i++) {
+				second.equalProperty(extJoinProps[i], extParentProps[i]);
+			}
+			second.equal(attrKeyProp, keyName);
 
 			String origField = criterion.getFieldName();
 			criterion.setFieldName(attrValueProp);
@@ -133,9 +134,12 @@ public class SubQueryParser implements CriterionParser {
 			return true;
 		}
 
-		// Single-level EAV mode: "alias.key" → EXISTS
+		// Single-level EAV mode
 		if (eavAlias != null && eavAlias.equals(alias)) {
-			Linq l = linq.exists(domainClass).equalProperty(joinProperty, parentProperty);
+			Linq l = linq.exists(domainClass);
+			for (int i = 0; i < joinProperties.length; i++) {
+				l.equalProperty(joinProperties[i], parentProperties[i]);
+			}
 			CriteriaUtils.parse(l, criterion);
 			l.end();
 			return true;
@@ -144,19 +148,13 @@ public class SubQueryParser implements CriterionParser {
 		// Normal mode: match by foreign key naming convention
 		for (String foreignKey : foreignKeys) {
 			if (StringUtils.startsWith(alias, foreignKey) || StringUtils.startsWith(foreignKey, alias)) {
-				Linq l = linq.exists(domainClass).equalProperty(JpaUtil.getIdName(domainClass), foreignKey);
+				Linq l = linq.exists(domainClass)
+						.equalProperty(JpaUtil.getIdName(domainClass), foreignKey);
 				CriteriaUtils.parse(l, criterion);
 				l.end();
 				return true;
 			}
 		}
 		return false;
-	}
-
-	/**
-	 * Returns the join property name for EAV mode (the FK column on the subquery side).
-	 */
-	public String getJoinProperty() {
-		return joinProperty;
 	}
 }

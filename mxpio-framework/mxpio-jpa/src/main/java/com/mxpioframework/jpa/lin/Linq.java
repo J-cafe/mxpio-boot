@@ -231,6 +231,21 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 			Class<?> entityClass, String... properties);
 
 	/**
+	 * Multi-key collect. Maps parent FK columns to child matching columns positionally.
+	 *
+	 * <pre>{@code
+	 * .collect(new String[]{"tenantId","deptCode"}, Dept.class,
+	 *          new String[]{"tenantId","deptCode"})
+	 * }</pre>
+	 *
+	 * @param properties       FK columns on the parent entity
+	 * @param entityClass      the entity to collect
+	 * @param otherProperties  matching columns on the collected entity (same length)
+	 */
+	Linq collect(String[] properties, Class<?> entityClass, String[] otherProperties);
+
+
+	/**
 	 * 设置收集entityClass对应的数据的投影
 	 * @param entityClass 实体类
 	 * @param projections 投影
@@ -321,6 +336,15 @@ public interface Linq extends Lin<Linq, CriteriaQuery<?>>{
 	 */
 	Linq collectExtAttr(Class<?> middleEntity, String middleFkProperty,
 						String ownerIdProperty, Class<?> extAttrEntity,
+						String alias, String mapProperty, String... keys);
+
+	// ---- multi-key overloads ----
+
+	Linq collectExtAttr(String[] ownerIdProperties, Class<?> extAttrEntity,
+						String alias, String mapProperty, String... keys);
+
+	Linq collectExtAttr(Class<?> middleEntity, String[] middleFkProperties,
+						String[] ownerIdProperties, Class<?> extAttrEntity,
 						String alias, String mapProperty, String... keys);
 
 	/**

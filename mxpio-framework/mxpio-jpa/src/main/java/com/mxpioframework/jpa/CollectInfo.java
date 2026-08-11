@@ -1,24 +1,79 @@
 package com.mxpioframework.jpa;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import com.mxpioframework.common.util.BeanReflectionUtils;
 
 @SuppressWarnings("rawtypes")
 public class CollectInfo {
+
+	private static final String COMPOSITE_KEY_DELIMITER = "||";
+
 	private Class<?> entityClass;
 	private Class<?> relationClass;
 	private String relationProperty;
 	private String relationOtherProperty;
 	private String otherProperty;
+	private String[] otherProperties;     // multi-key: matching columns on child side
 	private String[] properties;
 	private Set set;
+	private List<Object[]> compositeKeys; // multi-key: collected FK tuples
 
-	// EAV mode: if non-null, buildMetadata aggregates rows into Map<String,Map<String,String>>
-	// and BackfillFilter fills the named property on the entity
+	// EAV mode
 	private String extAttrMapProperty;
 	private String extAttrKeyProp = "attrKey";
 	private String extAttrValueProp = "attrValue";
-	private String[] extAttrKeys;  // if non-null, only load these keys
+	private String[] extAttrKeys;
+
+	// ---------- multi-key helpers ----------
+
+	public boolean isMultiKey() {
+		return otherProperties != null && otherProperties.length > 0;
+	}
+
+	public static String buildCompositeKey(Object[] values) {
+		return Arrays.stream(values)
+				.map(String::valueOf)
+				.collect(Collectors.joining(COMPOSITE_KEY_DELIMITER));
+	}
+
+	public static String extractCompositeKey(Object entity, String[] propertyNames) {
+		Object[] values = new Object[propertyNames.length];
+		for (int i = 0; i < propertyNames.length; i++) {
+			values[i] = BeanReflectionUtils.getPropertyValue(entity, propertyNames[i]);
+		}
+		return buildCompositeKey(values);
+	}
+
+	// ---------- getters / setters ----------
+
+	public List<Object[]> getCompositeKeys() {
+		return compositeKeys;
+	}
+
+	public void setCompositeKeys(List<Object[]> compositeKeys) {
+		this.compositeKeys = compositeKeys;
+	}
+
+	public void addCompositeKey(Object[] values) {
+		if (compositeKeys == null) {
+			compositeKeys = new ArrayList<>();
+		}
+		compositeKeys.add(values);
+	}
+
+	public String[] getOtherProperties() {
+		return otherProperties;
+	}
+
+	public void setOtherProperties(String[] otherProperties) {
+		this.otherProperties = otherProperties;
+	}
 
 	public String getExtAttrMapProperty() {
 		return extAttrMapProperty;

@@ -30,6 +30,8 @@ import com.mxpioframework.jpa.parser.SubQueryParser;
 import com.mxpioframework.jpa.policy.LinqContext;
 import com.mxpioframework.jpa.policy.impl.QBCCriteriaContext;
 import com.mxpioframework.jpa.query.Criteria;
+import com.mxpioframework.jpa.query.Junction;
+import com.mxpioframework.jpa.query.JunctionType;
 import com.mxpioframework.jpa.transform.ResultTransformer;
 import com.mxpioframework.jpa.transform.impl.Transformers;
 
@@ -499,6 +501,56 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		return this;
 	}
 
+	// ---- multi-key collectExtAttr ----
+
+	@Override
+	public Linq collectExtAttr(String[] ownerIdProperties, Class<?> extAttrEntity,
+							   String alias, String mapProperty, String... keys) {
+		if (!beforeMethodInvoke()) {
+			return this;
+		}
+		String[] parentPks = new String[ownerIdProperties.length];
+		for (int i = 0; i < ownerIdProperties.length; i++) {
+			parentPks[i] = JpaUtil.getIdName(domainClass);
+		}
+		this.addParser(new SubQueryParser(this, extAttrEntity, alias,
+				ownerIdProperties, parentPks));
+
+		CollectInfo info = new CollectInfo();
+		info.setEntityClass(extAttrEntity);
+		info.setProperties(ownerIdProperties);
+		info.setOtherProperties(ownerIdProperties);
+		info.setExtAttrMapProperty(mapProperty);
+		if (keys != null && keys.length > 0) {
+			info.setExtAttrKeys(keys);
+		}
+		collectInfos.add(info);
+		return this;
+	}
+
+	@Override
+	public Linq collectExtAttr(Class<?> middleEntity, String[] middleFkProperties,
+							   String[] ownerIdProperties, Class<?> extAttrEntity,
+							   String alias, String mapProperty, String... keys) {
+		if (!beforeMethodInvoke()) {
+			return this;
+		}
+		String[] parentPks = new String[middleFkProperties.length];
+		String[] middlePks = new String[ownerIdProperties.length];
+		for (int i = 0; i < middleFkProperties.length; i++) {
+			parentPks[i] = JpaUtil.getIdName(domainClass);
+		}
+		for (int i = 0; i < ownerIdProperties.length; i++) {
+			middlePks[i] = JpaUtil.getIdName(middleEntity);
+		}
+		this.addParser(new SubQueryParser(this,
+				middleEntity, middleFkProperties, parentPks,
+				extAttrEntity, ownerIdProperties, middlePks,
+				"attrKey", "attrValue",
+				alias));
+		return this;
+	}
+
 	@Override
 	public Linq collect(String... properties) {
 		if (!beforeMethodInvoke()) {
@@ -567,6 +619,26 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 	}
 
 	@Override
+	public Linq collect(String[] properties, Class<?> entityClass, String[] otherProperties) {
+		if (!beforeMethodInvoke()) {
+			return this;
+		}
+		// Register multi-key SubQueryParser so "properties[0].xxx" in where(criteria)
+		// auto-generates EXISTS with all join conditions
+		// joinProperties = otherProperties (child-side matching columns)
+		// parentProperties = properties (parent-side FK columns)
+		this.addParser(new SubQueryParser(this, entityClass,
+				properties[0], otherProperties, properties));
+
+		CollectInfo collectInfo = new CollectInfo();
+		collectInfo.setEntityClass(entityClass);
+		collectInfo.setProperties(properties);
+		collectInfo.setOtherProperties(otherProperties);
+		collectInfos.add(collectInfo);
+		return this;
+	}
+
+	@Override
 	public Linq collectSelect(Class<?> entityClass, String... projections) {
 		if (!beforeMethodInvoke()) {
 			return this;
@@ -588,6 +660,104 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 	private void buildMetadata() {
 		Map<Object, Object> metadata = linqContext.getMetadata();
 		for (CollectInfo collectInfo : collectInfos) {
+
+			// ======== multi-key branch ========
+			if (collectInfo.isMultiKey()) {
+				List<Object[]> keys = collectInfo.getCompositeKeys();
+				if (CollectionUtils.isEmpty(keys)) {
+					continue;
+				}
+				Class<?> entityClass = collectInfo.getEntityClass();
+				if (entityClass == null) {
+					continue;
+				}
+				if (metadata.containsKey(entityClass)) {
+					continue;
+				}
+
+				// Deduplicate composite keys
+				Set<String> seen = new HashSet<>();
+				List<Object[]> uniqueKeys = new ArrayList<>();
+				for (Object[] key : keys) {
+					if (seen.add(CollectInfo.buildCompositeKey(key))) {
+						uniqueKeys.add(key);
+					}
+				}
+
+				String[] otherProps = collectInfo.getOtherProperties();
+				Linq linq = JpaUtil.linq(entityClass);
+				if (ArrayUtils.isNotEmpty(projectionMap.get(entityClass))) {
+					linq.aliasToBean();
+					linq.select(projectionMap.get(entityClass));
+				}
+
+				// Build OR-of-ANDs: (col1=v1 AND col2=v2) OR (col1=v3 AND col2=v4) ...
+				if (uniqueKeys.size() == 1) {
+					// Single tuple: just AND
+					Object[] key = uniqueKeys.get(0);
+					for (int i = 0; i < otherProps.length; i++) {
+						linq.equal(otherProps[i], key[i]);
+					}
+				} else {
+					// Multiple tuples: OR-of-ANDs via Junction tree
+					com.mxpioframework.jpa.query.Junction orAll =
+							new com.mxpioframework.jpa.query.Junction(
+									com.mxpioframework.jpa.query.JunctionType.OR);
+					for (Object[] key : uniqueKeys) {
+						com.mxpioframework.jpa.query.Junction andGroup =
+								new com.mxpioframework.jpa.query.Junction(
+										com.mxpioframework.jpa.query.JunctionType.AND);
+						for (int i = 0; i < otherProps.length; i++) {
+							andGroup.add(linq.criteriaBuilder().equal(
+									linq.root().get(otherProps[i]), key[i]));
+						}
+						orAll.add(andGroup);
+					}
+					linq.add(orAll);
+				}
+
+				// EAV: filter by specific keys
+				if (collectInfo.getExtAttrMapProperty() != null
+						&& collectInfo.getExtAttrKeys() != null) {
+					linq.in(collectInfo.getExtAttrKeyProp(),
+							(Object[]) collectInfo.getExtAttrKeys());
+				}
+				List result = linq.list();
+
+				if (collectInfo.getExtAttrMapProperty() != null) {
+					// EAV mode: aggregate rows into Map<compositeFK, Map<String,String>>
+					String keyProp = collectInfo.getExtAttrKeyProp();
+					String valProp = collectInfo.getExtAttrValueProp();
+					Map<String, Map<String, String>> extMap = new HashMap<>();
+					for (Object row : result) {
+						String fk = CollectInfo.extractCompositeKey(row, otherProps);
+						String k = (String) BeanReflectionUtils.getPropertyValue(row, keyProp);
+						String v = (String) BeanReflectionUtils.getPropertyValue(row, valProp);
+						extMap.computeIfAbsent(fk, x1 -> new HashMap<>()).put(k, v);
+					}
+					metadata.put(collectInfo.getExtAttrMapProperty(), extMap);
+				} else {
+					// Normal mode: index and group by composite key
+					Map<String, Object> resultMap = new HashMap<>();
+					for (Object obj : result) {
+						resultMap.put(CollectInfo.extractCompositeKey(obj, otherProps), obj);
+					}
+					Map<String, List<Object>> map = new HashMap<>();
+					for (Object obj : result) {
+						String ck = CollectInfo.extractCompositeKey(obj, otherProps);
+						List<Object> list = map.get(ck);
+						if (list == null) {
+							list = new ArrayList<>(5);
+							map.put(ck, list);
+						}
+						list.add(obj);
+					}
+					metadata.put(entityClass, map);
+				}
+				continue;
+			}
+
+			// ======== single-key branch (existing) ========
 			Set collectSet = collectInfo.getSet();
 			Map<Object, Object> relationMap = null;
 			List collectList = null;
@@ -688,10 +858,28 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		for (Object entity : list) {
 			BeanMap beanMap = BeanMap.create(entity);
 			for (CollectInfo collectInfo : collectInfos) {
-				for (String property : collectInfo.getProperties()) {
-					Object value = beanMap.get(property);
-					if (value != null) {
-						collectInfo.add(value);
+				if (collectInfo.isMultiKey()) {
+					// Multi-key: collect full tuple
+					String[] props = collectInfo.getProperties();
+					Object[] values = new Object[props.length];
+					boolean allNonNull = true;
+					for (int i = 0; i < props.length; i++) {
+						values[i] = beanMap.get(props[i]);
+						if (values[i] == null) {
+							allNonNull = false;
+							break;
+						}
+					}
+					if (allNonNull) {
+						collectInfo.addCompositeKey(values);
+					}
+				} else {
+					// Single-key: existing behavior
+					for (String property : collectInfo.getProperties()) {
+						Object value = beanMap.get(property);
+						if (value != null) {
+							collectInfo.add(value);
+						}
 					}
 				}
 			}
