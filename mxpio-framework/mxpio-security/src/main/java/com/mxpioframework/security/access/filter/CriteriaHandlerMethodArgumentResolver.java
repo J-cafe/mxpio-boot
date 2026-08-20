@@ -10,6 +10,7 @@ import java.util.Set;
 
 import com.mxpioframework.security.access.datascope.provider.DataScapeContext;
 import com.mxpioframework.security.service.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.GrantedAuthority;
@@ -134,6 +135,20 @@ public class CriteriaHandlerMethodArgumentResolver implements HandlerMethodArgum
 										}
 										juntion.add(subJunction);
 										break;
+									}
+								}
+							}else if (com.mxpioframework.security.Constants.DatascopeEnum.FIELD.getCode()
+									.equals(dataFilter.getDataScope())&& StringUtils.isNotBlank(dataFilter.getFieldFilterJson())) {
+								Criteria scopeCri = CriteriaUtils.json2Criteria(dataFilter.getFieldFilterJson());
+								if (scopeCri != null && !scopeCri.getCriterions().isEmpty()){
+									Junction subJunction = new Junction(JunctionType.AND);
+									for (Object obj : scopeCri.getCriterions()) {
+										if (obj instanceof Criterion) {
+											subJunction.addCriterion((Criterion) obj);
+										}
+									}
+									if (!subJunction.getCriterions().isEmpty()){
+										juntion.add(subJunction);
 									}
 								}
 							}

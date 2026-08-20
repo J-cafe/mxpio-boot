@@ -1,9 +1,6 @@
 package com.mxpioframework.security.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import com.mxpioframework.jpa.annotation.Generator;
 
@@ -33,7 +30,7 @@ public class DataFilter extends BaseEntity {
 	private String dataResourceId;
 
 	@Column(name = "DATA_SCOPE_", length = 512)
-	@Schema(description = "权限范围")
+	@Schema(description = "权限范围")//枚举值
 	private String dataScope;
 
 	@Column(name = "PRE_PROCESS_")
@@ -47,5 +44,9 @@ public class DataFilter extends BaseEntity {
 	@Column(name = "DESCRIPTION_", length = 255)
 	@Schema(description = "描述")
 	private String description;
+
+	@Schema(description = "字段过滤条件(JSON)")
+	@Column(name = "FIELD_FILTER_JSON_", columnDefinition = "TEXT")
+	private String fieldFilterJson;
 
 }

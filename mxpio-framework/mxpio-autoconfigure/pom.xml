@@ -121,11 +121,11 @@
 			<artifactId>mxpio-oauth</artifactId>
 			<optional>true</optional>
 		</dependency>
-        <!--<dependency>
+        <dependency>
             <groupId>com.mxpio</groupId>
             <artifactId>mxpio-oauth2-server</artifactId>
             <optional>true</optional>
-        </dependency>-->
+        </dependency>
 		<dependency>
 			<groupId>com.mxpio</groupId>
 			<artifactId>mxpio-msal</artifactId>
