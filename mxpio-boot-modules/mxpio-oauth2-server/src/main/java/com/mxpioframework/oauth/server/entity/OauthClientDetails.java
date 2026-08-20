@@ -4,18 +4,18 @@ import com.mxpioframework.security.entity.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
-import org.springframework.security.oauth2.provider.ClientDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.util.*;
 
+/**
+ * OAuth2 接入端配置（对应表 MB_OAUTH_CLIENT_DETAILS）。
+ * <p>
+ * 仅作为 JPA 实体维护接入端信息，供 {@code JpaRegisteredClientRepository} 读取并映射为
+ * Spring Authorization Server 的 {@code RegisteredClient}。
+ */
 @Entity
 @Schema(description="oauth2 接入端配置")
 @Table(name = "MB_OAUTH_CLIENT_DETAILS")
@@ -57,7 +57,3 @@ public class OauthClientDetails extends BaseEntity{
     private String autoApproveScopes;
 
 }
-
-
-
-

@@ -193,6 +193,12 @@
                 <version>${mxpio.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.mxpio</groupId>
+                <artifactId>mxpio-oauth2-server</artifactId>
+                <version>${mxpio.version}</version>
+            </dependency>
+
             <!-- ======================================== -->
             <!-- Spring Boot Starters                       -->
             <!-- ======================================== -->
