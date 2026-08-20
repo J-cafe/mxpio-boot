@@ -627,8 +627,9 @@ public class LinqImpl extends LinImpl<Linq, CriteriaQuery<?>> implements Linq {
 		// auto-generates EXISTS with all join conditions
 		// joinProperties = otherProperties (child-side matching columns)
 		// parentProperties = properties (parent-side FK columns)
+		// translateAttrKey=false: "xxx" is a plain property path, not an ext-attr key
 		this.addParser(new SubQueryParser(this, entityClass,
-				properties[0], otherProperties, properties));
+				properties[0], otherProperties, properties, false));
 
 		CollectInfo collectInfo = new CollectInfo();
 		collectInfo.setEntityClass(entityClass);

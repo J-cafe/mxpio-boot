@@ -82,9 +82,22 @@ public class BackfillFilter implements Filter {
 					}
 				} else if (pds.size() == 1) {
 					doFill(linqContext, entity, cls, lookupKey, pds.get(0));
-				} else {
+				} else if (collectInfo.isMultiKey()) {
+					// Multi-key: one composite key applies to all same-typed properties
 					for (PropertyDescriptor pd : pds) {
 						doFill(linqContext, entity, cls, lookupKey, pd);
+					}
+				} else {
+					// Single-key, multiple same-typed properties: original contract —
+					// fuzzy-match property names, each filled with its own key value
+					String[] properties = collectInfo.getProperties();
+					for (String property : properties) {
+						for (PropertyDescriptor pd : pds) {
+							if (StringUtils.contains(property, pd.getName())
+									|| StringUtils.contains(pd.getName(), property)) {
+								doFill(linqContext, entity, cls, beanMap.get(property), pd);
+							}
+						}
 					}
 				}
 			}

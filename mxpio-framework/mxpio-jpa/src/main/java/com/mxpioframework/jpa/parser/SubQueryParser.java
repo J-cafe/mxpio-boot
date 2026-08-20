@@ -30,6 +30,9 @@ public class SubQueryParser implements CriterionParser {
 	private String attrKeyProp = "attrKey";
 	private String attrValueProp = "attrValue";
 
+	// false = alias.key parsed as plain property path (multi-key collect mode)
+	private boolean translateAttrKey = true;
+
 	// ---- Normal mode ----
 
 	public SubQueryParser(Linq linq, Class<?> domainClass) {
@@ -61,6 +64,18 @@ public class SubQueryParser implements CriterionParser {
 		this.eavAlias = eavAlias;
 		this.joinProperties = joinProperties;
 		this.parentProperties = parentProperties;
+	}
+
+	// ---- multi-key collect (non-EAV) mode ----
+
+	// Same shape as single-level EAV, but "alias.key" conditions are parsed as
+	// plain property paths on the collected entity (no attrKey/attrValue
+	// translation).
+	public SubQueryParser(Linq linq, Class<?> domainClass,
+						  String alias, String[] joinProperties, String[] parentProperties,
+						  boolean translateAttrKey) {
+		this(linq, domainClass, alias, joinProperties, parentProperties);
+		this.translateAttrKey = false;
 	}
 
 	// ---- EAV two-level (single key, backward compatible) ----
@@ -104,11 +119,10 @@ public class SubQueryParser implements CriterionParser {
 			return false;
 		}
 
-		String alias = StringUtils.substringBefore(property, ".");
-
-		// Two-level EAV mode
-		if (eavAlias != null && eavAlias.equals(alias) && middleEntity != null) {
-			String keyName = property.substring(alias.length() + 1);
+		// Two-level EAV mode (alias may itself contain dots, e.g. "items.ext")
+		if (eavAlias != null && middleEntity != null
+				&& property.startsWith(eavAlias + ".")) {
+			String keyName = property.substring(eavAlias.length() + 1);
 			if (keyName.isEmpty()) {
 				return false;
 			}
@@ -134,25 +148,43 @@ public class SubQueryParser implements CriterionParser {
 			return true;
 		}
 
-		// Single-level EAV mode
-		if (eavAlias != null && eavAlias.equals(alias)) {
+		// Single-level EAV mode / multi-key collect mode
+		if (eavAlias != null && property.startsWith(eavAlias + ".")) {
+			String keyName = property.substring(eavAlias.length() + 1);
+			if (keyName.isEmpty()) {
+				return false;
+			}
 			Linq l = linq.exists(domainClass);
 			for (int i = 0; i < joinProperties.length; i++) {
 				l.equalProperty(joinProperties[i], parentProperties[i]);
 			}
-			CriteriaUtils.parse(l, criterion);
+			String origField = criterion.getFieldName();
+			if (translateAttrKey) {
+				l.equal(attrKeyProp, keyName);
+				criterion.setFieldName(attrValueProp);
+			} else {
+				criterion.setFieldName(keyName);
+			}
+			try {
+				CriteriaUtils.parse(l, criterion);
+			} finally {
+				criterion.setFieldName(origField);
+			}
 			l.end();
 			return true;
 		}
 
 		// Normal mode: match by foreign key naming convention
-		for (String foreignKey : foreignKeys) {
-			if (StringUtils.startsWith(alias, foreignKey) || StringUtils.startsWith(foreignKey, alias)) {
-				Linq l = linq.exists(domainClass)
-						.equalProperty(JpaUtil.getIdName(domainClass), foreignKey);
-				CriteriaUtils.parse(l, criterion);
-				l.end();
-				return true;
+		if (foreignKeys != null) {
+			String alias = StringUtils.substringBefore(property, ".");
+			for (String foreignKey : foreignKeys) {
+				if (StringUtils.startsWith(alias, foreignKey) || StringUtils.startsWith(foreignKey, alias)) {
+					Linq l = linq.exists(domainClass)
+							.equalProperty(JpaUtil.getIdName(domainClass), foreignKey);
+					CriteriaUtils.parse(l, criterion);
+					l.end();
+					return true;
+				}
 			}
 		}
 		return false;
