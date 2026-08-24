@@ -12,6 +12,8 @@ interface PasswordStrategy {
 export interface SystemState {
   // 是否显示验证码
   captchaOpenFlag: boolean;
+  // 是否启用多租户（登录页显示租户输入框）
+  isMultitenant: boolean;
   // 密码校验规则
   passwordStrategy: PasswordStrategy[];
   // 应用名称
@@ -30,6 +32,7 @@ export const useSystemStore = defineStore({
   id: 'system',
   state: (): SystemState => ({
     captchaOpenFlag: false,
+    isMultitenant: false,
     passwordStrategy: [],
     appName: '',
     appSystemAbbr: '',
@@ -40,6 +43,7 @@ export const useSystemStore = defineStore({
   actions: {
     setSystem(data: SystemState) {
       this.captchaOpenFlag = data.captchaOpenFlag;
+      this.isMultitenant = data.isMultitenant;
       this.passwordStrategy = data.passwordStrategy;
       this.appName = data.appName;
       this.appSystemAbbr = data.appSystemAbbr;

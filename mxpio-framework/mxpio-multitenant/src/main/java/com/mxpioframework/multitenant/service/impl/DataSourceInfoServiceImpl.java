@@ -18,33 +18,36 @@ public class DataSourceInfoServiceImpl implements DataSourceInfoService {
 	@Override
 	@Transactional(readOnly = true)
 	public DataSourceInfo get(Organization organization) {
+		// 注意：不使用 addIf/addIfNot DSL —— 其对 String 的判定语义与 Javadoc
+		// 相反（LinImpl 中 addIf(String) 在空串时生效），这里用普通分支保证语义明确。
+		// 另外 doQuery 的 REQUIRES_NEW 事务中看不到调用方未提交的 Organization 行，
+		// 因此已分配数据源的租户必须按 dataSourceInfoId 直查（该行早已提交）。
+		if (StringUtils.isNotEmpty(organization.getDataSourceInfoId())) {
+			return JpaUtil.linq(DataSourceInfo.class)
+					.idEqual(organization.getDataSourceInfoId())
+					.findOne();
+		}
 		return JpaUtil.linq(DataSourceInfo.class)
-			.addIf(organization.getDataSourceInfoId())
-				.idEqual(organization.getDataSourceInfoId())
-			.endIf()
-			.addIfNot(organization.getDataSourceInfoId())
 				.exists(Organization.class)
 					.equalProperty("dataSourceInfoId", "id")
 					.idEqual(organization.getId())
 				.end()
-			.endIf()
-			.findOne();
+				.findOne();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public DataSourceInfo allocate(Organization organization) {
 		if (StringUtils.isEmpty(organization.getDataSourceInfoId())) {
+			// 选择消耗指数最小（depletionIndex 无更小者）且可用可共享的数据源
 			List<DataSourceInfo> list = JpaUtil.linq(DataSourceInfo.class)
 					.isTrue("enabled")
 					.isTrue("shared")
-					.addIfNot(organization.getDataSourceInfoId())
-						.notExists(DataSourceInfo.class)
-							.isTrue("enabled")
-							.isTrue("shared")
-							.lt("depletionIndex", "depletionIndex")
-						.end()
-					.endIf()
+					.notExists(DataSourceInfo.class)
+						.isTrue("enabled")
+						.isTrue("shared")
+						.lt("depletionIndex", "depletionIndex")
+					.end()
 					.list(0, 1);
 			Assert.notEmpty(list,"DataSourceInfo must contain elements");
 			return list.get(0);
@@ -55,7 +58,7 @@ public class DataSourceInfoServiceImpl implements DataSourceInfoService {
 					.idEqual(organization.getDataSourceInfoId())
 					.findOne();
 		}
-		
+
 	}
 
 }

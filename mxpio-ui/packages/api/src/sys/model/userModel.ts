@@ -8,6 +8,8 @@ export interface LoginParams {
   uuid?: string;
   authCode?: string;
   thirdPlatformType?: string;
+  // 多租户模式下的租户ID
+  organization?: string;
 }
 
 export interface RoleInfo {

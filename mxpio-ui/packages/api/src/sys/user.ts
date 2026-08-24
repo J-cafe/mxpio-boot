@@ -79,7 +79,8 @@ export function refreshToken(params: any) {
   return http.post(
     {
       url: Api.RefreshToken,
-      params,
+      // 后端 refreshToken(@RequestBody TokenVo) 要求 JSON body
+      data: params,
     },
     {
       errorMessageMode: 'none',

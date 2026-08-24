@@ -28,8 +28,6 @@ public abstract class MultitenantUtils {
 
 	
 	public static void pushOrganization(Organization organization) {
-		Organization tempOrganization = new Organization();
-		tempOrganization.setId(organization.getId());
 		Stack<Organization> stack = threadLocal.get();
 		if (stack == null) {
 			stack = new Stack<Organization>();
@@ -37,10 +35,10 @@ public abstract class MultitenantUtils {
 		}
 		stack.push(organization);
 	}
-	
+
 	public static Organization popOrganization() {
 		Stack<Organization> stack = threadLocal.get();
-		if (!stack.isEmpty()) {
+		if (stack != null && !stack.isEmpty()) {
 			return stack.pop();
 		}
         threadLocal.remove();

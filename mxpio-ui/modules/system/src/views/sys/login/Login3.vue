@@ -20,6 +20,23 @@
                 @close="error = ''"
               />
               <a-form-item
+                name="organization"
+                :rules="[{ required: true, message: '请输入租户', whitespace: true }]"
+                v-if="systemStore.isMultitenant"
+              >
+                <p class="label">租户:</p>
+                <a-input
+                  autocomplete="autocomplete"
+                  size="large"
+                  v-model:value="formData.organization"
+                  placeholder="请输入租户ID"
+                >
+                  <template #prefix>
+                    <img :src="userimg" alt="租户" style="width: 16px; height: 16px" />
+                  </template>
+                </a-input>
+              </a-form-item>
+              <a-form-item
                 name="username"
                 :rules="[{ required: true, message: '请输入用户名', whitespace: true }]"
               >
@@ -135,6 +152,7 @@
   const requestCodeSuccess = ref(false);
   const randCode = ref('');
   const formData = reactive({
+    organization: '',
     username: '',
     password: '',
     captcha: '',
@@ -156,6 +174,10 @@
 
   async function onSubmit(e: Event) {
     e.preventDefault();
+    if (systemStore.isMultitenant && !formData.organization) {
+      error.value = '请输入租户';
+      return;
+    }
     if (!formData.username) {
       error.value = '请输入用户名';
       return;
@@ -171,6 +193,7 @@
 
     logging.value = true;
     const data = {
+      organization: formData.organization,
       username: formData.username,
       password: formData.password,
     };
@@ -181,12 +204,16 @@
 
     try {
       const userInfo = await userStore.login({
+        organization: (data as any).organization,
         username: data.username,
         password: data.password,
         captcha: (data as any).captcha,
         uuid: (data as any).uuid,
         mode: 'none',
       });
+      if (systemStore.isMultitenant && formData.organization) {
+        localStorage.setItem('MXPIO_LAST_ORGANIZATION', formData.organization);
+      }
 
       logging.value = false;
       if (userInfo?.pwdExpiredFlag) {
@@ -226,7 +253,14 @@
   }
 
   onMounted(async () => {
-    await systemStore.getSystemAction();
+    try {
+      await systemStore.getSystemAction();
+    } catch (err) {
+      // 配置接口不可用时保持默认值（无验证码/无多租户），不阻塞登录
+    }
+    if (systemStore.isMultitenant) {
+      formData.organization = localStorage.getItem('MXPIO_LAST_ORGANIZATION') || '';
+    }
     if (systemStore.captchaOpenFlag) {
       handleChangeCheckCode();
     }

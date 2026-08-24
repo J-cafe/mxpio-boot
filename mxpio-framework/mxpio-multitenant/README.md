@@ -6,7 +6,7 @@
 
 Multitenant采用的是**独立数据库共享或独享数据库实例**，简单来说就是，一个租户对应着一个数据库，这个数据库可以独享整个数据库实例，也可以与其他租户共享数据库实例，数据库实例可以有一个或者多个，根据项目的规模来定，后期可以动态横向扩展数据库实例，不需要开发人员再次开发。
 ## 可维护性
-一个公司一个数据库，一百个公司就一百个数据库，这种情况下，项目后期运营过程中，项目添加了一个新的功能，这个新功能需要在每个公司对应的数据库中新建一张表，是不是需要运维人员把建表脚本在每个公司的数据库中都执行一遍呢？在Multitenant中是不需要的，Multitenant会在合适的时机，根据开发人员定义的实体类自动生成表。又或者我需要添加一个新的表字段，同样也是可以自动生成的。又或者我需要修改某个字段的长度，这种情况，虽然没法自动帮你修改，但是Multitenant提供了初始化脚本，你可以把修改字段长度的脚本写好，Multitenant就会在合适的时机来执行你的脚本。
+一个公司一个数据库，一百个公司就一百个数据库，这种情况下，项目后期运营过程中，项目添加了一个新的功能，这个新功能需要在每个公司对应的数据库中新建一张表，是不是需要运维人员把建表脚本在每个公司的数据库中都执行一遍呢？在Multitenant中是不需要的，Multitenant会在合适的时机，根据开发人员定义的实体类自动生成表（租户EntityManagerFactory创建时按`mxpio.multitenant.ddl-auto`执行Hibernate schema更新，默认`update`，嵌入式数据库固定`create-drop`）。又或者我需要添加一个新的表字段，同样也是可以自动生成的。又或者我需要修改某个字段的长度，这种情况，虽然没法自动帮你修改，但是Multitenant提供了初始化脚本，你可以把修改字段长度的脚本写好，Multitenant就会在合适的时机来执行你的脚本。
 ## 注意事项
 1. 如果数据库类型为非嵌入式数据库，一定要加spring.datasource.platform属性，如：spring.datasource.platform=mysql
 2. 如果数据库类型为非嵌入式数据库且不是mysql，请在classpath*路径下面添加对应数据库创库脚本，如：database-oracle.sql。mysql已经提供
@@ -26,11 +26,13 @@ packagesToScan=com......a.domain,com......b.domain.......
 * 刚开始，只会有一个数据源，这个数据源就是主公司对应的数据源，项目启动时，会自动把主数据源的相关信息插入到数据源信息表中，不可删除。总之项目中至少有一个数据源。
 * 数据源分配的默认逻辑：从数据源信息表中找到消耗指数最小且可共享且可用的数据源信息，消耗指数默认是该数据源下挂靠的公司数目，把数据源分配给公司，最后该数据源的消耗指数加1。
 ## 数据库分配工序
-1. 根据分配到的数据源信息，构造一个临时数据源，通过临时数据源，创建公司的数据库，数据库名称为公司的ID
+1. 根据分配到的数据源信息，构造一个临时数据源，通过临时数据源，创建公司的数据库（默认执行`database-{platform}.sql`）
 2. 根据分配到的数据源信息，构造真正的数据源
-3. 根据数据源，构造EntityManagerFactory，由EntityManagerFactory构造表结构
+3. 根据数据源，构造EntityManagerFactory，由EntityManagerFactory按`mxpio.multitenant.ddl-auto`（默认`update`）自动生成表结构
 ## 执行数据库初始化SQL脚本工序
-默认脚本存放位置为：classpath*:multitenant.sql;classpath*:multitenant-xxx.sql。其中xxx为spring.datasource.platform的值。可以通过resourceScript指定别的位置。
+默认脚本存放位置为：classpath*:multitenant.sql;classpath*:multitenant-xxx.sql。其中xxx为spring.datasource.platform的值。可以通过`mxpio.multitenant.resourceScript`指定别的位置（默认为空，即使用上述fallback位置）。该工序在租户EntityManagerFactory创建（建表）之后执行。
+## 种子数据工序
+建表完成后执行`mxpio.multitenant.dataScript`（默认`classpath*:data.sql`，即框架各模块分发的种子数据），为租户库写入菜单、字典等初始化数据。
 ## 公司数据源智能切换
 每个公司对应着一个数据源DataSource，或者说EntityManagerFactory，如何让不同公司的用户操作的是自己公司的数据源。SAAS模块提供了两个接口DataSourceService和EntityManagerFactoryService，都有相应方法：通过公司ID获取数据源或者EntityManagerFactory。有了这两个接口，实现业务的功能还是很麻烦，根据登录的公司，自动切换数据源，开发人员就不用关系多数据源的切换问题了。基于JpaUtil工具类还有一个好处，比如，刚开始项目不是SAAS项目，开发了一大半后想做成SAAS项目，这样就可以无缝切换，不需要改一行代码。从SAAS项目切换到普通项目也是一样。
 ## multitenant模式下的事务管理
@@ -39,6 +41,9 @@ packagesToScan=com......a.domain,com......b.domain.......
 multitenant是如何管理事务的，其实原理很简单：
 1. 调用业务方法前，事务管理器通过EntityManagerFactoryService和DataSourceService根据当前环境中的公司ID获取对应的DataSource和EntityManagerFactory
 2. 事务管理根据事务注解，构建事务状态，然后构建事务同步对象注册到事务同步管理器中
+
+### 跨租户操作的独立事务语义
+`MultitenantUtils.doQuery/doNonQuery` 执行的命令均为独立事务（REQUIRES_NEW）：挂起调用方事务后，事务管理器按命令中push的租户上下文重新解析目标DataSource/EntityManagerFactory。**注意：跨租户操作与调用方事务非原子**——内层先提交，外层回滚不会回滚租户库的操作。需要补偿/最终一致的场景（如租户注册失败）由调用方自行设计（如调用`releaseResource`清理已创建的租户库）。
 
 ## A公司用户操作B公司的数据源
 在绝大多数业务开发中，是不需要操作别的公司数据源的，操作主公司的数据源相对会比较多，但也不会太多。假如有这样的需求该怎么办呢？multitenant提供了一个工具类MultitenantUtils。
@@ -69,8 +74,9 @@ MultitenantUtils.doQuery(() -> {
 ```
 ## Multitenant的SQL脚本
 1. data.sql 用于主公司的初始化，配置属性：spring.dataSource.data，classpath*:data.sql;classpath*:data-xxx.sql。其中xxx为spring.datasource.platform的值。
-2. multitenant.sql 用于公司（不包含主公司）创建时的初始化，配置属性：resourceScript，classpath*:multitenant.sql;classpath*:multitenant-xxx.sql。其中xxx为spring.datasource.platform的值。
-3. multitenant-data.sql 用于公司（不包含主公司）对应的EntityManagerFactory创建时的初始化，配置属性：dataScript，classpath*:multitenant-data.sql;classpath*:multitenant-data-xxx.sql。其中xxx为spring.datasource.platform的值。
+2. multitenant.sql 用于公司（不包含主公司）创建时的初始化，配置属性：mxpio.multitenant.resourceScript（默认为空，fallback位置：classpath*:multitenant.sql;classpath*:multitenant-xxx.sql，xxx为spring.datasource.platform的值）。
+3. data.sql 用于公司（不包含主公司）建表完成后的种子数据，配置属性：mxpio.multitenant.dataScript（默认classpath*:data.sql；fallback位置：classpath*:multitenant-data.sql;classpath*:multitenant-data-xxx.sql）。
+4. database-{platform}.sql 用于创建公司数据库（DDL：CREATE DATABASE），配置属性：databaseScript（默认为空，fallback位置：classpath*:database-xxx.sql，mysql/sqlserver已内置）。
 ## 公司的EntityManagerFactory（DataSource）创建的时机
 * 主公司的EntityManagerFactory只在项目启动的时候创建
 * 其他公司EntityManagerFactory（DataSource）创建情况

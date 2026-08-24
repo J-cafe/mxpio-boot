@@ -39,11 +39,19 @@ public class OrganizationServiceImpl implements OrganizationService {
 			.paging(page);
 	}
 
+	/**
+	 * 注册租户：分配资源（建库/建表/初始化脚本）→ 在租户库创建默认管理员。
+	 * <p>
+	 * doNonQuery 是独立事务（REQUIRES_NEW），与 master 事务非原子：
+	 * 若后续 master 事务（Organization 记录落库）失败，租户库已创建且
+	 * 管理员已写入 —— 调用方需捕获异常后调用
+	 * {@code organizationService.releaseResource(organization)} 做补偿清理。
+	 */
 	@Override
 	@Transactional
 	public void save(List<Organization> organizations) {
 		JpaUtil.save(organizations, new SmartCrudPolicyAdapter() {
-			
+
 			@Override
 			public boolean beforeInsert(CrudContext context) {
 				Organization organization = context.getEntity();

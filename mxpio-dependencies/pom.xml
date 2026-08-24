@@ -199,6 +199,7 @@
                 <version>${mxpio.version}</version>
             </dependency>
 
+
             <!-- ======================================== -->
             <!-- Spring Boot Starters                       -->
             <!-- ======================================== -->
@@ -405,6 +406,8 @@
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
+
         </dependencies>
+
     </dependencyManagement>
 </project>

@@ -2,6 +2,7 @@ package com.mxpioframework.autoconfigure.multitenant;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.mxpioframework.jpa.JpaUtil;
+import com.mxpioframework.multitenant.Constants;
 import com.mxpioframework.multitenant.MultitenantUtils;
 import com.mxpioframework.multitenant.domain.Organization;
 import com.mxpioframework.multitenant.service.OrganizationService;
@@ -56,6 +58,10 @@ public class MultitenantUserDetailsService implements UserDetailsService {
 		Organization organization = null;
 		if (user == null) {
 			String organizationId = request.getParameter("organization");
+			// 未携带 organization 参数时默认主公司，避免 get(null) 异常路径
+			if (StringUtils.isBlank(organizationId)) {
+				organizationId = Constants.MASTER;
+			}
 			organization = organizationService.get(organizationId);
 			Assert.notNull(organization, "Organization is not exists.");
 		} else {

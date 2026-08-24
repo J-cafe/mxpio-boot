@@ -27,6 +27,7 @@ import org.springframework.boot.hibernate.autoconfigure.HibernatePropertiesCusto
 import org.springframework.boot.hibernate.autoconfigure.HibernateSettings;
 import org.springframework.boot.jpa.autoconfigure.JpaProperties;
 import org.springframework.boot.hibernate.autoconfigure.HibernateProperties;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.jdbc.SchemaManagementProvider;
 import org.springframework.boot.jpa.EntityManagerFactoryBuilder;
 import org.springframework.boot.jpa.EntityManagerFactoryBuilder.Builder;
@@ -49,7 +50,6 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 import com.mxpioframework.multitenant.Constants;
-import com.mxpioframework.multitenant.HibernateDefaultDdlAutoProvider;
 import com.mxpioframework.multitenant.domain.Organization;
 import com.mxpioframework.multitenant.listener.EntityManagerFactoryCreateListener;
 import com.mxpioframework.multitenant.service.DataSourceService;
@@ -85,8 +85,6 @@ public class EntityManagerFactoryServiceImpl implements
 
 	private String beanName;
 
-	private final HibernateDefaultDdlAutoProvider defaultDdlAutoProvider;
-
 	private HibernateProperties hibernateProperties;
 
 	private final List<HibernatePropertiesCustomizer> hibernatePropertiesCustomizers;
@@ -110,6 +108,9 @@ public class EntityManagerFactoryServiceImpl implements
 	@Autowired(required = false)
 	private PersistenceUnitManager persistenceUnitManager;
 
+	@Value("${mxpio.multitenant.ddl-auto:update}")
+	private String ddlAuto;
+
 	/*@Value("${mxpio.multitenant.packagesToScan:"
 			+ "com.mxpioframework.excel.importer.model,"
 			+ "com.mxpioframework.filestorage.entity,"
@@ -132,8 +133,6 @@ public class EntityManagerFactoryServiceImpl implements
 			ObjectProvider<ImplicitNamingStrategy> implicitNamingStrategy,
 			ObjectProvider<List<HibernatePropertiesCustomizer>> hibernatePropertiesCustomizers) {
 		this.hibernateProperties = hibernateProperties;
-		this.defaultDdlAutoProvider = new HibernateDefaultDdlAutoProvider(
-				providers.getIfAvailable(Collections::emptyList));
 		this.hibernatePropertiesCustomizers = hibernatePropertiesCustomizers
 				.getIfAvailable(() -> Collections.emptyList());
 	}
@@ -216,7 +215,10 @@ public class EntityManagerFactoryServiceImpl implements
 						this.hibernatePropertiesCustomizers)));
 		return vendorProperties;*/
 
-		Supplier<String> defaultDdlMode = () -> this.defaultDdlAutoProvider.getDefaultDdlAuto(dataSource);
+		// 租户库表结构由 Hibernate 按 ddl-auto 自动生成/更新（非嵌入式数据库默认 update），
+		// 嵌入式数据库（测试场景）保持 create-drop
+		Supplier<String> defaultDdlMode = () ->
+				EmbeddedDatabaseConnection.isEmbedded(dataSource) ? "create-drop" : ddlAuto;
 		return new LinkedHashMap<>(this.hibernateProperties
 				.determineHibernateProperties(this.properties.getProperties(), new HibernateSettings()
 						.ddlAuto(defaultDdlMode).hibernatePropertiesCustomizers(this.hibernatePropertiesCustomizers)));
