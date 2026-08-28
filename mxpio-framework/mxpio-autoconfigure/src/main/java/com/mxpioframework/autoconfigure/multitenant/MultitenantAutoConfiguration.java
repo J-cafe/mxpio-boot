@@ -45,7 +45,8 @@ public class MultitenantAutoConfiguration {
 	@ConditionalOnClass(SimpleKeyGenerator.class)
 	protected static class cacheConfiguration {
 		
-		@Bean
+		@Bean(name = "organizationKeyGenerator")
+		@Primary
 		public OrganizationKeyGenerator keyGenerator() {
 			return new OrganizationKeyGenerator();
 		}

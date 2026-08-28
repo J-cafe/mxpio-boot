@@ -24,6 +24,8 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.util.Assert;
 
+import com.mxpioframework.common.util.SpringUtil;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -77,11 +79,21 @@ public class RedisConfig extends CachingConfigurerSupport {
 
 	/**
 	 * 自定义缓存key生成策略，默认将使用该策略
+	 * 当多租户模块激活时，自动委托给OrganizationKeyGenerator
 	 */
 	@Bean
 	@Override
 	public KeyGenerator keyGenerator() {
 		return (target, method, params) -> {
+			try {
+				org.springframework.context.ApplicationContext ctx = SpringUtil.getApplicationContext();
+				if (ctx != null && ctx.containsBean("organizationKeyGenerator")) {
+					KeyGenerator orgKeyGen = (KeyGenerator) ctx.getBean("organizationKeyGenerator");
+					return orgKeyGen.generate(target, method, params);
+				}
+			} catch (Exception e) {
+				// fallback to SHA256
+			}
 			Map<String, Object> container = new HashMap<>(3);
 			Class<?> targetClassClass = target.getClass();
 			// 类地址
