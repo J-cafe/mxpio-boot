@@ -11,6 +11,8 @@ import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 
+import java.util.Map;
+
 @Configuration
 public class SpringDocConfig {
 
@@ -51,19 +53,27 @@ public class SpringDocConfig {
                 .build();
     }
 
-    @Bean
-    public OpenApiCustomizer globalOpenApiCustomizer() {
-        return openApi -> {
-            // 获取当前分组名
-            String groupName = openApi.getExtensions().get("group").toString();
+	@Bean
+	public OpenApiCustomizer globalOpenApiCustomizer() {
+		return openApi -> {
+			// 获取当前分组名（默认分组可能没有扩展属性，需做空值防护）
+			Map<String, Object> extensions = openApi.getExtensions();
+			if (extensions == null) {
+				return;
+			}
+			Object group = extensions.get("group");
+			if (group == null) {
+				return;
+			}
+			String groupName = group.toString();
 
-            // 根据不同分组做不同配置
-            if ("Camunda".equals(groupName)) {
-                openApi.info(new Info()
-                        .title("Camunda API")
-                        .version("7.24.0"));
-            }
-        };
-    }
+			// 根据不同分组做不同配置
+			if ("Camunda".equals(groupName)) {
+				openApi.info(new Info()
+						.title("Camunda API")
+						.version("7.24.0"));
+			}
+		};
+	}
 
 }
