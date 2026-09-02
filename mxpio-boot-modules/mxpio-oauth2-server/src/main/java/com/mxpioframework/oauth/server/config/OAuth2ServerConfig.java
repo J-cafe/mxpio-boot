@@ -1,6 +1,7 @@
 package com.mxpioframework.oauth.server.config;
 
 import com.mxpioframework.oauth.server.token.MxpioOAuth2TokenGenerator;
+import com.mxpioframework.security.access.filter.JwtTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
@@ -33,6 +35,9 @@ import java.util.Set;
  * <p>JWKSource、JwtDecoder、AuthorizationServerSettings 由 Spring Boot 自动配置提供，无需在此声明。
  * RegisteredClientRepository 由 {@link com.mxpioframework.oauth.server.client.JpaRegisteredClientRepository}
  * 提供（基于数据库表 MB_OAUTH_CLIENT_DETAILS）。
+ *
+ * <p>登录态判定有两条路径：优先由 mxpio-security 的 JwtTokenFilter 从 Access-Token（Header/Cookie）
+ * 识别已登录用户（SSO，免表单）；否则回退到 /oauth2/login 表单登录 + HttpSession 会话。
  */
 @Configuration
 public class OAuth2ServerConfig {
@@ -68,6 +73,17 @@ public class OAuth2ServerConfig {
 				.loginPage("/oauth2/login")
 				.loginProcessingUrl("/oauth2/login")
 				.permitAll());
+
+		// 桥接 mxpio 登录态（SSO）：复用 mxpio-security 的 JwtTokenFilter，从 Access-Token
+		// （Header / Cookie）解析在线用户并完成认证。已在 mxpio 系统登录过的浏览器携带
+		// Access-Token Cookie 访问 /oauth2/authorize 时，无需再填 /oauth2/login 表单；
+		// 令牌缺失或已过期时过滤器直接放行，回退到表单登录 + 会话的原有流程。
+		// 注意：必须紧跟 SecurityContextHolderFilter 执行（而不能挂在 UsernamePasswordAuthenticationFilter 之前）。
+		// SAS 7.0 新增的 OAuth2AuthorizationCodeRequestValidatingFilter 位于
+		// AbstractPreAuthenticatedProcessingFilter 之前，会提前执行 converter 并把
+		// SecurityContext 中的 principal 存入 request attribute；若认证此时尚未发生，
+		// principal 会被定格为匿名身份，最终 /oauth2/authorize 抛 invalid_request: principal。
+		http.addFilterAfter(new JwtTokenFilter(), SecurityContextHolderFilter.class);
 
 		// 授权码流程需要会话保存资源所有者的登录状态（mxpio-security 为无状态，仅作用于其自身链，互不影响）
 		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
