@@ -123,9 +123,9 @@ public class WebSecurityConfigurer{
 
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity,AuthenticationManager authenticationManager) throws Exception {
         JwtTokenFilter jwtTokenFilter = new JwtTokenFilter();
-        FilterSecurityInterceptor securityInterceptor = createFilterSecurityInterceptor(httpSecurity);
+        FilterSecurityInterceptor securityInterceptor = createFilterSecurityInterceptor(httpSecurity,authenticationManager);
         httpSecurity.authenticationProvider(jwtAuthenticationProvider)
                 .authenticationProvider(thirdAuthorizeProvider)
                 .cors(Customizer.withDefaults())
@@ -143,11 +143,11 @@ public class WebSecurityConfigurer{
         return httpSecurity.build();
 	}
 
-	private FilterSecurityInterceptor createFilterSecurityInterceptor(HttpSecurity httpSecurity) throws Exception {
+	private FilterSecurityInterceptor createFilterSecurityInterceptor(HttpSecurity httpSecurity,AuthenticationManager authenticationManager) throws Exception {
 		FilterSecurityInterceptor securityInterceptor = new FilterSecurityInterceptor();
 		securityInterceptor.setSecurityMetadataSource(securityMetadataSource);
 		securityInterceptor.setAccessDecisionManager(accessDecisionManager);
-		securityInterceptor.setAuthenticationManager(authenticationManager(httpSecurity));
+		securityInterceptor.setAuthenticationManager(authenticationManager);
 		securityInterceptor.afterPropertiesSet();
 		return securityInterceptor;
 	}
