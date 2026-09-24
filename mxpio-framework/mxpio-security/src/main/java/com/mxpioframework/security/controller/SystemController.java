@@ -65,6 +65,9 @@ public class SystemController {
 	@Value("${mxpio.logo}")
 	private String logoPath;
 
+	@Value("${mxpio.plugin.lodop.license}")
+	private String lodopLicense;
+
 	@GetMapping("captcha")
 	@Operation(summary = "加载验证码", description = "获取登录验证码", method = "GET")
 	public Result<CaptchaDTO> captcha() throws IOException {
@@ -119,6 +122,7 @@ public class SystemController {
 		returnMap.put("tokenTime",tokenTime);
 		returnMap.put("refreshTokenTime",refreshTokenTime);
 		returnMap.put("logo",logoPath);
+		returnMap.put("lodopLicense",lodopLicense);
 		if (StringUtils.isNotBlank(passwordStrategy)){
 			String[] split = passwordStrategy.split(",");
 			List<Map<String,Object>> configRegexs = new ArrayList<>();
