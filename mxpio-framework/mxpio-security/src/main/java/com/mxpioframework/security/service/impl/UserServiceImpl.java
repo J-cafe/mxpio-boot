@@ -49,10 +49,13 @@ public class UserServiceImpl implements UserService, JpaUtilAble {
 	@Value("${mxpio.JSEncrypt.privateKey:}")
 	private String privateKey;
 
+	@Value("${mxpio.password.defaultPwd:@2wsx!1qaz#Z2}")
+	private String defaultPwd;
+
 	@Override
 	@Transactional
 	public User create(User user) {
-		user.setPassword(passwordEncoder.encode("123456"));
+		user.setPassword(passwordEncoder.encode(defaultPwd));
 		JpaUtil.save(user);
 		return user;
 	}

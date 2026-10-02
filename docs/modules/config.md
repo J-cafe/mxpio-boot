@@ -76,7 +76,8 @@ mxpio-boot 采用 **模块级默认配置 + 应用级覆盖配置** 的机制。
 | `mxpio.password.expiredswitch` | on | 密码过期策略开关（on/off） |
 | `mxpio.password.expireddays` | 180 | 密码过期天数 |
 | `mxpio.password.strategy` | DIGANDLETTERCASE,... | 密码强度策略 |
-| `mxpio.resetPassword` | 123456 | 重置后的默认密码 |
+| `mxpio.password.defaultPwd` | @2wsx!1qaz#Z2 | 重置后的默认密码 |
+| `mxpio.resetPassword` | @2wsx!1qaz#Z2 | 重置后的默认密码 |
 
 > **密码强度策略选项**：`DIGANDLETTER`（数字+字母）、`DIGANDLETTERCASE`（数字+大小写字母）、`CONTINUOUS`（禁止连续字符）、`MINLENGTH`（最小长度）、`MINLENGTH12`（最小12位）
 
