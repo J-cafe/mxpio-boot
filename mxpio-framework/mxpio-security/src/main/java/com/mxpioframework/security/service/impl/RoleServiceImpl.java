@@ -117,6 +117,18 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
+	public List<Role> getRolesWithoutUserId(String userId) {
+		return JpaUtil
+				.linq(Role.class)
+				.notExists(RoleGrantedAuthority.class)
+					.equalProperty("roleId", "id")
+					.equal("actorId", userId)
+				.end()
+				.list();
+	}
+
+	@Override
 	@Transactional
 	@SecurityCacheEvict
 	public void addActors(String id, List<String> actorIds) {

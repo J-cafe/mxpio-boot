@@ -113,6 +113,14 @@ public class RoleController {
 		return Result.OK(roles);
 	}
 
+	@GetMapping("list/user/{userId}/without")
+	@Operation(summary = "用户未绑定角色列表", description = "根据用户ID获取未绑定角色列表", method = "GET")
+	public Result<List<Role>> getRolesWithoutUserId(
+			@PathVariable(name = "userId", required = true) String userId) throws Exception {
+		List<Role> roles = roleService.getRolesWithoutUserId(userId);
+		return Result.OK(roles);
+	}
+
 	@PostMapping("list/{id}/add/actors")
 	@Operation(summary = "添加绑定权限演员", description = "获取绑定权限演员列表", method = "POST")
 	public Result<?> addActors(

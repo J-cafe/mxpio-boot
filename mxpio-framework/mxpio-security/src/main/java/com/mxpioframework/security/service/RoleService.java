@@ -36,6 +36,13 @@ public interface RoleService {
 	 */
 	List<Role> getRolesByUserId(String userId);
 
+	/**
+	 * 根据用户ID查询未绑定的角色列表
+	 * @param userId 用户ID（即用户名）
+	 * @return 角色列表
+	 */
+	List<Role> getRolesWithoutUserId(String userId);
+
 	void addActors(String id, List<String> usernames);
 
 	void removeActors(String id, List<String> actorIds);
