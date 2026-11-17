@@ -105,6 +105,14 @@ public class RoleController {
 		return Result.OK(users);
 	}
 	
+	@GetMapping("list/user/{userId}")
+	@Operation(summary = "用户绑定角色列表", description = "根据用户ID获取绑定角色列表", method = "GET")
+	public Result<List<Role>> getRolesByUserId(
+			@PathVariable(name = "userId", required = true) String userId) throws Exception {
+		List<Role> roles = roleService.getRolesByUserId(userId);
+		return Result.OK(roles);
+	}
+
 	@PostMapping("list/{id}/add/actors")
 	@Operation(summary = "添加绑定权限演员", description = "获取绑定权限演员列表", method = "POST")
 	public Result<?> addActors(
@@ -122,5 +130,6 @@ public class RoleController {
 		roleService.removeActors(id, actorIds);
 		return Result.OK();
 	}
+
 	
 }

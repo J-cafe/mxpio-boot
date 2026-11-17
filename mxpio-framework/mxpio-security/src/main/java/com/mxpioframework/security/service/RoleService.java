@@ -29,6 +29,13 @@ public interface RoleService {
 
 	List<User> getUsersWithin(Criteria criteria, String roleId);
 
+	/**
+	 * 根据用户ID查询已绑定的角色列表
+	 * @param userId 用户ID（即用户名）
+	 * @return 角色列表
+	 */
+	List<Role> getRolesByUserId(String userId);
+
 	void addActors(String id, List<String> usernames);
 
 	void removeActors(String id, List<String> actorIds);
