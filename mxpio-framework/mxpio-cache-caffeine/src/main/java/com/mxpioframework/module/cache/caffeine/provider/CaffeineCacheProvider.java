@@ -137,7 +137,7 @@ public class CaffeineCacheProvider implements CacheProvider {
         try{
             long count = 0;
             for(Map.Entry<Long, LoadingCache<String, Object>> entry : cacheMap.entrySet()){
-                count += entry.getValue().size();
+                count += entry.getValue().estimatedSize();
                 entry.getValue().invalidateAll();
             }
             return count;
