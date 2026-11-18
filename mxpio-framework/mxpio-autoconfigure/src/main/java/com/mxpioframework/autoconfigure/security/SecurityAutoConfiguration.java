@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import com.mxpioframework.cache.CacheProperties;
 import com.mxpioframework.common.CommonConstant;
 import com.mxpioframework.common.vo.ModuleVO;
 import com.mxpioframework.jpa.LinqConfiguration;
@@ -39,8 +40,8 @@ public class SecurityAutoConfiguration {
 	protected static class CacheConfiguration {
 		
 		@Bean
-		public SecurityKeyGenerator securityKeyGenerator() {
-			return new SecurityKeyGenerator();
+		public SecurityKeyGenerator securityKeyGenerator(CacheProperties cacheProperties) {
+			return new SecurityKeyGenerator(cacheProperties.resolveKeyPrefix());
 		}
 	}
 	

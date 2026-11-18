@@ -1,6 +1,7 @@
 package com.mxpioframework.websocket.listener;
 
 import com.alibaba.fastjson.JSON;
+import com.mxpioframework.cache.CacheProperties;
 import com.mxpioframework.websocket.Constants;
 import com.mxpioframework.websocket.condition.WebsocketRedisModeCondition;
 import com.mxpioframework.websocket.dto.WebsocketRedisDTO;
@@ -20,10 +21,13 @@ public class RedisMessageListener implements MessageListener {
     @Autowired
     private MxpioWebSocketManager websocketManager;
 
+    @Autowired
+    private CacheProperties cacheProperties;
+
     @Override
     public void onMessage(Message message, byte[] pattern) {
         String channel = new String(message.getChannel());
-        if(!StringUtils.equals(channel, Constants.WEBSOCKET_REDIS_PUB_CHANNEL)){
+        if(!StringUtils.equals(channel, cacheProperties.resolveKeyPrefix() + Constants.WEBSOCKET_REDIS_PUB_CHANNEL)){
             return;
         }
         String body = new String(message.getBody());

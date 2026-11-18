@@ -65,6 +65,7 @@
 | `void set(String key, Object value)`          | 设置缓存（永不过期）              |
 | `void set(String key, Object value, long time)` | 设置缓存（秒级过期时间）        |
 | `void set(String key, Object value, long time, TimeUnit timeUnit)` | 设置缓存（自定义时间单位） |
+| `long clear()`                        | 清除当前应用的所有缓存（按应用key前缀隔离） |
 
 ### 基本使用示例
 
@@ -110,6 +111,21 @@ public class UserCacheService {
         cacheProvider.del("user:" + userId);
     }
 }
+```
+
+### 清除当前应用全部缓存
+
+框架提供清除当前系统所有缓存的接口（包含 `@Cacheable` 注解缓存与 `CacheProvider` 手工缓存，按应用key前缀隔离，不影响共用缓存实例的其他应用）：
+
+```
+GET /cache/clear
+```
+
+也可以在代码中直接调用：
+
+```java
+// 清除本应用的所有缓存，返回清除数量
+long count = cacheProvider.clear();
 ```
 
 ### 设置永不过期的缓存
@@ -271,13 +287,18 @@ spring:
         max-idle: 8
         min-idle: 0
 
-# mxpio 缓存全局默认过期时间（可选）
+# mxpio 缓存应用级命名空间（可选）
 mxpio:
   cache:
+    key-prefix: "appA"   # 所有写入Redis的key统一前缀，缺省取 spring.application.name
     redis:
       default-expire: 3600      # 默认过期时间（秒）
       key-prefix: "mxpio:cache:" # key 前缀
 ```
+
+> **多应用共享 Redis 说明**：框架会给所有写入 Redis 的 key（包括 `CacheProvider` 手工缓存、`@Cacheable` 注解缓存、安全模块权限缓存、WebSocket 集群 pub/sub 频道）统一加上 `mxpio.cache.key-prefix` 前缀，最终前缀统一以 `:` 结尾。未配置该属性时自动回退到 `spring.application.name` 的值。因此多个使用本框架的应用可以安全地共用同一个 Redis 实例的同一个 database；反过来，**如果两个应用配置了相同的 `spring.application.name`（或相同的 `mxpio.cache.key-prefix`），它们的缓存仍会互相冲突**。
+>
+> 升级注意：启用前缀后，升级前已写入的旧 key 将不再被读取（缓存会回源重建，旧 key 随 TTL 自然过期）；JWT 在线用户缓存重建意味着在线用户需要重新登录一次。
 
 ### Caffeine 实现配置
 
@@ -294,6 +315,7 @@ mxpio:
 |---------------------------------------------|----------|-----------------------------|
 | `spring.redis.host`                         | `localhost` | Redis 服务器地址          |
 | `spring.redis.port`                         | `6379`   | Redis 服务器端口             |
+| `mxpio.cache.key-prefix`                    | `spring.application.name` 的值 | 所有 Redis key 的应用级前缀 |
 | `mxpio.cache.redis.default-expire`          | `3600`   | Redis 缓存默认过期时间（秒） |
 | `mxpio.cache.redis.key-prefix`              | `""`     | Redis key 前缀               |
 | `mxpio.cache.caffeine.maximum-size`         | `10000`  | Caffeine 最大缓存条目数      |

@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+
+import com.mxpioframework.cache.CacheProperties;
 import com.mxpioframework.cache.provider.CacheProvider;
 
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +20,15 @@ import lombok.extern.slf4j.Slf4j;
 public class RedisCacheProvider implements CacheProvider {
 	private RedisTemplate<Object, Object> redisTemplate;
 
-	public RedisCacheProvider(RedisTemplate<Object, Object> redisTemplate) {
+	private final String keyPrefix;
+
+	public RedisCacheProvider(RedisTemplate<Object, Object> redisTemplate, CacheProperties cacheProperties) {
 		this.redisTemplate = redisTemplate;
+		this.keyPrefix = cacheProperties.resolveKeyPrefix();
+	}
+
+	private String prefix(String key) {
+		return keyPrefix + key;
 	}
 
 	/**
@@ -32,7 +41,7 @@ public class RedisCacheProvider implements CacheProvider {
 	@Override
 	public boolean hasKey(String key) {
 		try {
-			return redisTemplate.hasKey(key);
+			return redisTemplate.hasKey(prefix(key));
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			return false;
@@ -49,14 +58,14 @@ public class RedisCacheProvider implements CacheProvider {
 	public void del(String... keys) {
 		if (keys != null && keys.length > 0) {
 			if (keys.length == 1) {
-				boolean result = redisTemplate.delete(keys[0]);
+				boolean result = redisTemplate.delete(prefix(keys[0]));
 				log.debug("--------------------------------------------");
-				log.debug(new StringBuilder("删除缓存：").append(keys[0]).append("，结果：").append(result).toString());
+				log.debug(new StringBuilder("删除缓存：").append(prefix(keys[0])).append("，结果：").append(result).toString());
 				log.debug("--------------------------------------------");
 			} else {
 				Set<Object> keySet = new HashSet<>();
 				for (String key : keys) {
-					keySet.addAll(redisTemplate.keys(key));
+					keySet.addAll(redisTemplate.keys(prefix(key)));
 				}
 				long count = redisTemplate.delete(keySet);
 				log.debug("--------------------------------------------");
@@ -75,7 +84,7 @@ public class RedisCacheProvider implements CacheProvider {
 	 */
 	@Override
 	public Object get(String key) {
-		return key == null ? null : redisTemplate.opsForValue().get(key);
+		return key == null ? null : redisTemplate.opsForValue().get(prefix(key));
 	}
 
 	/**
@@ -90,7 +99,7 @@ public class RedisCacheProvider implements CacheProvider {
 	@Override
 	public boolean set(String key, Object value) {
 		try {
-			redisTemplate.opsForValue().set(key, value);
+			redisTemplate.opsForValue().set(prefix(key), value);
 			return true;
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
@@ -112,7 +121,7 @@ public class RedisCacheProvider implements CacheProvider {
 	public boolean set(String key, Object value, long time) {
 		try {
 			if (time > 0) {
-				redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+				redisTemplate.opsForValue().set(prefix(key), value, time, TimeUnit.SECONDS);
 			} else {
 				set(key, value);
 			}
@@ -139,7 +148,7 @@ public class RedisCacheProvider implements CacheProvider {
 	public boolean set(String key, Object value, long time, TimeUnit timeUnit) {
 		try {
 			if (time > 0) {
-				redisTemplate.opsForValue().set(key, value, time, timeUnit);
+				redisTemplate.opsForValue().set(prefix(key), value, time, timeUnit);
 			} else {
 				set(key, value);
 			}
@@ -147,6 +156,27 @@ public class RedisCacheProvider implements CacheProvider {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			return false;
+		}
+	}
+
+	/**
+	 * 清除当前应用的所有缓存
+	 *
+	 * @return 清除的缓存数量
+	 */
+	@Override
+	public long clear() {
+		try {
+			Set<Object> keys = redisTemplate.keys(keyPrefix + "*");
+			if (keys == null || keys.isEmpty()) {
+				return 0;
+			}
+			long count = redisTemplate.delete(keys);
+			log.info("清除当前应用缓存：前缀[{}]，共{}个", keyPrefix, count);
+			return count;
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return 0;
 		}
 	}
 }

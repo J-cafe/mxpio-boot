@@ -55,4 +55,13 @@ public interface CacheProvider {
 	 */
 	boolean set(String key, Object value, long time, TimeUnit timeUnit);
 
+	/**
+	 * 清除当前应用的所有缓存
+	 * <p>
+	 * 仅清除带本应用key前缀的缓存，不影响共用缓存实例的其他应用
+	 *
+	 * @return 清除的缓存数量
+	 */
+	long clear();
+
 }

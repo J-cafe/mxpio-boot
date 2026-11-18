@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 
 import com.mxpioframework.autoconfigure.security.SecurityAutoConfiguration;
+import com.mxpioframework.cache.CacheProperties;
 import com.mxpioframework.common.CommonConstant;
 import com.mxpioframework.common.vo.ModuleVO;
 import com.mxpioframework.multitenant.MultitenantConfiguration;
@@ -47,8 +48,8 @@ public class MultitenantAutoConfiguration {
 		
 		@Bean(name = "organizationKeyGenerator")
 		@Primary
-		public OrganizationKeyGenerator keyGenerator() {
-			return new OrganizationKeyGenerator();
+		public OrganizationKeyGenerator keyGenerator(CacheProperties cacheProperties) {
+			return new OrganizationKeyGenerator(cacheProperties.resolveKeyPrefix());
 		}
 	}
 	

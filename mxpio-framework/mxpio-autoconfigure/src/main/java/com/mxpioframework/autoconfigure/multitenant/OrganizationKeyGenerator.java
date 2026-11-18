@@ -13,11 +13,17 @@ import com.mxpioframework.security.entity.OrganizationSupport;
  * @since 2021年8月14日
  */
 public class OrganizationKeyGenerator implements KeyGenerator {
-	
+
+	private final String keyPrefix;
+
+	public OrganizationKeyGenerator(String keyPrefix) {
+		this.keyPrefix = keyPrefix;
+	}
+
 	@Override
 	public Object generate(Object target, Method method, Object... params) {
 		String organizationId = "";
-		if (SecurityContextHolder.getContext() != null 
+		if (SecurityContextHolder.getContext() != null
 				&& SecurityContextHolder.getContext().getAuthentication() != null
 				&& SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) {
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -28,7 +34,7 @@ public class OrganizationKeyGenerator implements KeyGenerator {
 				}
 			}
 		}
-		return organizationId;
+		return keyPrefix + organizationId;
 	}
 
 }

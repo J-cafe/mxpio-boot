@@ -125,4 +125,25 @@ public class CaffeineCacheProvider implements CacheProvider {
         }
         return false;
     }
+
+    /**
+     * 清除当前应用的所有缓存（本地缓存不与其他应用共享，直接清空）
+     *
+     * @return 清除的缓存数量
+     */
+    @Override
+    public long clear() {
+        writeLock.lock();
+        try{
+            long count = 0;
+            for(Map.Entry<Long, LoadingCache<String, Object>> entry : cacheMap.entrySet()){
+                count += entry.getValue().size();
+                entry.getValue().invalidateAll();
+            }
+            return count;
+        }
+        finally {
+            writeLock.unlock();
+        }
+    }
 }

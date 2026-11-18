@@ -24,6 +24,7 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.util.Assert;
 
+import com.mxpioframework.cache.CacheProperties;
 import com.mxpioframework.common.util.SpringUtil;
 
 import com.alibaba.fastjson.JSON;
@@ -43,6 +44,12 @@ import java.util.Map;
 @EnableConfigurationProperties(DataRedisProperties.class)
 public class RedisConfig extends CachingConfigurerSupport {
 
+	private final String keyPrefix;
+
+	public RedisConfig(CacheProperties cacheProperties) {
+		this.keyPrefix = cacheProperties.resolveKeyPrefix();
+	}
+
 	/**
 	 * 设置 redis 数据默认过期时间，默认2小时 设置@cacheable 序列化方式
 	 */
@@ -53,6 +60,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 		configuration = configuration
 				.serializeValuesWith(
 						RedisSerializationContext.SerializationPair.fromSerializer(fastJsonRedisSerializer))
+				.computePrefixWith(cacheName -> keyPrefix + cacheName + "::")
 				.entryTtl(Duration.ofHours(6));
 		return configuration;
 	}
@@ -94,8 +102,10 @@ public class RedisConfig extends CachingConfigurerSupport {
 			} catch (Exception e) {
 				// fallback to SHA256
 			}
-			Map<String, Object> container = new HashMap<>(3);
+			Map<String, Object> container = new HashMap<>(4);
 			Class<?> targetClassClass = target.getClass();
+			// 应用命名空间，避免多应用共用缓存实例时key冲突
+			container.put("app", keyPrefix);
 			// 类地址
 			container.put("class", targetClassClass.toGenericString());
 			// 方法名称

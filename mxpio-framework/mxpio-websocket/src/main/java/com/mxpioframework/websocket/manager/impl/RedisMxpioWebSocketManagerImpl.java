@@ -2,6 +2,7 @@ package com.mxpioframework.websocket.manager.impl;
 
 
 import com.alibaba.fastjson.JSON;
+import com.mxpioframework.cache.CacheProperties;
 import com.mxpioframework.websocket.Constants;
 import com.mxpioframework.websocket.condition.WebsocketRedisModeCondition;
 import com.mxpioframework.websocket.dto.WebsocketRedisDTO;
@@ -19,11 +20,14 @@ public class RedisMxpioWebSocketManagerImpl extends AbstractMxpioWebSocketManage
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
 
+    @Autowired
+    private CacheProperties cacheProperties;
+
     @Override
     public void send(String endpoint, String id, String text) {
         WebsocketRedisDTO pojo = new WebsocketRedisDTO(endpoint,id,text);
         String json = JSON.toJSONString(pojo);
-        redisTemplate.convertAndSend(Constants.WEBSOCKET_REDIS_PUB_CHANNEL,json);
+        redisTemplate.convertAndSend(cacheProperties.resolveKeyPrefix() + Constants.WEBSOCKET_REDIS_PUB_CHANNEL,json);
     }
 
     @Override
